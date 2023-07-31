@@ -1,5 +1,5 @@
-import { StyleSheet, View, ImageBackground, useWindowDimensions, Alert } from 'react-native'
-import { Text, Divider, Snackbar } from 'react-native-paper';
+import { StyleSheet, View, ImageBackground, useWindowDimensions, } from 'react-native'
+import { Text, Divider } from 'react-native-paper';
 import React, { useState } from 'react'
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
@@ -8,6 +8,7 @@ import CustomButton from '../components/Button';
 import TextInputComponent from '../components/TextInputComponent';
 
 const Register = ({ navigation }) => {
+  
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
@@ -15,11 +16,9 @@ const Register = ({ navigation }) => {
     const [lastname, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
     const [visible, setVisible] = useState(true)
 
     const onDismissSnackBar = () => setVisible(false)
-
 
     const testEmail = (text) => {
         const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
@@ -34,9 +33,7 @@ const Register = ({ navigation }) => {
         return regex2.test(num)
     }
 
-
-
-    const onPressContinue = () => {
+    const onPressSignup = () => {
         if (!testName(name)) {
             Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers!")
         } else if (!testName(lastname)) {
@@ -46,28 +43,25 @@ const Register = ({ navigation }) => {
         } else if (password.length == 0) {
             Alert.alert("Alert!", "Password can not be empty!")
         } else {
-            navigation.navigate("Login")
-
+            navigation.navigate("ChooseUserType")
         }
     }
+    
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}
-            source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
-            style={styles.ImageBackground} >
+            source={require('../assets/images/app_bg.webp')}
+            style={styles.ImageBackground}>
             <View style={styles.viewContainer2}>
                 <Text style={[styles.text1, Fonts.xlSemiBold]}>Sign up</Text>
                 <Divider style={styles.Devider}></Divider>
                 <View style={styles.textContainerForAlignment}>
                     <Text style={[styles.text2, Fonts.medMedium]}>Please enter details to contiue!</Text>
-
                     <TextInputComponent
                         placeholder='Enter First Name'
                         value={name}
                         onChangeText={(text) => { setName(text) }}
                     />
-
-
                     <TextInputComponent
                         placeholder='Enter Last Name'
                         value={lastname}
@@ -84,10 +78,9 @@ const Register = ({ navigation }) => {
                         onChangeText={(text) => { setPassword(text) }}
                     />
                     <CustomButton
+                        onPressButton={onPressSignup}
                         title={'Sign up'}
-                        onPressButton={onPressContinue}
                     />
-
                 </View>
 
 
