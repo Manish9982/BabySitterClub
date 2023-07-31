@@ -8,7 +8,7 @@ import CustomButton from '../components/Button';
 import TextInputComponent from '../components/TextInputComponent';
 
 const Register = ({ navigation }) => {
-
+  
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
@@ -16,16 +16,42 @@ const Register = ({ navigation }) => {
     const [lastname, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [visible, setVisible] = useState(true)
 
-    const onPressSignup = () => {
-        navigation.navigate("ChooseUserType")
+    const onDismissSnackBar = () => setVisible(false)
+
+    const testEmail = (text) => {
+        const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        return regex.test(text)
+    }
+    const testName = (text) => {
+        const regex = /^[a-zA-Z ]+$/
+        return regex.test(text)
+    }
+    const testNumber = (num) => {
+        const regex2 = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+        return regex2.test(num)
     }
 
+    const onPressSignup = () => {
+        if (!testName(name)) {
+            Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers!")
+        } else if (!testName(lastname)) {
+            Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers!")
+        } else if (!testEmail(email)) {
+            Alert.alert("Alert", "Please enter valid email!")
+        } else if (password.length == 0) {
+            Alert.alert("Alert!", "Password can not be empty!")
+        } else {
+            navigation.navigate("ChooseUserType")
+        }
+    }
+    
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}
             source={require('../assets/images/app_bg.webp')}
-            style={styles.ImageBackground} >
+            style={styles.ImageBackground}>
             <View style={styles.viewContainer2}>
                 <Text style={[styles.text1, Fonts.xlSemiBold]}>Sign up</Text>
                 <Divider style={styles.Devider}></Divider>
@@ -56,6 +82,8 @@ const Register = ({ navigation }) => {
                         title={'Sign up'}
                     />
                 </View>
+
+
             </View>
         </ImageBackground>
     )
