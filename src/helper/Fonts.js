@@ -12,7 +12,6 @@ lar:{
     fontFamily:"Poppins-Regular"
 },
 
-
 smSemiBold:{
     fontSize:12,
     fontWeight:'700',
