@@ -1,11 +1,12 @@
 
-import { StyleSheet, TouchableOpacity, View, ImageBackground, useWindowDimensions, } from 'react-native'
-import { TextInput, Text, Divider } from 'react-native-paper';
+import { StyleSheet, View, ImageBackground, useWindowDimensions, } from 'react-native'
+import { Text, Divider } from 'react-native-paper';
 import React, { useState } from 'react'
 import Fonts from '../helper/Fonts';
 import Spaces from '../helper/Spaces';
 import CustomButton from '../components/Button';
 import Colors from '../helper/Colors';
+import TextInputComponent from '../components/TextInputComponent';
 
 const Login = ({ navigation, route }) => {
 
@@ -35,11 +36,11 @@ const Login = ({ navigation, route }) => {
           <Divider style={styles.divider} />
           <View style={styles.textContainerForAlignment}>
             <Text style={[styles.text2, Fonts.medMedium]}>Please enter email to login or sign up!</Text>
-            <TextInput style={[styles.textInput, Fonts.medMedium]}
-              placeholder="Enter Email"
-              mode="outlined"
+            <TextInputComponent
+              placeholder='Enter Email'
               value={email}
-              onChangeText={(text) => { setEmail(text) }} />
+              onChangeText={(text) => { setEmail(text) }}
+            />
             <CustomButton
               title={'Continue'}
               onPressButton={onPressContinue}
@@ -85,7 +86,7 @@ const makeStyles = (H, W) => StyleSheet.create({
   text1:
   {
     alignSelf: 'center',
-    marginVertical:Spaces.med
+    marginVertical: Spaces.med
   },
   text2:
   {
@@ -100,7 +101,8 @@ const makeStyles = (H, W) => StyleSheet.create({
   },
   textInput:
   {
-    backgroundColor: Colors.white,
+    backgroundColor: 'white',
+    fontSize: Spaces.lar,
     height: 45,
     marginTop: H * 0.02,
     padding: 1,
@@ -114,7 +116,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 5,
     elevation: 15,
-    padding:Spaces.xl
+    paddingVertical: Spaces.xl
   },
 })
 export default Login;
