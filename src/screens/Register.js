@@ -8,7 +8,7 @@ import Fonts from '../helper/Fonts';
 import CustomButton from '../components/Button';
 
 
-const Password = ({ navigation, route }) => {
+const Register = ({ navigation, route }) => {
     const isFocused = useIsFocused()
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
@@ -17,22 +17,24 @@ const Password = ({ navigation, route }) => {
 
     
     const onPressContinue = () => {
-       //Alert.alert("Button Pressed")
-       navigation.navigate("Register")
+       Alert.alert("Button Pressed")
     }
     return (
         <View style={styles.upperContainer}>
+
+            {/* <ImageBackground source={require('../../assets/icons/pexels-lorilee-e-1309753.jpg')}
+                style={{ height: H, width: W, opacity: 0.12, }} /> */}
 
             <ImageBackground
                 source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
                 style={styles.ImageBackground} />
             <View style={styles.viewContainer1}>
                 <View style={styles.viewContainer2}>
-                    <Text style={[styles.text1, Fonts.xlSemiBold]}>Sign up</Text>
+                    <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome back, Gaurav</Text>
                     <Divider style={styles.Devider}></Divider>
                     <View style={styles.textContainerForAlignment}>
 
-                    <Text style={[styles.text2, Fonts.medMedium]}>Please enter details to continue!</Text>
+                    <Text style={[styles.text2, Fonts.medMedium]}>Enter password to continue!</Text>
 
                         <TextInput style={[styles.textInput, Fonts.medMedium]}
                             placeholder="Enter Password"
@@ -87,6 +89,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         height: H, 
         width: W, 
         opacity: 0.2,
+        backgroundColor:"#131313"
     },
     Devider: {
         marginHorizontal: W * 0.02, color: "black",
@@ -135,4 +138,4 @@ const makeStyles = (H, W) => StyleSheet.create({
 
     }
 })
-export default Password;
+export default Register;
