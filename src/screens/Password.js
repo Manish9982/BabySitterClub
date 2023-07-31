@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View, Dimensions, Modal, ImageBackground, StatusBar, useWindowDimensions, } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Dimensions, Modal, ImageBackground, Alert, useWindowDimensions, } from 'react-native'
 import { TextInput, Text, configureFonts, DefaultTheme, Provider as PaperProvider, ActivityIndicator, Divider } from 'react-native-paper';
 import React, { useState, useContext, useEffect } from 'react'
 import Colors from '../helper/Colors';
@@ -7,10 +7,17 @@ import Fonts from '../helper/Fonts';
 import CustomButton from '../components/Button';
 
 const Password = ({ navigation, route }) => {
+  
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
+    
     const styles = makeStyles(H, W)
+    
     const [password, setPassword] = useState("")
+
+    const onPressContinue = () => {
+       navigation.navigate("Register")
+    }
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}
@@ -72,15 +79,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         marginHorizontal: W * 0.02,
         color: "black",
     },
-    button:
-    {
-        backgroundColor: Colors.buttoncolor,
-        height: 45,
-        width: "100%",
-        justifyContent: 'center',
-        borderRadius: 15,
-        marginTop: H * 0.04,
-    },
+   
 
     textContainerForAlignment: {
         marginHorizontal: W * 0.05,
@@ -100,9 +99,9 @@ const makeStyles = (H, W) => StyleSheet.create({
 
     text2:
     {
-        padding: 5,
+        padding: Spaces.sm,
         fontSize: Spaces.lar,
-        marginTop: 10,
+        marginTop: Spaces.sm,
         alignItems: 'flex-start'
     },
     forgotpassword:
