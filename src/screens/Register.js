@@ -1,68 +1,70 @@
-import { StyleSheet, TouchableOpacity, View, Dimensions, Modal, ImageBackground, Alert, useWindowDimensions, } from 'react-native'
-import { TextInput, Text, configureFonts, DefaultTheme, Provider as PaperProvider, ActivityIndicator, Divider } from 'react-native-paper';
-import React, { useState, useContext, useEffect } from 'react'
-import { useIsFocused } from '@react-navigation/native';
+import { StyleSheet, View, ImageBackground, useWindowDimensions, } from 'react-native'
+import { Text, Divider } from 'react-native-paper';
+import React, { useState } from 'react'
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
 import CustomButton from '../components/Button';
+import TextInputComponent from '../components/TextInputComponent';
 
-
-const Register = ({ navigation, route }) => {
-    const isFocused = useIsFocused()
+const Register = ({ navigation }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
+    const [name, setName] = useState("")
+    const [lastname, setLastName] = useState("")
+    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
-    
     const onPressContinue = () => {
-       Alert.alert("Button Pressed")
+        navigation.navigate("Register")
     }
     return (
-        <View style={styles.upperContainer}>
+        <ImageBackground
+            imageStyle={styles.imageStyle}
+            source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
+            style={styles.ImageBackground} >
+            <View style={styles.viewContainer2}>
+                <Text style={[styles.text1, Fonts.xlSemiBold]}>Sign up</Text>
+                <Divider style={styles.Devider}></Divider>
+                <View style={styles.textContainerForAlignment}>
+                    <Text style={[styles.text2, Fonts.medMedium]}>Please enter details to contiue!</Text>
 
-            {/* <ImageBackground source={require('../../assets/icons/pexels-lorilee-e-1309753.jpg')}
-                style={{ height: H, width: W, opacity: 0.12, }} /> */}
+                    <TextInputComponent
+                        placeholder='Enter First Name'
+                        value={name}
+                        onChangeText={(text) => { setName(text) }}
+                    />
 
-            <ImageBackground
-                source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
-                style={styles.ImageBackground} />
-            <View style={styles.viewContainer1}>
-                <View style={styles.viewContainer2}>
-                    <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome back, Gaurav</Text>
-                    <Divider style={styles.Devider}></Divider>
-                    <View style={styles.textContainerForAlignment}>
 
-                    <Text style={[styles.text2, Fonts.medMedium]}>Enter password to continue!</Text>
-
-                        <TextInput style={[styles.textInput, Fonts.medMedium]}
-                            placeholder="Enter Password"
-                            mode="outlined"
-                            placeholderTextColor={"gray"}
-                            activeUnderlineColor={"green"}
-                            value={password}
-                            onChangeText={(text) => { setPassword(text) }} />
-                       <CustomButton
-                            title={'Continue'}
-                            onPressButton={onPressContinue}
-                        />
-                        <Text 
-                        
-                        style={[styles.forgotpassword, Fonts.medMedium]}>Forgot Password?</Text>
-
-                    </View>
+                    <TextInputComponent
+                        placeholder='Enter Last Name'
+                        value={lastname}
+                        onChangeText={(text) => { setLastName(text) }}
+                    />
+                    <TextInputComponent
+                        placeholder='Enter Email'
+                        value={email}
+                        onChangeText={(text) => { setEmail(text) }}
+                    />
+                    <TextInputComponent
+                        placeholder='Enter Password'
+                        value={password}
+                        onChangeText={(text) => { setPassword(text) }}
+                    />
+                    <CustomButton
+                        title={'Sign up'}
+                    />
+                    
                 </View>
             </View>
-        </View>
+        </ImageBackground>
     )
 }
 
 const makeStyles = (H, W) => StyleSheet.create({
     mainContainer:
     {
-        height: Dimensions.get('window').height,
-        width: Dimensions.get('window').width,
+        flex: 1
     },
     upperContainer:
     {
@@ -83,18 +85,21 @@ const makeStyles = (H, W) => StyleSheet.create({
         width: W * 0.95,
         backgroundColor: "white",
         borderRadius: 5,
-        elevation: 15
+        elevation: 15,
+        paddingVertical: Spaces.xl
+
     },
     ImageBackground: {
-        height: H, 
-        width: W, 
-        opacity: 0.2,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor:"#131313"
     },
     Devider: {
-        marginHorizontal: W * 0.02, color: "black",
+        marginHorizontal: W * 0.02,
+        color: "black",
     },
-   
+
 
     textContainerForAlignment: {
         marginHorizontal: W * 0.05,
@@ -122,11 +127,11 @@ const makeStyles = (H, W) => StyleSheet.create({
     forgotpassword:
     {
         fontSize: Spaces.lar,
-      //  marginVertical: H*0.03,
-        padding: Spaces.sm,
-        textDecorationLine:'underline',
+        marginVertical: H * 0.03,
+        padding: 5,
+        textDecorationLine: 'underline',
         alignItems: 'flex-start',
-        color:Colors.buttoncolor
+        color: Colors.buttoncolor
     },
     textInput:
     {
@@ -135,7 +140,12 @@ const makeStyles = (H, W) => StyleSheet.create({
         height: 45,
         marginTop: H * 0.02,
         padding: 1,
-
+    },
+    imageStyle:
+    {
+        flex: 1,
+        opacity: 0.5
     }
+
 })
 export default Register;

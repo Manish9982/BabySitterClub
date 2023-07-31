@@ -36,6 +36,7 @@ const Password = ({ navigation }) => {
                     />
                     <CustomButton
                         title={'Continue'}
+                        onPressButton={onPressContinue}
                     />
                     <Text
                         style={[styles.forgotpassword, Fonts.medMedium]}>Forgot Password?</Text>
