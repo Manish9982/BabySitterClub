@@ -3,13 +3,13 @@ import React from 'react'
 import Colors from '../helper/Colors'
 import Spaces from '../helper/Spaces'
 
-const CustomButton = ({ onPressButton, title }) => {
+const CustomButton = ({ onPressButton, title, style }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
     return (
         <TouchableOpacity
-            style={styles.button}
+            style={[styles.button, style]}
             onPress={onPressButton}>
             <Text style={styles.text}>{title}</Text>
         </TouchableOpacity>
@@ -26,7 +26,9 @@ const makeStyles = (H, W) => StyleSheet.create({
         paddingHorizontal: Spaces.xl,
         borderRadius: 8,
         width: W * 0.85,
-        alignItems: 'center'
+        alignItems: 'center',
+        alignSelf:'center',
+        marginVertical:Spaces.med
     },
     text:
     {
