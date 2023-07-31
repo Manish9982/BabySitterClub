@@ -8,6 +8,7 @@ import CustomButton from '../components/Button';
 import TextInputComponent from '../components/TextInputComponent';
 
 const Register = ({ navigation }) => {
+
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
@@ -15,27 +16,26 @@ const Register = ({ navigation }) => {
     const [lastname, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const onPressContinue = () => {
-        navigation.navigate("Register")
+
+    const onPressSignup = () => {
+        navigation.navigate("ChooseUserType")
     }
+
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}
-            source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
+            source={require('../assets/images/app_bg.webp')}
             style={styles.ImageBackground} >
             <View style={styles.viewContainer2}>
                 <Text style={[styles.text1, Fonts.xlSemiBold]}>Sign up</Text>
                 <Divider style={styles.Devider}></Divider>
                 <View style={styles.textContainerForAlignment}>
                     <Text style={[styles.text2, Fonts.medMedium]}>Please enter details to contiue!</Text>
-
                     <TextInputComponent
                         placeholder='Enter First Name'
                         value={name}
                         onChangeText={(text) => { setName(text) }}
                     />
-
-
                     <TextInputComponent
                         placeholder='Enter Last Name'
                         value={lastname}
@@ -52,9 +52,9 @@ const Register = ({ navigation }) => {
                         onChangeText={(text) => { setPassword(text) }}
                     />
                     <CustomButton
+                        onPressButton={onPressSignup}
                         title={'Sign up'}
                     />
-                    
                 </View>
             </View>
         </ImageBackground>
@@ -93,7 +93,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:"#131313"
+        backgroundColor: "#131313"
     },
     Devider: {
         marginHorizontal: W * 0.02,
