@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 
-const SelectCountry = () => {
+const SelectCountry = ({navigation}) => {
     const [selectedCountry, setSelectedCountry] = useState('');
     const [showPicker, setShowPicker] = useState(false);
 
@@ -46,7 +46,8 @@ const SelectCountry = () => {
             )}
             <TouchableOpacity
                 style={styles.continueButton}
-                onPress={() => console.log('Continue button pressed')}
+               // onPress={() => console.log('Continue button pressed')}
+                onPress={() => navigation.navigate("Login")}
             >
                 <Text style={styles.buttonText}>Continue</Text>
             </TouchableOpacity>
