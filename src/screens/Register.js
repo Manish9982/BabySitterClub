@@ -1,5 +1,5 @@
-import { StyleSheet, View, ImageBackground, useWindowDimensions, } from 'react-native'
-import { Text, Divider } from 'react-native-paper';
+import { StyleSheet, View, ImageBackground, useWindowDimensions, Alert } from 'react-native'
+import { Text, Divider, Snackbar } from 'react-native-paper';
 import React, { useState } from 'react'
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
@@ -15,8 +15,40 @@ const Register = ({ navigation }) => {
     const [lastname, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
+    const [visible, setVisible] = useState(true)
+
+    const onDismissSnackBar = () => setVisible(false)
+
+
+    const testEmail = (text) => {
+        const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        return regex.test(text)
+    }
+    const testName = (text) => {
+        const regex = /^[a-zA-Z ]+$/
+        return regex.test(text)
+    }
+    const testNumber = (num) => {
+        const regex2 = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+        return regex2.test(num)
+    }
+
+
+
     const onPressContinue = () => {
-        navigation.navigate("Register")
+        if (!testName(name)) {
+            Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers!")
+        } else if (!testName(lastname)) {
+            Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers!")
+        } else if (!testEmail(email)) {
+            Alert.alert("Alert", "Please enter valid email!")
+        } else if (password.length == 0) {
+            Alert.alert("Alert!", "Password can not be empty!")
+        } else {
+            navigation.navigate("Login")
+
+        }
     }
     return (
         <ImageBackground
@@ -53,9 +85,12 @@ const Register = ({ navigation }) => {
                     />
                     <CustomButton
                         title={'Sign up'}
+                        onPressButton={onPressContinue}
                     />
-                    
+
                 </View>
+
+
             </View>
         </ImageBackground>
     )
@@ -93,7 +128,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:"#131313"
+        backgroundColor: "#131313"
     },
     Devider: {
         marginHorizontal: W * 0.02,
