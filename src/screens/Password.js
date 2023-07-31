@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity, View, Dimensions, Modal, ImageBackground, StatusBar, useWindowDimensions, } from 'react-native'
-import { TextInput, Text,configureFonts, DefaultTheme, Provider as PaperProvider, ActivityIndicator, Divider } from 'react-native-paper';
+import { TextInput, Text, configureFonts, DefaultTheme, Provider as PaperProvider, ActivityIndicator, Divider } from 'react-native-paper';
 import React, { useState, useContext, useEffect } from 'react'
 import { useIsFocused } from '@react-navigation/native';
 import Colors from '../helper/Colors';
@@ -7,12 +7,17 @@ import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
 
 
-const Login = ({ navigation, route }) => {
+
+
+
+
+
+const Password = ({ navigation, route }) => {
     const isFocused = useIsFocused()
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
-    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     return (
         <View style={styles.upperContainer}>
 
@@ -24,19 +29,26 @@ const Login = ({ navigation, route }) => {
                 style={styles.ImageBackground} />
             <View style={styles.viewContainer1}>
                 <View style={styles.viewContainer2}>
-                    <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome to BabySits Club</Text>
+                    <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome back, Gaurav</Text>
                     <Divider style={styles.Devider}></Divider>
                     <View style={styles.textContainerForAlignment}>
-                        <Text style={[styles.text2, Fonts.medMedium]}>Please enter email to login or sign up!</Text>
+
+                    <Text style={[styles.text2, Fonts.medMedium]}>Enter password to continue!</Text>
+
                         <TextInput style={[styles.textInput, Fonts.medMedium]}
-                            placeholder="Enter Email"
+                            placeholder="Enter Password"
                             mode="outlined"
+                            placeholderTextColor={"gray"}
                             activeUnderlineColor={"green"}
-                            value={email}
-                            onChangeText={(text) => { setEmail(text) }} />
-                        <TouchableOpacity onPress={() => {navigation.navigate("Password")}} style={styles.button}>
-                            <Text style={[styles.text, Fonts.medMedium]}>Continue</Text>
+                            value={password}
+                            onChangeText={(text) => { setPassword(text) }} />
+                        <TouchableOpacity onPress={() => {}} style={styles.button}>
+                            <Text style={[styles.text , Fonts.medMedium]}>Continue</Text>
                         </TouchableOpacity>
+                        <Text 
+                        
+                        style={[styles.forgotpassword, Fonts.medMedium]}>Forgot Password?</Text>
+
                     </View>
                 </View>
             </View>
@@ -82,12 +94,12 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     button:
     {
-        backgroundColor: "#1e81b0",
+        backgroundColor: Colors.buttoncolor,
         height: 45,
         width: "100%",
         justifyContent: 'center',
         borderRadius: 15,
-        marginVertical: H * 0.04,
+        marginTop: H * 0.04,
     },
 
     textContainerForAlignment: {
@@ -97,37 +109,39 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         textAlign: 'center',
         color: 'white',
-        
-        fontFamily:"Poppins-Regular",
+        fontSize: Spaces.lar,
     },
     text1:
     {
-
+        fontSize: Spaces.xl,
         alignSelf: 'center',
-        marginVertical: H * 0.03,
+        marginVertical: H * 0.03
     },
 
     text2:
     {
         padding: 5,
+        fontSize: Spaces.lar,
         marginTop: 10,
         alignItems: 'flex-start'
     },
-    textUniversal:
+    forgotpassword:
     {
-
-        padding: 10,
-        paddingRight: 0,
-        marginVertical: 20
+        fontSize: Spaces.lar,
+        marginVertical: H*0.03,
+        padding: 5,
+        textDecorationLine:'underline',
+        alignItems: 'flex-start',
+        color:Colors.buttoncolor
     },
     textInput:
     {
         backgroundColor: 'white',
-        
+        fontSize: Spaces.lar,
         height: 45,
         marginTop: H * 0.02,
         padding: 1,
 
     }
 })
-export default Login;
+export default Password;

@@ -5,7 +5,7 @@ import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import CustomButton from '../components/Button';
 
-const SelectCountry = () => {
+const SelectCountry = ({navigation}) => {
     const [selectedCountry, setSelectedCountry] = useState('');
 
     const countries = [
@@ -18,7 +18,7 @@ const SelectCountry = () => {
     ];
 
     const onPressContinue = () => {
-        console.log(selectedCountry)
+      navigation.navigate("Login")
     }
 
     const handleCountrySelect = (country) => {
@@ -41,6 +41,7 @@ const SelectCountry = () => {
                     </Picker>
                 </View>
             )}
+
             <CustomButton
                 title={'Continue'}
                 onPressButton={onPressContinue}
