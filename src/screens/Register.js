@@ -1,4 +1,4 @@
-import { StyleSheet, View, ImageBackground, useWindowDimensions, } from 'react-native'
+import { StyleSheet, View, ImageBackground, useWindowDimensions, Alert } from 'react-native'
 import { Text, Divider } from 'react-native-paper';
 import React, { useState } from 'react'
 import Colors from '../helper/Colors';
