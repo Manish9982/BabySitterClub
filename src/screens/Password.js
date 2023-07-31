@@ -1,15 +1,11 @@
-import { StyleSheet, TouchableOpacity, View, Dimensions, Modal, ImageBackground, StatusBar, useWindowDimensions, } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Dimensions, Modal, ImageBackground, Alert, useWindowDimensions, } from 'react-native'
 import { TextInput, Text, configureFonts, DefaultTheme, Provider as PaperProvider, ActivityIndicator, Divider } from 'react-native-paper';
 import React, { useState, useContext, useEffect } from 'react'
 import { useIsFocused } from '@react-navigation/native';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
-
-
-
-
-
+import CustomButton from '../components/Button';
 
 
 const Password = ({ navigation, route }) => {
@@ -18,6 +14,11 @@ const Password = ({ navigation, route }) => {
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
     const [password, setPassword] = useState("")
+
+    
+    const onPressContinue = () => {
+       Alert.alert("Button Pressed")
+    }
     return (
         <View style={styles.upperContainer}>
 
@@ -42,9 +43,10 @@ const Password = ({ navigation, route }) => {
                             activeUnderlineColor={"green"}
                             value={password}
                             onChangeText={(text) => { setPassword(text) }} />
-                        <TouchableOpacity onPress={() => {}} style={styles.button}>
-                            <Text style={[styles.text , Fonts.medMedium]}>Continue</Text>
-                        </TouchableOpacity>
+                       <CustomButton
+                            title={'Continue'}
+                            onPressButton={onPressContinue}
+                        />
                         <Text 
                         
                         style={[styles.forgotpassword, Fonts.medMedium]}>Forgot Password?</Text>
@@ -92,15 +94,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     Devider: {
         marginHorizontal: W * 0.02, color: "black",
     },
-    button:
-    {
-        backgroundColor: Colors.buttoncolor,
-        height: 45,
-        width: "100%",
-        justifyContent: 'center',
-        borderRadius: 15,
-        marginTop: H * 0.04,
-    },
+   
 
     textContainerForAlignment: {
         marginHorizontal: W * 0.05,
@@ -120,16 +114,16 @@ const makeStyles = (H, W) => StyleSheet.create({
 
     text2:
     {
-        padding: 5,
+        padding: Spaces.sm,
         fontSize: Spaces.lar,
-        marginTop: 10,
+        marginTop: Spaces.sm,
         alignItems: 'flex-start'
     },
     forgotpassword:
     {
         fontSize: Spaces.lar,
-        marginVertical: H*0.03,
-        padding: 5,
+      //  marginVertical: H*0.03,
+        padding: Spaces.sm,
         textDecorationLine:'underline',
         alignItems: 'flex-start',
         color:Colors.buttoncolor

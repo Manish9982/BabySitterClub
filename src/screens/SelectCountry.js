@@ -4,6 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import CustomButton from '../components/Button';
+import Fonts from '../helper/Fonts';
 
 const SelectCountry = ({navigation}) => {
     const [selectedCountry, setSelectedCountry] = useState('');
@@ -27,7 +28,7 @@ const SelectCountry = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.heading}>Select your country:</Text>
+            <Text style={[styles.heading, Fonts.larMedium]}>Select your country:</Text>
             {(
                 <View style={styles.pickerContainer}>
                     <Picker
@@ -58,9 +59,10 @@ const styles = StyleSheet.create({
         padding: Spaces.xl,
     },
     heading: {
-        fontSize: 24,
-        fontWeight: 'bold',
+       // fontSize: 24,
+       // fontWeight: 'bold',
         marginBottom: Spaces.xl,
+        color:"black"
     },
     countryBox: {
         borderWidth: 1,

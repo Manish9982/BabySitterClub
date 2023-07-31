@@ -21,15 +21,27 @@ export default CustomButton
 const makeStyles = (H, W) => StyleSheet.create({
     button:
     {
-        backgroundColor: Colors.blue,
-        paddingVertical: Spaces.lar,
-        paddingHorizontal: Spaces.xl,
-        borderRadius: 8,
+        // backgroundColor: Colors.buttoncolor,
+        // paddingVertical: Spaces.lar,
+        // paddingHorizontal: Spaces.xl,
+        // borderRadius: 8,
+        // width: W * 0.85,
+        // alignItems: 'center'
+        backgroundColor: "#1e81b0",
+        height: 45,
+        width: "100%",
+        justifyContent: 'center',
+        borderRadius: 10,
+        alignSelf: 'center',
+        alignItems: 'center',
         width: W * 0.85,
-        alignItems: 'center'
+        marginVertical:H*0.04,
+        paddingHorizontal: Spaces.xl,
     },
     text:
     {
-        color: Colors.white,
+        textAlign: 'center',
+        color: 'white',
+        fontFamily: "Poppins-Regular",
     }
 })

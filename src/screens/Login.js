@@ -1,10 +1,11 @@
 import { StyleSheet, TouchableOpacity, View, Dimensions, Modal, ImageBackground, StatusBar, useWindowDimensions, } from 'react-native'
-import { TextInput, Text,configureFonts, DefaultTheme, Provider as PaperProvider, ActivityIndicator, Divider } from 'react-native-paper';
+import { TextInput, Text, configureFonts, DefaultTheme, Provider as PaperProvider, ActivityIndicator, Divider } from 'react-native-paper';
 import React, { useState, useContext, useEffect } from 'react'
 import { useIsFocused } from '@react-navigation/native';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
+import CustomButton from '../components/Button';
 
 
 const Login = ({ navigation, route }) => {
@@ -13,6 +14,11 @@ const Login = ({ navigation, route }) => {
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
     const [email, setEmail] = useState("")
+
+    const onPressContinue = () => {
+        navigation.navigate("Password")
+    }
+
     return (
         <View style={styles.upperContainer}>
 
@@ -34,9 +40,12 @@ const Login = ({ navigation, route }) => {
                             activeUnderlineColor={"green"}
                             value={email}
                             onChangeText={(text) => { setEmail(text) }} />
-                        <TouchableOpacity onPress={() => {navigation.navigate("Password")}} style={styles.button}>
-                            <Text style={[styles.text, Fonts.medMedium]}>Continue</Text>
-                        </TouchableOpacity>
+                        <CustomButton
+                            title={'Continue'}
+                            onPressButton={onPressContinue}
+                        />
+
+
                     </View>
                 </View>
             </View>
@@ -72,24 +81,15 @@ const makeStyles = (H, W) => StyleSheet.create({
         elevation: 15
     },
     ImageBackground: {
-        height: H, 
-        width: W, 
+        height: H,
+        width: W,
         opacity: 0.2,
-        backgroundColor:"#131313"
+        backgroundColor: "#131313"
     },
     Devider: {
         marginHorizontal: W * 0.02, color: "black",
     },
-    button:
-    {
-        backgroundColor: "#1e81b0",
-        height: 45,
-        width: "100%",
-        justifyContent: 'center',
-        borderRadius: 15,
-        marginVertical: H * 0.04,
-    },
-
+   
     textContainerForAlignment: {
         marginHorizontal: W * 0.05,
     },
@@ -97,8 +97,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         textAlign: 'center',
         color: 'white',
-        
-        fontFamily:"Poppins-Regular",
+
+        fontFamily: "Poppins-Regular",
     },
     text1:
     {
@@ -109,8 +109,8 @@ const makeStyles = (H, W) => StyleSheet.create({
 
     text2:
     {
-        padding: 5,
-        marginTop: 10,
+        padding: Spaces.sm,
+        marginTop: Spaces.sm,
         alignItems: 'flex-start'
     },
     textUniversal:
@@ -123,7 +123,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     textInput:
     {
         backgroundColor: 'white',
-        
+
         height: 45,
         marginTop: H * 0.02,
         padding: 1,
