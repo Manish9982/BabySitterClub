@@ -65,8 +65,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,
-    elevation: 15,
   },
+  
   ImageBackground: {
     flex: 1
   },
