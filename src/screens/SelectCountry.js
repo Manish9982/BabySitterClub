@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-nati
 import { Picker } from '@react-native-picker/picker';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
+import CustomButton from '../components/Button';
 
 const SelectCountry = () => {
     const [selectedCountry, setSelectedCountry] = useState('');
-    const [showPicker, setShowPicker] = useState(false);
 
     const countries = [
         'United States',
@@ -15,41 +15,36 @@ const SelectCountry = () => {
         'Australia',
         'India',
         'Germany',
-        // Add more countries as needed
     ];
+
+    const onPressContinue = () => {
+        console.log(selectedCountry)
+    }
 
     const handleCountrySelect = (country) => {
         setSelectedCountry(country);
-       // setShowPicker(false); // Hide the picker after a country is selected
     };
 
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>Select your country:</Text>
-            <TouchableOpacity
-                style={styles.countryBox}
-                onPress={() => setShowPicker(!showPicker)}
-            >
-                <Text style={styles.selectedCountry}>{selectedCountry || 'Choose a country'}</Text>
-            </TouchableOpacity>
-            {showPicker && (
+            {(
                 <View style={styles.pickerContainer}>
                     <Picker
                         selectedValue={selectedCountry}
                         onValueChange={(itemValue) => handleCountrySelect(itemValue)}
                     >
+                        <Picker.Item key={0} label='Choose a country' value='Choose a country' />
                         {countries.map((country, index) => (
-                            <Picker.Item key={index} label={country} value={country} />
+                            <Picker.Item key={index + 1} label={country} value={country} />
                         ))}
                     </Picker>
                 </View>
             )}
-            <TouchableOpacity
-                style={styles.continueButton}
-                onPress={() => console.log('Continue button pressed')}
-            >
-                <Text style={styles.buttonText}>Continue</Text>
-            </TouchableOpacity>
+            <CustomButton
+                title={'Continue'}
+                onPressButton={onPressContinue}
+            />
         </View>
     );
 };
@@ -77,14 +72,8 @@ const styles = StyleSheet.create({
     selectedCountry: {
         fontSize: 18,
     },
-    continueButton: {
-        backgroundColor: Colors.blue,
-        paddingVertical: Spaces.med,
-        paddingHorizontal: Spaces.xl,
-        borderRadius: 8,
-    },
     buttonText: {
-        color: '#fff',
+        color: Colors.white,
         fontSize: 18,
         fontWeight: 'bold',
     },

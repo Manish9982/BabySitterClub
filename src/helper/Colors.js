@@ -1,4 +1,5 @@
 export default Colors = {
     'blue': '#007BFF',
-    'outlineColor': '#ccc'
+    'outlineColor': '#ccc',
+    'white': '#fff'
 }
