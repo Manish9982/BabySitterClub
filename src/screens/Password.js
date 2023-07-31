@@ -1,66 +1,53 @@
 import { StyleSheet, TouchableOpacity, View, Dimensions, Modal, ImageBackground, Alert, useWindowDimensions, } from 'react-native'
 import { TextInput, Text, configureFonts, DefaultTheme, Provider as PaperProvider, ActivityIndicator, Divider } from 'react-native-paper';
 import React, { useState, useContext, useEffect } from 'react'
-import { useIsFocused } from '@react-navigation/native';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
 import CustomButton from '../components/Button';
 
-
 const Password = ({ navigation, route }) => {
-    const isFocused = useIsFocused()
+  
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
+    
     const styles = makeStyles(H, W)
+    
     const [password, setPassword] = useState("")
 
-    
     const onPressContinue = () => {
-       //Alert.alert("Button Pressed")
        navigation.navigate("Register")
     }
     return (
-        <View style={styles.upperContainer}>
-
-            <ImageBackground
-                source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
-                style={styles.ImageBackground} />
-            <View style={styles.viewContainer1}>
-                <View style={styles.viewContainer2}>
-                    <Text style={[styles.text1, Fonts.xlSemiBold]}>Sign up</Text>
-                    <Divider style={styles.Devider}></Divider>
-                    <View style={styles.textContainerForAlignment}>
-
-                    <Text style={[styles.text2, Fonts.medMedium]}>Please enter details to continue!</Text>
-
-                        <TextInput style={[styles.textInput, Fonts.medMedium]}
-                            placeholder="Enter Password"
-                            mode="outlined"
-                            placeholderTextColor={"gray"}
-                            activeUnderlineColor={"green"}
-                            value={password}
-                            onChangeText={(text) => { setPassword(text) }} />
-                       <CustomButton
-                            title={'Continue'}
-                            onPressButton={onPressContinue}
-                        />
-                        <Text 
-                        
-                        style={[styles.forgotpassword, Fonts.medMedium]}>Forgot Password?</Text>
-
-                    </View>
-                </View>
+        <ImageBackground
+            imageStyle={styles.imageStyle}
+            source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
+            style={styles.ImageBackground} >
+            <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome back, Gaurav</Text>
+            <Divider style={styles.Devider}></Divider>
+            <View style={styles.textContainerForAlignment}>
+                <Text style={[styles.text2, Fonts.medMedium]}>Enter password to continue!</Text>
+                <TextInput style={[styles.textInput, Fonts.medMedium]}
+                    placeholder="Enter Password"
+                    mode="outlined"
+                    placeholderTextColor={"gray"}
+                    activeUnderlineColor={"green"}
+                    value={password}
+                    onChangeText={(text) => { setPassword(text) }} />
+               <CustomButton 
+               title={'Continue'}
+               />
+                <Text
+                    style={[styles.forgotpassword, Fonts.medMedium]}>Forgot Password?</Text>
             </View>
-        </View>
+        </ImageBackground>
     )
 }
 
 const makeStyles = (H, W) => StyleSheet.create({
     mainContainer:
     {
-        height: Dimensions.get('window').height,
-        width: Dimensions.get('window').width,
+        flex: 1
     },
     upperContainer:
     {
@@ -84,12 +71,13 @@ const makeStyles = (H, W) => StyleSheet.create({
         elevation: 15
     },
     ImageBackground: {
-        height: H, 
-        width: W, 
-        opacity: 0.2,
+        flex: 1,
+        opacity: 0.5,
+        backgroundColor: "#131313"
     },
     Devider: {
-        marginHorizontal: W * 0.02, color: "black",
+        marginHorizontal: W * 0.02,
+        color: "black",
     },
    
 
@@ -119,11 +107,11 @@ const makeStyles = (H, W) => StyleSheet.create({
     forgotpassword:
     {
         fontSize: Spaces.lar,
-      //  marginVertical: H*0.03,
-        padding: Spaces.sm,
-        textDecorationLine:'underline',
+        marginVertical: H * 0.03,
+        padding: 5,
+        textDecorationLine: 'underline',
         alignItems: 'flex-start',
-        color:Colors.buttoncolor
+        color: Colors.buttoncolor
     },
     textInput:
     {
@@ -132,7 +120,11 @@ const makeStyles = (H, W) => StyleSheet.create({
         height: 45,
         marginTop: H * 0.02,
         padding: 1,
-
+    },
+    imageStyle:
+    {
+        flex: 1
     }
+
 })
 export default Password;
