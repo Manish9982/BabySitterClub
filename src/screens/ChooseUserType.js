@@ -1,32 +1,46 @@
-import { ImageBackground, StyleSheet, View, useWindowDimensions } from 'react-native'
+import { ImageBackground, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React from 'react'
 import { Text } from 'react-native-paper'
 import CustomButton from '../components/Button'
 import Colors from '../helper/Colors'
 import Spaces from '../helper/Spaces'
 import Fonts from '../helper/Fonts'
+import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 
-const ChooseUserType = () => {
+const ChooseUserType = ({ navigation }) => {
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
 
     const styles = makeStyles(H, W)
 
+    const onPressSmallBox = () => {
+        navigation.navigate('CountryList')
+    }
+
+    const onPressOne = () => {
+        navigation.navigate('BottomTabs')
+    }
+
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}
             source={require('../assets//images/app_bg.webp')}
             style={styles.container}>
-            <View style={styles.smallBox}>
-                <Text style={[styles.countryText, Fonts.xlSemiBold]}>India</Text>
-            </View>
+            <TouchableOpacity
+                onPress={onPressSmallBox}
+                style={styles.smallBox}>
+                <Text style={[styles.countryText, Fonts.xlSemiBold]}>India <AntDesign name="caretright" size={16} /></Text>
+            </TouchableOpacity>
             <View style={styles.box}>
                 <CustomButton
+                    onPressButton={onPressOne}
                     title={'I want to babysit'}
                     style={styles.button}
                 />
-                <CustomButton title={'I am looking for a babysitter'} />
+                <CustomButton
+                    title={'I am looking for a babysitter'}
+                />
             </View>
 
         </ImageBackground>
@@ -50,7 +64,6 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     smallBox:
     {
-        width: W * 0.45,
         alignItems: 'center',
         alignSelf: 'center',
         position: 'absolute',

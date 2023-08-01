@@ -56,7 +56,7 @@ const Register = ({ navigation }) => {
                 <Text style={[styles.text1, Fonts.xlSemiBold]}>Sign up</Text>
                 <Divider style={styles.Devider}></Divider>
                 <View style={styles.textContainerForAlignment}>
-                    <Text style={[styles.text2, Fonts.medMedium]}>Please enter details to contiue!</Text>
+                    <Text style={[styles.text2, Fonts.medMedium]}>Please enter details to continue!</Text>
                     <TextInputComponent
                         placeholder='Enter First Name'
                         value={name}
