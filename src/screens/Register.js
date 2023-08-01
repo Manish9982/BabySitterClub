@@ -43,7 +43,7 @@ const Register = ({ navigation }) => {
         } else if (password.length == 0) {
             Alert.alert("Alert!", "Password can not be empty")
         } else {
-            navigation.navigate("ForgotPassword")
+            navigation.navigate("BottomTabs")
         }
     }
     
