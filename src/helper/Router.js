@@ -28,6 +28,7 @@ const Router = () => {
                 <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{headerShown:false}} />
                 <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }} />
+
             </Stack.Navigator>
         </NavigationContainer>
     )

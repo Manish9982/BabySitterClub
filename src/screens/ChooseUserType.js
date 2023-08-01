@@ -19,7 +19,10 @@ const ChooseUserType = ({ navigation }) => {
     }
 
     const onPressOne = () => {
-        navigation.navigate('BottomTabs')
+        navigation.navigate('Login')
+    }
+    const onPressTwo= () => {
+        navigation.navigate('Login')
     }
 
     return (
@@ -35,11 +38,12 @@ const ChooseUserType = ({ navigation }) => {
             <View style={styles.box}>
                 <CustomButton
                     onPressButton={onPressOne}
-                    title={'I want to babysit'}
+                    title={'I want to babysit'} //babysitters
                     style={styles.button}
                 />
                 <CustomButton
-                    title={'I am looking for a babysitter'}
+                onPressButton={onPressTwo}
+                    title={'I am looking for a babysitter'} // parent
                 />
             </View>
 

@@ -19,7 +19,7 @@ const SelectCountry = ({ navigation }) => {
     ];
 
     const onPressContinue = () => {
-        navigation.navigate("Login")
+        navigation.navigate("ChooseUserType")
     }
 
     const handleCountrySelect = (country) => {
