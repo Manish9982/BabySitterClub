@@ -7,80 +7,44 @@ import Fonts from '../helper/Fonts';
 import CustomButton from '../components/Button';
 import TextInputComponent from '../components/TextInputComponent';
 
-const Register = ({ navigation }) => {
-  
+const ForgotPassword = ({ navigation }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
-    const [name, setName] = useState("")
-    const [lastname, setLastName] = useState("")
     const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [visible, setVisible] = useState(true)
-
-    const onDismissSnackBar = () => setVisible(false)
 
     const testEmail = (text) => {
         const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         return regex.test(text)
     }
-    const testName = (text) => {
-        const regex = /^[a-zA-Z ]+$/
-        return regex.test(text)
-    }
-    const testNumber = (num) => {
-        const regex2 = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
-        return regex2.test(num)
-    }
 
-    const onPressSignup = () => {
-        if (!testName(name)) {
-            Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers")
-        } else if (!testName(lastname)) {
-            Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers")
-        } else if (!testEmail(email)) {
+    const onPressSubmit = () => {
+        if (!testEmail(email)) {
             Alert.alert("Alert", "Please enter valid email")
-        } else if (password.length == 0) {
-            Alert.alert("Alert!", "Password can not be empty")
         } else {
-            navigation.navigate("ForgotPassword")
+            navigation.navigate("ChooseUserType")
         }
     }
-    
+
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}
             source={require('../assets/images/app_bg.webp')}
             style={styles.ImageBackground}>
             <View style={styles.viewContainer2}>
-                <Text style={[styles.text1, Fonts.xlSemiBold]}>Sign up</Text>
+                <Text style={[styles.text1, Fonts.xlSemiBold]}>Forgot Password</Text>
                 <Divider style={styles.Devider}></Divider>
                 <View style={styles.textContainerForAlignment}>
-                    <Text style={[styles.text2, Fonts.medMedium]}>Please enter details to continue!</Text>
-                    <TextInputComponent
-                        placeholder='Enter First Name'
-                        value={name}
-                        onChangeText={(text) => { setName(text) }}
-                    />
-                    <TextInputComponent
-                        placeholder='Enter Last Name'
-                        value={lastname}
-                        onChangeText={(text) => { setLastName(text) }}
-                    />
+                    <Text style={[styles.text2, Fonts.medMedium]}>Please enter your email-Id registered with us to reset password!</Text>
+
                     <TextInputComponent
                         placeholder='Enter Email'
                         value={email}
-                        onChangeText={(text) => { setEmail(text) }}
-                    />
-                    <TextInputComponent
-                        placeholder='Enter Password'
-                        value={password}
-                        onChangeText={(text) => { setPassword(text) }}
-                    />
+                        onChangeText={(text) => { setEmail(text) }} />
+
                     <CustomButton
-                        onPressButton={onPressSignup}
-                        title={'Sign up'}
-                    />
+                        onPressButton={onPressSubmit}
+                        title={'Submit'} />
                 </View>
 
 
@@ -176,4 +140,4 @@ const makeStyles = (H, W) => StyleSheet.create({
     }
 
 })
-export default Register;
+export default ForgotPassword;

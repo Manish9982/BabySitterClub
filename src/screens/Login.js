@@ -1,4 +1,4 @@
-import { StyleSheet, View, ImageBackground, useWindowDimensions, } from 'react-native'
+import { StyleSheet, View, ImageBackground, useWindowDimensions, Alert} from 'react-native'
 import { Text, Divider } from 'react-native-paper';
 import React, { useState } from 'react'
 import Fonts from '../helper/Fonts';
@@ -16,8 +16,19 @@ const Login = ({ navigation, route }) => {
 
   const [email, setEmail] = useState("")
 
+  const testEmail = (text) => {
+    const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    return regex.test(text)
+}
+
   const onPressContinue = () => {
-    navigation.navigate("Password")
+    if(!testEmail(email)){
+      Alert.alert("Alert", "Please enter valid email")
+
+    }else{
+      navigation.navigate("Password")
+
+    }
   }
 
   return (
