@@ -1,4 +1,4 @@
-import { StyleSheet, View, ImageBackground, useWindowDimensions,Alert,TouchableOpacity } from 'react-native'
+import { StyleSheet, View, ImageBackground, useWindowDimensions, Alert } from 'react-native'
 import { Text, Divider } from 'react-native-paper';
 import React, { useState } from 'react'
 import Colors from '../helper/Colors';
@@ -7,51 +7,47 @@ import Fonts from '../helper/Fonts';
 import CustomButton from '../components/Button';
 import TextInputComponent from '../components/TextInputComponent';
 
-const Password = ({ navigation }) => {
-
+const ForgotPassword = ({ navigation }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
-
     const styles = makeStyles(H, W)
+    const [email, setEmail] = useState("")
 
-    const [password, setPassword] = useState("")
+    const testEmail = (text) => {
+        const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        return regex.test(text)
+    }
 
-    const onPressContinue = () => {
-        if(password.length==0){
-            Alert.alert("Alert", "Password can not be empty")
-        }else{
-            navigation.navigate("Register")
-
+    const onPressSubmit = () => {
+        if (!testEmail(email)) {
+            Alert.alert("Alert", "Please enter valid email")
+        } else {
+            navigation.navigate("ChooseUserType")
         }
     }
+
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}
-            source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
-            style={styles.ImageBackground} >
+            source={require('../assets/images/app_bg.webp')}
+            style={styles.ImageBackground}>
             <View style={styles.viewContainer2}>
-                <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome back, Gaurav</Text>
+                <Text style={[styles.text1, Fonts.xlSemiBold]}>Forgot Password</Text>
                 <Divider style={styles.Devider}></Divider>
                 <View style={styles.textContainerForAlignment}>
-                    <Text style={[styles.text2, Fonts.medMedium]}>Enter password to continue!</Text>
+                    <Text style={[styles.text2, Fonts.medMedium]}>Please enter your email-Id registered with us to reset password!</Text>
+
                     <TextInputComponent
-                        placeholder='Enter Password'
-                        value={password}
-                        onChangeText={(text) => { setPassword(text) }}
-                    />
+                        placeholder='Enter Email'
+                        value={email}
+                        onChangeText={(text) => { setEmail(text) }} />
+
                     <CustomButton
-                        title={'Continue'}
-                        onPressButton={onPressContinue}
-                    />
-
-
-                    <TouchableOpacity onPress={()=>{
-                        navigation.navigate("ForgotPassword")}}>
-                    <Text
-                        style={[styles.forgotpassword, Fonts.medMedium]}>Forgot Password?</Text >
-                    </TouchableOpacity>
-                  
+                        onPressButton={onPressSubmit}
+                        title={'Submit'} />
                 </View>
+
+
             </View>
         </ImageBackground>
     )
@@ -81,12 +77,15 @@ const makeStyles = (H, W) => StyleSheet.create({
         width: W * 0.95,
         backgroundColor: "white",
         borderRadius: 5,
-        elevation: 15
+        elevation: 15,
+        paddingVertical: Spaces.xl
+
     },
     ImageBackground: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: "#131313"
     },
     Devider: {
         marginHorizontal: W * 0.02,
@@ -141,4 +140,4 @@ const makeStyles = (H, W) => StyleSheet.create({
     }
 
 })
-export default Password;
+export default ForgotPassword;

@@ -35,15 +35,15 @@ const Register = ({ navigation }) => {
 
     const onPressSignup = () => {
         if (!testName(name)) {
-            Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers!")
+            Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers")
         } else if (!testName(lastname)) {
-            Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers!")
+            Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers")
         } else if (!testEmail(email)) {
-            Alert.alert("Alert", "Please enter valid email!")
+            Alert.alert("Alert", "Please enter valid email")
         } else if (password.length == 0) {
-            Alert.alert("Alert!", "Password can not be empty!")
+            Alert.alert("Alert!", "Password can not be empty")
         } else {
-            navigation.navigate("ChooseUserType")
+            navigation.navigate("ForgotPassword")
         }
     }
     
