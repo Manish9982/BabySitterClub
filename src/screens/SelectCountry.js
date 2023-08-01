@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ImageBackground } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import CustomButton from '../components/Button';
 import Fonts from '../helper/Fonts';
 
-const SelectCountry = ({navigation}) => {
+const SelectCountry = ({ navigation }) => {
     const [selectedCountry, setSelectedCountry] = useState('');
 
     const countries = [
@@ -19,7 +19,7 @@ const SelectCountry = ({navigation}) => {
     ];
 
     const onPressContinue = () => {
-      navigation.navigate("Login")
+        navigation.navigate("Login")
     }
 
     const handleCountrySelect = (country) => {
@@ -27,27 +27,32 @@ const SelectCountry = ({navigation}) => {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={[styles.heading, Fonts.larMedium]}>Select your country:</Text>
-            {(
-                <View style={styles.pickerContainer}>
-                    <Picker
-                        selectedValue={selectedCountry}
-                        onValueChange={(itemValue) => handleCountrySelect(itemValue)}
-                    >
-                        <Picker.Item key={0} label='Choose a country' value='Choose a country' />
-                        {countries.map((country, index) => (
-                            <Picker.Item key={index + 1} label={country} value={country} />
-                        ))}
-                    </Picker>
-                </View>
-            )}
+        <ImageBackground
+            imageStyle={styles.imageStyle}
+            source={require('../assets//images/app_bg.webp')}
+            style={styles.container}>
+            <View style={styles.box}>
+                <Text style={[styles.heading, Fonts.larMedium]}>Select your country:</Text>
+                {(
+                    <View style={styles.pickerContainer}>
+                        <Picker
+                            selectedValue={selectedCountry}
+                            onValueChange={(itemValue) => handleCountrySelect(itemValue)}
+                        >
+                            <Picker.Item key={0} label='Choose a country' value='Choose a country' />
+                            {countries.map((country, index) => (
+                                <Picker.Item key={index + 1} label={country} value={country} />
+                            ))}
+                        </Picker>
+                    </View>
+                )}
 
-            <CustomButton
-                title={'Continue'}
-                onPressButton={onPressContinue}
-            />
-        </View>
+                <CustomButton
+                    title={'Continue'}
+                    onPressButton={onPressContinue}
+                />
+            </View>
+        </ImageBackground>
     );
 };
 
@@ -58,11 +63,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: Spaces.xl,
     },
+    imageStyle:
+    {
+        opacity: 0.4
+    },
+    box:
+    {
+        backgroundColor: Colors.white,
+        padding:Spaces.med,
+        borderRadius:8
+    },
     heading: {
-       // fontSize: 24,
-       // fontWeight: 'bold',
+        // fontSize: 24,
+        // fontWeight: 'bold',
         marginBottom: Spaces.xl,
-        color:"black"
+        color: "black"
     },
     countryBox: {
         borderWidth: 1,
@@ -81,7 +96,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     pickerContainer: {
-        width: '100%',
         maxHeight: 200,
         borderColor: Colors.outlineColor,
         borderWidth: 1,

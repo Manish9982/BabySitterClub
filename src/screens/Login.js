@@ -27,7 +27,7 @@ const Login = ({ navigation, route }) => {
         width: W,
         opacity: 0.4
       }}
-      source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
+      source={require('../assets//images/app_bg.webp')}
       style={styles.ImageBackground}>
       <View style={styles.viewContainer1}>
         <View style={styles.viewContainer2}>
