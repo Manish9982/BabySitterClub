@@ -8,6 +8,8 @@ import Password from '../screens/Password';
 import Register from '../screens/Register';
 import ChooseUserType from '../screens/ChooseUserType';
 import Forgotpassword from '../screens/ForgotPassword';
+import CountryList from '../screens/CountryList';
+import BottomTabs from './BottomTabs';
 
 const Router = () => {
     const Stack = createNativeStackNavigator();
@@ -19,7 +21,9 @@ const Router = () => {
                 <Stack.Screen name="Password" component={Password} options={{headerShown:false}} />
                 <Stack.Screen name="Register" component={Register} options={{headerShown:false}} />
                 <Stack.Screen name="ChooseUserType" component={ChooseUserType} options={{headerShown:false}} />
+                <Stack.Screen name="CountryList" component={CountryList} options={{ headerTitle: 'Choose Country' }} />
                 <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{headerShown:false}} />
+                <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     )
