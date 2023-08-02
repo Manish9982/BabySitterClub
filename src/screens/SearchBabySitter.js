@@ -18,7 +18,7 @@ const SearchBabySitter = () => {
         {
             id: '2',
             profilePicture: 'https://www.pexels.com/photo/blue-jeans-3036405',
-            name: 'MS Dhoni',
+            name: 'John Wick',
             description: 'Experienced babysitter with CPR certification.',
             hourlyPrice: 15,
             isFavourite: false,
@@ -26,7 +26,7 @@ const SearchBabySitter = () => {
         {
             id: '3',
             profilePicture: 'https://www.pexels.com/photo/mother-holding-her-little-baby-17473846',
-            name: 'Saurav Ganguly',
+            name: 'Steve Austin',
             description: 'Experienced babysitter with CPR certification.',
             hourlyPrice: 15,
             isFavourite: false,
@@ -34,7 +34,7 @@ const SearchBabySitter = () => {
         {
             id: '4',
             profilePicture: 'https://www.pexels.com/photo/man-holding-a-child-in-his-arms-17401645',
-            name: 'Irfan Pathan',
+            name: 'John Doe',
             description: 'Experienced babysitter with CPR certification.',
             hourlyPrice: 15,
             isFavourite: false,
@@ -42,7 +42,7 @@ const SearchBabySitter = () => {
         {
             id: '5',
             profilePicture: 'https://www.pexels.com/photo/father-looking-at-his-baby-4374504',
-            name: 'Vivek Mishra',
+            name: 'Stuart Broad',
             description: 'Experienced babysitter with CPR certification.',
             hourlyPrice: 15,
             isFavourite: false,
@@ -50,7 +50,7 @@ const SearchBabySitter = () => {
         {
             id: '6',
             profilePicture: 'https://www.pexels.com/photo/happy-father-and-son-4586688',
-            name: 'Chris Gayle',
+            name: 'Chris Jordan',
             description: 'Experienced babysitter with CPR certification.',
             hourlyPrice: 15,
             isFavourite: false,

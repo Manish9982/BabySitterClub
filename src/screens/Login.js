@@ -1,4 +1,4 @@
-import { StyleSheet, View, ImageBackground, useWindowDimensions, Alert} from 'react-native'
+import { StyleSheet, View, ImageBackground, useWindowDimensions, Alert, SafeAreaView } from 'react-native'
 import { Text, Divider } from 'react-native-paper';
 import React, { useState } from 'react'
 import Fonts from '../helper/Fonts';
@@ -19,46 +19,48 @@ const Login = ({ navigation, route }) => {
   const testEmail = (text) => {
     const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     return regex.test(text)
-}
+  }
 
   const onPressContinue = () => {
-    if(!testEmail(email)){
+    if (!testEmail(email)) {
       Alert.alert("Alert", "Please enter valid email")
 
-    }else{
+    } else {
       navigation.navigate("Password")
 
     }
   }
 
   return (
-    <ImageBackground
-      imageStyle={{
-        height: H,
-        width: W,
-        opacity: 0.4
-      }}
-      source={require('../assets//images/app_bg.webp')}
-      style={styles.ImageBackground}>
-      <View style={styles.viewContainer1}>
-        <View style={styles.viewContainer2}>
-          <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome to BabySits Club</Text>
-          <Divider style={styles.divider} />
-          <View style={styles.textContainerForAlignment}>
-            <Text style={[styles.text2, Fonts.medMedium]}>Please enter email to login or sign up!</Text>
-            <TextInputComponent
-              placeholder='Enter Email'
-              value={email}
-              onChangeText={(text) => { setEmail(text) }}
-            />
-            <CustomButton
-              title={'Continue'}
-              onPressButton={onPressContinue}
-            />
+    <SafeAreaView>
+      <ImageBackground
+        imageStyle={{
+          height: H,
+          width: W,
+          opacity: 0.4
+        }}
+        source={require('../assets//images/app_bg.webp')}
+        style={styles.ImageBackground}>
+        <View style={styles.viewContainer1}>
+          <View style={styles.viewContainer2}>
+            <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome to BabySits Club</Text>
+            <Divider style={styles.divider} />
+            <View style={styles.textContainerForAlignment}>
+              <Text style={[styles.text2, Fonts.medMedium]}>Please enter email to login or sign up!</Text>
+              <TextInputComponent
+                placeholder='Enter Email'
+                value={email}
+                onChangeText={(text) => { setEmail(text) }}
+              />
+              <CustomButton
+                title={'Continue'}
+                onPressButton={onPressContinue}
+              />
+            </View>
           </View>
         </View>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </SafeAreaView>
   )
 }
 
@@ -76,7 +78,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     alignItems: "center",
     borderRadius: 5,
   },
-  
+
   ImageBackground: {
     flex: 1
   },
@@ -126,7 +128,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 5,
     elevation: 15,
-    paddingVertical: Spaces.xl
+    paddingVertical: Spaces.xl,
+    marginBottom: H * 0.1
   },
 })
 export default Login;

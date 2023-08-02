@@ -12,10 +12,10 @@ const SelectCountry = ({ navigation }) => {
     const cities = [
         'Dallas',
     ];
-
+ 
     const onPressContinue = () => {
         if ((selectedCity !== 'Choose a city') && (selectedCity !== '')) {
-            navigation.navigate("ChooseUserType")
+            navigation.navigate("Services")
         }
     }
 
