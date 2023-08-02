@@ -14,14 +14,10 @@ const ChooseUserType = ({ navigation }) => {
 
     const styles = makeStyles(H, W)
 
-    const onPressSmallBox = () => {
-        navigation.navigate('CountryList')
-    }
-
     const onPressOne = () => {
         navigation.navigate('Login')
     }
-    const onPressTwo= () => {
+    const onPressTwo = () => {
         navigation.navigate('Login')
     }
 
@@ -30,11 +26,6 @@ const ChooseUserType = ({ navigation }) => {
             imageStyle={styles.imageStyle}
             source={require('../assets//images/app_bg.webp')}
             style={styles.container}>
-            <TouchableOpacity
-                onPress={onPressSmallBox}
-                style={styles.smallBox}>
-                <Text style={[styles.countryText, Fonts.xlSemiBold]}>India <AntDesign name="caretright" size={16} /></Text>
-            </TouchableOpacity>
             <View style={styles.box}>
                 <CustomButton
                     onPressButton={onPressOne}
@@ -42,7 +33,7 @@ const ChooseUserType = ({ navigation }) => {
                     style={styles.button}
                 />
                 <CustomButton
-                onPressButton={onPressTwo}
+                    onPressButton={onPressTwo}
                     title={'I am looking for a babysitter'} // parent
                 />
             </View>

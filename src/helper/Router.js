@@ -19,16 +19,15 @@ const Router = () => {
         <NavigationContainer>
             <Stack.Navigator>
                 <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-                <Stack.Screen name="SelectCountry" component={SelectCountry} options={{ headerShown: false }} />
+                <Stack.Screen name="SelectCountry" component={SelectCountry} options={{}} />
                 <Stack.Screen name="Login" component={Login} options={{headerShown:false}} />
                 <Stack.Screen name="Password" component={Password} options={{headerShown:false}} />
                 <Stack.Screen name="Register" component={Register} options={{headerShown:false}} />
                 <Stack.Screen name="ChooseUserType" component={ChooseUserType} options={{headerShown:false}} />
                 <Stack.Screen name="CountryList" component={CountryList} options={{ headerTitle: 'Choose Country' }} />
-                <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{headerShown:false}} />
+                <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{}} />
                 <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }} />
-
             </Stack.Navigator>
         </NavigationContainer>
     )

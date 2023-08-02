@@ -12,6 +12,7 @@ const TextInputComponent = ({ value, onChangeText, placeholder }) => {
       onChangeText={onChangeText}
       activeOutlineColor=''
       mode="outlined"
+      label={placeholder}
     />
   )
 }
@@ -20,6 +21,8 @@ export default TextInputComponent
 const styles = StyleSheet.create({
   input:
   {
-    marginVertical: Spaces.med
+    marginVertical: Spaces.med,
+    justifyContent: 'center',
+    paddingVertical: 0,
   }
 })
