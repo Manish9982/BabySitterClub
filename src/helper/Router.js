@@ -12,12 +12,15 @@ import CountryList from '../screens/CountryList';
 import BottomTabs from './BottomTabs';
 import ChatScreen from '../screens/ChatScreen';
 import Splash from '../screens/Splash';
+import Services from '../screens/Services';
 
 const Router = () => {
     const Stack = createNativeStackNavigator();
     return (
         <NavigationContainer>
             <Stack.Navigator>
+            <Stack.Screen name="Services" component={Services} />
+
                 <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
                 <Stack.Screen name="SelectCountry" component={SelectCountry} options={{ headerShown: false }} />
                 <Stack.Screen name="Login" component={Login} options={{headerShown:false}} />
