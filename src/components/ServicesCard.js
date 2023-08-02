@@ -1,26 +1,29 @@
-import React from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
-import { Text } from 'react-native-paper';
-import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import React, { useState } from 'react';
+import { View, Image, StyleSheet, useWindowDimensions, TouchableOpacity } from 'react-native';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
+import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import { Text } from 'react-native-paper';
 
-const ServiceCard = ({ profilePicture, name, length, onPressCard }) => {
+const ServiceCard = ({ picture, name, isSelected, onPressServices }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
     return (
-        <View style={[styles.container, {}]}>
-            <Image
-                defaultSource={require('../assets/images/mother.png')}
-                source={{ uri: profilePicture }}
-                style={styles.profilePicture} />
-            <View style={styles.card}>
-                <Text style={[styles.name, Fonts.larSemiBold]}>{name}</Text>
+        <TouchableOpacity
+            onPress={onPressServices}
+            style={[styles.container, { backgroundColor: isSelected ? Colors.buttoncolor : Colors.white }]}>
+            <View style={styles.checkBox}>
+                <AntDesign name={'checkcircle'} color={Colors.white} size={25} />
             </View>
-
-        </View>
+            <Image
+                source={{ uri: picture }}
+                style={[styles.picture, { tintColor: isSelected ? Colors.white : Colors.black }]} />
+            <View style={styles.card}>
+                <Text style={[styles.name, Fonts.larSemiBold, { color: isSelected ? Colors.white : Colors.black }]}>{name}</Text>
+            </View>
+        </TouchableOpacity>
     );
 };
 
@@ -30,26 +33,22 @@ const makeStyles = (H, W) => StyleSheet.create({
     container:
     {
         padding: Spaces.sm,
-        backgroundColor: Colors.white,
         margin: Spaces.sm,
         borderColor: Colors.blue,
         borderWidth: 0.6,
         alignItems: 'center',
-        height: W * 0.4,
-        width: W * 0.4,
+        height: W * 0.35,
+        width: W * 0.35,
         borderRadius: 8,
-        marginHorizontal:W*0.05,
-        justifyContent: 'center',
+        marginHorizontal: W * 0.05,
+        justifyContent: 'space-evenly',
         alignSelf: 'center',
-        borderWidth:0.6
-
-
+        borderWidth: 0.6
     },
-    profilePicture:
+    picture:
     {
         width: 40,
         height: 40,
-
     },
     card:
     {
@@ -63,5 +62,11 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         color: Colors.gray
     },
+    checkBox:
+    {
+       position:'absolute',
+       bottom:W*0.27,
+       left:W*0.01,
+    }
 
 })

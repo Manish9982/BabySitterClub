@@ -1,36 +1,29 @@
 import { FlatList, StyleSheet, Alert, useWindowDimensions, ImageBackground } from 'react-native'
 import React, { useState } from 'react'
-import { Searchbar, TextInput } from 'react-native-paper'
-import BabySitterCard from '../components/BabySitterCard';
 import Spaces from '../helper/Spaces';
-import FavBabySittersCard from '../components/FavBabySittersCard';
 import ServicesCard from '../components/ServicesCard';
 import CustomButton from '../components/Button';
 
-const Services = () => {
-    const [searchText, setSearchText] = useState('');
-    const [babysitters, setBabysitters] = useState([
+const Services = ({ navigation }) => {
+    const [services, setServices] = useState([
         {
             id: '1',
-            profilePicture: 'https://cdn-icons-png.flaticon.com/128/3282/3282468.png',
+            picture: 'https://cdn-icons-png.flaticon.com/128/3282/3282468.png',
             name: 'Child Care',
-            description: 'Faridabad',
-
+            isSelected: false
         },
         {
             id: '2',
-            profilePicture: 'https://cdn-icons-png.flaticon.com/128/1076/1076928.png',
+            picture: 'https://cdn-icons-png.flaticon.com/128/1076/1076928.png',
             name: 'Pet Care ',
-            description: 'Ballabgarh',
-
+            isSelected: false,
         },
 
         {
             id: '3',
-            profilePicture: 'https://cdn-icons-png.flaticon.com/128/1416/1416832.png',
+            picture: 'https://cdn-icons-png.flaticon.com/128/1416/1416832.png',
             name: 'Housekeeping ',
-            description: 'Ballabgarh',
-
+            isSelected: false,
         },
     ]);
 
@@ -38,20 +31,36 @@ const Services = () => {
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
 
-
     const onPressContinue = () => {
-        Alert.alert("Alert", "Service Selected")
+        services.map(item => {
+            if (item.isSelected == false) {
+                null
+            }
+            else {
+                navigation.navigate('ChooseUserType')
+            }
+        })
     }
 
-    const renderfavBabysitterCard = ({ item }) => (
-        <ServicesCard
-            // onPress={onPressCard}
+    const onPressService = (item) => {
+        console.log('item', item)
+        const updatedService = services.map(service => {
+            if (service.id == item.id) {
+                const newItem = item
+                newItem.isSelected = !newItem.isSelected
+                return newItem
+            }
+            return service;
+        });
+        setServices(updatedService);
+    }
 
-            length={babysitters?.length}
-            profilePicture={item.profilePicture}
-            name={item.name}
-            description={item.description}
-            onPressFavourite={() => handleFavourite(item.id)}
+    const renderServices = ({ item }) => (
+        <ServicesCard
+            isSelected={item?.isSelected}
+            picture={item?.picture}
+            name={item?.name}
+            onPressServices={() => onPressService(item)}
         />
     );
 
@@ -61,15 +70,14 @@ const Services = () => {
             source={require('../assets/images/app_bg.webp')}
             style={{ flex: 1 }}>
             <FlatList
-                style={[styles.list, { marginTop: babysitters?.length > 3 ? 0 : H * 0.09 }]}
-                data={babysitters}
-                renderItem={renderfavBabysitterCard}
+                style={[styles.list, { marginTop: services?.length > 3 ? 0 : H * 0.09 }]}
+                data={services}
+                renderItem={renderServices}
                 keyExtractor={(item) => item.id.toString()}
-                numColumns={babysitters?.length > 3 ? 2 : 1} // Set the number of columns here, you can adjust as needed
-                contentContainerStyle={styles.flatListContent}
+                numColumns={services?.length > 3 ? 2 : 1} // Set the number of columns here, you can adjust as needed
             />
-
             <CustomButton
+                style={styles.button}
                 onPressButton={onPressContinue}
                 title={'Continue'} />
         </ImageBackground>
@@ -90,6 +98,9 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     list: {
 
-
+    },
+    button:
+    {
+        top: - H * 0.04
     }
 })

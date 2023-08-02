@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, Platform } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -18,19 +18,21 @@ const Router = () => {
     const Stack = createNativeStackNavigator();
     return (
         <NavigationContainer>
-            <Stack.Navigator>
-            <Stack.Screen name="Services" component={Services} />
-
+            <Stack.Navigator screenOptions={{
+                headerBackTitleVisible: false,
+                headerShown: Platform.OS == "android" ? false : true
+            }}>
                 <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-                <Stack.Screen name="SelectCountry" component={SelectCountry} options={{}} />
-                <Stack.Screen name="Login" component={Login} options={{headerShown:false}} />
-                <Stack.Screen name="Password" component={Password} options={{headerShown:false}} />
-                <Stack.Screen name="Register" component={Register} options={{headerShown:false}} />
-                <Stack.Screen name="ChooseUserType" component={ChooseUserType} options={{headerShown:false}} />
+                <Stack.Screen name="Services" component={Services} />
+                <Stack.Screen name="SelectCountry" component={SelectCountry} options={{ headerTitle: '' }} />
+                <Stack.Screen name="Login" component={Login} options={{ headerTitle: '' }} />
+                <Stack.Screen name="Password" component={Password} options={{}} />
+                <Stack.Screen name="Register" component={Register} options={{}} />
+                <Stack.Screen name="ChooseUserType" component={ChooseUserType} options={{ headerTitle: '' }} />
                 <Stack.Screen name="CountryList" component={CountryList} options={{ headerTitle: 'Choose Country' }} />
                 <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{}} />
                 <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
-                <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="ChatScreen" component={ChatScreen} options={{}} />
             </Stack.Navigator>
         </NavigationContainer>
     )

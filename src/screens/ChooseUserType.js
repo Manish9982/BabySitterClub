@@ -1,11 +1,8 @@
-import { ImageBackground, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { ImageBackground, StyleSheet, View, useWindowDimensions } from 'react-native'
 import React from 'react'
-import { Text } from 'react-native-paper'
 import CustomButton from '../components/Button'
 import Colors from '../helper/Colors'
 import Spaces from '../helper/Spaces'
-import Fonts from '../helper/Fonts'
-import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 
 const ChooseUserType = ({ navigation }) => {
 
@@ -48,10 +45,11 @@ const makeStyles = (H, W) => StyleSheet.create({
     container:
     {
         flex: 1,
+        justifyContent:'center'
     },
     imageStyle:
     {
-        opacity: 0.5
+        opacity: 0.5,
     },
     button:
     {
@@ -70,7 +68,6 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     box:
     {
-        marginTop: H * 0.7,
         backgroundColor: Colors.grayTransparent,
         alignSelf: 'center',
         padding: Spaces.xl,
