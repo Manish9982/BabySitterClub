@@ -3,17 +3,30 @@ import React from 'react'
 import { Divider, List } from 'react-native-paper'
 import Colors from '../helper/Colors'
 import CustomButton from '../components/Button'
+import { useDispatch, useSelector } from 'react-redux'
 
-const Account = () => {
+const Account = ({ navigation }) => {
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
 
     const styles = makeStyles(H, W)
 
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    const dispatch = useDispatch();
+
+    const handleLogin = () => {
+        dispatch(login());
+    };
+
+    const handleLogout = () => {
+        dispatch(logout());
+    };
+
     const DATA = [
         {
             title: 'Account',
+            action: () => navigation.navigate('Profile')
         },
         {
             title: 'Switch User Type',
@@ -39,6 +52,7 @@ const Account = () => {
         return (
             <>
                 <List.Item
+                    onPress={item?.action}
                     title={item?.title}
                     underlayColor={Colors.blue}
                 />
@@ -54,9 +68,13 @@ const Account = () => {
                 renderItem={renderOptions}
                 keyExtractor={(item, index) => `${index}`}
             />
-            <CustomButton
-                style={styles.button}
-                title='Login' />
+            {
+                !isLoggedIn
+                &&
+                <CustomButton
+                    style={styles.button}
+                    title='Login' />
+            }
         </View>
     )
 }
