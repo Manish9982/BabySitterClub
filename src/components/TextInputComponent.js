@@ -23,6 +23,5 @@ const styles = StyleSheet.create({
   {
     marginVertical: Spaces.med,
     justifyContent: 'center',
-    paddingVertical: 0,
   }
 })
