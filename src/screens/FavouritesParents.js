@@ -1,12 +1,9 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { Searchbar, TextInput } from 'react-native-paper'
-import BabySitterCard from '../components/BabySitterCard';
 import Spaces from '../helper/Spaces';
 import FavBabySittersCard from '../components/FavBabySittersCard';
 
 const FavouritesParents = () => {
-    const [searchText, setSearchText] = useState('');
     const [babysitters, setBabysitters] = useState([
         {
             id: '1',
