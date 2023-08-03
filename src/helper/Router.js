@@ -23,8 +23,8 @@ const Router = () => {
                 headerBackTitleVisible: false,
                 headerShown: Platform.OS == "android" ? false : true
             }}>
-                <Stack.Screen name="Profile" component={Profile} options={{}} />
                 <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+                <Stack.Screen name="Profile" component={Profile} options={{}} />
                 <Stack.Screen name="Services" component={Services} />
                 <Stack.Screen name="SelectCountry" component={SelectCountry} options={{ headerTitle: '' }} />
                 <Stack.Screen name="Login" component={Login} options={{ headerTitle: '' }} />
