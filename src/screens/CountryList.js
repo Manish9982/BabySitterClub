@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, StyleSheet, View, useWindowDimensions } from 'react-native'
+import { FlatList, StyleSheet, View, useWindowDimensions } from 'react-native'
 import React, { useState } from 'react'
 import { Divider, List, Text } from 'react-native-paper'
 import { Searchbar } from 'react-native-paper'

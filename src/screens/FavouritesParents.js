@@ -6,7 +6,6 @@ import Spaces from '../helper/Spaces';
 import FavBabySittersCard from '../components/FavBabySittersCard';
 
 const FavouritesParents = () => {
-    const [searchText, setSearchText] = useState('');
     const [babysitters, setBabysitters] = useState([
         {
             id: '1',

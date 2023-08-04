@@ -30,7 +30,7 @@ const Password = ({ navigation }) => {
             source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
             style={styles.ImageBackground} >
             <View style={styles.viewContainer2}>
-                <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome back, Gaurav</Text>
+                <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome back, James</Text>
                 <Divider style={styles.Devider}></Divider>
                 <View style={styles.textContainerForAlignment}>
                     <Text style={[styles.text2, Fonts.medMedium]}>Enter password to continue!</Text>

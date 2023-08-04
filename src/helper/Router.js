@@ -13,6 +13,7 @@ import BottomTabs from './BottomTabs';
 import ChatScreen from '../screens/ChatScreen';
 import Splash from '../screens/Splash';
 import Services from '../screens/Services';
+import Profile from '../screens/Profile';
 
 const Router = () => {
     const Stack = createNativeStackNavigator();
@@ -23,6 +24,7 @@ const Router = () => {
                 headerShown: Platform.OS == "android" ? false : true
             }}>
                 <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+                <Stack.Screen name="Profile" component={Profile} options={{}} />
                 <Stack.Screen name="Services" component={Services} />
                 <Stack.Screen name="SelectCountry" component={SelectCountry} options={{ headerTitle: '' }} />
                 <Stack.Screen name="Login" component={Login} options={{ headerTitle: '' }} />
@@ -33,6 +35,7 @@ const Router = () => {
                 <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{}} />
                 <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="ChatScreen" component={ChatScreen} options={{}} />
+                
             </Stack.Navigator>
         </NavigationContainer>
     )
