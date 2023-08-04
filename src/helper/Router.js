@@ -23,6 +23,8 @@ const Router = () => {
                 headerBackTitleVisible: false,
                 headerShown: Platform.OS == "android" ? false : true
             }}>
+                <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
+
                 <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
                 <Stack.Screen name="Profile" component={Profile} options={{}} />
                 <Stack.Screen name="Services" component={Services} />
@@ -33,7 +35,7 @@ const Router = () => {
                 <Stack.Screen name="ChooseUserType" component={ChooseUserType} options={{ headerTitle: '' }} />
                 <Stack.Screen name="CountryList" component={CountryList} options={{ headerTitle: 'Choose Country' }} />
                 <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{}} />
-                <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
+                {/* <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} /> */}
                 <Stack.Screen name="ChatScreen" component={ChatScreen} options={{}} />
                 
             </Stack.Navigator>
