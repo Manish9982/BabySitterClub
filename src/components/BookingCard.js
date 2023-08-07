@@ -4,13 +4,15 @@ import Fonts from '../helper/Fonts';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 
-const BookingCard = ({ booking, onPressBookingCard }) => {
+const BookingCard = ({ booking, onItemPress }) => {
+
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
     return (
+
         <TouchableOpacity
-            onPress={onPressBookingCard}
+            onPress={onItemPress}
             style={styles.cardContainer}>
             <View style={styles.leftContent}>
                 <Image
@@ -22,7 +24,11 @@ const BookingCard = ({ booking, onPressBookingCard }) => {
                 <Text style={[styles.bookingStatus, Fonts.sm]}>{booking.type}</Text>
                 <Text style={[styles.bookingStatus, Fonts.sm]}>{booking.status}</Text>
             </View>
-            <View style={styles.rightContent}>
+            <TouchableOpacity
+                onPress={() => {
+                    onItemPress()
+                }}
+                style={styles.rightContent}>
                 <Text style={[styles.viewBookingText, Fonts.smMedium]}>View Booking</Text>
             </View>
         </TouchableOpacity>

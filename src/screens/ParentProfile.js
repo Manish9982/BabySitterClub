@@ -20,6 +20,7 @@ const ParentProfile = ({ navigation, route }) => {
                 style={styles.container}>
                 <View style={styles.upperContainer}>
                     <View>
+
                         <Image
                             source={require('../assets/images/profile-user.png')}
                             defaultSource={require('../assets/images/profile-user.png')}

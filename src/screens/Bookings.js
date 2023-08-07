@@ -33,11 +33,18 @@ const Bookings = ({ navigation }) => {
   }
 
 
+
+  const onClickHandle = () => {
+    navigation.navigate('BookingDetailsPage')
+
+  }
+
   const renderBookings = ({ item }) => (
     <BookingCard
       booking={item}
-      onPressBookingCard={onPressBookingCard}
+      onItemPress={() => { onClickHandle(item.id) }}
     />
+
   );
 
 
