@@ -54,7 +54,6 @@ const Account = ({ navigation }) => {
                 <List.Item
                     onPress={item?.action}
                     title={item?.title}
-                    underlayColor={Colors.blue}
                 />
                 <Divider />
             </>

@@ -20,7 +20,9 @@ const ParentProfile = ({ navigation, route }) => {
                 style={styles.container}>
                 <View style={styles.upperContainer}>
                     <View>
-                        <Image defaultSource={require('../assets/images/profile-user.png')}
+                        <Image
+                            source={require('../assets/images/profile-user.png')}
+                            defaultSource={require('../assets/images/profile-user.png')}
                             style={styles.profilePic}
                         />
                     </View>
@@ -225,7 +227,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         flexDirection: 'row',
         padding: Spaces.xl,
         flex: 2,
-        height:H*0.13
+        height: H * 0.13
     },
     floatText:
     {
