@@ -33,6 +33,14 @@ const ChooseUserType = ({ navigation }) => {
                     onPressButton={onPressTwo}
                     title={'I am looking for a babysitter'} // parent
                 />
+                <CustomButton
+                    onPressButton={onPressTwo}
+                    title={'I want to petsit'} // parent
+                />
+                <CustomButton
+                    onPressButton={onPressTwo}
+                    title={'I am looking for a petsitter'} // parent
+                />
             </View>
 
         </ImageBackground>
