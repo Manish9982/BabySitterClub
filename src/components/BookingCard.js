@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, Image, Text, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, Image, Text, StyleSheet, useWindowDimensions, TouchableOpacity } from 'react-native';
 import Fonts from '../helper/Fonts';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 
-const BookingCard = ({ booking }) => {
+const BookingCard = ({ booking, onItemPress }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
     return (
+
         <View style={styles.cardContainer}>
             <View style={styles.leftContent}>
                 <Image
@@ -20,9 +21,13 @@ const BookingCard = ({ booking }) => {
                 <Text style={[styles.bookingStatus, Fonts.sm]}>{booking.type}</Text>
                 <Text style={[styles.bookingStatus, Fonts.sm]}>{booking.status}</Text>
             </View>
-            <View style={styles.rightContent}>
+            <TouchableOpacity
+                onPress={() => {
+                    onItemPress()
+                }}
+                style={styles.rightContent}>
                 <Text style={[styles.viewBookingText, Fonts.smMedium]}>View Booking</Text>
-            </View>
+            </TouchableOpacity>
         </View>
     );
 };
