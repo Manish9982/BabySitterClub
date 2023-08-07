@@ -14,7 +14,7 @@ export default Fonts = {
 
     smSemiBold: {
         fontSize: 12,
-        fontWeight: '700',
+        //fontWeight: '700',
         fontFamily: "Poppins-SemiBold"
     },
     medSemiBold: {
@@ -24,24 +24,24 @@ export default Fonts = {
     },
     larSemiBold: {
         fontSize: 16,
-        fontWeight: '600',
-        fontFamily: "Poppins-Regular"
+        //fontWeight: '600',
+        fontFamily: "Poppins-SemiBold"
     },
 
     smBold: {
         fontSize: 12,
-        fontWeight: 'bold',
+        //fontWeight: '700',
         fontFamily: "Poppins-SemiBold"
     },
     medBold: {
         fontSize: 14,
-        fontWeight: 'bold',
+        //fontWeight: '700',
         fontFamily: "Poppins-SemiBold"
     },
     larBold: {
         fontSize: 18,
-        fontWeight: 'bold',
-        fontFamily: "Poppins-Regular"
+        //fontWeight: '700',
+        fontFamily: "Poppins-SemiBold"
     },
 
     smMedium: {

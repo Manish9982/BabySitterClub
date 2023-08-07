@@ -5,12 +5,15 @@ import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 
 const BookingCard = ({ booking, onItemPress }) => {
+
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
     return (
 
-        <View style={styles.cardContainer}>
+        <TouchableOpacity
+            onPress={onItemPress}
+            style={styles.cardContainer}>
             <View style={styles.leftContent}>
                 <Image
                     defaultSource={require('../assets/images/mother.png')}
@@ -27,8 +30,8 @@ const BookingCard = ({ booking, onItemPress }) => {
                 }}
                 style={styles.rightContent}>
                 <Text style={[styles.viewBookingText, Fonts.smMedium]}>View Booking</Text>
-            </TouchableOpacity>
-        </View>
+            </View>
+        </TouchableOpacity>
     );
 };
 

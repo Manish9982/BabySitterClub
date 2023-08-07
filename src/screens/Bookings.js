@@ -28,6 +28,10 @@ const Bookings = ({ navigation }) => {
     // Add more booking data as needed
   ];
 
+  const onPressBookingCard = () => {
+    navigation.navigate('ViewBookings')
+  }
+
 
 
   const onClickHandle = () => {
@@ -37,9 +41,10 @@ const Bookings = ({ navigation }) => {
 
   const renderBookings = ({ item }) => (
     <BookingCard
+      booking={item}
       onItemPress={() => { onClickHandle(item.id) }}
-      booking={item}>
-    </BookingCard>
+    />
+
   );
 
 

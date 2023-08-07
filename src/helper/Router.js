@@ -16,6 +16,8 @@ import Services from '../screens/Services';
 import Profile from '../screens/Profile';
 import ParentProfile from '../screens/ParentProfile';
 import BookingDetailsPage from '../screens/BookingDetailsPage';
+import ViewBookings from '../screens/ViewBookings';
+import Filters from '../screens/Filters';
 
 const Router = () => {
     const Stack = createNativeStackNavigator();
@@ -40,7 +42,8 @@ const Router = () => {
                 <Stack.Screen name="ChatScreen" component={ChatScreen} options={{}} />
                 <Stack.Screen name="ParentProfile" component={ParentProfile} options={{ headerTitle: 'Parent Profile' }} />
                 <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
-           
+                <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
+                <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
             </Stack.Navigator>
         </NavigationContainer>
     )
