@@ -1,10 +1,13 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import { Searchbar, TextInput } from 'react-native-paper'
+import { Searchbar } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
 import Spaces from '../helper/Spaces';
+import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import Colors from '../helper/Colors';
+import Fonts from '../helper/Fonts';
 
-const SearchBabySitter = () => {
+const SearchBabySitter = ({navigation}) => {
     const [searchText, setSearchText] = useState('');
     const [babysitters, setBabysitters] = useState([
         {
@@ -77,12 +80,22 @@ const SearchBabySitter = () => {
         />
     );
 
+    const onPressFilter = () =>
+    {
+        navigation.navigate('Filters')
+    }
+
     return (
         <View style={{ flex: 1 }}>
             <Searchbar
                 placeholder='Search Location'
                 style={styles.searchBar}
             />
+            <TouchableOpacity 
+            onPress={onPressFilter}
+            style={styles.filterBox}>
+                <Text style={styles.text}>Filter<AntDesign name="right" /></Text>
+            </TouchableOpacity>
             <FlatList
                 data={babysitters}
                 renderItem={renderBabysitterCard}
@@ -100,5 +113,19 @@ const styles = StyleSheet.create({
     searchBar:
     {
         margin: Spaces.med
+    },
+    filterBox:
+    {
+        borderWidth: 0.6,
+        borderColor: Colors.buttoncolor,
+        alignSelf: 'flex-end',
+        margin: Spaces.sm,
+        padding: Spaces.sm,
+        borderRadius:8,
+        backgroundColor:Colors.white,
+    },
+    text:
+    {
+        ...Fonts.medBold
     }
 })

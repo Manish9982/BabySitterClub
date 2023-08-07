@@ -9,20 +9,20 @@ const Services = ({ navigation }) => {
         {
             id: '1',
             picture: 'https://cdn-icons-png.flaticon.com/128/3282/3282468.png',
-            name: 'Child Care',
+            name: 'Baby Sitter',
             isSelected: false
         },
         {
             id: '2',
             picture: 'https://cdn-icons-png.flaticon.com/128/1076/1076928.png',
-            name: 'Pet Care ',
+            name: 'Pet Sitter',
             isSelected: false,
         },
 
         {
             id: '3',
             picture: 'https://cdn-icons-png.flaticon.com/128/1416/1416832.png',
-            name: 'Housekeeping ',
+            name: 'Home Sitter',
             isSelected: false,
         },
     ]);
