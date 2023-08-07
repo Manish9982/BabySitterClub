@@ -1,5 +1,5 @@
 import React, { } from 'react';
-import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Chip, DataTable, Text } from 'react-native-paper';
 import TextInputComponent from '../components/TextInputComponent';
 import Colors from '../helper/Colors';
@@ -18,6 +18,7 @@ const Profile = () => {
             <View style={styles.profilePictureContainer}>
                 {/* <View style={styles.profilePicturePlaceholder} /> */}
                 <Image defaultSource={require('../assets/images/profile-user.png')}
+                    source={require('../assets/images/profile-user.png')}
                     style={styles.profilePicturePlaceholder}
                 />
             </View>
@@ -38,12 +39,16 @@ const Profile = () => {
             <Text style={styles.sectionHeader}>Hourly Rate (Per Hour)</Text>
             <TextInputComponent placeholder={"INR"} style={styles.input} />
             <Text style={styles.sectionHeader}>Date of birth</Text>
-            <RNDateTimePicker
-                style={{
-                    alignSelf: 'flex-start'
-                }}
-                value={new Date()}
-            />
+            {
+                Platform.OS == "ios"
+                &&
+                <RNDateTimePicker
+                    style={{
+                        alignSelf: 'flex-start'
+                    }}
+                    value={new Date()}
+                />
+                }
             <Text style={styles.guidingText}>
                 Ask for permission from your parents if you are under 18 years old. Babysitters must be 16 years or older.
             </Text>

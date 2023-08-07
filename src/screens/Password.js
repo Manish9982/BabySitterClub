@@ -1,4 +1,4 @@
-import { StyleSheet, View, ImageBackground, useWindowDimensions,Alert,TouchableOpacity } from 'react-native'
+import { StyleSheet, View, ImageBackground, useWindowDimensions, Alert, TouchableOpacity } from 'react-native'
 import { Text, Divider } from 'react-native-paper';
 import React, { useState } from 'react'
 import Colors from '../helper/Colors';
@@ -17,11 +17,10 @@ const Password = ({ navigation }) => {
     const [password, setPassword] = useState("")
 
     const onPressContinue = () => {
-        if(password.length==0){
+        if (password.length == 0) {
             Alert.alert("Alert", "Password can not be empty")
-        }else{
+        } else {
             navigation.navigate("Register")
-
         }
     }
     return (
@@ -43,14 +42,13 @@ const Password = ({ navigation }) => {
                         title={'Continue'}
                         onPressButton={onPressContinue}
                     />
-
-
-                    <TouchableOpacity onPress={()=>{
-                        navigation.navigate("ForgotPassword")}}>
-                    <Text
-                        style={[styles.forgotpassword, Fonts.medMedium]}>Forgot Password?</Text >
+                    <TouchableOpacity onPress={() => {
+                        navigation.navigate("ForgotPassword")
+                    }}>
+                        <Text
+                            style={[styles.forgotpassword, Fonts.medMedium]}>Forgot Password?</Text >
                     </TouchableOpacity>
-                  
+
                 </View>
             </View>
         </ImageBackground>
@@ -92,8 +90,6 @@ const makeStyles = (H, W) => StyleSheet.create({
         marginHorizontal: W * 0.02,
         color: "black",
     },
-
-
     textContainerForAlignment: {
         marginHorizontal: W * 0.05,
     },

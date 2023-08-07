@@ -11,7 +11,7 @@ const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavo
         <View style={styles.container}>
             <Image
                 defaultSource={require('../assets/images/mother.png')}
-                source={{ uri: profilePicture }}
+                source={profilePicture}
                 style={styles.profilePic} />
             <View style={styles.card}>
                 <Text style={[styles.name, Fonts.larSemiBold]}>{name}</Text>
@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 30,
         marginRight: Spaces.med,
-        borderWidth:0.6,
+        borderWidth: 0.6,
+        borderColor: Colors.black
     },
     card:
     {

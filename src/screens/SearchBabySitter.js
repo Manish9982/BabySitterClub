@@ -9,15 +9,15 @@ const SearchBabySitter = () => {
     const [babysitters, setBabysitters] = useState([
         {
             id: '1',
-            profilePicture: 'https://www.pexels.com/photo/mother-carrying-her-baby-boy-755028',
+            profilePicture: require('../assets/images/mother.png'),
             name: 'Jane Doe',
             description: 'Experienced babysitter with CPR certification.',
-            hourlyPrice: 15,
+            hourlyPrice: 14,
             isFavourite: false,
         },
         {
             id: '2',
-            profilePicture: 'https://www.pexels.com/photo/blue-jeans-3036405',
+            profilePicture: require('../assets/images/mother.png'),
             name: 'John Wick',
             description: 'Experienced babysitter with CPR certification.',
             hourlyPrice: 15,
@@ -25,7 +25,7 @@ const SearchBabySitter = () => {
         },
         {
             id: '3',
-            profilePicture: 'https://www.pexels.com/photo/mother-holding-her-little-baby-17473846',
+            profilePicture: require('../assets/images/mother.png'),
             name: 'Steve Austin',
             description: 'Experienced babysitter with CPR certification.',
             hourlyPrice: 15,
@@ -33,7 +33,7 @@ const SearchBabySitter = () => {
         },
         {
             id: '4',
-            profilePicture: 'https://www.pexels.com/photo/man-holding-a-child-in-his-arms-17401645',
+            profilePicture: require('../assets/images/mother.png'),
             name: 'John Doe',
             description: 'Experienced babysitter with CPR certification.',
             hourlyPrice: 15,
@@ -41,7 +41,7 @@ const SearchBabySitter = () => {
         },
         {
             id: '5',
-            profilePicture: 'https://www.pexels.com/photo/father-looking-at-his-baby-4374504',
+            profilePicture: require('../assets/images/mother.png'),
             name: 'Stuart Broad',
             description: 'Experienced babysitter with CPR certification.',
             hourlyPrice: 15,
@@ -49,7 +49,7 @@ const SearchBabySitter = () => {
         },
         {
             id: '6',
-            profilePicture: 'https://www.pexels.com/photo/happy-father-and-son-4586688',
+            profilePicture: require('../assets/images/mother.png'),
             name: 'Chris Jordan',
             description: 'Experienced babysitter with CPR certification.',
             hourlyPrice: 15,
