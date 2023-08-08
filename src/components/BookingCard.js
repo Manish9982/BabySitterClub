@@ -11,7 +11,7 @@ const BookingCard = ({ booking, onItemPress }) => {
     const styles = makeStyles(H, W)
     return (
 
-        <View
+        <TouchableOpacity
             onPress={onItemPress}
             style={styles.cardContainer}>
             <View style={styles.leftContent}>
@@ -27,8 +27,8 @@ const BookingCard = ({ booking, onItemPress }) => {
             <View
                 style={styles.rightContent}>
                 <Text style={[styles.viewBookingText, Fonts.smMedium]}>View Booking</Text>
-            </TouchableOpacity>
-        </View>
+            </View>
+        </TouchableOpacity>
     );
 };
 
