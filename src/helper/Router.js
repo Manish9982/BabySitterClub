@@ -18,33 +18,54 @@ import ParentProfile from '../screens/ParentProfile';
 import BookingDetailsPage from '../screens/BookingDetailsPage';
 import ViewBookings from '../screens/ViewBookings';
 import Filters from '../screens/Filters';
+import { useSelector } from 'react-redux';
 
 const Router = () => {
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
     const Stack = createNativeStackNavigator();
+
+    const returnStack = () => {
+        if (isLoggedIn) {
+            return (
+                <Stack.Navigator screenOptions={{
+                    headerBackTitleVisible: false,
+                    headerShown: Platform.OS == "android" ? false : true
+                }}>
+                    <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
+                    <Stack.Screen name="Profile" component={Profile} options={{}} />
+                    <Stack.Screen name="ChatScreen" component={ChatScreen} options={{}} />
+                    <Stack.Screen name="ParentProfile" component={ParentProfile} options={{ headerTitle: 'Parent Profile' }} />
+                    <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
+                    <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
+                    <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
+                </Stack.Navigator>
+            )
+        }
+        else {
+            return (
+                <Stack.Navigator screenOptions={{
+                    headerBackTitleVisible: false,
+                    headerShown: Platform.OS == "android" ? false : true
+                }}>
+
+                    <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+                    <Stack.Screen name="Services" component={Services} />
+                    <Stack.Screen name="SelectCountry" component={SelectCountry} options={{ headerTitle: '' }} />
+                    <Stack.Screen name="Login" component={Login} options={{ headerTitle: '' }} />
+                    <Stack.Screen name="Password" component={Password} options={{}} />
+                    <Stack.Screen name="Register" component={Register} options={{}} />
+                    <Stack.Screen name="ChooseUserType" component={ChooseUserType} options={{ headerTitle: '' }} />
+                    <Stack.Screen name="CountryList" component={CountryList} options={{ headerTitle: 'Choose Country' }} />
+                    <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{}} />
+                </Stack.Navigator>
+            )
+
+        }
+    }
+
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{
-                headerBackTitleVisible: false,
-                headerShown: Platform.OS == "android" ? false : true
-            }}>
-
-                <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-                <Stack.Screen name="Profile" component={Profile} options={{}} />
-                <Stack.Screen name="Services" component={Services} />
-                <Stack.Screen name="SelectCountry" component={SelectCountry} options={{ headerTitle: '' }} />
-                <Stack.Screen name="Login" component={Login} options={{ headerTitle: '' }} />
-                <Stack.Screen name="Password" component={Password} options={{}} />
-                <Stack.Screen name="Register" component={Register} options={{}} />
-                <Stack.Screen name="ChooseUserType" component={ChooseUserType} options={{ headerTitle: '' }} />
-                <Stack.Screen name="CountryList" component={CountryList} options={{ headerTitle: 'Choose Country' }} />
-                <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{}} />
-                <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
-                <Stack.Screen name="ChatScreen" component={ChatScreen} options={{}} />
-                <Stack.Screen name="ParentProfile" component={ParentProfile} options={{ headerTitle: 'Parent Profile' }} />
-                <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
-                <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
-                <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
-            </Stack.Navigator>
+            {returnStack()}
         </NavigationContainer>
     )
 }

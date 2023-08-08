@@ -6,6 +6,7 @@ import Spaces from '../helper/Spaces';
 import CustomButton from '../components/Button';
 import Colors from '../helper/Colors';
 import TextInputComponent from '../components/TextInputComponent';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Login = ({ navigation, route }) => {
 
@@ -23,7 +24,7 @@ const Login = ({ navigation, route }) => {
 
   const onPressContinue = () => {
     if (!testEmail(email)) {
-      Alert.alert("Alert", "Please enter valid email")
+      Alert.alert("Invalid Email", "Please enter valid email")
 
     } else {
       navigation.navigate("Password")
@@ -32,14 +33,16 @@ const Login = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView>
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.mainContainer}
+      showsVerticalScrollIndicator={false}
+    >
       <ImageBackground
         imageStyle={{
-          height: H,
-          width: W,
+          flex: 1,
           opacity: 0.4
         }}
-        source={require('../assets//images/app_bg.webp')}
+        source={require('../assets/images/app_bg.webp')}
         style={styles.ImageBackground}>
         <View style={styles.viewContainer1}>
           <View style={styles.viewContainer2}>
@@ -60,11 +63,15 @@ const Login = ({ navigation, route }) => {
           </View>
         </View>
       </ImageBackground>
-    </SafeAreaView>
+    </KeyboardAwareScrollView>
   )
 }
 
 const makeStyles = (H, W) => StyleSheet.create({
+  mainContainer:
+  {
+    flex: 1
+  },
   upperContainer:
   {
     flex: 1,

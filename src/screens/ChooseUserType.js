@@ -26,19 +26,23 @@ const ChooseUserType = ({ navigation }) => {
             <View style={styles.box}>
                 <CustomButton
                     onPressButton={onPressOne}
+                    btnColor={Colors.gray}
                     title={'I want to babysit'} //babysitters
                     style={styles.button}
                 />
                 <CustomButton
                     onPressButton={onPressTwo}
+                    btnColor={Colors.gray}
                     title={'I am looking for a babysitter'} // parent
                 />
                 <CustomButton
                     onPressButton={onPressTwo}
+                    btnColor={Colors.gray}
                     title={'I want to petsit'} // parent
                 />
                 <CustomButton
                     onPressButton={onPressTwo}
+                    btnColor={Colors.gray}
                     title={'I am looking for a petsitter'} // parent
                 />
             </View>
@@ -53,7 +57,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     container:
     {
         flex: 1,
-        justifyContent:'center'
+        justifyContent: 'center'
     },
     imageStyle:
     {

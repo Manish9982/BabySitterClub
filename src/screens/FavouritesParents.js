@@ -9,14 +9,14 @@ const FavouritesParents = ({ navigation }) => {
             id: '1',
             profilePicture: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
             name: 'Alize',
-            description: 'Faridabad',
+            description: 'Dallas',
 
         },
         {
             id: '2',
             profilePicture: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
             name: 'Saniya ',
-            description: 'Ballabgarh',
+            description: 'Dallas',
 
         },
 

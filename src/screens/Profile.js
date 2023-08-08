@@ -7,11 +7,12 @@ import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import RNDateTimePicker from '@react-native-community/datetimepicker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Profile = () => {
 
     return (
-        <ScrollView
+        <KeyboardAwareScrollView
             contentContainerStyle={styles.container}
             style={styles.container}>
             <Text style={styles.sectionHeader}>Profile Photo</Text>
@@ -48,7 +49,7 @@ const Profile = () => {
                     }}
                     value={new Date()}
                 />
-                }
+            }
             <Text style={styles.guidingText}>
                 Ask for permission from your parents if you are under 18 years old. Babysitters must be 16 years or older.
             </Text>
@@ -144,7 +145,7 @@ const Profile = () => {
                     <DataTable.Title></DataTable.Title>
                 </DataTable.Row>
             </DataTable>
-        </ScrollView>
+        </KeyboardAwareScrollView>
     );
 }
 
