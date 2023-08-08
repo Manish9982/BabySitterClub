@@ -1719,6 +1719,11 @@
   dependencies:
     invariant "^2.2.4"
 
+"@react-native-community/netinfo@^9.4.1":
+  version "9.4.1"
+  resolved "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-9.4.1.tgz"
+  integrity sha512-dAbY5mfw+6Kas/GJ6QX9AZyY+K+eq9ad4Su6utoph/nxyH3whp5cMSgRNgE2VhGQVRZ/OG0qq3IaD3+wzoqJXw==
+
 "@react-native-community/slider@^4.4.2":
   version "4.4.2"
   resolved "https://registry.npmjs.org/@react-native-community/slider/-/slider-4.4.2.tgz"

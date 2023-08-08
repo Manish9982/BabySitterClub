@@ -47,7 +47,6 @@ const Router = () => {
                     headerBackTitleVisible: false,
                     headerShown: Platform.OS == "android" ? false : true
                 }}>
-
                     <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
                     <Stack.Screen name="Services" component={Services} />
                     <Stack.Screen name="SelectCountry" component={SelectCountry} options={{ headerTitle: '' }} />
@@ -59,10 +58,8 @@ const Router = () => {
                     <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{}} />
                 </Stack.Navigator>
             )
-
         }
     }
-
     return (
         <NavigationContainer>
             {returnStack()}

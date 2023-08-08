@@ -8,14 +8,21 @@ const FavouritesParents = ({ navigation }) => {
         {
             id: '1',
             profilePicture: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
-            name: 'Alize',
+            name: 'Amelia',
             description: 'Dallas',
 
         },
         {
             id: '2',
             profilePicture: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
-            name: 'Saniya ',
+            name: 'Ava ',
+            description: 'Dallas',
+
+        },
+        {
+            id: '3',
+            profilePicture: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
+            name: 'Alice ',
             description: 'Dallas',
 
         },
