@@ -3,7 +3,7 @@ export default Colors = {
     'outlineColor': '#ccc',
     'buttoncolor': '#1e81b0',
     'white': '#fff',
-    'grayTransparent': 'rgba(151, 153, 152, 0.66)',
+    'grayTransparent': 'rgba(151, 153, 152, 0.38)',
     'gray': 'rgba(151, 153, 152, 1)',
     'black': '#000',
     'Secondary': '#ff6f61',

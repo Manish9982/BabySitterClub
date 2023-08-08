@@ -6,9 +6,15 @@ import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
 import CustomButton from '../components/Button';
 import TextInputComponent from '../components/TextInputComponent';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { ListAccordionGroupContext } from 'react-native-paper/lib/typescript/src/components/List/ListAccordionGroup';
+import { login } from '../redux/AuthSlice';
+import { storeLocalValue } from '../helper/LocalStore';
+import { LOCAL_STORE } from '../helper/Utils';
+import { useDispatch } from 'react-redux';
 
 const Register = ({ navigation }) => {
-  
+
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
@@ -18,7 +24,7 @@ const Register = ({ navigation }) => {
     const [password, setPassword] = useState("")
     const [visible, setVisible] = useState(true)
 
-    const onDismissSnackBar = () => setVisible(false)
+    const dispatch = useDispatch()
 
     const testEmail = (text) => {
         const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
@@ -35,57 +41,60 @@ const Register = ({ navigation }) => {
 
     const onPressSignup = () => {
         if (!testName(name)) {
-            Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers")
+            Alert.alert("Invalid First Name", "First Name can not be empty or contain special characters and numbers")
         } else if (!testName(lastname)) {
-            Alert.alert("Alert", "Last Name can not be empty or contain special characters and numbers")
+            Alert.alert("Invalid Last Name", "Last Name can not be empty or contain special characters and numbers")
         } else if (!testEmail(email)) {
-            Alert.alert("Alert", "Please enter valid email")
+            Alert.alert("Invalid Email", "Please enter valid email")
         } else if (password.length == 0) {
-            Alert.alert("Alert!", "Password can not be empty")
+            Alert.alert("Invalid Password!", "Password can not be empty")
         } else {
-            navigation.navigate("BottomTabs")
+            storeLocalValue(LOCAL_STORE.LOGIN, 'true')
+            dispatch(login())
         }
     }
-    
+
     return (
-        <ImageBackground
-            imageStyle={styles.imageStyle}
-            source={require('../assets/images/app_bg.webp')}
-            style={styles.ImageBackground}>
-            <View style={styles.viewContainer2}>
-                <Text style={[styles.text1, Fonts.xlSemiBold]}>Sign up</Text>
-                <Divider style={styles.Devider}></Divider>
-                <View style={styles.textContainerForAlignment}>
-                    <Text style={[styles.text2, Fonts.medMedium]}>Please enter details to continue!</Text>
-                    <TextInputComponent
-                        placeholder='Enter First Name'
-                        value={name}
-                        onChangeText={(text) => { setName(text) }}
-                    />
-                    <TextInputComponent
-                        placeholder='Enter Last Name'
-                        value={lastname}
-                        onChangeText={(text) => { setLastName(text) }}
-                    />
-                    <TextInputComponent
-                        placeholder='Enter Email'
-                        value={email}
-                        onChangeText={(text) => { setEmail(text) }}
-                    />
-                    <TextInputComponent
-                        placeholder='Enter Password'
-                        value={password}
-                        onChangeText={(text) => { setPassword(text) }}
-                    />
-                    <CustomButton
-                        onPressButton={onPressSignup}
-                        title={'Sign up'}
-                    />
+        <KeyboardAwareScrollView contentContainerStyle={styles.mainContainer}>
+            <ImageBackground
+                imageStyle={styles.imageStyle}
+                source={require('../assets/images/app_bg.webp')}
+                style={styles.ImageBackground}>
+                <View style={styles.viewContainer2}>
+                    <Text style={[styles.text1, Fonts.xlSemiBold]}>Sign up</Text>
+                    <Divider style={styles.Devider}></Divider>
+                    <View style={styles.textContainerForAlignment}>
+                        <Text style={[styles.text2, Fonts.medMedium]}>Please enter details to continue!</Text>
+                        <TextInputComponent
+                            placeholder='Enter First Name'
+                            value={name}
+                            onChangeText={(text) => { setName(text) }}
+                        />
+                        <TextInputComponent
+                            placeholder='Enter Last Name'
+                            value={lastname}
+                            onChangeText={(text) => { setLastName(text) }}
+                        />
+                        <TextInputComponent
+                            placeholder='Enter Email'
+                            value={email}
+                            onChangeText={(text) => { setEmail(text) }}
+                        />
+                        <TextInputComponent
+                            placeholder='Enter Password'
+                            value={password}
+                            onChangeText={(text) => { setPassword(text) }}
+                        />
+                        <CustomButton
+                            onPressButton={onPressSignup}
+                            title={'Sign up'}
+                        />
+                    </View>
+
+
                 </View>
-
-
-            </View>
-        </ImageBackground>
+            </ImageBackground>
+        </KeyboardAwareScrollView>
     )
 }
 

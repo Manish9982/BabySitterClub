@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Router from './src/helper/Router'
 import { configureFonts, PaperProvider, MD2LightTheme } from 'react-native-paper';
 import Fonts from './src/helper/Fonts';
 import { Provider } from 'react-redux';
 import Store from './src/redux/Store';
+import { handlePostRequest } from './src/helper/Utils';
 
 const App = () => {
 
@@ -20,6 +21,11 @@ const App = () => {
     ...MD2LightTheme,
     fonts: configureFonts({ config: fontConfig, isV3: false }),
   };
+
+  useEffect(() => {
+    handlePostRequest()
+  }, [])
+
 
   return (
     <Provider store={Store}>
