@@ -8,15 +8,22 @@ const FavouritesParents = ({ navigation }) => {
         {
             id: '1',
             profilePicture: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
-            name: 'Alize',
-            description: 'Faridabad',
+            name: 'Amelia',
+            description: 'Dallas',
 
         },
         {
             id: '2',
             profilePicture: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
-            name: 'Saniya ',
-            description: 'Ballabgarh',
+            name: 'Ava ',
+            description: 'Dallas',
+
+        },
+        {
+            id: '3',
+            profilePicture: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
+            name: 'Alice ',
+            description: 'Dallas',
 
         },
 

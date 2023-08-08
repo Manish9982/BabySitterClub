@@ -1,7 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { View, Text, TouchableOpacity, useWindowDimensions } from 'react-native';
 import Fonts from '../helper/Fonts';
 import Colors from '../helper/Colors';
+import Spaces from '../helper/Spaces';
+import HeaderToolbar from '../helper/HeaderToolbar';
+import { StyleSheet } from 'react-native';
 
 const BookingDetailsPage = () => {
     const H = useWindowDimensions().height
@@ -27,88 +30,134 @@ const BookingDetailsPage = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={[styles.statusText1, Fonts.larMedium]}>Booking with James Anderson</Text>
 
-            <View style={styles.statusContainer}>
-                <Text style={[styles.statusText, Fonts.medMedium]}>{bookingStatus}</Text>
-                <View style={styles.messageContainer}>
-                    <Text style={[styles.messageText, Fonts.medMedium]}>{message}</Text>
+        <View
+            style={{
+                flex: 1
+            }}>
+            <HeaderToolbar
+                Title="Booking Details" />
+
+            <View style={styles.container}>
+
+
+                {/* <Text style={[styles.statusText1, Fonts.larMedium]}>Booking with James Anderson</Text> */}
+
+                <View style={styles.statusContainer}>
+                    <Text style={[styles.aboutText, Fonts.larMedium]}>Booking Status:</Text>
+
+
+                    <View style={styles.messageContainer}>
+
+                        <Text style={[styles.messageText, Fonts.medMedium]}>{bookingStatus}</Text>
+                    </View>
+
+
+                    <Text style={[styles.aboutText, Fonts.larMedium]}>About:</Text>
+                    <View style={styles.messageContainer}>
+                        <Text style={[styles.messageText, Fonts.medMedium]}>{message}</Text>
+                    </View>
+                </View>
+                <View style={styles.detailsContainer}>
+                    <Text style={[styles.bookingdetailsContainer, Fonts.larMedium]}>Booking Details:</Text>
+                    <View style={styles.messageContainer}>
+
+                        <Text style={[styles.messageText, Fonts.medMedium]}>{bookingStartDate} - {bookingEndDate}</Text>
+                    </View>
+
+                    <Text style={[styles.paymentdetailsContainer, Fonts.larMedium]}>Payment Details:</Text>
+                    <View style={styles.messageContainer}>
+
+                        <Text style={[styles.messageText, Fonts.medMedium]}>Amount: {paymentAmount}</Text>
+                        <Text style={[styles.messageText, Fonts.medMedium]}>Payment Method: {paymentMethod}</Text>
+                    </View>
+                </View>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.button} onPress={handleContactPress}>
+                        <Text style={[styles.buttonText, Fonts.medMedium]}>Contact</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleCancelPress}>
+                        <Text style={[styles.buttonText, Fonts.medMedium]}>Cancel Booking</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.detailsContainer}>
-                <Text style={[styles.dateText, Fonts.medMedium]}>Booking Date: {bookingStartDate} - {bookingEndDate}</Text>
-                <Text style={[styles.dateText, Fonts.medMedium]}>Payment Details:</Text>
-                <Text style={[styles.paymentDetail, Fonts.smMedium]}>Amount: {paymentAmount}</Text>
-                <Text style={styles.paymentDetail}>Payment Method: {paymentMethod}</Text>
-            </View>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.button} onPress={handleContactPress}>
-                    <Text style={styles.buttonText}>Contact</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleCancelPress}>
-                    <Text style={styles.buttonText}>Cancel Booking</Text>
-                </TouchableOpacity>
-            </View>
         </View>
+
     );
 };
 
 const makeStyles = (H, W) => StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: 20,
-        paddingTop: 50,
+        paddingHorizontal: Spaces.med,
+        paddingTop: Spaces.xxl,
     },
     statusContainer: {
-        marginBottom: 20,
+        marginBottom: Spaces.med,
     },
     statusText1: {
-        color:Colors.black,
+        color: Colors.black,
         marginTop: H * 0.02,
-        alignSelf:'center'
+        alignSelf: 'center'
     },
     statusText: {
-       color:Colors.buttoncolor,
+        color: Colors.buttoncolor,
+
+    },
+    aboutText: {
+        color: Colors.black,
         marginTop: H * 0.02
 
     },
     messageContainer: {
-        borderWidth: 1,
-        borderColor: 'gray',
+        borderWidth: 0,
+        borderColor: 'white',
         borderRadius: 5,
-        padding: 10,
-        marginTop: H*0.02,
+        padding: Spaces.med,
+        marginTop: H * 0.01,
+        elevation: 2
     },
     messageText: {
-        fontSize: 16,
+
         color: 'gray',
     },
-    detailsContainer: {},
+    bookingdetailsContainer: {
+        color: Colors.black,
+        marginTop: H * 0.015
+    },
+
     dateText: {
-        color:Colors.black,
-        marginBottom: 10,
+        color: Colors.gray,
     },
+
+
+    paymentdetailsContainer: {
+        color: Colors.black,
+        marginTop: H * 0.03
+    },
+
     paymentText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 5,
+        marginBottom: Spaces.sm,
+        marginVertical: H * 0.02
+
     },
+
     paymentDetail: {
-        marginBottom: 3,
+        marginBottom: Spaces.sm,
     },
+
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 20,
+        marginTop: Spaces.xxl,
     },
     button: {
-        backgroundColor: '#007AFF',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
+        backgroundColor: Colors.buttoncolor,
+        paddingVertical: Spaces.sm,
+        paddingHorizontal: Spaces.med,
         borderRadius: 5,
         flex: 1,
-        marginRight: 10,
+        marginRight: Spaces.sm,
     },
     cancelButton: {
         backgroundColor: 'red',
@@ -116,7 +165,6 @@ const makeStyles = (H, W) => StyleSheet.create({
     buttonText: {
         color: 'white',
         textAlign: 'center',
-        fontSize: 16,
     },
 });
 
