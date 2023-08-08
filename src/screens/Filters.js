@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Divider, Checkbox } from 'react-native-paper';
+import { Text, Divider, Checkbox } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 const Filters = () => {
     const [checkedItems, setCheckedItems] = useState({});
@@ -45,6 +45,8 @@ const Filters = () => {
                 checkedItems={checkedItems}
                 onChange={handleCheckboxChange}
             />
+            
+            <Divider style={styles.divider} />
 
             <CategoryOptions
                 category="location"

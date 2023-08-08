@@ -6,6 +6,7 @@ import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
 import CustomButton from '../components/Button';
 import TextInputComponent from '../components/TextInputComponent';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Password = ({ navigation }) => {
 
@@ -24,34 +25,38 @@ const Password = ({ navigation }) => {
         }
     }
     return (
-        <ImageBackground
-            imageStyle={styles.imageStyle}
-            source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
-            style={styles.ImageBackground} >
-            <View style={styles.viewContainer2}>
-                <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome back, James</Text>
-                <Divider style={styles.Devider}></Divider>
-                <View style={styles.textContainerForAlignment}>
-                    <Text style={[styles.text2, Fonts.medMedium]}>Enter password to continue!</Text>
-                    <TextInputComponent
-                        placeholder='Enter Password'
-                        value={password}
-                        onChangeText={(text) => { setPassword(text) }}
-                    />
-                    <CustomButton
-                        title={'Continue'}
-                        onPressButton={onPressContinue}
-                    />
-                    <TouchableOpacity onPress={() => {
-                        navigation.navigate("ForgotPassword")
-                    }}>
-                        <Text
-                            style={[styles.forgotpassword, Fonts.medMedium]}>Forgot Password?</Text >
-                    </TouchableOpacity>
+        <KeyboardAwareScrollView 
+        contentContainerStyle={styles.mainContainer}
+        style={styles.mainContainer}>
+            <ImageBackground
+                imageStyle={styles.imageStyle}
+                source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
+                style={styles.ImageBackground} >
+                <View style={styles.viewContainer2}>
+                    <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome back, James</Text>
+                    <Divider style={styles.Devider}></Divider>
+                    <View style={styles.textContainerForAlignment}>
+                        <Text style={[styles.text2, Fonts.medMedium]}>Enter password to continue!</Text>
+                        <TextInputComponent
+                            placeholder='Enter Password'
+                            value={password}
+                            onChangeText={(text) => { setPassword(text) }}
+                        />
+                        <CustomButton
+                            title={'Continue'}
+                            onPressButton={onPressContinue}
+                        />
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate("ForgotPassword")
+                        }}>
+                            <Text
+                                style={[styles.forgotpassword, Fonts.medMedium]}>Forgot Password?</Text >
+                        </TouchableOpacity>
 
+                    </View>
                 </View>
-            </View>
-        </ImageBackground>
+            </ImageBackground>
+        </KeyboardAwareScrollView>
     )
 }
 
@@ -134,7 +139,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         flex: 1,
         opacity: 0.5
-    }
+    },
 
 })
 export default Password;

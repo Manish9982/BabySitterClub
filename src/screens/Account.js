@@ -1,9 +1,9 @@
 import { FlatList, StyleSheet, View, useWindowDimensions } from 'react-native'
 import React from 'react'
 import { Divider, List } from 'react-native-paper'
-import Colors from '../helper/Colors'
-import CustomButton from '../components/Button'
 import { useDispatch, useSelector } from 'react-redux'
+import { login, logout } from '../redux/AuthSlice'
+import { clearStorage } from '../helper/LocalStore'
 
 const Account = ({ navigation }) => {
 
@@ -20,6 +20,7 @@ const Account = ({ navigation }) => {
     };
 
     const handleLogout = () => {
+        clearStorage()
         dispatch(logout());
     };
 
@@ -46,6 +47,10 @@ const Account = ({ navigation }) => {
         {
             title: 'Help',
         },
+        {
+            title: 'Logout',
+            action: () => handleLogout()
+        },
     ]
 
     const renderOptions = ({ item }) => {
@@ -67,13 +72,13 @@ const Account = ({ navigation }) => {
                 renderItem={renderOptions}
                 keyExtractor={(item, index) => `${index}`}
             />
-            {
+            {/* {
                 !isLoggedIn
                 &&
                 <CustomButton
                     style={styles.button}
                     title='Login' />
-            }
+            } */}
         </View>
     )
 }

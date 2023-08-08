@@ -24,10 +24,7 @@ const BookingCard = ({ booking, onItemPress }) => {
                 <Text style={[styles.bookingStatus, Fonts.sm]}>{booking.type}</Text>
                 <Text style={[styles.bookingStatus, Fonts.sm]}>{booking.status}</Text>
             </View>
-            <TouchableOpacity
-                onPress={() => {
-                    onItemPress()
-                }}
+            <View
                 style={styles.rightContent}>
                 <Text style={[styles.viewBookingText, Fonts.smMedium]}>View Booking</Text>
             </View>

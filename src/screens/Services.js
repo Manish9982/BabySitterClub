@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import Spaces from '../helper/Spaces';
 import ServicesCard from '../components/ServicesCard';
 import CustomButton from '../components/Button';
+import Colors from '../helper/Colors';
 
 const Services = ({ navigation }) => {
     const [services, setServices] = useState([
@@ -78,6 +79,7 @@ const Services = ({ navigation }) => {
             />
             <CustomButton
                 style={styles.button}
+                btnColor={services.every(service => !service.isSelected) ? Colors.gray : Colors.buttoncolor}
                 onPressButton={onPressContinue}
                 title={'Continue'} />
         </ImageBackground>
@@ -101,6 +103,6 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     button:
     {
-        top: - H * 0.04
+        top: - H * 0.04,
     }
 })
