@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useState } from 'react'
 import { Searchbar } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
@@ -7,7 +7,10 @@ import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 
-const SearchBabySitter = ({navigation}) => {
+const SearchBabySitter = ({ navigation }) => {
+    const H = useWindowDimensions().height
+    const W = useWindowDimensions().width
+    const styles = makeStyles(H, W)
     const [searchText, setSearchText] = useState('');
     const [babysitters, setBabysitters] = useState([
         {
@@ -80,22 +83,24 @@ const SearchBabySitter = ({navigation}) => {
         />
     );
 
-    const onPressFilter = () =>
-    {
+    const onPressFilter = () => {
         navigation.navigate('Filters')
     }
 
     return (
         <View style={{ flex: 1 }}>
-            <Searchbar
-                placeholder='Search Location'
-                style={styles.searchBar}
-            />
-            <TouchableOpacity 
-            onPress={onPressFilter}
-            style={styles.filterBox}>
-                <Text style={styles.text}>Filter<AntDesign name="right" /></Text>
-            </TouchableOpacity>
+
+            <View style={styles.upperconatiner}>
+                <Searchbar
+                    placeholder='Search Location'
+                    style={styles.searchBar} />
+                <TouchableOpacity
+                    onPress={onPressFilter}
+                    style={styles.filterBox}>
+                    <Text style={[styles.text, Fonts.smMedium]}>Filter<AntDesign name="right" /></Text>
+                </TouchableOpacity>
+            </View>
+
             <FlatList
                 data={babysitters}
                 renderItem={renderBabysitterCard}
@@ -108,11 +113,20 @@ const SearchBabySitter = ({navigation}) => {
 
 export default SearchBabySitter
 
-const styles = StyleSheet.create({
+const makeStyles = (H, W) => StyleSheet.create({
+
+    upperconatiner: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        margin: Spaces.med,
+
+    },
 
     searchBar:
     {
-        margin: Spaces.med
+        width: W * 0.75,
+        height: H * 0.07,
+
     },
     filterBox:
     {
@@ -121,8 +135,8 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         margin: Spaces.sm,
         padding: Spaces.sm,
-        borderRadius:8,
-        backgroundColor:Colors.white,
+        borderRadius: 8,
+        backgroundColor: Colors.white,
     },
     text:
     {
