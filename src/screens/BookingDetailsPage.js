@@ -35,6 +35,7 @@ const BookingDetailsPage = () => {
             style={{
                 flex: 1
             }}>
+                
             <HeaderToolbar
                 Title="Booking Details" />
 
