@@ -1,17 +1,17 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useState } from 'react'
-import { Searchbar } from 'react-native-paper'
+import { Searchbar, TextInput } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
 import Spaces from '../helper/Spaces';
-import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
+import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons'
 
 const SearchBabySitter = ({ navigation }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
-    const [searchText, setSearchText] = useState('');
+
     const [babysitters, setBabysitters] = useState([
         {
             id: '1',
@@ -92,13 +92,16 @@ const SearchBabySitter = ({ navigation }) => {
 
             <View style={styles.upperconatiner}>
                 <Searchbar
+                    loading={false}
+                    mode='bar'
                     placeholder='Search Location'
-                    style={styles.searchBar} />
-                <TouchableOpacity
-                    onPress={onPressFilter}
-                    style={styles.filterBox}>
-                    <Text style={[styles.text, Fonts.smMedium]}>Filter<AntDesign name="right" /></Text>
-                </TouchableOpacity>
+                    style={styles.searchBar}
+                    icon={{ source: "filter-variant", direction: 'rtl' }}
+                    onIconPress={onPressFilter}
+                >
+                    <MaterialCommunityIcons name="filter-variant" />
+                </Searchbar>
+
             </View>
 
             <FlatList
@@ -124,7 +127,7 @@ const makeStyles = (H, W) => StyleSheet.create({
 
     searchBar:
     {
-        width: W * 0.75,
+        width: W * 0.9,
         height: H * 0.07,
 
     },
