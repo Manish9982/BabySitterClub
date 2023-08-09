@@ -1,188 +1,131 @@
-import { StyleSheet, View, ImageBackground, useWindowDimensions, Alert } from 'react-native'
+import React, { useState } from 'react';
+import { View, ImageBackground, Alert, Platform } from 'react-native';
 import { Text, Divider } from 'react-native-paper';
-import React, { useState } from 'react'
-import Colors from '../helper/Colors';
-import Spaces from '../helper/Spaces';
-import Fonts from '../helper/Fonts';
-import CustomButton from '../components/Button';
-import TextInputComponent from '../components/TextInputComponent';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ListAccordionGroupContext } from 'react-native-paper/lib/typescript/src/components/List/ListAccordionGroup';
+import { useDispatch } from 'react-redux';
 import { login } from '../redux/AuthSlice';
 import { storeLocalValue } from '../helper/LocalStore';
 import { LOCAL_STORE } from '../helper/Utils';
-import { useDispatch } from 'react-redux';
+import Colors from '../helper/Colors';
+import Fonts from '../helper/Fonts';
+import CustomButton from '../components/Button';
+import TextInputComponent from '../components/TextInputComponent';
+import Spaces from '../helper/Spaces';
 
 const Register = ({ navigation }) => {
+    const [name, setName] = useState('');
+    const [lastname, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const H = useWindowDimensions().height
-    const W = useWindowDimensions().width
-    const styles = makeStyles(H, W)
-    const [name, setName] = useState("")
-    const [lastname, setLastName] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [visible, setVisible] = useState(true)
-
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const testEmail = (text) => {
-        const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-        return regex.test(text)
-    }
+        const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        return regex.test(text);
+    };
     const testName = (text) => {
-        const regex = /^[a-zA-Z ]+$/
-        return regex.test(text)
-    }
+        const regex = /^[a-zA-Z ]+$/;
+        return regex.test(text);
+    };
     const testNumber = (num) => {
-        const regex2 = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
-        return regex2.test(num)
-    }
+        const regex2 = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+        return regex2.test(num);
+    };
 
     const onPressSignup = () => {
         if (!testName(name)) {
-            Alert.alert("Invalid First Name", "First Name can not be empty or contain special characters and numbers")
+            Alert.alert('Invalid First Name', 'First Name can not be empty or contain special characters and numbers');
         } else if (!testName(lastname)) {
-            Alert.alert("Invalid Last Name", "Last Name can not be empty or contain special characters and numbers")
+            Alert.alert('Invalid Last Name', 'Last Name can not be empty or contain special characters and numbers');
         } else if (!testEmail(email)) {
-            Alert.alert("Invalid Email", "Please enter valid email")
-        } else if (password.length == 0) {
-            Alert.alert("Invalid Password!", "Password can not be empty")
+            Alert.alert('Invalid Email', 'Please enter valid email');
+        } else if (password.length === 0) {
+            Alert.alert('Invalid Password!', 'Password can not be empty');
         } else {
-            storeLocalValue(LOCAL_STORE.LOGIN, 'true')
-            dispatch(login())
+            storeLocalValue(LOCAL_STORE.LOGIN, 'true');
+            dispatch(login());
         }
-    }
+    };
 
     return (
         <KeyboardAwareScrollView contentContainerStyle={styles.mainContainer}>
             <ImageBackground
                 imageStyle={styles.imageStyle}
                 source={require('../assets/images/app_bg.webp')}
-                style={styles.ImageBackground}>
-                <View style={styles.viewContainer2}>
-                    <Text style={[styles.text1, Fonts.xlSemiBold]}>Sign up</Text>
-                    <Divider style={styles.Devider}></Divider>
-                    <View style={styles.textContainerForAlignment}>
-                        <Text style={[styles.text2, Fonts.medMedium]}>Please enter details to continue!</Text>
+                style={styles.imageBackground}>
+                <View style={styles.viewContainer}>
+                    <Text style={[styles.text, Fonts.xlSemiBold]}>Sign up</Text>
+                    <Divider style={styles.divider} />
+                    <View style={styles.textContainer}>
+                        <Text style={[styles.text, styles.subText, Fonts.medMedium]}>Please enter details to continue!</Text>
                         <TextInputComponent
                             placeholder='Enter First Name'
                             value={name}
-                            onChangeText={(text) => { setName(text) }}
+                            onChangeText={(text) => setName(text)}
                         />
                         <TextInputComponent
                             placeholder='Enter Last Name'
                             value={lastname}
-                            onChangeText={(text) => { setLastName(text) }}
+                            onChangeText={(text) => setLastName(text)}
                         />
                         <TextInputComponent
                             placeholder='Enter Email'
                             value={email}
-                            onChangeText={(text) => { setEmail(text) }}
+                            onChangeText={(text) => setEmail(text)}
                         />
                         <TextInputComponent
                             placeholder='Enter Password'
                             value={password}
-                            onChangeText={(text) => { setPassword(text) }}
+                            onChangeText={(text) => setPassword(text)}
                         />
                         <CustomButton
                             onPressButton={onPressSignup}
                             title={'Sign up'}
                         />
                     </View>
-
-
                 </View>
             </ImageBackground>
         </KeyboardAwareScrollView>
-    )
-}
+    );
+};
 
-const makeStyles = (H, W) => StyleSheet.create({
-    mainContainer:
-    {
-        flex: 1
-    },
-    upperContainer:
-    {
+const styles = {
+    mainContainer: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: "center",
     },
-
-    viewContainer1: {
-        height: H,
-        width: W,
-        justifyContent: "center",
-        alignItems: "center",
-        position: "absolute"
-    },
-
-    viewContainer2: {
-        width: W * 0.95,
-        backgroundColor: "white",
-        borderRadius: 5,
-        elevation: 15,
-        paddingVertical: Spaces.xl
-
-    },
-    ImageBackground: {
+    imageBackground: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: "#131313"
     },
-    Devider: {
-        marginHorizontal: W * 0.02,
-        color: "black",
-    },
-
-
-    textContainerForAlignment: {
-        marginHorizontal: W * 0.05,
-    },
-    text:
-    {
-        textAlign: 'center',
-        color: 'white',
-        fontSize: Spaces.lar,
-    },
-    text1:
-    {
-        fontSize: Spaces.xl,
-        alignSelf: 'center',
-        marginVertical: H * 0.03
-    },
-
-    text2:
-    {
-        padding: Spaces.sm,
-        fontSize: Spaces.lar,
-        marginTop: Spaces.sm,
-        alignItems: 'flex-start'
-    },
-    forgotpassword:
-    {
-        fontSize: Spaces.lar,
-        marginVertical: H * 0.03,
-        padding: 5,
-        textDecorationLine: 'underline',
-        alignItems: 'flex-start',
-        color: Colors.buttoncolor
-    },
-    textInput:
-    {
+    viewContainer: {
+        width: '95%',
         backgroundColor: 'white',
-        fontSize: Spaces.lar,
-        height: 45,
-        marginTop: H * 0.02,
-        padding: 1,
+        borderRadius: 8,
+        elevation: 15,
+        paddingVertical: Spaces.med,
+        paddingHorizontal: Spaces.med,
+        marginTop: Platform.OS === 'ios' ? 40 : 0, // Adjust marginTop for iOS header
     },
-    imageStyle:
-    {
-        flex: 1,
+    text: {
+        ...Fonts.med,
+        alignSelf: 'center',
+        marginVertical: 20,
+    },
+    divider: {
+        marginHorizontal: 5,
+        backgroundColor: 'black',
+    },
+    subText: {
+        marginBottom: Spaces.lar,
+    },
+    textContainer: {
+        marginHorizontal: '5%',
+    },
+    imageStyle: {
         opacity: 0.5
     }
+};
 
-})
 export default Register;

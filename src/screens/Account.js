@@ -30,6 +30,10 @@ const Account = ({ navigation }) => {
             action: () => navigation.navigate('Profile')
         },
         {
+            title: 'Transaction History',
+            action: () => navigation.navigate('TransactionHistory')
+        },
+        {
             title: 'Switch User Type',
         },
         {

@@ -15,4 +15,13 @@ export default Colors = {
     'BackgroundAlt': '#e5e5e5',
     'TextonAccent': '#ffffff',
     'Divider': '#d1d1d1',
+    'PRIMARY_BLUE': '#1e81b0',
+    'DARK_BLUE': '#174b6b',
+    'LIGHT_BLUE': '#4ea8d6',
+    'ACCENT_YELLOW': '#f9c542',
+    'DEEP_GRAY': '#333333',
+    'LIGHT_GRAY': '#f5f5f5',
+    'SUBTLE_WHITE': '#ffffff',
+    'COMPLEMENTARY_ORANGE': '#e76f51',
+    'MUTED_GREEN': '#78a890'
 }

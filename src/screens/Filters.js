@@ -1,23 +1,44 @@
 import React, { useState } from 'react';
 import { Text, Divider, Checkbox } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
+import Spaces from '../helper/Spaces';
+import Fonts from '../helper/Fonts';
+import Colors from '../helper/Colors';
+import CustomButton from '../components/Button';
 
-const Filters = () => {
+const Filters = ({ navigation }) => {
     const [checkedItems, setCheckedItems] = useState({});
 
+    // const handleCheckboxChange = (category, option) => {
+    //     setCheckedItems((prevCheckedItems) => ({
+    //         ...prevCheckedItems,
+    //         [category]: {
+    //             ...prevCheckedItems[category],
+    //             [option]: !prevCheckedItems[category]?.[option] || true,
+    //         },
+    //     }));
+    // };
     const handleCheckboxChange = (category, option) => {
-        setCheckedItems((prevCheckedItems) => ({
-            ...prevCheckedItems,
-            [category]: {
+        setCheckedItems((prevCheckedItems) => {
+            const updatedCategory = {
                 ...prevCheckedItems[category],
-                [option]: !prevCheckedItems[category]?.[option] || true,
-            },
-        }));
+                [option]: !prevCheckedItems[category]?.[option],
+            };
+
+            return {
+                ...prevCheckedItems,
+                [category]: updatedCategory,
+            };
+        });
     };
 
+    const onPressSubmit = () => {
+        navigation.goBack()
+    }
+
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <CategoryOptions
                 category="type"
                 title="Type of babysitter needed"
@@ -45,7 +66,7 @@ const Filters = () => {
                 checkedItems={checkedItems}
                 onChange={handleCheckboxChange}
             />
-            
+
             <Divider style={styles.divider} />
 
             <CategoryOptions
@@ -56,13 +77,19 @@ const Filters = () => {
                 onChange={handleCheckboxChange}
             />
 
+            <Divider style={styles.divider} />
+
             <Text style={styles.header}>Minimum rate per hour</Text>
             <Slider style={styles.slider} />
-        </View>
+            <CustomButton title={'Submit'}
+                onPressButton={onPressSubmit}
+            />
+        </ScrollView>
     );
 };
 
 const CategoryOptions = ({ category, title, options, checkedItems, onChange }) => {
+    console.log('checked items', checkedItems)
     return (
         <View>
             <Text style={styles.header}>{title}</Text>
@@ -82,6 +109,7 @@ const CheckboxItem = ({ label, checked, onChange }) => {
     return (
         <View style={styles.checkboxContainer}>
             <Checkbox.Android
+                color={Colors.blue}
                 status={checked ? 'checked' : 'unchecked'}
                 onPress={onChange}
             />
@@ -92,26 +120,26 @@ const CheckboxItem = ({ label, checked, onChange }) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 16,
+        padding: Spaces.lar,
         backgroundColor: 'white',
         borderRadius: 8,
         elevation: 2,
-        margin: 16,
+        marginBottom: 100,
+        paddingBottom: 100,
     },
     header: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 8,
+        ...Fonts.medBold,
+        marginBottom: Spaces.med,
     },
     option: {
-        fontSize: 14,
+        ...Fonts.med,
         marginBottom: 4,
     },
     divider: {
-        marginVertical: 10,
+        marginVertical: Spaces.med,
     },
     slider: {
-        marginTop: 10,
+        marginTop: Spaces.med,
     },
     checkboxContainer: {
         flexDirection: 'row',
