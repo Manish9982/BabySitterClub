@@ -19,6 +19,7 @@ import BookingDetailsPage from '../screens/BookingDetailsPage';
 import ViewBookings from '../screens/ViewBookings';
 import Filters from '../screens/Filters';
 import { useSelector } from 'react-redux';
+import TransactionHistory from '../screens/TransactionHistory';
 
 const Router = () => {
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
@@ -38,6 +39,7 @@ const Router = () => {
                     <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
                     <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
                     <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
+                    <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerTitle: 'Transaction History' }} />
                 </Stack.Navigator>
             )
         }
