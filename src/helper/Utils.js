@@ -9,23 +9,27 @@ export const Constants = {
     BASE_URL: 'https://thebabysitterclubs.com/babysitter/public/api/v1/'
 }
 
-export const handlePostRequest = async (name, formdata) => {
-    try {
-        const config = {
-            method: 'post',
-            url: `${Constants.BASE_URL}${name}`,
-            data: formdata,
-            redirect: 'follow',
-        };
-        const response = await axios(config);
-        console.log('POST response:', response);
-        return response.data
-    } catch (error) {
-        Alert.alert(error);
-    } finally {
-        console.log('POST request completed.');
-    }
+export const handlePostRequest = (name, formdata) => {
+    const config = {
+        method: 'post',
+        url: `${Constants.BASE_URL}${name}`,
+        data: formdata,
+        redirect: 'follow',
+    };
+
+    return axios(config)
+        .then(response => {
+            console.log('POST response:', response);
+            return response.data;
+        })
+        .catch(error => {
+            Alert.alert(error);
+        })
+        .finally(() => {
+            console.log('POST request completed.');
+        });
 };
+
 
 export const handleGetRequest = async () => {
     try {

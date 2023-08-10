@@ -34,7 +34,7 @@ const Router = () => {
                 }}>
                     <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
                     <Stack.Screen name="Profile" component={Profile} options={{}} />
-                    <Stack.Screen name="ChatScreen" component={ChatScreen} options={{}} />
+                    <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
                     <Stack.Screen name="ParentProfile" component={ParentProfile} options={{ headerTitle: 'Parent Profile' }} />
                     <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
                     <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
