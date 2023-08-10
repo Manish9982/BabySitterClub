@@ -27,7 +27,7 @@ const Login = ({ navigation, route }) => {
       Alert.alert("Invalid Email", "Please enter valid email")
 
     } else {
-      navigation.navigate("Password")
+      navigation.navigate("Password", { email: email })
 
     }
   }
