@@ -13,9 +13,18 @@ export const handlePostRequest = (name, formdata) => {
     const config = {
         method: 'post',
         url: `${Constants.BASE_URL}${name}`,
+
         data: formdata,
         redirect: 'follow',
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Accept': 'application/json',
+
+        },
     };
+
+    console.log('POST request completed.=========================', `${Constants.BASE_URL}${name}`);
+
 
     return axios(config)
         .then(response => {
@@ -31,10 +40,11 @@ export const handlePostRequest = (name, formdata) => {
 };
 
 
-export const handleGetRequest = async () => {
+export const handleGetRequest = async (name) => {
     try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts/1');
+        const response = await axios.get(`${Constants.BASE_URL}${name}`);
         console.log('GET response:', response.data);
+        return response.data
     } catch (error) {
         console.error('GET error:', error);
     } finally {

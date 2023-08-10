@@ -38,7 +38,7 @@ const Password = ({ navigation, route }) => {
                 dispatch(login())
             }
             else {
-                Alert.alert(result?.message)
+                Alert.alert('Alert',result?.message)
             }
             setLoader(false)
         }

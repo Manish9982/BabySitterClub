@@ -7,6 +7,8 @@ import CustomButton from '../components/Button';
 import Colors from '../helper/Colors';
 import TextInputComponent from '../components/TextInputComponent';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { handlePostRequest } from '../helper/Utils';
+import axios from 'axios';
 
 const Login = ({ navigation, route }) => {
 
@@ -16,21 +18,47 @@ const Login = ({ navigation, route }) => {
   const styles = makeStyles(H, W)
 
   const [email, setEmail] = useState("")
+  const [loader, setLoader] = useState(false)
 
   const testEmail = (text) => {
     const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     return regex.test(text)
   }
 
-  const onPressContinue = () => {
+  const onPressContinue = async () => {
     if (!testEmail(email)) {
       Alert.alert("Invalid Email", "Please enter valid email")
 
-    } else {
-      navigation.navigate("Password", { email: email })
-
     }
+    else {
+
+
+      var formdata = new FormData()
+      formdata.append("Email", email);
+      setLoader(true)
+      console.log('formdata======>', formdata)
+      const result = await handlePostRequest('verify', formdata)
+      console.log('result======>', result)
+      if (result?.status == "200") {
+        navigation.navigate("Password", { email: email })
+      } else if (result?.status == "201") {
+        Alert.alert('Alert', result?.message, [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          { text: 'OK', onPress: () => navigation.navigate("Register") },
+        ]);
+      }
+      else {
+        Alert.alert(result?.message)
+      }
+      setLoader(false)
+    }
+
   }
+
 
   return (
     <KeyboardAwareScrollView
@@ -56,6 +84,7 @@ const Login = ({ navigation, route }) => {
                 onChangeText={(text) => { setEmail(text) }}
               />
               <CustomButton
+                loader={loader}
                 title={'Continue'}
                 onPressButton={onPressContinue}
               />
