@@ -20,7 +20,6 @@ const Account = ({ navigation }) => {
     };
 
     const handleLogout = () => {
-        clearStorage()
         dispatch(logout());
     };
 

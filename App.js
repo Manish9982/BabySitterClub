@@ -22,11 +22,6 @@ const App = () => {
     fonts: configureFonts({ config: fontConfig, isV3: false }),
   };
 
-  useEffect(() => {
-    handlePostRequest()
-  }, [])
-
-
   return (
     <Provider store={Store}>
       <PaperProvider theme={theme}>

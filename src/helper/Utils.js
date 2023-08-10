@@ -1,20 +1,27 @@
 import axios from "axios";
+import { Alert } from "react-native";
 
 export const LOCAL_STORE = {
     LOGIN: 'loginStatus'
 }
 
-export const handlePostRequest = async () => {
+export const Constants = {
+    BASE_URL: 'https://thebabysitterclubs.com/babysitter/public/api/v1/'
+}
+
+export const handlePostRequest = async (name, formdata) => {
     try {
-        const response = await axios.post('https://jsonplaceholder.typicode.com/posts', {
-            title: 'New Post',
-            body: 'This is the body of the new post.',
-            userId: 1,
-            key: 8,
-        });
-        console.log('POST response:', response.data);
+        const config = {
+            method: 'post',
+            url: `${Constants.BASE_URL}${name}`,
+            data: formdata,
+            redirect: 'follow',
+        };
+        const response = await axios(config);
+        console.log('POST response:', response);
+        return response.data
     } catch (error) {
-        console.error('POST error:', error);
+        Alert.alert(error);
     } finally {
         console.log('POST request completed.');
     }
