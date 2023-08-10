@@ -31,6 +31,7 @@ const Password = ({ navigation, route }) => {
             formdata.append("Email", route?.params?.email);
             formdata.append("Password", password);
             setLoader(true)
+            console.log('formdata======>', formdata)
             const result = await handlePostRequest('login', formdata)
             console.log('result======>', result)
             if (result?.status == "200") {
