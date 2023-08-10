@@ -36,9 +36,6 @@ const BookingDetailsPage = () => {
                 flex: 1
             }}>
                 
-            <HeaderToolbar
-                Title="Booking Details" />
-
             <View style={styles.container}>
 
 
