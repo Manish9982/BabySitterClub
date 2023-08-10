@@ -98,9 +98,7 @@ const SearchBabySitter = ({ navigation }) => {
                     style={styles.searchBar}
                     icon={{ source: "filter-variant", direction: 'rtl' }}
                     onIconPress={onPressFilter}
-                >
-                    <MaterialCommunityIcons name="filter-variant" />
-                </Searchbar>
+                />
 
             </View>
 

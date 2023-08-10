@@ -2,8 +2,9 @@ import { StyleSheet, Text, Touchable, TouchableOpacity, View, useWindowDimension
 import React from 'react'
 import Colors from '../helper/Colors'
 import Spaces from '../helper/Spaces'
+import { ActivityIndicator } from 'react-native-paper'
 
-const CustomButton = ({ onPressButton, title, style, btnColor = Colors.buttoncolor }) => {
+const CustomButton = ({ onPressButton, title, style, btnColor = Colors.buttoncolor, loader }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
@@ -11,7 +12,15 @@ const CustomButton = ({ onPressButton, title, style, btnColor = Colors.buttoncol
         <TouchableOpacity
             style={[styles.button, style, { backgroundColor: btnColor }]}
             onPress={onPressButton}>
-            <Text style={styles.text}>{title}</Text>
+            {
+                loader ?
+                    <ActivityIndicator size={"small"}
+                        color={Colors.white}
+                    />
+                    :
+                    <Text style={styles.text}>{title}</Text>
+            }
+
         </TouchableOpacity>
     )
 }

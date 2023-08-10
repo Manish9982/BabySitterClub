@@ -7,8 +7,11 @@ import Fonts from '../helper/Fonts';
 import CustomButton from '../components/Button';
 import TextInputComponent from '../components/TextInputComponent';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { login } from '../redux/AuthSlice';
+import { useDispatch } from 'react-redux';
+import { handlePostRequest } from '../helper/Utils';
 
-const Password = ({ navigation }) => {
+const Password = ({ navigation, route }) => {
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
@@ -16,18 +19,33 @@ const Password = ({ navigation }) => {
     const styles = makeStyles(H, W)
 
     const [password, setPassword] = useState("")
+    const [loader, setLoader] = useState(false)
 
-    const onPressContinue = () => {
+    const dispatch = useDispatch()
+
+    const onPressContinue = async () => {
         if (password.length == 0) {
             Alert.alert("Alert", "Password can not be empty")
         } else {
-            navigation.navigate("Register")
+            var formdata = new FormData()
+            formdata.append("Email", route?.params?.email);
+            formdata.append("Password", password);
+            setLoader(true)
+            const result = await handlePostRequest('login', formdata)
+            console.log('result======>', result)
+            if (result?.status == "200") {
+                dispatch(login())
+            }
+            else {
+                Alert.alert(result?.message)
+            }
+            setLoader(false)
         }
     }
     return (
-        <KeyboardAwareScrollView 
-        contentContainerStyle={styles.mainContainer}
-        style={styles.mainContainer}>
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.mainContainer}
+            style={styles.mainContainer}>
             <ImageBackground
                 imageStyle={styles.imageStyle}
                 source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
@@ -43,6 +61,7 @@ const Password = ({ navigation }) => {
                             onChangeText={(text) => { setPassword(text) }}
                         />
                         <CustomButton
+                            loader={loader}
                             title={'Continue'}
                             onPressButton={onPressContinue}
                         />
