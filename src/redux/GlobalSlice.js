@@ -18,5 +18,5 @@ const globalSlice = createSlice({
   }
 })
 
-export const { usertype, selectedService } = globalSlice.actions;
+export const { setUsertype, setSelectedServices } = globalSlice.actions;
 export default globalSlice.reducer;

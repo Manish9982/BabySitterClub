@@ -13,15 +13,15 @@ const ServiceCard = ({ picture, name, isSelected, onPressServices }) => {
     return (
         <TouchableOpacity
             onPress={onPressServices}
-            style={[styles.container, { backgroundColor: isSelected ? Colors.buttoncolor : Colors.white }]}>
-            <View style={styles.checkBox}>
+            style={[styles.container, { backgroundColor: Colors.buttoncolor }]}>
+            {/* <View style={styles.checkBox}>
                 <AntDesign name={'checkcircle'} color={Colors.white} size={25} />
-            </View>
+            </View> */}
             <Image
                 source={{ uri: picture }}
-                style={[styles.picture, { tintColor: isSelected ? Colors.white : Colors.black }]} />
+                style={[styles.picture]} />
             <View style={styles.card}>
-                <Text style={[styles.name, Fonts.larSemiBold, { color: isSelected ? Colors.white : Colors.black }]}>{name}</Text>
+                <Text style={[styles.name, Fonts.larSemiBold]}>{name}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -49,6 +49,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         width: 40,
         height: 40,
+        tintColor: Colors.white
     },
     card:
     {
@@ -56,6 +57,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     name:
     {
+        color: Colors.white
     },
 
     description:
@@ -64,9 +66,9 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     checkBox:
     {
-       position:'absolute',
-       bottom:W*0.27,
-       left:W*0.01,
+        position: 'absolute',
+        bottom: W * 0.27,
+        left: W * 0.01,
     }
 
 })

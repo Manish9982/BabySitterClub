@@ -8,7 +8,6 @@ import Colors from '../helper/Colors';
 import TextInputComponent from '../components/TextInputComponent';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { handlePostRequest } from '../helper/Utils';
-import axios from 'axios';
 
 const Login = ({ navigation, route }) => {
 
@@ -28,11 +27,8 @@ const Login = ({ navigation, route }) => {
   const onPressContinue = async () => {
     if (!testEmail(email)) {
       Alert.alert("Invalid Email", "Please enter valid email")
-
     }
     else {
-
-
       var formdata = new FormData()
       formdata.append("Email", email);
       setLoader(true)
@@ -40,7 +36,7 @@ const Login = ({ navigation, route }) => {
       const result = await handlePostRequest('verify', formdata)
       console.log('result======>', result)
       if (result?.status == "200") {
-        navigation.navigate("Password", { email: email })
+        navigation.navigate("Password", { name: result?.name, email: email })
       } else if (result?.status == "201") {
         Alert.alert('Alert', result?.message, [
           {
@@ -56,9 +52,7 @@ const Login = ({ navigation, route }) => {
       }
       setLoader(false)
     }
-
   }
-
 
   return (
     <KeyboardAwareScrollView

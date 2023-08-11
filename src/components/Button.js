@@ -10,6 +10,7 @@ const CustomButton = ({ onPressButton, title, style, btnColor = Colors.buttoncol
     const styles = makeStyles(H, W)
     return (
         <TouchableOpacity
+            disabled={loader}
             style={[styles.button, style, { backgroundColor: btnColor }]}
             onPress={onPressButton}>
             {

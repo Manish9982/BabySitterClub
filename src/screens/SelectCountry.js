@@ -12,7 +12,7 @@ const SelectCountry = ({ navigation }) => {
     const cities = [
         'Dallas',
     ];
- 
+
     const onPressContinue = () => {
         if ((selectedCity !== 'Choose a city') && (selectedCity !== '')) {
             navigation.navigate("Services")
@@ -33,6 +33,9 @@ const SelectCountry = ({ navigation }) => {
                 {(
                     <View style={styles.pickerContainer}>
                         <Picker
+                            style={{
+                                ...Fonts.med
+                            }}
                             selectedValue={selectedCity}
                             onValueChange={(itemValue) => handleCountrySelect(itemValue)}
                         >
