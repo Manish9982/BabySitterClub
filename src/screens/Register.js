@@ -2,23 +2,23 @@ import React, { useState } from 'react';
 import { View, ImageBackground, Alert, Platform } from 'react-native';
 import { Text, Divider } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../redux/AuthSlice';
-import { storeLocalValue } from '../helper/LocalStore';
-import { LOCAL_STORE, handlePostRequest } from '../helper/Utils';
-import Colors from '../helper/Colors';
+import { handlePostRequest } from '../helper/Utils';
 import Fonts from '../helper/Fonts';
 import CustomButton from '../components/Button';
 import TextInputComponent from '../components/TextInputComponent';
 import Spaces from '../helper/Spaces';
 
-const Register = ({ navigation , route}) => {
+const Register = ({ navigation, route }) => {
     const [name, setName] = useState('');
     const [lastname, setLastName] = useState('');
     const [email, setEmail] = useState(route?.params?.email);
     const [password, setPassword] = useState('');
     const [loader, setLoader] = useState(false)
 
+    const usertype = useSelector(state => state.global.usertype)
+    const selectedService = useSelector(state => state.global.selectedService)
     const dispatch = useDispatch();
 
     const testEmail = (text) => {
@@ -33,7 +33,6 @@ const Register = ({ navigation , route}) => {
         const regex2 = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
         return regex2.test(num);
     };
-
     const onPressSignup = async () => {
         if (!testName(name)) {
             Alert.alert('Invalid First Name', 'First Name can not be empty or contain special characters and numbers');
@@ -44,10 +43,6 @@ const Register = ({ navigation , route}) => {
         } else if (password.length === 0) {
             Alert.alert('Invalid Password!', 'Password can not be empty');
         } else {
-            storeLocalValue(LOCAL_STORE.LOGIN, 'true');
-            //dispatch(login());
-
-
 
             var formdata = new FormData()
             formdata.append("FirstName", name);
@@ -55,8 +50,8 @@ const Register = ({ navigation , route}) => {
             formdata.append("Email", route?.params?.email);
             formdata.append("Password", password);
             formdata.append("RoleId", "2");  //2 for users , // 1 for admin
-            formdata.append("ServiceId", "1");
-            formdata.append("SubServiceId", "8");
+            formdata.append("ServiceId", selectedService?.id?.toString());
+            formdata.append("SubServiceId", usertype?.toString());
             setLoader(true)
             console.log('formdata======>', formdata)
             const result = await handlePostRequest('register', formdata)
@@ -95,6 +90,7 @@ const Register = ({ navigation , route}) => {
                             onChangeText={(text) => setLastName(text)}
                         />
                         <TextInputComponent
+                            editable={false}
                             placeholder='Enter Email'
                             value={email}
                             onChangeText={(text) => setEmail(text)}

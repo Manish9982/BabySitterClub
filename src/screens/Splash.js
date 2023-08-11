@@ -2,7 +2,7 @@ import { ImageBackground, StyleSheet } from 'react-native'
 import { Text } from 'react-native-paper'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getLocalValue, storeLocalValue } from '../helper/LocalStore'
+import { getLocalValue } from '../helper/LocalStore'
 import { LOCAL_STORE } from '../helper/Utils'
 import { login, logout } from '../redux/AuthSlice'
 
