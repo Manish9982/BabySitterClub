@@ -1,52 +1,63 @@
-import { ImageBackground, StyleSheet, View, useWindowDimensions } from 'react-native'
-import React from 'react'
+import { FlatList, ImageBackground, StyleSheet, useWindowDimensions, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import CustomButton from '../components/Button'
 import Colors from '../helper/Colors'
 import Spaces from '../helper/Spaces'
+import { handlePostRequest } from '../helper/Utils'
+import Loader from '../components/Loader'
+import { useDispatch } from 'react-redux'
+import { setUsertype } from '../redux/GlobalSlice'
 
-const ChooseUserType = ({ navigation }) => {
-
+const ChooseUserType = ({ navigation, route }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
-
     const styles = makeStyles(H, W)
 
-    const onPressOne = () => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        getSubServices()
+    }, [])
+
+    const [subServicesData, setSubServicesData] = useState(null)
+    const [loader, setLoader] = useState(true)
+
+    const getSubServices = async () => {
+        var formdata = new FormData()
+        formdata.append('service_id[]', route?.params?.services?.id);
+        const result = await handlePostRequest('sub_services', formdata)
+        setSubServicesData(result)
+        setLoader(false)
+    }
+
+    const onPressSubService = (subservice) => {
+        dispatch(setUsertype(subservice))
         navigation.navigate('Login')
     }
-    const onPressTwo = () => {
-        navigation.navigate('Login')
+
+    const renderSubServices = ({ item }) => {
+        return (
+            <CustomButton title={item?.name}
+                onPressButton={(item) => onPressSubService(item?.service_id)}
+            />
+        )
     }
 
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}
-            source={require('../assets//images/app_bg.webp')}
+            source={require('../assets/images/app_bg.webp')}
             style={styles.container}>
-            <View style={styles.box}>
-                <CustomButton
-                    onPressButton={onPressOne}
-                    btnColor={Colors.gray}
-                    title={'I want to babysit'} //babysitters
-                    style={styles.button}
+            {loader ? (
+                <Loader />
+            ) : (
+                <FlatList
+                    contentContainerStyle={styles.box}
+                    data={subServicesData?.user_type}
+                    renderItem={renderSubServices}
+                    keyExtractor={(item, index) => `${index}`}
                 />
-                <CustomButton
-                    onPressButton={onPressTwo}
-                    btnColor={Colors.gray}
-                    title={'I am looking for a babysitter'} // parent
-                />
-                <CustomButton
-                    onPressButton={onPressTwo}
-                    btnColor={Colors.gray}
-                    title={'I want to petsit'} // parent
-                />
-                <CustomButton
-                    onPressButton={onPressTwo}
-                    btnColor={Colors.gray}
-                    title={'I am looking for a petsitter'} // parent
-                />
-            </View>
-
+            )}
         </ImageBackground>
     )
 }
@@ -54,40 +65,23 @@ const ChooseUserType = ({ navigation }) => {
 export default ChooseUserType
 
 const makeStyles = (H, W) => StyleSheet.create({
-    container:
-    {
+    container: {
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    imageStyle:
-    {
+    imageStyle: {
         opacity: 0.5,
     },
-    button:
-    {
-
-    },
-    smallBox:
-    {
-        alignItems: 'center',
-        alignSelf: 'center',
-        position: 'absolute',
-        top: H * 0.05,
+    box: {
+        justifyContent: 'center',
         backgroundColor: Colors.grayTransparent,
-        borderRadius: 8,
         padding: Spaces.xl,
-        margin: Spaces.med,
-    },
-    box:
-    {
-        backgroundColor: Colors.grayTransparent,
+        borderRadius: 10,
         alignSelf: 'center',
-        padding: Spaces.xl,
-        borderRadius: 10
+        marginTop: H * 0.3
     },
-    countryText:
-    {
-        color: Colors.white
-    }
-
-})
+    countryText: {
+        color: Colors.white,
+    },
+});

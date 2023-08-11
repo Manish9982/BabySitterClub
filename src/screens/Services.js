@@ -1,88 +1,87 @@
 import { FlatList, StyleSheet, Alert, useWindowDimensions, ImageBackground } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Spaces from '../helper/Spaces';
 import ServicesCard from '../components/ServicesCard';
 import CustomButton from '../components/Button';
 import Colors from '../helper/Colors';
+import { handleGetRequest } from '../helper/Utils';
+import Loader from '../components/Loader';
+import { setSelectedServices } from '../redux/GlobalSlice'
+import { useDispatch } from 'react-redux';
 
 const Services = ({ navigation }) => {
-    const [services, setServices] = useState([
-        {
-            id: '1',
-            picture: 'https://cdn-icons-png.flaticon.com/128/3282/3282468.png',
-            name: 'Baby Sitter',
-            isSelected: false
-        },
-        {
-            id: '2',
-            picture: 'https://cdn-icons-png.flaticon.com/128/1076/1076928.png',
-            name: 'Pet Sitter',
-            isSelected: false,
-        },
-
-        {
-            id: '3',
-            picture: 'https://cdn-icons-png.flaticon.com/128/1416/1416832.png',
-            name: 'Home Sitter',
-            isSelected: false,
-        },
-    ]);
-
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
 
-    const onPressContinue = () => {
-        services.map(item => {
-            if (item.isSelected == false) {
-                null
-            }
-            else {
-                navigation.navigate('ChooseUserType')
-            }
-        })
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        getServices()
+    }, [])
+
+    const [services, setServices] = useState([]);
+    const [loader, setLoader] = useState(true)
+    const [baseUrl, setBaseUrl] = useState('')
+
+    const onPressContinue = (service) => {
+        // services?.map(item => {
+        //     if (item.isSelected == false) {
+        //         null
+        //     }
+        //     else {
+        //        navigation.navigate('ChooseUserType', { services: services?.filter(service => service.isSelected) })
+        //     }
+        // })
+        dispatch(setSelectedServices(service));
+        navigation.navigate('ChooseUserType', { services: service })
     }
 
-    const onPressService = (item) => {
-        console.log('item', item)
-        const updatedService = services.map(service => {
-            if (service.id == item.id) {
-                const newItem = item
-                newItem.isSelected = !newItem.isSelected
-                return newItem
-            }
-            return service;
-        });
-        setServices(updatedService);
+    const getServices = async () => {
+        const result = await handleGetRequest('services')
+        setServices(result?.services)
+        setBaseUrl(result?.url)
+        setLoader(false)
     }
+
+    // const onPressService = (item) => {
+    //     console.log('item', item)
+    //     const updatedService = services?.map(service => {
+    //         if (service.id == item.id) {
+    //             const newItem = item
+    //             newItem.isSelected = !newItem.isSelected
+    //             return newItem
+    //         }
+    //         return service;
+    //     });
+    //     setServices(updatedService);
+    // }
 
     const renderServices = ({ item }) => (
         <ServicesCard
             isSelected={item?.isSelected}
-            picture={item?.picture}
-            name={item?.name}
-            onPressServices={() => onPressService(item)}
+            picture={`${baseUrl}${item?.picture}`}
+            name={item?.service_name}
+            onPressServices={() => onPressContinue(item)}
         />
     );
-
     return (
-        <ImageBackground
-            imageStyle={styles.imageStyle}
-            source={require('../assets/images/app_bg.webp')}
-            style={{ flex: 1 }}>
-            <FlatList
-                style={[styles.list, { marginTop: services?.length > 3 ? 0 : H * 0.09 }]}
-                data={services}
-                renderItem={renderServices}
-                keyExtractor={(item) => item.id.toString()}
-                numColumns={services?.length > 3 ? 2 : 1} // Set the number of columns here, you can adjust as needed
-            />
-            <CustomButton
-                style={styles.button}
-                btnColor={services.every(service => !service.isSelected) ? Colors.gray : Colors.buttoncolor}
-                onPressButton={onPressContinue}
-                title={'Continue'} />
-        </ImageBackground>
+        loader
+            ?
+            <Loader />
+            :
+            <ImageBackground
+                imageStyle={styles.imageStyle}
+                source={require('../assets/images/app_bg.webp')}
+                style={styles.container}>
+                <FlatList
+                    contentContainerStyle={[styles.list]}
+                    data={services}
+                    renderItem={renderServices}
+                    keyExtractor={(item) => item.id.toString()}
+                    numColumns={services?.length > 3 ? 2 : 1} // Set the number of columns here, you can adjust as needed
+                />
+            </ImageBackground>
     );
 };
 
@@ -90,7 +89,12 @@ const Services = ({ navigation }) => {
 export default Services
 
 const makeStyles = (H, W) => StyleSheet.create({
-
+    container:
+    {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     searchBar:
     {
         margin: Spaces.med
@@ -99,7 +103,9 @@ const makeStyles = (H, W) => StyleSheet.create({
         opacity: 0.5
     },
     list: {
-
+        marginTop: H * 0.15,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     button:
     {

@@ -6,7 +6,7 @@ export const LOCAL_STORE = {
 }
 
 export const Constants = {
-    BASE_URL: 'https://thebabysitterclubs.com/babysitter/public/api/v1/'
+    BASE_URL: 'https://thebabysitterclubs.com/babysitter/api/v1/'
 }
 
 export const handlePostRequest = (name, formdata) => {
@@ -32,7 +32,7 @@ export const handlePostRequest = (name, formdata) => {
             return response.data;
         })
         .catch(error => {
-            Alert.alert(error);
+            Alert.alert(error?.message);
         })
         .finally(() => {
             console.log('POST request completed.');
@@ -40,14 +40,19 @@ export const handlePostRequest = (name, formdata) => {
 };
 
 
-export const handleGetRequest = async (name) => {
-    try {
-        const response = await axios.get(`${Constants.BASE_URL}${name}`);
-        console.log('GET response:', response.data);
-        return response.data
-    } catch (error) {
-        console.error('GET error:', error);
-    } finally {
-        console.log('GET request completed.');
-    }
+export const handleGetRequest = (name) => {
+    let config = {
+        method: 'get',
+        url: `${Constants.BASE_URL}${name}`,
+        headers: {}
+    };
+
+    return axios.request(config)
+        .then((response) => {
+            return response.data
+        })
+        .catch((error) => {
+            Alert.alert(error?.message);
+        });
+
 };
