@@ -23,7 +23,7 @@ const SearchParent = () => {
             hourlyPrice: 15,
             isFavourite: false,
         },
-       
+
 
     ]);
 

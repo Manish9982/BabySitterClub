@@ -5,18 +5,19 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/AuthSlice';
 import { storeLocalValue } from '../helper/LocalStore';
-import { LOCAL_STORE } from '../helper/Utils';
+import { LOCAL_STORE, handlePostRequest } from '../helper/Utils';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 import CustomButton from '../components/Button';
 import TextInputComponent from '../components/TextInputComponent';
 import Spaces from '../helper/Spaces';
 
-const Register = ({ navigation }) => {
+const Register = ({ navigation , route}) => {
     const [name, setName] = useState('');
     const [lastname, setLastName] = useState('');
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState(route?.params?.email);
     const [password, setPassword] = useState('');
+    const [loader, setLoader] = useState(false)
 
     const dispatch = useDispatch();
 
@@ -33,7 +34,7 @@ const Register = ({ navigation }) => {
         return regex2.test(num);
     };
 
-    const onPressSignup = () => {
+    const onPressSignup = async () => {
         if (!testName(name)) {
             Alert.alert('Invalid First Name', 'First Name can not be empty or contain special characters and numbers');
         } else if (!testName(lastname)) {
@@ -44,9 +45,32 @@ const Register = ({ navigation }) => {
             Alert.alert('Invalid Password!', 'Password can not be empty');
         } else {
             storeLocalValue(LOCAL_STORE.LOGIN, 'true');
-            dispatch(login());
-            
+            //dispatch(login());
+
+
+
+            var formdata = new FormData()
+            formdata.append("FirstName", name);
+            formdata.append("LastName", lastname);
+            formdata.append("Email", route?.params?.email);
+            formdata.append("Password", password);
+            formdata.append("RoleId", "2");  //2 for users , // 1 for admin
+            formdata.append("ServiceId", "1");
+            formdata.append("SubServiceId", "8");
+            setLoader(true)
+            console.log('formdata======>', formdata)
+            const result = await handlePostRequest('register', formdata)
+            console.log('result======>', result)
+
+            if (result?.status == "200") {
+                dispatch(login())
+            }
+            else {
+                Alert.alert('Alert', result?.message)
+            }
+            setLoader(false)
         }
+
     };
 
     return (
@@ -81,6 +105,7 @@ const Register = ({ navigation }) => {
                             onChangeText={(text) => setPassword(text)}
                         />
                         <CustomButton
+                            loader={loader}
                             onPressButton={onPressSignup}
                             title={'Sign up'}
                         />

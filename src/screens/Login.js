@@ -31,8 +31,6 @@ const Login = ({ navigation, route }) => {
 
     }
     else {
-
-
       var formdata = new FormData()
       formdata.append("Email", email);
       setLoader(true)
@@ -48,7 +46,7 @@ const Login = ({ navigation, route }) => {
             onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
           },
-          { text: 'OK', onPress: () => navigation.navigate("Register") },
+          { text: 'OK', onPress: () => navigation.navigate("Register", { email: email }) },
         ]);
       }
       else {
