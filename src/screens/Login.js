@@ -44,7 +44,7 @@ const Login = ({ navigation, route }) => {
             onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
           },
-          { text: 'OK', onPress: () => navigation.navigate("Register") },
+          { text: 'OK', onPress: () => navigation.navigate("Register", { email: email }) },
         ]);
       }
       else {
