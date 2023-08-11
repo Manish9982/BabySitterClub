@@ -38,7 +38,7 @@ const ChooseUserType = ({ navigation, route }) => {
     const renderSubServices = ({ item }) => {
         return (
             <CustomButton title={item?.name}
-                onPressButton={(item) => onPressSubService(item?.service_id)}
+                onPressButton={() => onPressSubService(item?.service_id)}
             />
         )
     }

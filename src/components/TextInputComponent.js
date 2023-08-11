@@ -3,9 +3,10 @@ import React from 'react'
 import { TextInput } from 'react-native-paper'
 import Spaces from '../helper/Spaces'
 
-const TextInputComponent = ({ value, onChangeText, placeholder }) => {
+const TextInputComponent = ({ value, onChangeText, placeholder, editable = true }) => {
   return (
     <TextInput
+      editable={editable}
       style={styles.input}
       placeholder={placeholder}
       value={value}
