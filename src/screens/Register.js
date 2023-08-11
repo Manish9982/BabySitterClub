@@ -45,6 +45,7 @@ const Register = ({ navigation }) => {
         } else {
             storeLocalValue(LOCAL_STORE.LOGIN, 'true');
             dispatch(login());
+            
         }
     };
 
