@@ -16,24 +16,8 @@ const ChatScreen = () => {
 
     const renderItem = ({ item }) => {
         return (
-            <View style={{ flexDirection: item.fromMe ? 'row-reverse' : 'row', marginVertical: 5, }}>
-                {item.fromMe ? (
-                    <View style={{ flex: 1 }} />
-                ) : (
-                    <Avatar.Image source={{ uri: item.profileImage }} size={40} />
-                )}
-                <View
-                    style={{
-                        backgroundColor: item.fromMe ? '#DCF8C6' : '#FFFFFF',
-                        padding: 10,
-                        borderRadius: 10,
-                        flex: 3,
-                        marginLeft: item.fromMe ? 40 : 0,
-                    }}
-                >
-                    <Text>{item.text}</Text>
-                </View>
-                {item.fromMe && <Avatar.Image source={{ uri: item.profileImage }} size={40} />}
+            <View style={item?.fromMe ? styles.myMessages : styles.clientMessages}>
+                <Text>{item?.text}</Text>
             </View>
         );
     };
@@ -55,7 +39,8 @@ const ChatScreen = () => {
 
     console.log(messages)
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={styles.container}>
+
             <FlatList
                 ref={flatlistRef}
                 data={messages}
@@ -63,13 +48,14 @@ const ChatScreen = () => {
                 keyExtractor={(item) => item.id}
                 inverted
             />
+
             <TextInput
                 right={
                     <TextInput.Icon
                         onPress={sendMessage}
                         icon='send' />
                 }
-                style={StyleSheet.messageInput}
+                style={styles.messageInput}
                 value={message}
                 onChangeText={(text) => setMessage(text)}
                 placeholder="Type your message..."
@@ -81,12 +67,39 @@ const ChatScreen = () => {
 export default ChatScreen;
 
 const styles = StyleSheet.create({
-    messsageInput:
+    messageInput:
     {
+        //position: 'absolute',
+        width: '94%',
+        alignSelf: 'center',
+        backgroundColor: Colors.white
+    },
+    container:
+    {
+        flex: 1,
+        // justifyContent: 'center',
+        // alignItems: 'center'
+    },
+    myMessages:
+    {
+        backgroundColor: Colors.MESSAGE_GREEN,
+        alignSelf: 'flex-end',
+        padding: Spaces.lar,
+        marginHorizontal: Spaces.sm,
+        marginVertical: Spaces.vsm,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomLeftRadius: 20,
+
+    },
+    clientMessages: {
+        marginVertical: Spaces.vsm,
         backgroundColor: Colors.white,
-        borderRadius: 5,
-        margin: Spaces.lar,
-        width: '90%',
-        alignSelf: 'center'
+        alignSelf: 'flex-start',
+        padding: Spaces.lar,
+        marginHorizontal: Spaces.sm,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderBottomRightRadius: 20,
     }
 })
