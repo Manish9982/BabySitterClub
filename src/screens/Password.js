@@ -9,7 +9,8 @@ import TextInputComponent from '../components/TextInputComponent';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { login } from '../redux/AuthSlice';
 import { useDispatch } from 'react-redux';
-import { handlePostRequest } from '../helper/Utils';
+import { LOCAL_STORE, handlePostRequest } from '../helper/Utils';
+import { storeLocalValue } from '../helper/LocalStore';
 
 const Password = ({ navigation, route }) => {
 
@@ -35,10 +36,11 @@ const Password = ({ navigation, route }) => {
             const result = await handlePostRequest('login', formdata)
             console.log('result======>', result)
             if (result?.status == "200") {
+                storeLocalValue(LOCAL_STORE.TOKEN, result?.token)
                 dispatch(login())
             }
             else {
-                Alert.alert('Alert',result?.message)
+                Alert.alert('Alert', result?.message)
             }
             setLoader(false)
         }

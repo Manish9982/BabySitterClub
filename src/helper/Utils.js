@@ -1,8 +1,10 @@
 import axios from "axios";
 import { Alert } from "react-native";
+import { getLocalValue } from "./LocalStore";
 
 export const LOCAL_STORE = {
-    LOGIN: 'loginStatus'
+    LOGIN: 'loginStatus',
+    TOKEN: 'auth_token',
 }
 
 export const Constants = {
@@ -40,11 +42,12 @@ export const handlePostRequest = (name, formdata) => {
 };
 
 
-export const handleGetRequest = (name) => {
+export const handleGetRequest =  async (name) => {
+    const token = await getLocalValue(LOCAL_STORE.TOKEN)
     let config = {
         method: 'get',
         url: `${Constants.BASE_URL}${name}`,
-        headers: {}
+        headers: {'Authorization': `Bearer ${token}`}
     };
 
     return axios.request(config)

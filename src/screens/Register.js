@@ -4,11 +4,12 @@ import { Text, Divider } from 'react-native-paper';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../redux/AuthSlice';
-import { handlePostRequest } from '../helper/Utils';
+import { LOCAL_STORE, handlePostRequest } from '../helper/Utils';
 import Fonts from '../helper/Fonts';
 import CustomButton from '../components/Button';
 import TextInputComponent from '../components/TextInputComponent';
 import Spaces from '../helper/Spaces';
+import { storeLocalValue } from '../helper/LocalStore';
 
 const Register = ({ navigation, route }) => {
     const [name, setName] = useState('');
@@ -18,6 +19,9 @@ const Register = ({ navigation, route }) => {
     const [loader, setLoader] = useState(false)
 
     const usertype = useSelector(state => state.global.usertype)
+
+    console.log('formdata======>', usertype)
+
     const selectedService = useSelector(state => state.global.selectedService)
     const dispatch = useDispatch();
 
@@ -34,6 +38,9 @@ const Register = ({ navigation, route }) => {
         return regex2.test(num);
     };
     const onPressSignup = async () => {
+
+
+
         if (!testName(name)) {
             Alert.alert('Invalid First Name', 'First Name can not be empty or contain special characters and numbers');
         } else if (!testName(lastname)) {
@@ -58,6 +65,7 @@ const Register = ({ navigation, route }) => {
             console.log('result======>', result)
 
             if (result?.status == "200") {
+                storeLocalValue(LOCAL_STORE.TOKEN, result?.token)
                 dispatch(login())
             }
             else {
