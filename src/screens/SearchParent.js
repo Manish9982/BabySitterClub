@@ -1,11 +1,17 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState , useEffect} from 'react'
 import { Searchbar, TextInput } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
 import Spaces from '../helper/Spaces';
+import { handleGetRequest } from '../helper/Utils';
+import Loader from '../components/Loader';
+
 
 const SearchParent = () => {
     const [searchText, setSearchText] = useState('');
+    const [data, setData] = useState([])
+    const [loader, setLoader] = useState(true)
+
     const [babysitters, setBabysitters] = useState([
         {
             id: '1',
@@ -27,6 +33,13 @@ const SearchParent = () => {
 
     ]);
 
+
+    useEffect(() => {
+        getUsers()
+    }, [])
+
+
+
     const handleFavourite = (id) => {
         setBabysitters((prevBabysitters) =>
             prevBabysitters.map((bs) =>
@@ -34,6 +47,13 @@ const SearchParent = () => {
             )
         );
     };
+
+
+    const getUsers = async () => {
+        const result = await handleGetRequest('users')
+        setData(result)
+        setLoader(false)
+    }
 
     const renderBabysitterCard = ({ item }) => (
         <BabySitterCard
@@ -47,13 +67,17 @@ const SearchParent = () => {
     );
 
     return (
+        loader
+        ?
+        <Loader />
+        :
         <View style={{ flex: 1 }}>
             <Searchbar
                 placeholder='Search Location'
                 style={styles.searchBar}
             />
             <FlatList
-                data={babysitters}
+                data={data.users}
                 renderItem={renderBabysitterCard}
                 keyExtractor={(item) => item.id}
             />

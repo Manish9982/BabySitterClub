@@ -1,11 +1,14 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Searchbar, TextInput } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
-import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons'
+import Loader from '../components/Loader';
+import { LOCAL_STORE, handleGetRequest } from '../helper/Utils';
+import { getLocalValue } from '../helper/LocalStore';
+Loader
 
 const SearchBabySitter = ({ navigation }) => {
     const H = useWindowDimensions().height
@@ -64,6 +67,26 @@ const SearchBabySitter = ({ navigation }) => {
 
     ]);
 
+    const [data, setData] = useState([])
+    const [loader, setLoader] = useState(true)
+
+
+
+    useEffect(() => {
+        getUsers()
+
+    }, [])
+
+
+    const getUsers = async () => {
+        const token = await getLocalValue(LOCAL_STORE.TOKEN)
+        console.log("token =============== ", token)
+        const result = await handleGetRequest('users')
+        setData(result)
+        setLoader(false)
+    }
+
+
     const handleFavourite = (id) => {
         setBabysitters((prevBabysitters) =>
             prevBabysitters.map((bs) =>
@@ -72,42 +95,52 @@ const SearchBabySitter = ({ navigation }) => {
         );
     };
 
-    const renderBabysitterCard = ({ item }) => (
-        <BabySitterCard
-            profilePicture={item.profilePicture}
-            name={item.name}
-            description={item.description}
-            hourlyPrice={item.hourlyPrice}
-            isFavourite={item.isFavourite}
-            onPressFavourite={() => handleFavourite(item.id)}
-        />
-    );
+    const renderBabysitterCard = ({ item }) => {
+        return (
+            <BabySitterCard
+                profilePicture={`${data?.url}${item.profilePicture}`}
+                name={item.name}
+                description={item.description}
+                hourlyPrice={item.hourlyPrice}
+                isFavourite={item.isFavourite}
+                onPressFavourite={() => handleFavourite(item.id)}
+            />
+        )
+    }
+
+
+
+
 
     const onPressFilter = () => {
         navigation.navigate('Filters')
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        loader
+            ?
+            <Loader />
+            :
+            <View style={{ flex: 1 }}>
 
-            <View style={styles.upperconatiner}>
-                <Searchbar
-                    loading={false}
-                    mode='bar'
-                    placeholder='Search Location'
-                    style={styles.searchBar}
-                    icon={{ source: "filter-variant", direction: 'rtl' }}
-                    onIconPress={onPressFilter}
+                <View style={styles.upperconatiner}>
+                    <Searchbar
+                        loading={false}
+                        mode='bar'
+                        placeholder='Search Location'
+                        style={styles.searchBar}
+                        icon={{ source: "filter-variant", direction: 'rtl' }}
+                        onIconPress={onPressFilter}
+                    />
+
+                </View>
+
+                <FlatList
+                    data={data?.users}
+                    renderItem={renderBabysitterCard}
+                    keyExtractor={(item) => item.id}
                 />
-
             </View>
-
-            <FlatList
-                data={babysitters}
-                renderItem={renderBabysitterCard}
-                keyExtractor={(item) => item.id}
-            />
-        </View>
     );
 };
 

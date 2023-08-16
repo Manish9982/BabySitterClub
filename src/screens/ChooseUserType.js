@@ -24,7 +24,7 @@ const ChooseUserType = ({ navigation, route }) => {
 
     const getSubServices = async () => {
         var formdata = new FormData()
-        formdata.append('service_id[]', route?.params?.services?.id);
+        formdata.append('service_id', route?.params?.services?.id);
         const result = await handlePostRequest('sub_services', formdata)
         setSubServicesData(result)
         setLoader(false)
@@ -32,13 +32,15 @@ const ChooseUserType = ({ navigation, route }) => {
 
     const onPressSubService = (subservice) => {
         dispatch(setUsertype(subservice))
+        console.log("SubServiceID++++++++++++++++++++=======  ", subservice)
+
         navigation.navigate('Login')
     }
 
     const renderSubServices = ({ item }) => {
         return (
             <CustomButton title={item?.name}
-                onPressButton={() => onPressSubService(item?.service_id)}
+                onPressButton={() => onPressSubService(item?.id)}
             />
         )
     }
