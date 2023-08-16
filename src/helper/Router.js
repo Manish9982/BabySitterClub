@@ -23,6 +23,7 @@ import TransactionHistory from '../screens/TransactionHistory';
 
 const Router = () => {
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
+    
     const Stack = createNativeStackNavigator();
 
     const returnStack = () => {

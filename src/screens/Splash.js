@@ -26,11 +26,14 @@ const Splash = ({ navigation }) => {
 
     const checkStatus = async () => {
         const status = await getLocalValue(LOCAL_STORE.LOGIN)
+        console.log("LOGIN=======  ", status)
+
         if (status == 'true') {
             dispatch(login());
         }
         else {
             dispatch(logout());
+            navigation.navigate("SelectCountry")
         }
     }
 
