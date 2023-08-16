@@ -32,16 +32,14 @@ const Login = ({ navigation, route }) => {
       var formdata = new FormData()
       formdata.append("Email", email);
       setLoader(true)
-      console.log('formdata======>', formdata)
       const result = await handlePostRequest('verify', formdata)
-      console.log('result======>', result)
       if (result?.status == "200") {
         navigation.navigate("Password", { name: result?.name, email: email })
       } else if (result?.status == "201") {
         Alert.alert('Alert', result?.message, [
           {
             text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
+            onPress: () => {},
             style: 'cancel',
           },
           { text: 'OK', onPress: () => navigation.navigate("Register", { email: email }) },

@@ -22,7 +22,6 @@ const SelectCountry = ({ navigation }) => {
     const handleCountrySelect = (city) => {
         setSelectedCity(city);
     };
-    console.log('selectedCity', selectedCity)
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}

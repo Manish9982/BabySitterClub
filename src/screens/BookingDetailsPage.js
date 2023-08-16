@@ -21,12 +21,12 @@ const BookingDetailsPage = () => {
 
     const handleContactPress = () => {
         // Implement your contact logic here
-        console.log('Contact button pressed');
+        // console.log('Contact button pressed');
     };
 
     const handleCancelPress = () => {
         // Implement your cancel booking logic here
-        console.log('Cancel booking button pressed');
+        // console.log('Cancel booking button pressed');
     };
 
     return (

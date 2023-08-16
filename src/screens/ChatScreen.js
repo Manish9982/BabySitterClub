@@ -39,8 +39,7 @@ const ChatScreen = () => {
         setMessage('');
         flatlistRef?.current?.scrollToEnd()
     }
-
-    console.log(messages)
+    
     return (
         <KeyboardAwareScrollView
             keyboardDismissMode='interactive'
