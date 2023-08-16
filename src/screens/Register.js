@@ -20,8 +20,6 @@ const Register = ({ navigation, route }) => {
 
     const usertype = useSelector(state => state.global.usertype)
 
-    console.log('formdata======>', usertype)
-
     const selectedService = useSelector(state => state.global.selectedService)
     const dispatch = useDispatch();
 
@@ -60,9 +58,7 @@ const Register = ({ navigation, route }) => {
             formdata.append("ServiceId", selectedService?.id?.toString());
             formdata.append("SubServiceId", usertype?.toString());
             setLoader(true)
-            console.log('formdata======>', formdata)
             const result = await handlePostRequest('register', formdata)
-            console.log('result======>', result)
 
             if (result?.status == "200") {
                 storeLocalValue(LOCAL_STORE.TOKEN, result?.token)
