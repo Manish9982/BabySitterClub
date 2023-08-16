@@ -55,38 +55,38 @@ const Profile = () => {
             </Text>
             <Text style={styles.sectionHeader}>Experience</Text>
             <View style={styles.chipContainer}>
-                <Chip selected style={styles.chip} selectedColor={Colors.blue} onPress={() => console.log('Pressed')}>
+                <Chip selected style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
                     I have first aid certification
                 </Chip>
                 <Chip
-                    style={styles.chip} selectedColor={Colors.blue} onPress={() => console.log('Pressed')}>
+                    style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
                     I smoke
                 </Chip>
                 <Chip
-                    style={styles.chip} selectedColor={Colors.blue} onPress={() => console.log('Pressed')}>
+                    style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
                     I have children
                 </Chip>
                 <Chip
-                    style={styles.chip} selectedColor={Colors.blue} onPress={() => console.log('Pressed')}>
+                    style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
                     I have a driving license
                 </Chip>
             </View>
             <Text style={styles.sectionHeader}>I'm Comforatble with</Text>
             <View style={styles.chipContainer}>
-                <Chip selected style={styles.chip} selectedColor={Colors.blue} onPress={() => console.log('Pressed')}>
+                <Chip selected style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
                     Pets
                 </Chip>
                 <Chip
-                    style={styles.chip} selectedColor={Colors.blue} onPress={() => console.log('Pressed')}>
+                    style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
                     Cooking
                 </Chip>
                 <Chip
-                    style={styles.chip} selectedColor={Colors.blue} onPress={() => console.log('Pressed')}>
+                    style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
                     Chores
                 </Chip>
                 <Chip
                     selected
-                    style={styles.chip} selectedColor={Colors.blue} onPress={() => console.log('Pressed')}>
+                    style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
                     Homework assistance
                 </Chip>
             </View>

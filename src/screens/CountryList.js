@@ -46,7 +46,7 @@ const CountryList = () => {
                 renderItem={({ item }) => (
                     <>
                         <List.Item
-                            onPress={() => console.log(item)}
+                            onPress={() => {}}
                             title={item} />
                         <Divider />
                     </>

@@ -25,29 +25,29 @@ export const handlePostRequest = (name, formdata) => {
         },
     };
 
-    console.log('POST request completed.=========================', `${Constants.BASE_URL}${name}`);
 
+    console.log("Formdata=======>", formdata)
 
     return axios(config)
         .then(response => {
-            console.log('POST response:', response);
+            // console.log('POST response:', response);
             return response.data;
         })
         .catch(error => {
             Alert.alert(error?.message);
         })
         .finally(() => {
-            console.log('POST request completed.');
+            console.log('POST request completed.=========================', `${name}`);
         });
 };
 
 
-export const handleGetRequest =  async (name) => {
+export const handleGetRequest = async (name) => {
     const token = await getLocalValue(LOCAL_STORE.TOKEN)
     let config = {
         method: 'get',
         url: `${Constants.BASE_URL}${name}`,
-        headers: {'Authorization': `Bearer ${token}`}
+        headers: { 'Authorization': `Bearer ${token}` }
     };
 
     return axios.request(config)
@@ -56,6 +56,8 @@ export const handleGetRequest =  async (name) => {
         })
         .catch((error) => {
             Alert.alert(error?.message);
+        }).finally(() => {
+            console.log('GET request completed.=========================', `${name}`);
         });
 
 };

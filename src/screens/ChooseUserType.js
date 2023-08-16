@@ -32,8 +32,6 @@ const ChooseUserType = ({ navigation, route }) => {
 
     const onPressSubService = (subservice) => {
         dispatch(setUsertype(subservice))
-        console.log("SubServiceID++++++++++++++++++++=======  ", subservice)
-
         navigation.navigate('Login')
     }
 

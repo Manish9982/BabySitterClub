@@ -32,9 +32,7 @@ const Password = ({ navigation, route }) => {
             formdata.append("Email", route?.params?.email);
             formdata.append("Password", password);
             setLoader(true)
-            console.log('formdata======>', formdata)
             const result = await handlePostRequest('login', formdata)
-            console.log('result======>', result)
             if (result?.status == "200") {
                 storeLocalValue(LOCAL_STORE.TOKEN, result?.token)
                 dispatch(login())

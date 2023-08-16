@@ -89,7 +89,6 @@ const Filters = ({ navigation }) => {
 };
 
 const CategoryOptions = ({ category, title, options, checkedItems, onChange }) => {
-    console.log('checked items', checkedItems)
     return (
         <View>
             <Text style={styles.header}>{title}</Text>
