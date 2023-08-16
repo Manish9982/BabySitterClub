@@ -3,6 +3,7 @@ import { View, FlatList, SafeAreaView, StyleSheet } from 'react-native';
 import { Button, Text, Avatar, TextInput } from 'react-native-paper';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const ChatScreen = () => {
     const [message, setMessage] = useState('');
@@ -14,9 +15,11 @@ const ChatScreen = () => {
 
     const flatlistRef = useRef()
 
-    const renderItem = ({ item }) => {
+    const renderItem = (item, index) => {
         return (
-            <View style={item?.fromMe ? styles.myMessages : styles.clientMessages}>
+            <View
+                key={index}
+                style={item?.fromMe ? styles.myMessages : styles.clientMessages}>
                 <Text>{item?.text}</Text>
             </View>
         );
@@ -32,26 +35,32 @@ const ChatScreen = () => {
             fromMe: true,
         };
 
-        setMessages([newMessage, ...messages]);
+        setMessages([...messages, newMessage]);
         setMessage('');
         flatlistRef?.current?.scrollToEnd()
     }
 
     console.log(messages)
     return (
-        <SafeAreaView style={styles.container}>
+        <KeyboardAwareScrollView
+            keyboardDismissMode='interactive'
+            keyboardShouldPersistTaps="always"
+            contentContainerStyle={styles.container}>
 
-            <FlatList
+            {/* <FlatList
                 ref={flatlistRef}
                 data={messages}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
                 inverted
-            />
-
+            /> */}
+            {
+                messages?.map((item, index) => renderItem(item, index))
+            }
             <TextInput
                 right={
                     <TextInput.Icon
+                        onTouchStart={sendMessage}
                         onPress={sendMessage}
                         icon='send' />
                 }
@@ -60,7 +69,7 @@ const ChatScreen = () => {
                 onChangeText={(text) => setMessage(text)}
                 placeholder="Type your message..."
             />
-        </SafeAreaView>
+        </KeyboardAwareScrollView>
     );
 };
 
@@ -69,10 +78,11 @@ export default ChatScreen;
 const styles = StyleSheet.create({
     messageInput:
     {
-        //position: 'absolute',
+        position: 'absolute',
         width: '94%',
         alignSelf: 'center',
-        backgroundColor: Colors.white
+        backgroundColor: Colors.white,
+        top: '90%'
     },
     container:
     {
