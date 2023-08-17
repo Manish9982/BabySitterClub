@@ -22,6 +22,7 @@ import { useSelector } from 'react-redux';
 import TransactionHistory from '../screens/TransactionHistory';
 import TimeSlotScreen from '../screens/TimeSlotScreen';
 
+
 const Router = () => {
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
     const Stack = createNativeStackNavigator();
@@ -34,7 +35,6 @@ const Router = () => {
                     headerShown: Platform.OS == "android" ? false : true
                 }}>
                     <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
-                    <Stack.Screen name="Profile" component={Profile} options={{}} />
                     <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
                     <Stack.Screen name="ParentProfile" component={ParentProfile} options={{ headerTitle: 'Parent Profile' }} />
                     <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
@@ -54,6 +54,7 @@ const Router = () => {
                     <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
                     <Stack.Screen name="Services" component={Services} />
                     <Stack.Screen name="SelectCountry" component={SelectCountry} options={{ headerTitle: '' }} />
+                    <Stack.Screen name="Profile" component={Profile} options={{}} />
                     <Stack.Screen name="Login" component={Login} options={{ headerTitle: '' }} />
                     <Stack.Screen name="Password" component={Password} options={{}} />
                     <Stack.Screen name="Register" component={Register} options={{}} />

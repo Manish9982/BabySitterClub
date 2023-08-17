@@ -1,5 +1,5 @@
-import React, { } from 'react';
-import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Image, Platform, Alert, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Chip, DataTable, Text } from 'react-native-paper';
 import TextInputComponent from '../components/TextInputComponent';
 import Colors from '../helper/Colors';
@@ -8,37 +8,136 @@ import Fonts from '../helper/Fonts';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { handleGetRequest, handlePostRequest } from '../helper/Utils';
+import CustomButton from '../components/Button';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 const Profile = () => {
+
+    const [userdata, setUserdata] = useState([])
+    const [loader, setLoader] = useState(false)
+    const [name, setName] = useState('')
+    const [about, setAbout] = useState('')
+    const [address, setAddress] = useState('')
+    const [price, setPrice] = useState('')
+    const [dob, setDob] = useState('')
+    const [image, setImage] = useState({})
+
+
+    useEffect(() => {
+        getUserProfileData()
+    }, [])
+
+
+    const onPressButton = () => {
+        updateUserProfileData()
+    }
+
+    const pickImage = async () => {
+        try {
+            const image = await launchImageLibrary()
+            setImage((prev) => {
+                return {
+                    ...prev,
+                    uri: image?.assets?.[0]?.uri,
+                    name: image?.assets?.[0]?.fileName,
+                    type: image?.assets?.[0]?.type
+                }
+            })
+            console.log("Image", image)
+        } catch (error) {
+            Alert.alert(error)
+        }
+
+    }
+
+    const updateUserProfileData = async () => {
+        var formdata = new FormData()
+        //  formdata.append('service_id', route?.params?.services?.id);
+        formdata.append('firstName', name);
+        formdata.append('lastName', "kumar");
+        formdata.append('hourPrice', price);
+        formdata.append('noOfChildren', "2");
+        formdata.append('comfirtableWith', "Cooking");
+        formdata.append('experience', "I smoke");
+        formdata.append('address', address);
+        formdata.append('dob', "2000-01-10");
+        formdata.append('description', about);
+        formdata.append('picture', image);
+        const result = await handlePostRequest('profile_update', formdata)
+
+        if (result?.status == '200') {
+            Alert.alert("Alert", result?.message)
+        } else {
+            Alert.alert("Alert", result?.message)
+        }
+        setLoader(false)
+    }
+
+    const getUserProfileData = async () => {
+        const result = await handleGetRequest('profile')
+        setName(result?.userDetails?.first_name)
+        setAbout(result?.userDetails?.description)
+        setAddress(result?.userDetails?.address)
+        setPrice(JSON.stringify(result?.userDetails?.hour_price))
+        console.log("RESULT===========   ", result)
+        setLoader(false)
+    }
 
     return (
         <KeyboardAwareScrollView
             contentContainerStyle={styles.container}
             style={styles.container}>
             <Text style={styles.sectionHeader}>Profile Photo</Text>
-            <View style={styles.profilePictureContainer}>
+            <TouchableOpacity
+                onPress={pickImage}
+                style={styles.profilePictureContainer}>
                 {/* <View style={styles.profilePicturePlaceholder} /> */}
                 <Image defaultSource={require('../assets/images/profile-user.png')}
                     source={require('../assets/images/profile-user.png')}
                     style={styles.profilePicturePlaceholder}
                 />
-            </View>
+            </TouchableOpacity>
             <View style={styles.availabilityContainer}></View>
-            <TextInputComponent placeholder={"Name"} style={styles.input} />
+            <TextInputComponent
+                placeholder={"Name"}
+                value={name}
+                onChangeText={(text) => {
+                    setName(text)
+                }}
+                style={styles.input} />
+
+
             <Text style={styles.sectionHeader}>About Me</Text>
+
             <Text style={styles.description}>
                 Tell a little about yourself, so families can get to know you.
             </Text>
-            <TextInputComponent placeholder={"About Me"} style={styles.input} />
+            <TextInputComponent
+                value={about}
+                onChangeText={(text) => {
+                    setAbout(text)
+                }}
+                placeholder={"About Me"} style={styles.input} />
             <Text style={styles.guidingText}>
                 Only communicate through the App, do not include contact details. Minimum 200 characters.
             </Text>
-            <TextInputComponent placeholder={'Address'} style={styles.input} />
+            <TextInputComponent
+                value={address}
+                onChangeText={(text) => {
+                    setAddress(text)
+                }}
+                placeholder={'Address'} style={styles.input} />
             <Text style={styles.guidingText}>
                 Your address will never be shared with anyone. We will show your approximate location on profile.
             </Text>
             <Text style={styles.sectionHeader}>Hourly Rate (Per Hour)</Text>
-            <TextInputComponent placeholder={"INR"} style={styles.input} />
+            <TextInputComponent
+                value={price}
+                onChangeText={(text) => {
+                    setPrice(text)
+                }}
+                placeholder={"INR"} style={styles.input} />
             <Text style={styles.sectionHeader}>Date of birth</Text>
             {
                 Platform.OS == "ios"
@@ -55,38 +154,38 @@ const Profile = () => {
             </Text>
             <Text style={styles.sectionHeader}>Experience</Text>
             <View style={styles.chipContainer}>
-                <Chip selected style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
+                <Chip selected style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
                     I have first aid certification
                 </Chip>
                 <Chip
-                    style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
+                    style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
                     I smoke
                 </Chip>
                 <Chip
-                    style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
+                    style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
                     I have children
                 </Chip>
                 <Chip
-                    style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
+                    style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
                     I have a driving license
                 </Chip>
             </View>
             <Text style={styles.sectionHeader}>I'm Comforatble with</Text>
             <View style={styles.chipContainer}>
-                <Chip selected style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
+                <Chip selected style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
                     Pets
                 </Chip>
                 <Chip
-                    style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
+                    style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
                     Cooking
                 </Chip>
                 <Chip
-                    style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
+                    style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
                     Chores
                 </Chip>
                 <Chip
                     selected
-                    style={styles.chip} selectedColor={Colors.blue} onPress={() => {}}>
+                    style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
                     Homework assistance
                 </Chip>
             </View>
@@ -145,6 +244,15 @@ const Profile = () => {
                     <DataTable.Title></DataTable.Title>
                 </DataTable.Row>
             </DataTable>
+
+
+
+
+            <CustomButton
+                // loader={loader}
+                onPressButton={onPressButton}
+                title={'Update'}
+            />
         </KeyboardAwareScrollView>
     );
 }
