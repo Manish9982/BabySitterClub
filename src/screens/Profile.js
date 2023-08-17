@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Platform, Alert, StyleSheet, View } from 'react-native';
+import { Image, Platform, Alert, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Chip, DataTable, Text } from 'react-native-paper';
 import TextInputComponent from '../components/TextInputComponent';
 import Colors from '../helper/Colors';
@@ -10,6 +10,7 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { handleGetRequest, handlePostRequest } from '../helper/Utils';
 import CustomButton from '../components/Button';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 const Profile = () => {
 
@@ -21,7 +22,7 @@ const Profile = () => {
     const [address, setAddress] = useState('')
     const [price, setPrice] = useState('')
     const [dob, setDob] = useState('')
-
+    const [image, setImage] = useState({})
 
     useEffect(() => {
         getUserProfileData()
@@ -32,6 +33,23 @@ const Profile = () => {
         updateUserProfileData()
     }
 
+    const pickImage = async () => {
+        try {
+            const image = await launchImageLibrary()
+            setImage((prev) => {
+                return {
+                    ...prev,
+                    uri: image?.assets?.[0]?.uri,
+                    name: image?.assets?.[0]?.fileName,
+                    type: image?.assets?.[0]?.type
+                }
+            })
+            console.log("Image", image)
+        } catch (error) {
+            Alert.alert(error)
+        }
+
+    }
 
     const updateUserProfileData = async () => {
         var formdata = new FormData()
@@ -45,7 +63,7 @@ const Profile = () => {
         formdata.append('address', address);
         formdata.append('dob', "2000-01-10");
         formdata.append('description', about);
-        formdata.append('picture', "");
+        formdata.append('picture', image);
         const result = await handlePostRequest('profile_update', formdata)
 
         if (result?.status == '200') {
@@ -55,9 +73,7 @@ const Profile = () => {
         }
         setLoader(false)
     }
-
-
-
+    
     const getUserProfileData = async () => {
         const result = await handleGetRequest('profile')
         setName(result?.userDetails?.first_name)
@@ -74,13 +90,15 @@ const Profile = () => {
             contentContainerStyle={styles.container}
             style={styles.container}>
             <Text style={styles.sectionHeader}>Profile Photo</Text>
-            <View style={styles.profilePictureContainer}>
+            <TouchableOpacity
+                onPress={pickImage}
+                style={styles.profilePictureContainer}>
                 {/* <View style={styles.profilePicturePlaceholder} /> */}
                 <Image defaultSource={require('../assets/images/profile-user.png')}
                     source={require('../assets/images/profile-user.png')}
                     style={styles.profilePicturePlaceholder}
                 />
-            </View>
+            </TouchableOpacity>
             <View style={styles.availabilityContainer}></View>
             <TextInputComponent
                 placeholder={"Name"}
@@ -90,7 +108,6 @@ const Profile = () => {
                 }}
                 style={styles.input} />
 
-
             <TextInputComponent
                 placeholder={"Last Name"}
                 value={lastname}
@@ -98,7 +115,6 @@ const Profile = () => {
                     setLastName(text)
                 }}
                 style={styles.input} />
-
 
             <Text style={styles.sectionHeader}>About Me</Text>
 
@@ -113,6 +129,7 @@ const Profile = () => {
                 }}
                 placeholder={"About Me"}
                 style={styles.input} />
+
             <Text style={styles.guidingText}>
                 Only communicate through the App, do not include contact details. Minimum 200 characters.
             </Text>
@@ -132,7 +149,6 @@ const Profile = () => {
                     setPrice(text)
                 }}
                 placeholder={"USD"}
-
                 style={styles.input} />
             <Text style={styles.sectionHeader}>Date of birth</Text>
             {
@@ -153,6 +169,7 @@ const Profile = () => {
                 <Chip 
                 selected={true} 
                 style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
+
                     I have first aid certification
                 </Chip>
                 <Chip
