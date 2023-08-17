@@ -3,7 +3,7 @@ import React from 'react'
 import { TextInput } from 'react-native-paper'
 import Spaces from '../helper/Spaces'
 
-const TextInputComponent = ({ value, onChangeText, placeholder, editable = true }) => {
+const TextInputComponent = ({ value, onChangeText, placeholder, editable = true, multiline = false }) => {
   return (
     <TextInput
       editable={editable}
@@ -14,6 +14,7 @@ const TextInputComponent = ({ value, onChangeText, placeholder, editable = true 
       activeOutlineColor=''
       mode="outlined"
       label={placeholder}
+      multiline={multiline}
     />
   )
 }

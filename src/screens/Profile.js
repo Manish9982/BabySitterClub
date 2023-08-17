@@ -16,6 +16,7 @@ const Profile = () => {
     const [userdata, setUserdata] = useState([])
     const [loader, setLoader] = useState(false)
     const [name, setName] = useState('')
+    const [lastname, setLastName] = useState('')
     const [about, setAbout] = useState('')
     const [address, setAddress] = useState('')
     const [price, setPrice] = useState('')
@@ -36,7 +37,7 @@ const Profile = () => {
         var formdata = new FormData()
         //  formdata.append('service_id', route?.params?.services?.id);
         formdata.append('firstName', name);
-        formdata.append('lastName', "kumar");
+        formdata.append('lastName', lastname);
         formdata.append('hourPrice', price);
         formdata.append('noOfChildren', "2");
         formdata.append('comfirtableWith', "Cooking");
@@ -90,6 +91,15 @@ const Profile = () => {
                 style={styles.input} />
 
 
+            <TextInputComponent
+                placeholder={"Last Name"}
+                value={lastname}
+                onChangeText={(text) => {
+                    setLastName(text)
+                }}
+                style={styles.input} />
+
+
             <Text style={styles.sectionHeader}>About Me</Text>
 
             <Text style={styles.description}>
@@ -97,10 +107,12 @@ const Profile = () => {
             </Text>
             <TextInputComponent
                 value={about}
+                multiline={true}
                 onChangeText={(text) => {
                     setAbout(text)
                 }}
-                placeholder={"About Me"} style={styles.input} />
+                placeholder={"About Me"}
+                style={styles.input} />
             <Text style={styles.guidingText}>
                 Only communicate through the App, do not include contact details. Minimum 200 characters.
             </Text>
@@ -115,11 +127,13 @@ const Profile = () => {
             </Text>
             <Text style={styles.sectionHeader}>Hourly Rate (Per Hour)</Text>
             <TextInputComponent
-                value={price}
+                value={`$ ${price}`}
                 onChangeText={(text) => {
                     setPrice(text)
                 }}
-                placeholder={"INR"} style={styles.input} />
+                placeholder={"USD"}
+
+                style={styles.input} />
             <Text style={styles.sectionHeader}>Date of birth</Text>
             {
                 Platform.OS == "ios"
@@ -136,7 +150,9 @@ const Profile = () => {
             </Text>
             <Text style={styles.sectionHeader}>Experience</Text>
             <View style={styles.chipContainer}>
-                <Chip selected style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
+                <Chip 
+                selected={true} 
+                style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
                     I have first aid certification
                 </Chip>
                 <Chip
@@ -259,6 +275,7 @@ const styles = StyleSheet.create({
     },
     input: {
         marginBottom: Spaces.sm,
+        
     },
     guidingText: {
         ...Fonts.sm,

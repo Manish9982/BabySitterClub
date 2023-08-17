@@ -15,7 +15,7 @@ const SelectCountry = ({ navigation }) => {
 
     const onPressContinue = () => {
         if ((selectedCity !== 'Choose a city') && (selectedCity !== '')) {
-            navigation.navigate("Services")
+            navigation.navigate("ChooseUserType")
         }
     }
 

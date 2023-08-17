@@ -20,21 +20,19 @@ const Services = ({ navigation }) => {
         getServices()
     }, [])
 
-    const [services, setServices] = useState([]);
+    const [services, setServices] = useState();
     const [loader, setLoader] = useState(true)
     const [baseUrl, setBaseUrl] = useState('')
 
-    const onPressContinue = (service) => {
-        // services?.map(item => {
-        //     if (item.isSelected == false) {
-        //         null
-        //     }
-        //     else {
-        //        navigation.navigate('ChooseUserType', { services: services?.filter(service => service.isSelected) })
-        //     }
-        // })
-        dispatch(setSelectedServices(service));
-        navigation.navigate('ChooseUserType', { services: service })
+    const onPressContinue = () => {
+        if (services.every(item => !item?.isSelected)) {
+            null
+        }
+        else {
+            dispatch(setSelectedServices(services.filter(item => item?.isSelected)));
+            navigation.navigate('Login')
+        }
+
     }
 
     const getServices = async () => {
@@ -44,25 +42,25 @@ const Services = ({ navigation }) => {
         setLoader(false)
     }
 
-    // const onPressService = (item) => {
-    //     console.log('item', item)
-    //     const updatedService = services?.map(service => {
-    //         if (service.id == item.id) {
-    //             const newItem = item
-    //             newItem.isSelected = !newItem.isSelected
-    //             return newItem
-    //         }
-    //         return service;
-    //     });
-    //     setServices(updatedService);
-    // }
+    const onPressService = (item) => {
+        console.log('item', item)
+        const updatedService = services?.map(service => {
+            if (service.id == item.id) {
+                const newItem = item
+                newItem.isSelected = !newItem.isSelected
+                return newItem
+            }
+            return service;
+        });
+        setServices(updatedService);
+    }
 
     const renderServices = ({ item }) => (
         <ServicesCard
             isSelected={item?.isSelected}
             picture={`${baseUrl}${item?.picture}`}
             name={item?.service_name}
-            onPressServices={() => onPressContinue(item)}
+            onPressServices={() => onPressService(item)}
         />
     );
     return (
@@ -81,6 +79,11 @@ const Services = ({ navigation }) => {
                     keyExtractor={(item) => item.id.toString()}
                     numColumns={services?.length > 3 ? 2 : 1} // Set the number of columns here, you can adjust as needed
                 />
+                <CustomButton
+                    style={styles.button}
+                    btnColor={services.every(service => !service.isSelected) ? Colors.gray : Colors.buttoncolor}
+                    onPressButton={onPressContinue}
+                    title={'Continue'} />
             </ImageBackground>
     );
 };

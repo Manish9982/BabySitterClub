@@ -1,18 +1,20 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { Searchbar } from 'react-native-paper'
+import { Chip, Searchbar } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 import Loader from '../components/Loader';
-import { handleGetRequest } from '../helper/Utils';
+import { handleGetRequest, handlePostRequest } from '../helper/Utils';
 
 
 const SearchBabySitter = ({ navigation }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
+
+    const [filterdata, setFilterdata] = useState()
 
 
     const [babySittersData, setBabySittersData] = useState([])
@@ -24,10 +26,16 @@ const SearchBabySitter = ({ navigation }) => {
 
 
     const getUsers = async () => {
-        const result = await handleGetRequest('users')
+        const formdata = new FormData()
+        formdata.append('serviceIds[]', "1")
+        const result = await handlePostRequest('users', formdata)
         setBabySittersData(result)
         setLoader(false)
     }
+
+
+
+
 
 
     const handleFavourite = (id) => {
@@ -50,6 +58,11 @@ const SearchBabySitter = ({ navigation }) => {
             />
         )
     }
+    const renderfilters = ({ item }) => {
+        return (
+            <Chip>{item.name}</Chip>
+        )
+    }
 
 
 
@@ -70,13 +83,31 @@ const SearchBabySitter = ({ navigation }) => {
                     <Searchbar
                         loading={false}
                         mode='bar'
-                        placeholder='Search Location'
+                        placeholder='Search'
                         style={styles.searchBar}
                         icon={{ source: "filter-variant", direction: 'rtl' }}
                         onIconPress={onPressFilter}
                     />
 
+
+
                 </View>
+
+                <View style={styles.upperconatiner2}>
+                    {/* <Chip>All</Chip>
+                    <Chip>BabySitter</Chip>
+                    <Chip>PetSitter</Chip>
+                    <Chip>HomeSitter</Chip> */}
+
+                    <FlatList
+                        horizontal={true}
+                        data={babySittersData?.filters}
+                        renderItem={renderfilters}
+                        keyExtractor={(item) => item.id}
+                    />
+
+                </View>
+
 
                 <FlatList
                     data={babySittersData?.users}
@@ -93,6 +124,12 @@ export default SearchBabySitter
 const makeStyles = (H, W) => StyleSheet.create({
 
     upperconatiner: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        margin: Spaces.med,
+
+    },
+    upperconatiner2: {
         flexDirection: 'row',
         justifyContent: 'center',
         margin: Spaces.med,
