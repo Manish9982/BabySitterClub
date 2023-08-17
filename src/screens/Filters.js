@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, Divider, Checkbox } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 import { View, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
@@ -6,19 +6,12 @@ import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
 import Colors from '../helper/Colors';
 import CustomButton from '../components/Button';
+import { handlePostRequest } from '../helper/Utils';
 
 const Filters = ({ navigation }) => {
     const [checkedItems, setCheckedItems] = useState({});
+    const [filterdata, setFilterdata] = useState()
 
-    // const handleCheckboxChange = (category, option) => {
-    //     setCheckedItems((prevCheckedItems) => ({
-    //         ...prevCheckedItems,
-    //         [category]: {
-    //             ...prevCheckedItems[category],
-    //             [option]: !prevCheckedItems[category]?.[option] || true,
-    //         },
-    //     }));
-    // };
     const handleCheckboxChange = (category, option) => {
         setCheckedItems((prevCheckedItems) => {
             const updatedCategory = {
@@ -37,6 +30,22 @@ const Filters = ({ navigation }) => {
         navigation.goBack()
     }
 
+
+    useEffect(() => {
+ //   getFilters()
+    }, [])
+    
+
+    const getFilters = async () => {
+        const result = await handlePostRequest('filters', formdata)
+        setFilterdata(result)
+        setLoader(false)
+    }
+
+
+
+
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <CategoryOptions
@@ -47,9 +56,9 @@ const Filters = ({ navigation }) => {
                 onChange={handleCheckboxChange}
             />
 
-            <Divider style={styles.divider} />
+            {/* <Divider style={styles.divider} /> */}
 
-            <CategoryOptions
+            {/* <CategoryOptions
                 category="age"
                 title="Age of children"
                 options={['Baby', 'Toddler', 'Preschooler', 'Gradeschooler', 'Teenager']}
@@ -80,7 +89,7 @@ const Filters = ({ navigation }) => {
             <Divider style={styles.divider} />
 
             <Text style={styles.header}>Minimum rate per hour</Text>
-            <Slider style={styles.slider} />
+            <Slider style={styles.slider} /> */}
             <CustomButton title={'Submit'}
                 onPressButton={onPressSubmit}
             />

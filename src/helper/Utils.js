@@ -11,20 +11,19 @@ export const Constants = {
     BASE_URL: 'https://thebabysitterclubs.com/babysitter/api/v1/'
 }
 
-export const handlePostRequest = (name, formdata) => {
+export const handlePostRequest = async (name, formdata) => {
+    const token = await getLocalValue(LOCAL_STORE.TOKEN)
     const config = {
         method: 'post',
         url: `${Constants.BASE_URL}${name}`,
-
         data: formdata,
         redirect: 'follow',
         headers: {
             'Content-Type': 'multipart/form-data',
             'Accept': 'application/json',
-
+            'Authorization': `Bearer ${token}`
         },
     };
-
 
     console.log("Formdata=======>", formdata)
 

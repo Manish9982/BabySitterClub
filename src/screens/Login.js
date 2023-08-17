@@ -11,6 +11,8 @@ import { handlePostRequest } from '../helper/Utils';
 
 const Login = ({ navigation, route }) => {
 
+  //console.log("Services===   " , route?.params?.services)
+
   const H = useWindowDimensions().height
   const W = useWindowDimensions().width
 

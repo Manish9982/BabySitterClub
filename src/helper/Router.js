@@ -25,6 +25,7 @@ import TimeSlotScreen from '../screens/TimeSlotScreen';
 
 const Router = () => {
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
+    
     const Stack = createNativeStackNavigator();
 
     const returnStack = () => {

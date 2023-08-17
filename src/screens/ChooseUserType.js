@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import CustomButton from '../components/Button'
 import Colors from '../helper/Colors'
 import Spaces from '../helper/Spaces'
-import { handlePostRequest } from '../helper/Utils'
+import { handleGetRequest, handlePostRequest } from '../helper/Utils'
 import Loader from '../components/Loader'
 import { useDispatch } from 'react-redux'
 import { setUsertype } from '../redux/GlobalSlice'
@@ -23,16 +23,14 @@ const ChooseUserType = ({ navigation, route }) => {
     const [loader, setLoader] = useState(true)
 
     const getSubServices = async () => {
-        var formdata = new FormData()
-        formdata.append('service_id', route?.params?.services?.id);
-        const result = await handlePostRequest('sub_services', formdata)
+        const result = await handleGetRequest('user_types')
         setSubServicesData(result)
         setLoader(false)
     }
 
     const onPressSubService = (subservice) => {
         dispatch(setUsertype(subservice))
-        navigation.navigate('Login')
+        navigation.navigate('Services')
     }
 
     const renderSubServices = ({ item }) => {
