@@ -77,6 +77,7 @@ const Profile = () => {
     const getUserProfileData = async () => {
         const result = await handleGetRequest('profile')
         setName(result?.userDetails?.first_name)
+        setLastName(result?.userDetails?.last_name)
         setAbout(result?.userDetails?.description)
         setAddress(result?.userDetails?.address)
         setPrice(JSON.stringify(result?.userDetails?.hour_price))
