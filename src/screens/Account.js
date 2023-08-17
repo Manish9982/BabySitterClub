@@ -29,6 +29,10 @@ const Account = ({ navigation }) => {
             action: () => navigation.navigate('Profile')
         },
         {
+            title: 'Book Slot',
+            action: () => navigation.navigate('TimeSlotScreen')
+        },
+        {
             title: 'Transaction History',
             action: () => navigation.navigate('TransactionHistory')
         },
