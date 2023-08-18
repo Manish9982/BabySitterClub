@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Chip, Searchbar } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
@@ -29,7 +29,15 @@ const SearchBabySitter = ({ navigation }) => {
         const formdata = new FormData()
         formdata.append('serviceIds[]', "1")
         const result = await handlePostRequest('users', formdata)
+        console.log("Results==========   ", result)
+
         setBabySittersData(result)
+
+        if (result?.status == '200') {
+
+        } else if (result?.status == '201') {
+            Alert.alert("Alert", result?.message)
+        }
         setLoader(false)
     }
 
@@ -60,12 +68,9 @@ const SearchBabySitter = ({ navigation }) => {
     }
     const renderfilters = ({ item }) => {
         return (
-            <Chip>{item.name}</Chip>
+            <Chip style={{Colors:"yellow"}}>{item.service_name}</Chip>
         )
     }
-
-
-
 
 
     const onPressFilter = () => {
@@ -94,10 +99,6 @@ const SearchBabySitter = ({ navigation }) => {
                 </View>
 
                 <View style={styles.upperconatiner2}>
-                    {/* <Chip>All</Chip>
-                    <Chip>BabySitter</Chip>
-                    <Chip>PetSitter</Chip>
-                    <Chip>HomeSitter</Chip> */}
 
                     <FlatList
                         horizontal={true}
