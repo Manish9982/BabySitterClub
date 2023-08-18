@@ -1,5 +1,4 @@
-import { FlatList, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
-import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Alert, FlatList, StyleSheet, View, useWindowDimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Chip, Searchbar, Text } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
@@ -47,8 +46,14 @@ const SearchBabySitter = ({ navigation }) => {
         //         bs.Id === Id ? { ...bs, isFavourite: !bs.isFavourite } : bs
         //     )
         // );
+
     };
 
+
+    const handleNavigation = (userid) => {
+        navigation.navigate("ParentProfile", { 'userID': userid })
+
+    }
     const renderBabysitterCard = ({ item }) => {
         return (
             <BabySitterCard
@@ -58,6 +63,8 @@ const SearchBabySitter = ({ navigation }) => {
                 hourlyPrice={item?.hourlyPrice}
                 isFavourite={item?.isFavourite}
                 onPressFavourite={() => handleFavourite(item?.Id)}
+                onPressItemSelected={() =>   handleNavigation(item?.Id)}
+
             />
         )
     }
@@ -84,8 +91,8 @@ const SearchBabySitter = ({ navigation }) => {
                         mode='bar'
                         placeholder='Search'
                         style={styles.searchBar}
-                        icon={{ source: "filter-variant", direction: 'rtl' }}
-                        onIconPress={onPressFilter}
+                     //   icon={{ source: "filter-variant", direction: 'rtl' }}
+                      //  onIconPress={onPressFilter}
                     />
 
 
@@ -109,7 +116,7 @@ const SearchBabySitter = ({ navigation }) => {
                 {
                     babySittersData?.users?.length == 0
                         ?
-                        <Text style={styles.nothingToShow}>No BabySitters Found</Text>
+                        <Text style={styles.nothingToShow}>No Data Found At This Moment!</Text>
                         :
                         <FlatList
                             data={babySittersData?.users}

@@ -3,7 +3,7 @@ import React from 'react'
 import { TextInput } from 'react-native-paper'
 import Spaces from '../helper/Spaces'
 
-const TextInputComponent = ({ value, onChangeText, placeholder, editable = true, multiline = false }) => {
+const TextInputComponent = ({ value, onChangeText, placeholder, editable = true, multiline = false , keyboardType = 'default'}) => {
   return (
     <TextInput
       editable={editable}
@@ -15,6 +15,7 @@ const TextInputComponent = ({ value, onChangeText, placeholder, editable = true,
       mode="outlined"
       label={placeholder}
       multiline={multiline}
+      keyboardType={keyboardType}
     />
   )
 }

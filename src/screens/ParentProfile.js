@@ -1,152 +1,190 @@
 import { Image, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { DataTable, Divider, Text } from 'react-native-paper'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import Spaces from '../helper/Spaces'
 import Fonts from '../helper/Fonts'
 import Colors from '../helper/Colors'
 import SmallWhiteButton from '../components/SmallWhiteButton'
+import Loader from '../components/Loader'
+import { handlePostRequest } from '../helper/Utils'
 
 const ParentProfile = ({ navigation, route }) => {
+
+    console.log("UserID =    " , route?.params?.userID)
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
 
+    const [profiledetailsdata, setProfiledetailsdata] = useState()
+    const [loader, setLoader] = useState(true)
+    const [image, setImage] = useState({})
+
+
+    useEffect(() => {
+        getUsersProfileDetails()
+    }, [])
+
+
+    const getUsersProfileDetails = async () => {
+        const formdata = new FormData()
+        formdata.append('userId', route?.params?.userID)
+        const result = await handlePostRequest('user_details', formdata)
+        console.log("Results==========   ", result)
+
+        setProfiledetailsdata(result)
+
+        if (result?.status == '200') {
+
+        } else if (result?.status == '201') {
+            Alert.alert("Alert", result?.message)
+        }
+        setLoader(false)
+    }
+
+
     const styles = makeStyles(H, W)
     return (
-        <View style={styles.container}>
-            <ScrollView
-                contentContainerStyle={styles.contentContainerStyle}
-                style={styles.container}>
-                <View style={styles.upperContainer}>
-                    <View>
+        loader
+            ?
+            <Loader />
+            :
+            <View style={styles.container}>
+                <ScrollView
+                    contentContainerStyle={styles.contentContainerStyle}
+                    style={styles.container}>
+                    <View style={styles.upperContainer}>
+                        <View>
 
-                        <Image
-                            source={require('../assets/images/profile-user.png')}
-                            defaultSource={require('../assets/images/profile-user.png')}
-                            style={styles.profilePic}
-                        />
-                    </View>
-                    <View>
-                        <Text style={[styles.heading, { marginBottom: 0 }]}>Gracie</Text>
-                        <Text style={[styles.textSecondary, { marginBottom: 0 }]}>Babysitting job in Dallas</Text>
-                        <View style={styles.whiteBox}>
-                            <Text style={[styles.text, { marginBottom: 0, ...Fonts.sm }]}> ~ 2 km away</Text>
+                            <Image
+                                source={{uri:`${profiledetailsdata?.url}${profiledetailsdata?.userDetails?.picture}` }}
+                                defaultSource={require('../assets/images/profile-user.png')}
+                                style={styles.profilePic}
+                            />
+                        </View>
+                        <View>
+                            <Text style={[styles.heading, { marginBottom: 0 }]}>{`${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`}</Text>
+                            <Text style={[styles.textSecondary, { marginBottom: 0 }, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.address}</Text>
+                            <View style={styles.whiteBox}>
+                                <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.hour_price}`}</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
-                <View style={styles.lowerContainer}>
-                    <Text style={styles.text}>
-                        Hello! My husband and I are just starting to use sitters here and there for our 7 months old.
-                        We own a business and need someone on average one day, weekly or bi-weekly for date nights/days,
-                        client calls needing both of us, or a rest day for mom.
-                    </Text>
-                    <Text style={styles.text}>
-                        Characteristics of the children
-                        <Text style={styles.text}>Curious, Funny, Intelligent</Text>
-                    </Text>
-                    <Text>
-                        <Text style={styles.subheading}>Number of children: </Text>
-                        <Text style={styles.text}>1</Text>
-                    </Text>
-                    <Text>
-                        <Text style={styles.subheading}>Age of children: </Text>
-                        <Text style={styles.text}>Baby</Text>
-                    </Text>
+                    <View style={styles.lowerContainer}>
+                        <Text style={styles.text}>
+                            {profiledetailsdata?.userDetails?.description}
+                        </Text>
+                        {/* <Text style={styles.text}>
+                            Characteristics of the children
+                            <Text style={styles.text}>Curious, Funny, Intelligent</Text>
+                        </Text> */}
+                        <Text>
+                            <Text style={styles.subheading}>Number of children: </Text>
+                            <Text style={[styles.text, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.no_of_children}</Text>
+                        </Text>
+                        {/* <Text>
+                            <Text style={styles.subheading}>Age of children: </Text>
+                            <Text style={styles.text}>Baby</Text>
+                        </Text> */}
 
-                    <Text style={styles.warning}>
-                        For your own safety and protection, only communicate through this app.
-                        Never pay for anything and don't share personal information like ID documents and bank details with someone you have never met.
-                    </Text>
-                    <Text style={styles.heading}>When we need a babysitter</Text>
-                    <Divider style={styles.divider} />
-                    <DataTable>
-                        <DataTable.Header>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title>Mo</DataTable.Title>
-                            <DataTable.Title>Tu</DataTable.Title>
-                            <DataTable.Title>We</DataTable.Title>
-                            <DataTable.Title>Th</DataTable.Title>
-                            <DataTable.Title>Fr</DataTable.Title>
-                            <DataTable.Title>Sa</DataTable.Title>
-                            <DataTable.Title>Su</DataTable.Title>
-                        </DataTable.Header>
+                        <Text style={styles.warningtitle}>Warning: </Text>
 
-                        <DataTable.Row>
-                            <DataTable.Title>Morning</DataTable.Title>
-                            <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                        </DataTable.Row>
-                        <DataTable.Row>
-                            <DataTable.Title>Afternoon</DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                            <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                        </DataTable.Row>
-                        <DataTable.Row>
-                            <DataTable.Title>Evening</DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                            <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                        </DataTable.Row>
-                        <DataTable.Row>
-                            <DataTable.Title textStyle={{ fontSize: 10 }}>Night</DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                            <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                            <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                            <DataTable.Title></DataTable.Title>
-                        </DataTable.Row>
-                    </DataTable>
-                    <Text style={styles.heading}>About our family</Text>
-                    <Text style={styles.text}>
-                        <Text style={styles.subheading}>Type of babysitter needed: </Text>
-                        <Text style={styles.text}>Babysitter</Text>
-                    </Text>
-                    <Text style={styles.text}>
-                        <Text style={styles.subheading}>Preferred babysitting location: </Text>
-                        <Text style={styles.text}>At the family</Text>
-                    </Text>
-                    <Text style={styles.text}>
-                        <Text style={styles.subheading}>Languages we speak: </Text>
-                        <Text style={styles.text}>English</Text>
-                    </Text>
-                    <Text style={styles.text}>
-                        <Text style={styles.subheading}>Favorited: </Text>
-                        <Text style={styles.text}>6 Times</Text>
-                    </Text>
-                    <Text style={styles.text}>
-                        <Text style={styles.subheading}>We need a babysitter comfortable with: </Text>
-                        <Text style={styles.text}>Pets</Text>
-                    </Text>
+                        <Text style={[styles.warning, Fonts.smMedium]}>
+                            For your own safety and protection, only communicate through this app.
+                            Never pay for anything and don't share personal information like ID documents and bank details with someone you have never met.
+                        </Text>
+                        <Text style={styles.textneedbabysittertitle}>When we need a babysitter</Text>
+                        <Divider style={styles.divider} />
+                        <DataTable>
+                            <DataTable.Header>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title>Mo</DataTable.Title>
+                                <DataTable.Title>Tu</DataTable.Title>
+                                <DataTable.Title>We</DataTable.Title>
+                                <DataTable.Title>Th</DataTable.Title>
+                                <DataTable.Title>Fr</DataTable.Title>
+                                <DataTable.Title>Sa</DataTable.Title>
+                                <DataTable.Title>Su</DataTable.Title>
+                            </DataTable.Header>
 
-                </View>
-            </ScrollView>
-            <View style={styles.floatingView}>
-                <View style={styles.secondaryFloatingView}>
-                    <Text style={[styles.text, styles.floatText, { ...Fonts.larBold }]}>US$13.00/hr</Text>
-                    <Text style={[styles.subheading, styles.floatText]}>Hourly rate for babysitting</Text>
-                </View>
-                <View style={styles.secondaryFloatingView}>
-                    <SmallWhiteButton title='Contact Gracie' />
+                            <DataTable.Row>
+                                <DataTable.Title>Morning</DataTable.Title>
+                                <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                            </DataTable.Row>
+                            <DataTable.Row>
+                                <DataTable.Title>Afternoon</DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
+                                <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
+                            </DataTable.Row>
+                            <DataTable.Row>
+                                <DataTable.Title>Evening</DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
+                                <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
+                            </DataTable.Row>
+                            <DataTable.Row>
+                                <DataTable.Title textStyle={{ fontSize: 10 }}>Night</DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                                <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
+                                <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
+                                <DataTable.Title></DataTable.Title>
+                            </DataTable.Row>
+                        </DataTable>
+                        {/* <Text style={styles.textneedbabysittertitle}>About our family</Text> */}
+                        {/* <Text style={styles.text}>
+                            <Text style={styles.subheading}>Type of babysitter needed: </Text>
+                            <Text style={styles.text}>Babysitter</Text>
+                        </Text> */}
+                        {/* <Text style={styles.text}>
+                            <Text style={styles.subheading}>Preferred babysitting location: </Text>
+                            <Text style={styles.text}>At the family</Text>
+                        </Text> */}
+                        {/* <Text style={styles.text}>
+                            <Text style={styles.subheading}>Languages we speak: </Text>
+                            <Text style={styles.text}>English</Text>
+                        </Text> */}
+                        {/* <Text style={styles.text}>
+                            <Text style={styles.subheading}>Favorited: </Text>
+                            <Text style={styles.text}>0 Times</Text>
+                        </Text> */}
+                        {/* <Text style={styles.text}>
+                            <Text style={styles.subheading}>We need a babysitter comfortable with: </Text>
+                            <Text style={styles.text}>Pets</Text>
+                        </Text> */}
+
+                    </View>
+                </ScrollView>
+                <View style={styles.floatingView}>
+                    <View style={styles.secondaryFloatingView}>
+                        <Text style={[styles.text, styles.floatText,
+
+                        { ...Fonts.larBold }]}>{`$${profiledetailsdata?.userDetails?.hour_price}/hrs`}</Text>
+
+                        <Text style={[styles.subheading, styles.floatText]}>Total Price</Text>
+                    </View>
+                    <View style={styles.secondaryFloatingView}>
+                        <SmallWhiteButton title={`${"Contact"} ${profiledetailsdata?.userDetails?.first_name}`} />
+                    </View>
                 </View>
             </View>
-        </View>
     )
 }
 
@@ -163,6 +201,12 @@ const makeStyles = (H, W) => StyleSheet.create({
     heading: {
         ...Fonts.larBold,
         marginBottom: Spaces.med,
+        color: "white"
+    },
+    textneedbabysittertitle: {
+        ...Fonts.larMedium,
+        color: "black",
+        marginTop: H * 0.025
     },
     subheading: {
         ...Fonts.medBold,
@@ -184,7 +228,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         ...Fonts.sm,
         color: Colors.white,
-        marginBottom: Spaces.med
+        marginBottom: Spaces.med,
+        width: W * 0.7
     },
     whiteBox:
     {
@@ -216,8 +261,13 @@ const makeStyles = (H, W) => StyleSheet.create({
     warning:
     {
         ...Fonts.medMedium,
-        color: Colors.gray,
-        marginVertical: Spaces.med
+        color: 'gray',
+    },
+    warningtitle:
+    {
+        ...Fonts.larMedium,
+        color: 'red',
+        marginTop: H * 0.025
     },
     floatingView:
     {
