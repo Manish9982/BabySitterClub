@@ -1,4 +1,5 @@
 import { FlatList, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Chip, Searchbar, Text } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
@@ -28,7 +29,15 @@ const SearchBabySitter = ({ navigation }) => {
         const formdata = new FormData()
         formdata.append('serviceIds[]', "1")
         const result = await handlePostRequest('users', formdata)
+        console.log("Results==========   ", result)
+
         setBabySittersData(result)
+
+        if (result?.status == '200') {
+
+        } else if (result?.status == '201') {
+            Alert.alert("Alert", result?.message)
+        }
         setLoader(false)
     }
 
