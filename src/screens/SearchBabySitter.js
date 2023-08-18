@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { Chip,Searchbar, Text } from 'react-native-paper'
+import { Chip, Searchbar, Text } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
@@ -54,7 +54,7 @@ const SearchBabySitter = ({ navigation }) => {
     }
     const renderfilters = ({ item }) => {
         return (
-            <Chip>{item.name}</Chip>
+            <Chip>{item.service_name}</Chip>
         )
     }
 
@@ -83,20 +83,19 @@ const SearchBabySitter = ({ navigation }) => {
 
                 </View>
 
-                <View style={styles.upperconatiner2}>
-                    {/* <Chip>All</Chip>
-                    <Chip>BabySitter</Chip>
-                    <Chip>PetSitter</Chip>
-                    <Chip>HomeSitter</Chip> */}
+                {
+                    babySittersData?.status == '200' &&
+                    <View style={styles.uppercontainer2}>
+                        <FlatList
+                            horizontal={true}
+                            data={babySittersData?.filters}
+                            renderItem={renderfilters}
+                            keyExtractor={(item) => item.id}
+                        />
 
-                    <FlatList
-                        horizontal={true}
-                        data={babySittersData?.filters}
-                        renderItem={renderfilters}
-                        keyExtractor={(item) => item.id}
-                    />
+                    </View>
+                }
 
-                </View>
 
                 {
                     babySittersData?.users?.length == 0
@@ -124,7 +123,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         justifyContent: 'center',
         margin: Spaces.med,
     },
-    upperconatiner2: {
+    uppercontainer2: {
         flexDirection: 'row',
         justifyContent: 'center',
         margin: Spaces.med,
@@ -152,7 +151,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     nothingToShow:
     {
-        alignSelf:'center',
-        marginTop:'70%'
+        alignSelf: 'center',
+        marginTop: '70%'
     }
 })

@@ -128,12 +128,9 @@ const CheckboxItem = ({ label, checked, onChange }) => {
 
 const styles = StyleSheet.create({
     container: {
+        flex:1,
         padding: Spaces.lar,
-        backgroundColor: 'white',
-        borderRadius: 8,
-        elevation: 2,
-        marginBottom: 100,
-        paddingBottom: 100,
+        backgroundColor: 'white'
     },
     header: {
         ...Fonts.medBold,
