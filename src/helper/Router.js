@@ -20,10 +20,12 @@ import ViewBookings from '../screens/ViewBookings';
 import Filters from '../screens/Filters';
 import { useSelector } from 'react-redux';
 import TransactionHistory from '../screens/TransactionHistory';
+import TimeSlotScreen from '../screens/TimeSlotScreen';
+
 
 const Router = () => {
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
-    
+
     const Stack = createNativeStackNavigator();
 
     const returnStack = () => {
@@ -34,13 +36,14 @@ const Router = () => {
                     headerShown: Platform.OS == "android" ? false : true
                 }}>
                     <Stack.Screen name="BottomTabs" component={BottomTabs} options={{ headerShown: false }} />
-                    <Stack.Screen name="Profile" component={Profile} options={{}} />
                     <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
                     <Stack.Screen name="ParentProfile" component={ParentProfile} options={{ headerTitle: 'Parent Profile' }} />
                     <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
                     <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
                     <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
                     <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerTitle: 'Transaction History' }} />
+                    <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
+                    <Stack.Screen name="Profile" component={Profile} options={{}} />
                 </Stack.Navigator>
             )
         }
