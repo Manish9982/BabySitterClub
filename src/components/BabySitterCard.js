@@ -11,7 +11,7 @@ const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavo
         <View style={styles.container}>
             <Image
                 defaultSource={require('../assets/images/mother.png')}
-                source={profilePicture}
+                source={{ uri: profilePicture }}
                 style={styles.profilePic} />
             <View style={styles.card}>
                 <Text style={[styles.name, Fonts.larSemiBold]}>{name}</Text>
