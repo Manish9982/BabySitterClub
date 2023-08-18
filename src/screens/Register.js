@@ -60,6 +60,7 @@ const Register = ({ navigation, route }) => {
             }
             setLoader(true)
             const result = await handlePostRequest('register', formdata)
+            console.log("Signup====== " , result)
 
             if (result?.status == "200") {
                 storeLocalValue(LOCAL_STORE.TOKEN, result?.token)

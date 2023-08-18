@@ -378,6 +378,7 @@ const Profile = () => {
     const [address, setAddress] = useState('')
     const [price, setPrice] = useState('')
     const [dob, setDob] = useState('')
+    const [children, setChildren] = useState('')
     const [image, setImage] = useState({})
     const [loaderButton, setLoaderButton] = useState(false)
     const [showSlots, setShowSlots] = useState(true)
@@ -388,7 +389,12 @@ const Profile = () => {
 
 
     const onPressButton = () => {
-        updateUserProfileData()
+        if (price.length == '0') {
+
+        } else {
+            updateUserProfileData()
+        }
+
     }
 
     const pickImage = async () => {
@@ -431,7 +437,7 @@ const Profile = () => {
         formdata.append('firstName', name);
         formdata.append('lastName', lastname);
         formdata.append('hourPrice', price);
-        formdata.append('noOfChildren', "2");
+        formdata.append('noOfChildren', children);
         formdata.append('comfirtableWith', "Cooking");
         formdata.append('experience', "I smoke");
         formdata.append('address', address);
@@ -454,6 +460,7 @@ const Profile = () => {
         setLastName(result?.userDetails?.last_name)
         setAbout(result?.userDetails?.description)
         setAddress(result?.userDetails?.address)
+        setChildren(JSON.stringify(result?.userDetails?.no_of_children))
         setPrice(JSON.stringify(result?.userDetails?.hour_price))
         setImage({ uri: `${result?.url}${result?.userDetails?.picture}` })
         setUserdata(result)
@@ -546,11 +553,21 @@ const Profile = () => {
                 </Text>
                 <Text style={styles.sectionHeader}>Hourly Rate (Per Hour)</Text>
                 <TextInputComponent
-                    value={`$ ${price}`}
+                    keyboardType='numeric'
+                    value={price}
                     onChangeText={(text) => {
                         setPrice(text)
                     }}
-                    placeholder={"USD"}
+                    placeholder={"USD ($)"}
+                    style={styles.input} />
+                <Text style={styles.sectionHeader}>No of children</Text>
+                <TextInputComponent
+                    keyboardType='numeric'
+                    value={children}
+                    onChangeText={(text) => {
+                        setChildren(text)
+                    }}
+                    placeholder={"No of children"}
                     style={styles.input} />
                 <Text style={styles.sectionHeader}>Date of birth</Text>
                 {
