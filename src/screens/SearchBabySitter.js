@@ -7,6 +7,8 @@ import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 import Loader from '../components/Loader';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { handleGetRequest, handlePostRequest } from '../helper/Utils';
 
 const SearchBabySitter = ({ navigation }) => {
@@ -19,6 +21,8 @@ const SearchBabySitter = ({ navigation }) => {
 
     const [babySittersData, setBabySittersData] = useState([])
     const [loader, setLoader] = useState(true)
+    const selectedService = useSelector(state => state.global.selectedService)
+
 
     useEffect(() => {
         getUsers()
@@ -26,7 +30,10 @@ const SearchBabySitter = ({ navigation }) => {
 
     const getUsers = async () => {
         const formdata = new FormData()
-        formdata.append('serviceIds[]', "1")
+        for (let i = 0; i < selectedService.length; i++) {
+            formdata.append("ServiceId[]", selectedService?.[i]?.id);
+        }
+        //formdata.append('serviceIds[]', "2")
         const result = await handlePostRequest('users', formdata)
         console.log("Results==========   ", result)
         setBabySittersData(result)
