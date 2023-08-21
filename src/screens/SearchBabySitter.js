@@ -30,7 +30,7 @@ const SearchBabySitter = ({ navigation }) => {
 
     const getUsers = async () => {
         const formdata = new FormData()
-        for (let i = 0; i < selectedService.length; i++) {
+        for (let i = 0; i < selectedService?.length; i++) {
             formdata.append("ServiceId[]", selectedService?.[i]?.id);
         }
         //formdata.append('serviceIds[]', "2")
@@ -68,7 +68,7 @@ const SearchBabySitter = ({ navigation }) => {
                 hourlyPrice={item?.hourlyPrice}
                 isFavourite={item?.isFavourite}
                 onPressFavourite={() => handleFavourite(item?.Id)}
-                onPressItemSelected={() =>   handleNavigation(item?.Id)}
+                onPressItemSelected={() => handleNavigation(item?.Id)}
 
             />
         )
@@ -95,8 +95,8 @@ const SearchBabySitter = ({ navigation }) => {
                         mode='bar'
                         placeholder='Search'
                         style={styles.searchBar}
-                     //   icon={{ source: "filter-variant", direction: 'rtl' }}
-                      //  onIconPress={onPressFilter}
+                    //   icon={{ source: "filter-variant", direction: 'rtl' }}
+                    //  onIconPress={onPressFilter}
                     />
                 </View>
 
