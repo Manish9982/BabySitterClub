@@ -1,4 +1,5 @@
-import { FlatList, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+
+import { Alert, FlatList, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Chip, Searchbar, Text } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
@@ -6,6 +7,8 @@ import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 import Loader from '../components/Loader';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { handleGetRequest, handlePostRequest } from '../helper/Utils';
 
 const SearchBabySitter = ({ navigation }) => {
@@ -18,17 +21,27 @@ const SearchBabySitter = ({ navigation }) => {
 
     const [babySittersData, setBabySittersData] = useState([])
     const [loader, setLoader] = useState(true)
+    const selectedService = useSelector(state => state.global.selectedService)
+
 
     useEffect(() => {
         getUsers()
     }, [])
 
-
     const getUsers = async () => {
         const formdata = new FormData()
-        formdata.append('serviceIds[]', "1")
+        for (let i = 0; i < selectedService.length; i++) {
+            formdata.append("ServiceId[]", selectedService?.[i]?.id);
+        }
+        //formdata.append('serviceIds[]', "2")
         const result = await handlePostRequest('users', formdata)
+        console.log("Results==========   ", result)
         setBabySittersData(result)
+
+        if (result?.status == '200') {
+        } else if (result?.status == '201') {
+            Alert.alert("Alert", result?.message)
+        }
         setLoader(false)
     }
 
@@ -38,8 +51,14 @@ const SearchBabySitter = ({ navigation }) => {
         //         bs.Id === Id ? { ...bs, isFavourite: !bs.isFavourite } : bs
         //     )
         // );
+
     };
 
+
+    const handleNavigation = (userid) => {
+        navigation.navigate("ParentProfile", { 'userID': userid })
+
+    }
     const renderBabysitterCard = ({ item }) => {
         return (
             <BabySitterCard
@@ -49,6 +68,8 @@ const SearchBabySitter = ({ navigation }) => {
                 hourlyPrice={item?.hourlyPrice}
                 isFavourite={item?.isFavourite}
                 onPressFavourite={() => handleFavourite(item?.Id)}
+                onPressItemSelected={() =>   handleNavigation(item?.Id)}
+
             />
         )
     }
@@ -68,19 +89,15 @@ const SearchBabySitter = ({ navigation }) => {
             <Loader />
             :
             <View style={{ flex: 1 }}>
-
                 <View style={styles.upperconatiner}>
                     <Searchbar
                         loading={false}
                         mode='bar'
                         placeholder='Search'
                         style={styles.searchBar}
-                        icon={{ source: "filter-variant", direction: 'rtl' }}
-                        onIconPress={onPressFilter}
+                     //   icon={{ source: "filter-variant", direction: 'rtl' }}
+                      //  onIconPress={onPressFilter}
                     />
-
-
-
                 </View>
 
                 {
@@ -96,11 +113,10 @@ const SearchBabySitter = ({ navigation }) => {
                     </View>
                 }
 
-
                 {
                     babySittersData?.users?.length == 0
                         ?
-                        <Text style={styles.nothingToShow}>No BabySitters Found</Text>
+                        <Text style={styles.nothingToShow}>No Data Found At This Moment!</Text>
                         :
                         <FlatList
                             data={babySittersData?.users}
