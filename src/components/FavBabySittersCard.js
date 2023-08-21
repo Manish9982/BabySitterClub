@@ -5,7 +5,7 @@ import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 
-const FavBabySittersCard = ({ profilePicture, name, description, onPressFavourite }) => {
+const FavBabySittersCard = ({ profilePicture, name, description,hourlyPrice, onPressFavourite }) => {
     return (
         <TouchableOpacity 
         onPress={onPressFavourite}
@@ -17,6 +17,7 @@ const FavBabySittersCard = ({ profilePicture, name, description, onPressFavourit
             <View style={styles.card}>
                 <Text style={[styles.name, Fonts.larSemiBold]}>{name}</Text>
                 <Text style={styles.description}>{description}</Text>
+                <Text style={[styles.price, Fonts.medMedium]}>Hourly Price: ${hourlyPrice}</Text>
             </View>
           
         </TouchableOpacity>

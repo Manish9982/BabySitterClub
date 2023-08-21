@@ -23,26 +23,32 @@ const SearchBabySitter = ({ navigation }) => {
     const [loader, setLoader] = useState(true)
     const selectedService = useSelector(state => state.global.selectedService)
 
-
     useEffect(() => {
         getUsers()
     }, [])
 
     const getUsers = async () => {
-        const formdata = new FormData()
-        for (let i = 0; i < selectedService.length; i++) {
-            formdata.append("ServiceId[]", selectedService?.[i]?.id);
-        }
-        //formdata.append('serviceIds[]', "2")
-        const result = await handlePostRequest('users', formdata)
+        const result = await handleGetRequest('users')
         console.log("Results==========   ", result)
         setBabySittersData(result)
-
         if (result?.status == '200') {
         } else if (result?.status == '201') {
             Alert.alert("Alert", result?.message)
         }
         setLoader(false)
+    }
+
+
+    const addUserFav = async () => {
+        const formdata = new FormData()
+        formdata.append('userId', "38")
+        const result = await handlePostRequest('add_fav', formdata)
+        if (result?.status == '200') {
+            //Alert.alert("Alert", result?.message)
+            getUsers()
+        } else if (result?.status == '201') {
+            Alert.alert("Alert", result?.message)
+        }
     }
 
     const handleFavourite = (Id) => {
@@ -51,14 +57,18 @@ const SearchBabySitter = ({ navigation }) => {
         //         bs.Id === Id ? { ...bs, isFavourite: !bs.isFavourite } : bs
         //     )
         // );
-
+        addUserFav()
     };
 
 
-    const handleNavigation = (userid) => {
+    const handleNavigation = (userid, roleid) => {
         navigation.navigate("ParentProfile", { 'userID': userid })
-
     }
+
+
+
+
+
     const renderBabysitterCard = ({ item }) => {
         return (
             <BabySitterCard
@@ -68,8 +78,7 @@ const SearchBabySitter = ({ navigation }) => {
                 hourlyPrice={item?.hourlyPrice}
                 isFavourite={item?.isFavourite}
                 onPressFavourite={() => handleFavourite(item?.Id)}
-                onPressItemSelected={() =>   handleNavigation(item?.Id)}
-
+                onPressItemSelected={() => handleNavigation(item?.Id)}
             />
         )
     }
@@ -95,8 +104,8 @@ const SearchBabySitter = ({ navigation }) => {
                         mode='bar'
                         placeholder='Search'
                         style={styles.searchBar}
-                     //   icon={{ source: "filter-variant", direction: 'rtl' }}
-                      //  onIconPress={onPressFilter}
+                    //   icon={{ source: "filter-variant", direction: 'rtl' }}
+                    //  onIconPress={onPressFilter}
                     />
                 </View>
 
