@@ -9,7 +9,7 @@ import Fonts from '../helper/Fonts';
 import Loader from '../components/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { handleGetRequest } from '../helper/Utils';
+import { handleGetRequest, handlePostRequest } from '../helper/Utils';
 
 const SearchBabySitter = ({ navigation }) => {
     const H = useWindowDimensions().height
