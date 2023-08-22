@@ -9,18 +9,19 @@ import Fonts from '../helper/Fonts';
 import Loader from '../components/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { handleGetRequest, handlePostRequest } from '../helper/Utils';
+import { handleGetRequest } from '../helper/Utils';
 
 const SearchBabySitter = ({ navigation }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
 
-    const [filterdata, setFilterdata] = useState()
-
-
+    const [filterdata, setFilterdata] = useState([])
     const [babySittersData, setBabySittersData] = useState([])
     const [loader, setLoader] = useState(true)
+    const [users, setUsers] = useState([])
+    const [searchText, setSearchText] = useState("")
+
     const selectedService = useSelector(state => state.global.selectedService)
 
     useEffect(() => {
@@ -31,9 +32,12 @@ const SearchBabySitter = ({ navigation }) => {
         const result = await handleGetRequest('users')
         console.log("Results==========   ", result)
         setBabySittersData(result)
+
         if (result?.status == '200') {
+            setBabySittersData(result)
+            setUsers(result?.users)
         } else if (result?.status == '201') {
-            Alert.alert("Alert", result?.message)
+            Alert.alert("Sorry", result?.message)
         }
         setLoader(false)
     }
@@ -60,31 +64,62 @@ const SearchBabySitter = ({ navigation }) => {
         addUserFav()
     };
 
-
     const handleNavigation = (userid, roleid) => {
         navigation.navigate("ParentProfile", { 'userID': userid })
+
     }
 
+    const throwChipSelection = (name) => {
+        if (filterdata?.includes(name)) {
+            return true
+        }
+    }
 
+    const onPressChip = (name) => {
+        if (filterdata?.includes(name)) {
+            setFilterdata(prev => prev?.filter(item => item !== name))
+        }
+        else {
+            setFilterdata(prev => [...prev, name])
+        }
+    }
 
-
-
+    function haveCommonElements(arr1, arr2) {
+        for (let i = 0; i < arr1?.length; i++) {
+            for (let j = 0; j < arr2?.length; j++) {
+                if (arr1[i] === arr2[j]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+  
+    console.log("filterData=======>", filterdata)
     const renderBabysitterCard = ({ item }) => {
-        return (
-            <BabySitterCard
-                profilePicture={`${babySittersData?.url}${item?.profilePicture}`}
-                name={item?.name}
-                description={item?.description}
-                hourlyPrice={item?.hourlyPrice}
-                isFavourite={item?.isFavourite}
-                onPressFavourite={() => handleFavourite(item?.Id)}
-                onPressItemSelected={() => handleNavigation(item?.Id)}
-            />
-        )
+        if ((haveCommonElements(filterdata, item?.service) || filterdata?.length == 0) && (item?.name?.toLowerCase()?.includes(searchText?.toLowerCase()))) {
+            return (
+                <BabySitterCard
+                    profilePicture={`${babySittersData?.url}${item?.profilePicture}`}
+                    name={item?.name}
+                    description={item?.description}
+                    hourlyPrice={item?.hourlyPrice}
+                    isFavourite={item?.isFavourite}
+                    onPressFavourite={() => handleFavourite(item?.Id)}
+                    onPressItemSelected={() => handleNavigation(item?.Id)}
+
+                />
+            )
+        }
+
     }
     const renderfilters = ({ item }) => {
         return (
-            <Chip>{item.service_name}</Chip>
+            <Chip
+                selectedColor={Colors.blue}
+                onPress={() => onPressChip(item.service_name)}
+                selected={throwChipSelection(item.service_name)}
+            >{item.service_name}</Chip>
         )
     }
 
@@ -104,8 +139,7 @@ const SearchBabySitter = ({ navigation }) => {
                         mode='bar'
                         placeholder='Search'
                         style={styles.searchBar}
-                    //   icon={{ source: "filter-variant", direction: 'rtl' }}
-                    //  onIconPress={onPressFilter}
+                        onChangeText={(text) => setSearchText(text)}
                     />
                 </View>
 
@@ -128,7 +162,7 @@ const SearchBabySitter = ({ navigation }) => {
                         <Text style={styles.nothingToShow}>No Data Found At This Moment!</Text>
                         :
                         <FlatList
-                            data={babySittersData?.users}
+                            data={users}
                             renderItem={renderBabysitterCard}
                             keyExtractor={(item) => item.Id}
                         />

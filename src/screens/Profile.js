@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Platform, Alert, StyleSheet, View, TouchableOpacity, Modal, useWindowDimensions, FlatList } from 'react-native';
+import { Image, Platform, Alert, StyleSheet, View, TouchableOpacity, Modal, useWindowDimensions, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { Chip, DataTable, Text } from 'react-native-paper';
 import TextInputComponent from '../components/TextInputComponent';
 import Colors from '../helper/Colors';
@@ -382,6 +382,7 @@ const Profile = () => {
     const [image, setImage] = useState({})
     const [loaderButton, setLoaderButton] = useState(false)
     const [showSlots, setShowSlots] = useState(true)
+    const [slots, setSlots] = useState(null)
 
     useEffect(() => {
         getUserProfileData()
@@ -389,7 +390,7 @@ const Profile = () => {
 
 
     const onPressButton = () => {
-        if (price.length == '0') {
+        if (price?.length == '0') {
 
         } else {
             updateUserProfileData()
@@ -413,15 +414,21 @@ const Profile = () => {
 
     const renderSlots = ({ item, index }) => {
         return (
-            <View style={styles.slot}>
+            <TouchableOpacity style={styles.slot}>
                 <Text>{item.slot}</Text>
-            </View>
+            </TouchableOpacity>
         )
+    }
+
+    const toggleModal = (slots) => {
+        setShowSlots(prev => !prev)
+        setSlots(slots)
     }
 
     const renderDays = (item, index) => {
         return (
             <TouchableOpacity
+                onPress={() => toggleModal(item?.slots)}
                 key={index}
                 style={item?.available ? styles.weekButton : styles.weekButtonUnavailable}
             >
@@ -477,25 +484,26 @@ const Profile = () => {
                 contentContainerStyle={styles.container}
                 style={styles.container}>
                 <Modal
-                    //visible={showSlots}
-                    visible={finalPropsSelectorFactory}
+                    visible={showSlots}
                     transparent={true}
 
                 >
-                    <View style={styles.modalContainer}>
-                        <View style={styles.popup}>
-                            <Text style={styles.text}>Slots:</Text>
-                            <Text style={styles.text2}>(Monday)</Text>
-                            <FlatList
-                                // horizontal
-                                numColumns={3}
-                                data={SlotsData?.slots}
-                                renderItem={renderSlots}
-                                keyExtractor={(item, index) => `${item?.id}`}
-                                columnWrapperStyle={styles.columnWrapperStyle}
-                            />
+                    <TouchableWithoutFeedback onPress={() => setShowSlots(false)}>
+                        <View style={styles.modalContainer}>
+                            <View style={styles.popup}>
+                                <Text style={styles.text}>Slots:</Text>
+                                <Text style={styles.text2}>(Monday)</Text>
+                                <FlatList
+                                    // horizontal
+                                    numColumns={3}
+                                    data={slots}
+                                    renderItem={renderSlots}
+                                    keyExtractor={(item, index) => `${item?.id}`}
+                                    columnWrapperStyle={styles.columnWrapperStyle}
+                                />
+                            </View>
                         </View>
-                    </View>
+                    </TouchableWithoutFeedback>
                 </Modal>
                 <Text style={styles.sectionHeader}>Profile Photo</Text>
                 <TouchableOpacity
@@ -817,8 +825,8 @@ const makeStyles = (H, W) => StyleSheet.create({
         width: W * 0.18,
         marginVertical: Spaces.vsm,
         alignItems: 'center',
-        borderWidth:0.2,
-        borderColor:Colors.PRIMARY_BLUE
+        borderWidth: 0.2,
+        borderColor: Colors.PRIMARY_BLUE
     },
     whiteText:
     {

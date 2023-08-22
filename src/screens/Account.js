@@ -28,29 +28,30 @@ const Account = ({ navigation }) => {
             title: 'Account',
             action: () => navigation.navigate('Profile')
         },
-        {
-            title: 'Book Slot',
-            action: () => navigation.navigate('TimeSlotScreen')
-        },
+        // {
+        //     title: 'Book Slot',
+        //     action: () => navigation.navigate('TimeSlotScreen')
+        // },
         {
             title: 'Transaction History',
             action: () => navigation.navigate('TransactionHistory')
         },
         {
-            title: 'Switch User Type',
+            title: 'Switch Role',
+            action: () => navigation.navigate('SwitchUserType')
         },
-        {
-            title: 'Tips & Articles',
-        },
-        {
-            title: 'How we work',
-        },
-        {
-            title: 'Pricing',
-        },
-        {
-            title: 'Trust & Safety',
-        },
+        // {
+        //     title: 'Tips & Articles',
+        // },
+        // {
+        //     title: 'How we work',
+        // },
+        // {
+        //     title: 'Pricing',
+        // },
+        // {
+        //     title: 'Trust & Safety',
+        // },
         {
             title: 'Help',
         },

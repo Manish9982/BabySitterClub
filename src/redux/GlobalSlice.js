@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { storeLocalValue } from '../helper/LocalStore'
+import { LOCAL_STORE } from '../helper/Utils'
 
 const initialState = {
   usertype: null,
@@ -10,9 +12,11 @@ const globalSlice = createSlice({
   initialState,
   reducers: {
     setUsertype: (state, action) => {
+      storeLocalValue(LOCAL_STORE.USER_TYPE, `${action.payload}`)
       state.usertype = action.payload
     },
     setSelectedServices: (state, action) => {
+      storeLocalValue(LOCAL_STORE.SELECTED_SERVICE, JSON.stringify(action.payload))
       state.selectedService = action.payload
     },
   }
