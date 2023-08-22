@@ -65,7 +65,7 @@ const ParentProfile = ({ navigation, route }) => {
                             <Text style={[styles.heading, { marginBottom: 0 }]}>{`${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`}</Text>
                             <Text style={[styles.textSecondary, { marginBottom: 0 }, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.address}</Text>
                             <View style={styles.whiteBox}>
-                                <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.hour_price}`}</Text>
+                                <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.hour_price}/hrs`}</Text>
                             </View>
                         </View>
                     </View>
@@ -78,8 +78,8 @@ const ParentProfile = ({ navigation, route }) => {
                             <Text style={styles.text}>Curious, Funny, Intelligent</Text>
                         </Text> */}
                         <Text>
-                            <Text style={styles.subheading}>Number of children: </Text>
-                            <Text style={[styles.text, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.no_of_children}</Text>
+                            <Text style={styles.subheading}>Favorited: </Text>
+                            <Text style={[styles.text, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.no_of_children} times</Text>
                         </Text>
                         {/* <Text>
                             <Text style={styles.subheading}>Age of children: </Text>

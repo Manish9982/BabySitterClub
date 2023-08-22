@@ -22,18 +22,16 @@ const SearchBabySitter = ({ navigation }) => {
     const [users, setUsers] = useState([])
     const [searchText, setSearchText] = useState("")
 
+    const selectedService = useSelector(state => state.global.selectedService)
+
     useEffect(() => {
         getUsers()
     }, [])
 
     const getUsers = async () => {
-        const formdata = new FormData()
-        // for (let i = 0; i < selectedService?.length; i++) {
-        //     formdata.append("ServiceId[]", selectedService?.[i]?.id);
-        // }
-        //formdata.append('serviceIds[]', "2")
-        const result = await handleGetRequest('users', formdata)
+        const result = await handleGetRequest('users')
         console.log("Results==========   ", result)
+        setBabySittersData(result)
 
         if (result?.status == '200') {
             setBabySittersData(result)
@@ -44,18 +42,31 @@ const SearchBabySitter = ({ navigation }) => {
         setLoader(false)
     }
 
+
+    const addUserFav = async () => {
+        const formdata = new FormData()
+        formdata.append('userId', "38")
+        const result = await handlePostRequest('add_fav', formdata)
+        if (result?.status == '200') {
+            //Alert.alert("Alert", result?.message)
+            getUsers()
+        } else if (result?.status == '201') {
+            Alert.alert("Alert", result?.message)
+        }
+    }
+
     const handleFavourite = (Id) => {
         // setBabySittersData((prevBabysitters) =>
         //     prevBabysitters?.users?.map((bs) =>
         //         bs.Id === Id ? { ...bs, isFavourite: !bs.isFavourite } : bs
         //     )
         // );
-
+        addUserFav()
     };
 
-
-    const handleNavigation = (userid) => {
+    const handleNavigation = (userid, roleid) => {
         navigation.navigate("ParentProfile", { 'userID': userid })
+
     }
 
     const throwChipSelection = (name) => {
@@ -83,6 +94,7 @@ const SearchBabySitter = ({ navigation }) => {
         }
         return false;
     }
+  
     console.log("filterData=======>", filterdata)
     const renderBabysitterCard = ({ item }) => {
         if ((haveCommonElements(filterdata, item?.service) || filterdata?.length == 0) && (item?.name?.toLowerCase()?.includes(searchText?.toLowerCase()))) {
