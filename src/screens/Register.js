@@ -19,7 +19,6 @@ const Register = ({ navigation, route }) => {
     const [loader, setLoader] = useState(false)
 
     const usertype = useSelector(state => state.global.usertype)
-
     const selectedService = useSelector(state => state.global.selectedService)
     const dispatch = useDispatch();
 

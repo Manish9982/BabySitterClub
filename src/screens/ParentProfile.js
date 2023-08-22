@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native'
+import { Alert, Image, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { DataTable, Divider, Text } from 'react-native-paper'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
@@ -11,7 +11,7 @@ import { handlePostRequest } from '../helper/Utils'
 
 const ParentProfile = ({ navigation, route }) => {
 
-    console.log("UserID =    " , route?.params?.userID)
+    console.log("UserID =    ", route?.params?.userID)
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
@@ -32,12 +32,11 @@ const ParentProfile = ({ navigation, route }) => {
         const result = await handlePostRequest('user_details', formdata)
         console.log("Results==========   ", result)
 
-        setProfiledetailsdata(result)
-
         if (result?.status == '200') {
-
+            setProfiledetailsdata(result)
         } else if (result?.status == '201') {
-            Alert.alert("Alert", result?.message)
+            Alert.alert("Error", result?.message)
+            navigation.goBack()
         }
         setLoader(false)
     }
@@ -57,7 +56,7 @@ const ParentProfile = ({ navigation, route }) => {
                         <View>
 
                             <Image
-                                source={{uri:`${profiledetailsdata?.url}${profiledetailsdata?.userDetails?.picture}` }}
+                                source={{ uri: `${profiledetailsdata?.url}${profiledetailsdata?.userDetails?.picture}` }}
                                 defaultSource={require('../assets/images/profile-user.png')}
                                 style={styles.profilePic}
                             />

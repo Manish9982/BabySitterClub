@@ -8,18 +8,19 @@ import Messages from '../screens/Messages';
 import Account from '../screens/Account';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import FavouritesParents from '../screens/FavouritesParents';
+import Dashboard_Sitter from '../screens/Dashboard_Sitter';
 
-const BottomTabs = () => {
+const BottomTabsParent = () => {
 
     const Tab = createBottomTabNavigator();
 
     return (
         <Tab.Navigator>
-            <Tab.Screen name="Search" component={SearchBabySitter} options={{
+            {/* <Tab.Screen name="Search" component={SearchBabySitter} options={{
                 tabBarIcon: ({ color, size }) => <AntDesign name="search1" size={size} color={color} />
-            }} />
-            <Tab.Screen name="Favourites" component={FavouritesParents} options={{
-                tabBarIcon: ({ color, size }) => <AntDesign name="staro" size={size} color={color} />
+            }} /> */}
+            <Tab.Screen name="Home" component={Dashboard_Sitter} options={{
+                tabBarIcon: ({ color, size }) => <AntDesign name="home" size={size} color={color} />
             }} />
             <Tab.Screen name="Bookings" component={Bookings} options={{
                 tabBarIcon: ({ color, size }) => <AntDesign name="calendar" size={size} color={color} />
@@ -33,6 +34,6 @@ const BottomTabs = () => {
         </Tab.Navigator>
     )
 }
-export default BottomTabs
+export default BottomTabsParent
 
 const styles = StyleSheet.create({})

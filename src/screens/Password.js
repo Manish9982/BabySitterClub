@@ -1,6 +1,6 @@
 import { StyleSheet, View, ImageBackground, useWindowDimensions, Alert, TouchableOpacity } from 'react-native'
 import { Text, Divider } from 'react-native-paper';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
@@ -8,9 +8,9 @@ import CustomButton from '../components/Button';
 import TextInputComponent from '../components/TextInputComponent';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { login } from '../redux/AuthSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { LOCAL_STORE, handlePostRequest } from '../helper/Utils';
-import { storeLocalValue } from '../helper/LocalStore';
+import { getLocalValue, storeLocalValue } from '../helper/LocalStore';
 
 const Password = ({ navigation, route }) => {
 
@@ -22,6 +22,8 @@ const Password = ({ navigation, route }) => {
     const [password, setPassword] = useState("")
     const [loader, setLoader] = useState(false)
 
+    const userType = useSelector(state => state.global.usertype)
+    const selectedService = useSelector(state => state.global.selectedService)
     const dispatch = useDispatch()
 
     const onPressContinue = async () => {
@@ -31,6 +33,10 @@ const Password = ({ navigation, route }) => {
             var formdata = new FormData()
             formdata.append("Email", route?.params?.email);
             formdata.append("Password", password);
+            formdata.append("RoleId", `${userType}`);
+            for (let i = 0; i < selectedService.length; i++) {
+                formdata.append("ServiceId[]", `${selectedService?.[i]?.id}`);
+            }
             setLoader(true)
             const result = await handlePostRequest('login', formdata)
             if (result?.status == "200") {
