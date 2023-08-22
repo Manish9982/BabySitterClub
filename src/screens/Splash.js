@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { clearStorage, getLocalValue } from '../helper/LocalStore'
 import { LOCAL_STORE } from '../helper/Utils'
 import { login, logout } from '../redux/AuthSlice'
+import { setUsertype } from '../redux/GlobalSlice'
 
 const Splash = ({ navigation }) => {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
@@ -16,20 +17,15 @@ const Splash = ({ navigation }) => {
         }, 2000);
     }, [])
 
-    const handleLogin = () => {
-
-    };
-
-    const handleLogout = () => {
-
-    };
-
     const checkStatus = async () => {
         const status = await getLocalValue(LOCAL_STORE.LOGIN)
+        const USER = await getLocalValue(LOCAL_STORE.USER_TYPE)
         console.log("LOGIN=======  ", status)
 
         if (status == 'true') {
             dispatch(login());
+            dispatch(setUsertype(`${USER}`))
+            console.log("User at Splash==>", USER)
         }
         else {
             dispatch(logout());

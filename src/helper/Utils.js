@@ -5,6 +5,8 @@ import { getLocalValue } from "./LocalStore";
 export const LOCAL_STORE = {
     LOGIN: 'loginStatus',
     TOKEN: 'auth_token',
+    USER_TYPE: 'userType',
+    SELECTED_SERVICE: 'selected_service'
 }
 
 export const Constants = {

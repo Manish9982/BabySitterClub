@@ -41,7 +41,7 @@ const Login = ({ navigation, route }) => {
         Alert.alert('Alert', result?.message, [
           {
             text: 'Cancel',
-            onPress: () => {},
+            onPress: () => { },
             style: 'cancel',
           },
           { text: 'OK', onPress: () => navigation.navigate("Register", { email: email }) },
