@@ -13,6 +13,7 @@ const Account = ({ navigation }) => {
     const styles = makeStyles(H, W)
 
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    const usertype = useSelector((state) => state.global.usertype);
     const dispatch = useDispatch();
 
     const handleLogin = () => {
@@ -26,7 +27,14 @@ const Account = ({ navigation }) => {
     const DATA = [
         {
             title: 'Account',
-            action: () => navigation.navigate('Profile')
+            action: () => {
+                if (usertype == '2') {
+                    navigation.navigate('MyProfile_Sitter')
+                }
+                else if (usertype == '3') {
+                    navigation.navigate('MyProfile_Parent')
+                }
+            }
         },
         // {
         //     title: 'Book Slot',

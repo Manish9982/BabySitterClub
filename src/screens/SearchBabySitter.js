@@ -9,7 +9,7 @@ import Fonts from '../helper/Fonts';
 import Loader from '../components/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { handleGetRequest } from '../helper/Utils';
+import { handleGetRequest, handlePostRequest } from '../helper/Utils';
 
 const SearchBabySitter = ({ navigation }) => {
     const H = useWindowDimensions().height
@@ -37,15 +37,14 @@ const SearchBabySitter = ({ navigation }) => {
             setBabySittersData(result)
             setUsers(result?.users)
         } else if (result?.status == '201') {
-            Alert.alert("Sorry", result?.message)
+            Alert.alert("Error", result?.message)
         }
         setLoader(false)
     }
 
-
-    const addUserFav = async () => {
+    const handleFavourite = async (Id) => {
         const formdata = new FormData()
-        formdata.append('userId', "38")
+        formdata.append('userId', Id)
         const result = await handlePostRequest('add_fav', formdata)
         if (result?.status == '200') {
             //Alert.alert("Alert", result?.message)
@@ -53,19 +52,10 @@ const SearchBabySitter = ({ navigation }) => {
         } else if (result?.status == '201') {
             Alert.alert("Alert", result?.message)
         }
-    }
-
-    const handleFavourite = (Id) => {
-        // setBabySittersData((prevBabysitters) =>
-        //     prevBabysitters?.users?.map((bs) =>
-        //         bs.Id === Id ? { ...bs, isFavourite: !bs.isFavourite } : bs
-        //     )
-        // );
-        addUserFav()
     };
 
     const handleNavigation = (userid, roleid) => {
-        navigation.navigate("ParentProfile", { 'userID': userid })
+        navigation.navigate("ProfileOfSitterDuringBooking_Parent", { 'userID': userid })
 
     }
 

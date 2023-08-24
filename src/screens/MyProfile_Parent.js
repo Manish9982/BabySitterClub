@@ -12,9 +12,8 @@ import { Shadows, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import CustomButton from '../components/Button';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Loader from '../components/Loader';
-import finalPropsSelectorFactory from 'react-redux/es/connect/selectorFactory';
 
-const Profile = () => {
+const MyProfile_Parent = () => {
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
@@ -536,7 +535,7 @@ const Profile = () => {
                 <Text style={styles.sectionHeader}>About Me</Text>
 
                 <Text style={styles.description}>
-                    Tell a little about yourself, so families can get to know you.
+                    Tell a little about yourself, so Sitters can get to know you.
                 </Text>
                 <TextInputComponent
                     value={about}
@@ -559,7 +558,7 @@ const Profile = () => {
                 <Text style={styles.guidingText}>
                     Your address will never be shared with anyone. We will show your approximate location on profile.
                 </Text>
-                <Text style={styles.sectionHeader}>Hourly Rate (Per Hour)</Text>
+                <Text style={styles.sectionHeader}>Price Offered (Per Hour)</Text>
                 <TextInputComponent
                     keyboardType='numeric'
                     value={price}
@@ -577,117 +576,6 @@ const Profile = () => {
                     }}
                     placeholder={"No of children"}
                     style={styles.input} />
-                <Text style={styles.sectionHeader}>Date of birth</Text>
-                {
-                    Platform.OS == "ios"
-                    &&
-                    <RNDateTimePicker
-                        style={{
-                            alignSelf: 'flex-start'
-                        }}
-                        value={new Date()}
-                    />
-                }
-                <Text style={styles.guidingText}>
-                    Ask for permission from your parents if you are under 18 years old. Babysitters must be 16 years or older.
-                </Text>
-                {/* <Text style={styles.sectionHeader}>Experience</Text>
-                <View style={styles.chipContainer}>
-                    <Chip
-                        selected={true}
-                        style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
-
-                        I have first aid certification
-                    </Chip>
-                    <Chip
-                        style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
-                        I smoke
-                    </Chip>
-                    <Chip
-                        style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
-                        I have children
-                    </Chip>
-                    <Chip
-                        style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
-                        I have a driving license
-                    </Chip>
-                </View> */}
-                {/* <Text style={styles.sectionHeader}>I'm Comforatble with</Text>
-                <View style={styles.chipContainer}>
-                    <Chip selected style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
-                        Pets
-                    </Chip>
-                    <Chip
-                        style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
-                        Cooking
-                    </Chip>
-                    <Chip
-                        style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
-                        Chores
-                    </Chip>
-                    <Chip
-                        selected
-                        style={styles.chip} selectedColor={Colors.blue} onPress={() => { }}>
-                        Homework assistance
-                    </Chip>
-                </View> */}
-                <Text style={styles.sectionHeader}>Availability</Text>
-
-                {/* <DataTable>
-                    <DataTable.Header>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title>Mo</DataTable.Title>
-                        <DataTable.Title>Tu</DataTable.Title>
-                        <DataTable.Title>We</DataTable.Title>
-                        <DataTable.Title>Th</DataTable.Title>
-                        <DataTable.Title>Fr</DataTable.Title>
-                        <DataTable.Title>Sa</DataTable.Title>
-                        <DataTable.Title>Su</DataTable.Title>
-                    </DataTable.Header>
-                    <DataTable.Row>
-                        <DataTable.Title>Morning</DataTable.Title>
-                        <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                    </DataTable.Row>
-                    <DataTable.Row>
-                        <DataTable.Title>Afternoon</DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                        <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                    </DataTable.Row>
-                    <DataTable.Row>
-                        <DataTable.Title>Evening</DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                        <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                    </DataTable.Row>
-                    <DataTable.Row>
-                        <DataTable.Title textStyle={{ fontSize: 10 }}>Night</DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                        <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                        <DataTable.Title><AntDesign name="checkcircle" /></DataTable.Title>
-                        <DataTable.Title></DataTable.Title>
-                    </DataTable.Row>
-                </DataTable> */}
-                <View style={styles.weekContainer}>
-                    {SlotsData?.days?.map((item, index) => renderDays(item, index))}
-                </View>
 
                 <CustomButton
                     style={styles.updateButton}
@@ -840,4 +728,4 @@ const makeStyles = (H, W) => StyleSheet.create({
 
 });
 
-export default Profile;
+export default MyProfile_Parent;
