@@ -9,7 +9,7 @@ import SmallWhiteButton from '../components/SmallWhiteButton'
 import Loader from '../components/Loader'
 import { handlePostRequest } from '../helper/Utils'
 
-const ParentProfile = ({ navigation, route }) => {
+const ProfileOfParentDuringBooking_Sitter = ({ navigation, route }) => {
 
     console.log("UserID =    ", route?.params?.userID)
 
@@ -187,7 +187,7 @@ const ParentProfile = ({ navigation, route }) => {
     )
 }
 
-export default ParentProfile
+export default ProfileOfParentDuringBooking_Sitter
 
 const makeStyles = (H, W) => StyleSheet.create({
     container: {

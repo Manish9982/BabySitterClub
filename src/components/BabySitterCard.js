@@ -8,16 +8,16 @@ import Fonts from '../helper/Fonts';
 
 const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavourite, onPressFavourite, onPressItemSelected, }) => {
     return (
-        <View style={styles.container}
+        <TouchableOpacity
+            onPress={onPressItemSelected}
+            style={styles.container}
 
         >
             <Image
                 defaultSource={require('../assets/images/mother.png')}
                 source={{ uri: profilePicture }}
                 style={styles.profilePic} />
-            <TouchableOpacity
-                onPress={onPressItemSelected}
-
+            <View
                 style={styles.card}>
                 <Text style={[styles.name, Fonts.larSemiBold]}>{name}</Text>
                 <Text numberOfLines={2}
@@ -27,14 +27,14 @@ const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavo
 
                 </Text>
                 <Text style={[styles.price, Fonts.medMedium]}>Hourly Price: ${hourlyPrice}</Text>
-            </TouchableOpacity>
+            </View>
             <TouchableOpacity
                 style={styles.favButton}
                 onPress={onPressFavourite}>
                 <Text>{isFavourite == 1 ? <AntDesign name="star" size={20} color={Colors.blue} />
                     : <AntDesign name="staro" size={20} />}</Text>
             </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
     );
 };
 

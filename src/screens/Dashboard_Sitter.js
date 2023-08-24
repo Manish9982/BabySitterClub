@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import FontAwesome6 from 'react-native-vector-icons/dist/FontAwesome6'
 import Colors from '../helper/Colors';
@@ -8,6 +8,11 @@ import Fonts from '../helper/Fonts';
 import { Shadows } from '../helper/Utils';
 
 const ProfileScreen = () => {
+
+    const H = useWindowDimensions().height
+    const W = useWindowDimensions().width
+    const styles = makeStyles(H, W)
+
     return (
         <View style={styles.container}>
             <View style={styles.cardContainer}>
@@ -35,7 +40,7 @@ const ProfileScreen = () => {
             </View>
 
             <View style={styles.statsContainer}>
-                <StatButton title="Total Bookings" count={20} />
+                <StatButton title="Total Bookings" count={Spaces.med} />
                 <StatButton title="Completed Bookings" count={15} />
                 <StatButton title="Pending Bookings" count={5} />
             </View>
@@ -44,6 +49,9 @@ const ProfileScreen = () => {
 };
 
 const StatButton = ({ title, count }) => {
+    const H = useWindowDimensions().height
+    const W = useWindowDimensions().width
+    const styles = makeStyles(H, W)
     return (
         <TouchableOpacity style={styles.statButton}>
             <Text style={styles.statTitle}>{title}</Text>
@@ -53,13 +61,16 @@ const StatButton = ({ title, count }) => {
 };
 
 const TagIcon = ({ name, label, fontawesome = false }) => {
+    const H = useWindowDimensions().height
+    const W = useWindowDimensions().width
+    const styles = makeStyles(H, W)
     return (
         <View style={styles.tagIconContainer}>
             {
                 fontawesome ?
-                    <FontAwesome6 name={name} size={20} color={Colors.blue} />
+                    <FontAwesome6 name={name} size={Spaces.lar} color={Colors.blue} />
                     :
-                    <Ionicons name={name} size={20} color={Colors.blue} />
+                    <Ionicons name={name} size={Spaces.lar} color={Colors.blue} />
             }
 
             <Text style={styles.tagLabel}>{label}</Text>
@@ -67,20 +78,21 @@ const TagIcon = ({ name, label, fontawesome = false }) => {
     );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (H, W) => StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        padding: Spaces.med,
     },
     cardContainer: {
         backgroundColor: 'white',
-        padding: 20,
+        padding: Spaces.med,
         borderRadius: 10,
         shadowColor: 'black',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 5,
         elevation: 5,
+        marginBottom: Spaces.med,
     },
     profileImage: {
         width: 100,
@@ -121,7 +133,7 @@ const styles = StyleSheet.create({
     statsContainer: {
         // flexDirection: 'row',
         // justifyContent: 'space-between',
-        // marginTop: 20,
+        // marginTop: Spaces.med,
     },
     statButton: {
         backgroundColor: '#e74c3c',
@@ -137,7 +149,7 @@ const styles = StyleSheet.create({
     },
     statCount: {
         color: 'white',
-        fontSize: 20,
+        fontSize: Spaces.med,
         fontWeight: 'bold',
         marginTop: 5,
     },

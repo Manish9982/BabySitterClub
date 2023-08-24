@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native'
+import { ImageBackground, StyleSheet } from 'react-native'
 import React from 'react'
 import { ActivityIndicator } from 'react-native-paper'
 import Colors from '../helper/Colors'
@@ -24,10 +24,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Colors.white
     },
     imageStyle:
     {
-        opacity: 0.5,
+        opacity: 0,
+        backgroundColor:'transparent'
     },
 })

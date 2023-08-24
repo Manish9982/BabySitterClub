@@ -6,32 +6,6 @@ import { handleGetRequest } from '../helper/Utils';
 
 const FavouritesParents = ({ navigation }) => {
     const [babySittersData, setBabySittersData] = useState([])
-
-    const [babysitters, setBabysitters] = useState([
-        {
-            id: '1',
-            profilePicture: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
-            name: 'Amelia',
-            description: 'Dallas',
-
-        },
-        {
-            id: '2',
-            profilePicture: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
-            name: 'Ava ',
-            description: 'Dallas',
-
-        },
-        {
-            id: '3',
-            profilePicture: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
-            name: 'Alice ',
-            description: 'Dallas',
-
-        },
-
-    ]);
-
     
     useEffect(() => {
         getFavUsers()
@@ -50,7 +24,7 @@ const FavouritesParents = ({ navigation }) => {
     }
 
     const handleFavourite = (id) => {
-        navigation.navigate("ParentProfile", { 'userID': id })
+        navigation.navigate("ProfileOfSitterDuringBooking_Parent", { 'userID': id })
     }
 
 
@@ -71,7 +45,7 @@ const FavouritesParents = ({ navigation }) => {
             <FlatList
                 data={babySittersData?.users}
                 renderItem={renderfavBabysitterCard}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.Id}
             />
         </View>
     );

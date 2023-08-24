@@ -12,8 +12,9 @@ import CountryList from '../screens/CountryList';
 import ChatScreen from '../screens/ChatScreen';
 import Splash from '../screens/Splash';
 import Services from '../screens/Services';
-import Profile from '../screens/Profile';
-import ParentProfile from '../screens/ParentProfile';
+import MyProfile_Sitter from '../screens/MyProfile_Sitter';
+import ProfileOfParentDuringBooking_Sitter from '../screens/ProfileOfParentDuringBooking_Sitter';
+import ProfileOfSitterDuringBooking_Parent from '../screens/ProfileOfSitterDuringBooking_Parent';
 import BookingDetailsPage from '../screens/BookingDetailsPage';
 import ViewBookings from '../screens/ViewBookings';
 import Filters from '../screens/Filters';
@@ -22,10 +23,9 @@ import TransactionHistory from '../screens/TransactionHistory';
 import TimeSlotScreen from '../screens/TimeSlotScreen';
 import BottomTabsParent from './BottomTabsParent';
 import BottomTabsSitter from './BottomTabsSitter';
-import { getLocalValue } from './LocalStore';
-import { LOCAL_STORE } from './Utils';
 import SwitchServices from '../screens/SwitchServices';
 import SwitchUserType from '../screens/SwitchUserType';
+import MyProfile_Parent from '../screens/MyProfile_Parent';
 
 
 const Router = () => {
@@ -37,7 +37,7 @@ const Router = () => {
     console.log("USERTYPE at Router", usertype)
     const returnStack = () => {
         if (isLoggedIn) {
-            if (usertype == "3") {
+            if (usertype == "3") {//Parent
                 return (
                     <Stack.Navigator screenOptions={{
                         headerBackTitleVisible: false,
@@ -45,20 +45,20 @@ const Router = () => {
                     }}>
                         <Stack.Screen name="BottomTabsParent" component={BottomTabsParent} options={{ headerShown: false }} />
                         <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
-                        <Stack.Screen name="ParentProfile" component={ParentProfile} options={{ headerShown: true, headerTitle: 'Profile Details' }} />
+                        <Stack.Screen name="ProfileOfSitterDuringBooking_Parent" component={ProfileOfSitterDuringBooking_Parent} options={{}} />
                         <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
                         <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
                         <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
                         <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerTitle: 'Transaction History' }} />
                         <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
-                        <Stack.Screen name="Profile" component={Profile} options={{}} />
+                        <Stack.Screen name="MyProfile_Parent" component={MyProfile_Parent} options={{}} />
                         <Stack.Screen name="SwitchServices" component={SwitchServices} options={{ headerTitle: 'Switch Services' }} />
                         <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Switch Role' }} />
 
                     </Stack.Navigator>
                 )
             }
-            else if (usertype == "2") {
+            else if (usertype == "2") {//Sitter
                 return (
                     <Stack.Navigator screenOptions={{
                         headerBackTitleVisible: false,
@@ -66,13 +66,14 @@ const Router = () => {
                     }}>
                         <Stack.Screen name="BottomTabsSitter" component={BottomTabsSitter} options={{ headerShown: false }} />
                         <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
-                        <Stack.Screen name="ParentProfile" component={ParentProfile} options={{ headerShown: true, headerTitle: 'Profile Details' }} />
+                        <Stack.Screen name="ProfileOfParentDuringBooking_Sitter" component={ProfileOfParentDuringBooking_Sitter} options={{ headerShown: true, headerTitle: 'Profile Details' }} />
                         <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
                         <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
                         <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
                         <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerTitle: 'Transaction History' }} />
                         <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
-                        <Stack.Screen name="Profile" component={Profile} options={{}} />
+                        <Stack.Screen name="MyProfile_Sitter" component={MyProfile_Sitter} options={{}} />
+                        <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Switch Role' }} />
                     </Stack.Navigator>
                 )
             }
