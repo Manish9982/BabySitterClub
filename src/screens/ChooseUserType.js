@@ -1,4 +1,4 @@
-import { FlatList, ImageBackground, StyleSheet, useWindowDimensions, View } from 'react-native'
+import { FlatList, ImageBackground, StyleSheet, useWindowDimensions, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomButton from '../components/Button'
 import Colors from '../helper/Colors'
@@ -7,6 +7,7 @@ import { handleGetRequest, handlePostRequest } from '../helper/Utils'
 import Loader from '../components/Loader'
 import { useDispatch } from 'react-redux'
 import { setUsertype } from '../redux/GlobalSlice'
+import Fonts from '../helper/Fonts'
 
 const ChooseUserType = ({ navigation, route }) => {
     const H = useWindowDimensions().height
@@ -46,16 +47,33 @@ const ChooseUserType = ({ navigation, route }) => {
             imageStyle={styles.imageStyle}
             source={require('../assets/images/app_bg.webp')}
             style={styles.container}>
-            {loader ? (
-                <Loader />
-            ) : (
-                <FlatList
-                    contentContainerStyle={styles.box}
-                    data={subServicesData?.user_type}
-                    renderItem={renderSubServices}
-                    keyExtractor={(item, index) => `${index}`}
-                />
-            )}
+            {
+                loader ? (
+                    <Loader />
+                ) : (
+
+
+                    <View style={styles.middlecontainer}>
+
+                        <Text style={[styles.text, Fonts.larBold]}>
+                            Login As
+                        </Text>
+                        <FlatList
+                            contentContainerStyle={styles.box}
+                            data={subServicesData?.user_type}
+                            renderItem={renderSubServices}
+                            keyExtractor={(item, index) => `${index}`}
+                        />
+
+                        <Text style={[styles.textBottom, Fonts.smSemiBold]}>
+                            Note:-
+                            Choose "Care Provider" to offer your services and make a difference.{'\n\n'}
+                            Choose "Find Care" to find trusted caregivers who meet your needs."</Text>
+
+                    </View>
+                )
+
+            }
         </ImageBackground>
     )
 }
@@ -67,9 +85,10 @@ const makeStyles = (H, W) => StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+
     },
     imageStyle: {
-        opacity: 0.5,
+        opacity: 0.3,
     },
     box: {
         justifyContent: 'center',
@@ -77,9 +96,34 @@ const makeStyles = (H, W) => StyleSheet.create({
         padding: Spaces.xl,
         borderRadius: 10,
         alignSelf: 'center',
-        marginTop: H * 0.3
+        marginTop: H * 0.02
+    },
+    middlecontainer: {
+        justifyContent: 'center',
+        padding: Spaces.xl,
+        borderRadius: 10,
+        height: H,
+        alignSelf: 'center',
     },
     countryText: {
         color: Colors.white,
     },
+
+    text: {
+        marginTop: H * 0.3,
+        width: W * 0.95,
+        color: Colors.black,
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center'
+
+    },
+    textBottom: {
+        width: W * 0.95,
+        color: "black",
+
+        textAlign: 'center'
+
+    }
 });

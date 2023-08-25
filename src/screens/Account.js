@@ -36,10 +36,10 @@ const Account = ({ navigation }) => {
                 }
             }
         },
-        // {
-        //     title: 'Book Slot',
-        //     action: () => navigation.navigate('TimeSlotScreen')
-        // },
+        {
+            title: 'Manage Address',
+            action: () => navigation.navigate('ManageAddress')
+        },
         {
             title: 'Transaction History',
             action: () => navigation.navigate('TransactionHistory')

@@ -26,6 +26,8 @@ import BottomTabsSitter from './BottomTabsSitter';
 import SwitchServices from '../screens/SwitchServices';
 import SwitchUserType from '../screens/SwitchUserType';
 import MyProfile_Parent from '../screens/MyProfile_Parent';
+import ManageAddress from '../screens/ManageAddress';
+import AddAddress from '../screens/AddAddress';
 
 
 const Router = () => {
@@ -54,6 +56,8 @@ const Router = () => {
                         <Stack.Screen name="MyProfile_Parent" component={MyProfile_Parent} options={{}} />
                         <Stack.Screen name="SwitchServices" component={SwitchServices} options={{ headerTitle: 'Switch Services' }} />
                         <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Switch Role' }} />
+                        <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown : true,headerTitle: 'Manage Address' }} />
+                        <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown : true,headerTitle: 'Add Address' }} />
 
                     </Stack.Navigator>
                 )
