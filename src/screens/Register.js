@@ -16,6 +16,7 @@ const Register = ({ navigation, route }) => {
     const [lastname, setLastName] = useState('');
     const [email, setEmail] = useState(route?.params?.email);
     const [password, setPassword] = useState('');
+    const [confirmpassword, setConfirmPassword] = useState('');
     const [loader, setLoader] = useState(false)
 
     const usertype = useSelector(state => state.global.usertype)
@@ -46,6 +47,13 @@ const Register = ({ navigation, route }) => {
             Alert.alert('Invalid Email', 'Please enter valid email');
         } else if (password.length === 0) {
             Alert.alert('Invalid Password!', 'Password can not be empty');
+        } else if (confirmpassword.length === 0) {
+            Alert.alert('Invalid Confirm Password!', 'Confirm password can not be empty');
+
+        } else if (password != confirmpassword) {
+            Alert.alert('Error', 'Password and confirm password do not match');
+
+
         } else {
 
             var formdata = new FormData()
@@ -59,7 +67,7 @@ const Register = ({ navigation, route }) => {
             }
             setLoader(true)
             const result = await handlePostRequest('register', formdata)
-            console.log("Signup====== " , result)
+            console.log("Signup====== ", result)
 
             if (result?.status == "200") {
                 storeLocalValue(LOCAL_STORE.TOKEN, result?.token)
@@ -101,9 +109,17 @@ const Register = ({ navigation, route }) => {
                             onChangeText={(text) => setEmail(text)}
                         />
                         <TextInputComponent
+                            secureTextEntry={true}
+
                             placeholder='Enter Password'
                             value={password}
                             onChangeText={(text) => setPassword(text)}
+                        />
+                        <TextInputComponent
+                            secureTextEntry={true}
+                            placeholder='Confirm Password'
+                            value={confirmpassword}
+                            onChangeText={(text) => setConfirmPassword(text)}
                         />
                         <CustomButton
                             loader={loader}

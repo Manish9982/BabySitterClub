@@ -380,7 +380,7 @@ const MyProfile_Parent = () => {
     const [children, setChildren] = useState('')
     const [image, setImage] = useState({})
     const [loaderButton, setLoaderButton] = useState(false)
-    const [showSlots, setShowSlots] = useState(true)
+    const [showSlots, setShowSlots] = useState(false)
     const [slots, setSlots] = useState(null)
 
     useEffect(() => {
@@ -390,7 +390,8 @@ const MyProfile_Parent = () => {
 
     const onPressButton = () => {
         if (price?.length == '0') {
-
+            Alert.alert("Warning" ,"Hourly price must be more than 0")
+        
         } else {
             updateUserProfileData()
         }
@@ -558,15 +559,19 @@ const MyProfile_Parent = () => {
                 <Text style={styles.guidingText}>
                     Your address will never be shared with anyone. We will show your approximate location on profile.
                 </Text>
-                <Text style={styles.sectionHeader}>Price Offered (Per Hour)</Text>
+                <Text style={styles.sectionHeader}>Hourly rate for babysitting</Text>
                 <TextInputComponent
                     keyboardType='numeric'
+                    maxlength={3}
+                
                     value={price}
                     onChangeText={(text) => {
                         setPrice(text)
                     }}
                     placeholder={"USD ($)"}
                     style={styles.input} />
+
+
                 <Text style={styles.sectionHeader}>No of children</Text>
                 <TextInputComponent
                     keyboardType='numeric'

@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Alert, useWindowDimensions, ImageBackground } from 'react-native'
+import { FlatList, StyleSheet, Alert, useWindowDimensions, ImageBackground, Text } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Spaces from '../helper/Spaces';
 import ServicesCard from '../components/ServicesCard';
@@ -8,6 +8,7 @@ import { handleGetRequest } from '../helper/Utils';
 import Loader from '../components/Loader';
 import { setSelectedServices } from '../redux/GlobalSlice'
 import { useDispatch } from 'react-redux';
+import Fonts from '../helper/Fonts';
 
 const Services = ({ navigation }) => {
     const H = useWindowDimensions().height
@@ -72,6 +73,8 @@ const Services = ({ navigation }) => {
                 imageStyle={styles.imageStyle}
                 source={require('../assets/images/app_bg.webp')}
                 style={styles.container}>
+                <Text style={[styles.textBottom, Fonts.larMedium]}>
+                    Select one or more services to suit your needs.</Text>
                 <FlatList
                     contentContainerStyle={[styles.list]}
                     data={services}
@@ -103,15 +106,23 @@ const makeStyles = (H, W) => StyleSheet.create({
         margin: Spaces.med
     },
     imageStyle: {
-        opacity: 0.5
+        opacity: 0.3
     },
     list: {
-        marginTop: H * 0.15,
+        marginTop: H * 0.05,
         justifyContent: 'center',
         alignItems: 'center',
     },
     button:
     {
         top: - H * 0.04,
+    },
+    textBottom: {
+        width: W * 0.95,
+        marginTop: H * 0.05,
+        color: "black",
+
+        textAlign: 'center'
+
     }
 })
