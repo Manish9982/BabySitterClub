@@ -36,6 +36,51 @@ const Account = ({ navigation }) => {
                 }
             }
         },
+
+
+      
+        {
+            title: 'Transaction History',
+            action: () => navigation.navigate('TransactionHistory')
+        },
+        {
+            title: 'Switch Role',
+            action: () => navigation.navigate('SwitchUserType')
+        },
+        // {
+        //     title: 'Tips & Articles',
+        // },
+        // {
+        //     title: 'How we work',
+        // },
+        // {
+        //     title: 'Pricing',
+        // },
+        // {
+        //     title: 'Trust & Safety',
+        // },
+        {
+            title: 'Help',
+        },
+        {
+            title: 'Logout',
+            action: () => handleLogout()
+        },
+    ]
+    const DATAPARENT = [
+        {
+            title: 'Account',
+            action: () => {
+                if (usertype == '2') {
+                    navigation.navigate('MyProfile_Sitter')
+                }
+                else if (usertype == '3') {
+                    navigation.navigate('MyProfile_Parent')
+                }
+            }
+        },
+
+
         {
             title: 'Manage Address',
             action: () => navigation.navigate('ManageAddress')
@@ -83,11 +128,16 @@ const Account = ({ navigation }) => {
 
     return (
         <View>
-            <FlatList
-                data={DATA}
+
+            {usertype == "3" ?  <FlatList
+                data={DATAPARENT}
                 renderItem={renderOptions}
                 keyExtractor={(item, index) => `${index}`}
-            />
+            /> :
+            
+            null}
+
+           
             {/* {
                 !isLoggedIn
                 &&
