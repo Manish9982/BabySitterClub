@@ -1,54 +1,78 @@
-import React from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, useWindowDimensions, ScrollView } from 'react-native';
-import Colors from '../helper/Colors';
-import Spaces from '../helper/Spaces';
-import Fonts from '../helper/Fonts';
-import { Shadows } from '../helper/Utils';
+import { Image, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import React from 'react'
+import { Text } from 'react-native-paper'
+import { Shadows } from '../helper/Utils'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
-import { Text } from 'react-native-paper';
-import ProfileOfSitter from '../components/ProfileOfSitter';
+import Ionicons from 'react-native-vector-icons/dist/Ionicons'
+import FontAwesome6 from 'react-native-vector-icons/dist/FontAwesome6'
 
-const ProfileScreen = () => {
+const ProfileOfSitter = ({ imageUrl, name, roles, location, price, about }) => {
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <ProfileOfSitter 
-            name={'John Doe'}
-            location={'Dallas, Texas'}
-            price={'$ 15'}
-            about={'Lorem ipsum'}
-            />
-            <View style={styles.statsContainer}>
-                <StatButton title="Total Bookings" count={20} />
-                <StatButton title="Completed Bookings" count={15} />
-                <StatButton title="Pending Bookings" count={5} />
-            </View>
-            <Text style={{ ...Fonts.larBold }}>My Availability:</Text>
-            <View style={styles.boxAvailability}>
-                <Text style={styles.text}>
-                    You have not added your availability yet. Tap <Text style={styles.blueText}>here</Text> to add.
-                </Text>
-            </View>
-        </ScrollView>
-    );
-};
+        <View style={styles.cardContainer}>
+            <View style={{ flexDirection: 'row' }}>
+                <View>
+                    <Image source={require('../assets/images/client.png')} style={styles.profileImage} />
+                    <TouchableOpacity style={styles.editButton}>
+                        <Text style={styles.editButtonText}><AntDesign name="edit" /> Edit</Text>
+                    </TouchableOpacity>
+                </View>
 
-const StatButton = ({ title, count }) => {
+                <View style={styles.detailsCard}>
+                    <Text style={styles.name}>{name}</Text>
+                    <View style={styles.tagsContainer}>
+                        <TagIcon name="home-outline" label="Homesit" />
+                        <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} />
+                        <TagIcon name="paw-outline" label="Petsit" />
+                    </View>
+                    {/* <Text style={styles.address}>123 Main St, City, Country</Text> */}
+                    <Text style={styles.texts}>
+                        <Text style={styles.headingText}>Location: </Text>
+                        <Text>{location}</Text>
+                    </Text>
+                    <Text style={styles.texts}>
+                        <Text style={styles.headingText}>
+                            Hourly Price: </Text>
+                        <Text>
+                           {price}
+                        </Text>
+                    </Text>
+                    <Text style={styles.texts}>
+                        <Text style={styles.headingText}>
+                            About: </Text>
+                        <Text>
+                            {about}
+                        </Text>
+                    </Text>
+                </View>
+            </View>
+        </View>
+    )
+}
+
+const TagIcon = ({ name, label, fontawesome = false }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
     return (
-        <TouchableOpacity style={styles.statButton}>
-            <Text style={styles.statTitle}>{title}</Text>
-            <Text style={styles.statCount}>{count}</Text>
-        </TouchableOpacity>
+        <View style={styles.tagIconContainer}>
+            {
+                fontawesome ?
+                    <FontAwesome6 name={name} size={Spaces.lar} color={Colors.blue} />
+                    :
+                    <Ionicons name={name} size={Spaces.lar} color={Colors.blue} />
+            }
+
+            {/* <Text style={styles.tagLabel}>{label}</Text> */}
+        </View>
     );
 };
 
+export default ProfileOfSitter
 
 const makeStyles = (H, W) => StyleSheet.create({
     container: {
@@ -178,5 +202,3 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderColor: Colors.blue
     }
 });
-
-export default ProfileScreen;

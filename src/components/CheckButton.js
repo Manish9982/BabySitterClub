@@ -1,22 +1,23 @@
 import { View, Text, Touchable, TouchableOpacity, StyleSheet } from 'react-native'
 import React from 'react'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import Colors from '../helper/Colors'
 
-const CloseButton = ({ onPress, size = 20 }) => {
+const CheckButton = ({ onPress, size = 20 }) => {
     return (
         <TouchableOpacity
-            style={styles.closeButton}
+            style={styles.checkButton}
             onPress={onPress}>
-            <AntDesign name='closecircleo' color='red' size={size} />
+            <AntDesign name='checkcircleo' color={'green'} size={size} />
         </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
-    closeButton:
+    checkButton:
     {
         alignSelf: 'flex-end'
     }
 })
 
-export default CloseButton
+export default CheckButton

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Platform, Alert, StyleSheet, View, TouchableOpacity, Modal, useWindowDimensions, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { Image, Platform, Alert, StyleSheet, View, TouchableOpacity, Modal, useWindowDimensions, TouchableWithoutFeedback, ScrollView, FlatList } from 'react-native';
 import { Text } from 'react-native-paper';
 import TextInputComponent from '../components/TextInputComponent';
 import Colors from '../helper/Colors';
@@ -8,13 +8,14 @@ import Fonts from '../helper/Fonts';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Shadows, handleGetRequest, handlePostRequest } from '../helper/Utils';
+import { Shadows, calculateEndTime, formatDate, formatDate_mmddyyyy, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import CustomButton from '../components/Button';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Loader from '../components/Loader';
 import { Picker, PickerIOS } from '@react-native-picker/picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CloseButton from '../components/CloseButton';
+import CheckButton from '../components/CheckButton';
 
 const intervals = [
     { label: '1 hour', value: '1' },
@@ -42,17 +43,15 @@ const MyProfile_Sitter = () => {
     const [loaderButton, setLoaderButton] = useState(false)
     const [showSlots, setShowSlots] = useState(false)
     const [showPickerOptions, setShowPickerOptions] = useState(false)
-    /////////////////////////////////////////////////////////////////
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedTime, setSelectedTime] = useState(new Date());
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
-    const [slots, setSlots] = useState([
-
-
-        // Add more slots as needed
-    ]);
+    const [slots, setSlots] = useState([])
+    const [slotTime, setSlotTime] = useState('')
+    const [isSlotContainerVisible, setIsSlotContainerVisible] = useState(false)
+    const [isSlotSelected, setIsSlotSelected] = useState(false)
 
     useEffect(() => {
         getUserProfileData()
@@ -82,17 +81,35 @@ const MyProfile_Sitter = () => {
         }
     }
 
-    const renderSlots = ({ item, index }) => {
-        return (
-            <TouchableOpacity style={styles.slot}>
-                <Text>{item.slot}</Text>
-            </TouchableOpacity>
-        )
-    }
-
     const toggleModal = (slots) => {
+        getSlots()
         setShowSlots(prev => !prev)
         //setSlots(slots)
+    }
+
+    const getSlots = async (date, duration) => {
+        if (selectedSlot) {
+            var formdata = new FormData()
+            formdata.append("date", date || formatDate(selectedDate));
+            formdata.append("duration", duration || selectedSlot);
+            const result = await handlePostRequest('slot_add', formdata)
+            if (result?.status == '200') {
+                setIsSlotSelected(false)
+                setSlots(result?.slots)
+            }
+        }
+    }
+
+    const deleteSlot = async (id) => {
+        var formdata = new FormData()
+        formdata.append("slot_id", id);
+        const result = await handlePostRequest('delete_slot', formdata)
+        if (result?.status == '200') {
+            // setIsSlotSelected(false)
+            // setSlots(result?.slots)
+            console.log(result)
+            getUserProfileData()
+        }
     }
 
     const updateUserProfileData = async () => {
@@ -140,12 +157,14 @@ const MyProfile_Sitter = () => {
 
     const SlotItem = ({ item }) => (
         <View style={styles.slotItem}>
-            <Text>{item.duration}</Text>
-            <Text>{item.status === 0 ? 'Available' : 'Booked'}</Text>
+            <Text>{item?.duration}</Text>
+            {item?.status === 0 ? <><Text>Available</Text><CloseButton onPress={() => deleteSlot(item?.id)} /></> : <Text>Booked</Text>}
         </View>
     );
 
     const handleDateChange = (event, selected) => {
+        setIsSlotContainerVisible(false)
+        setSelectedSlot(null)
         if (event.type === 'set') {
             setSelectedDate(selected || selectedDate);
             setShowDatePicker(false);
@@ -167,6 +186,46 @@ const MyProfile_Sitter = () => {
         setShowSlots(false)
     }
 
+    const confirmSlot = async () => {
+        var formdata = new FormData()
+        formdata.append("date", formatDate((selectedDate)));
+        formdata.append("time", slotTime);
+        formdata.append("duration", selectedSlot);
+        const result = await handlePostRequest('slot_availability', formdata)
+        if (result?.status == '200') {
+            getUserProfileData()
+            setShowSlots(false)
+            setIsSlotSelected(false)
+        }
+    }
+
+    const onPressSlot = (time) => {
+        // Alert.alert('Confirm Availability', `Are you sure you are available for ${selectedSlot} hour(s) on ${formatDate_mmddyyyy(selectedDate)} at ${time} ?`,
+        //     [
+        //         {
+        //             text: 'Yes',
+        //             onPress: () => confirmSlot(time)
+        //         },
+        //         {
+        //             text: 'No'
+        //         }
+        //     ]
+        // )
+        setSlotTime(time)
+        setIsSlotSelected(true)
+    }
+
+    const renderSlots = ({ item, index }) => {
+        return (
+            <TouchableOpacity
+                disabled={item?.status != '0'}
+                onPress={() => item?.status == '0' ? onPressSlot(item?.time) : null}
+                style={item?.status == '0' ? styles.slot : styles.redSlot}>
+                <Text style={{ color: item?.status != '0' ? 'red' : Colors.black }}>{item?.time}</Text>
+            </TouchableOpacity>
+        )
+    }
+
     return (
         loader
             ?
@@ -178,7 +237,6 @@ const MyProfile_Sitter = () => {
                 <Modal
                     visible={showSlots}
                     transparent={true}
-
                 >
                     <TouchableWithoutFeedback onPress={() => { }}>
                         {/* <TouchableWithoutFeedback onPress={() => setShowSlots(false)}> */}
@@ -200,24 +258,59 @@ const MyProfile_Sitter = () => {
                                     )}
                                 </TouchableOpacity>
 
-                                <View style={styles.pickerContainer}>
-                                    <Text style={styles.text3}>Pick Interval:</Text>
-                                    <DropDownPicker
-                                        value={selectedSlot}
-                                        placeholder='Select duration of your slot'
-                                        labelStyle={{ ...Fonts.smMedium }}
-                                        open={showPickerOptions}
-                                        onPress={() => setShowPickerOptions(true)}
-                                        closeOnBackPressed={true}
-                                        items={intervals}
-                                        itemStyle={styles.itemStyleDropdown}
-                                        onSelectItem={item => {
-                                            setShowPickerOptions(false)
-                                            setSelectedSlot(item.value)
-                                        }}
-                                    />
+                                <Text style={styles.text3}>Pick Duration:</Text>
+                                <DropDownPicker
+                                    style={styles.pickerContainer}
+                                    value={selectedSlot}
+                                    placeholder='Select duration of your slot'
+                                    labelStyle={{ ...Fonts.smMedium }}
+                                    open={showPickerOptions}
+                                    onPress={() => setShowPickerOptions(prev => !prev)}
+                                    closeOnBackPressed={true}
+                                    items={intervals}
+                                    itemStyle={styles.itemStyleDropdown}
+                                    onSelectItem={item => {
+                                        setShowPickerOptions(false)
+                                        setSelectedSlot(item.value)
+                                        setIsSlotContainerVisible(true)
+                                    }}
+                                    onChangeValue={(value) => getSlots(formatDate(selectedDate), value)}
+                                />
 
-                                </View>
+                                {
+                                    isSlotContainerVisible
+                                    &&
+                                    <View style={styles.slotList}>
+                                        {
+                                            isSlotSelected
+                                                ?
+                                                <View>
+                                                    <Text>
+                                                        <Text>{`Are you sure you are available for `}</Text>
+                                                        <Text style={styles.infoText}>{`${calculateEndTime(slotTime, selectedSlot)}`}</Text>
+                                                        <Text> on </Text>
+                                                        <Text style={styles.infoText}>{`${formatDate_mmddyyyy(selectedDate)}`}</Text>
+                                                        <Text>?</Text>
+                                                    </Text>
+                                                    <View style={styles.slotChoiceBox}>
+                                                        <CheckButton size={40} onPress={confirmSlot} />
+                                                        <CloseButton size={40} />
+                                                    </View>
+                                                </View>
+
+                                                :
+                                                <FlatList
+                                                    columnWrapperStyle={styles.columnSlots}
+                                                    numColumns={3}
+                                                    style={{
+                                                        zIndex: -1
+                                                    }}
+                                                    data={slots}
+                                                    renderItem={renderSlots}
+                                                    keyExtractor={(item, index) => `${index}`}
+                                                />}
+                                    </View>
+                                }
                                 {/* <ScrollView style={styles.slotContainer}>
                                     {slots.map((slot, index) => (
                                         <Text key={index} style={styles.slotItem}>
@@ -333,10 +426,14 @@ const MyProfile_Sitter = () => {
                 </View>
 
                 <ScrollView contentContainerStyle={{ paddingVertical: 10 }}>
+                    {userdata?.userSlots?.length == 0
+                        &&
+                        <Text>You have not added your availability</Text>
+                    }
                     {userdata?.userSlots?.map((section, index) => (
                         <View key={index}>
                             <DateSection section={section} />
-                            {section.times.map((time) => (
+                            {section?.times?.map((time) => (
                                 <SlotItem key={time.id} item={time} />
                             ))}
                         </View>
@@ -450,18 +547,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         marginVertical: Spaces.xxl
     },
-    slot:
-    {
-        width: W * 0.17,
-        borderColor: Colors.black,
-        borderWidth: 0.2,
-        paddingVertical: Spaces.med,
-        borderRadius: 8,
-        borderColor: Colors.PRIMARY_BLUE,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginHorizontal: Spaces.sm
-    },
+
     columnWrapperStyle:
     {
         //justifyContent: 'center',
@@ -547,6 +633,53 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         ...Fonts.larBold,
         marginVertical: Spaces.sm
+    },
+    slotList:
+    {
+        padding: Spaces.med,
+        height: H * 0.2,
+        borderWidth: 0.6,
+        borderRadius: 8,
+        width: '98%',
+        borderColor: Colors.blue
+    },
+    slot:
+    {
+        borderWidth: 0.8,
+        alignSelf: 'center',
+        width: W * 0.18,
+        alignItems: 'center',
+        paddingVertical: H * 0.007,
+        borderRadius: 8,
+        borderColor: Colors.PRIMARY_BLUE,
+        marginHorizontal: W * 0.012
+    },
+    redSlot:
+    {
+        borderWidth: 0.8,
+        alignSelf: 'center',
+        width: W * 0.18,
+        alignItems: 'center',
+        paddingVertical: H * 0.007,
+        borderRadius: 8,
+        borderColor: 'red',
+        marginHorizontal: W * 0.012
+    },
+    columnSlots:
+    {
+        // justifyContent: 'space-evenly',
+        marginVertical: H * 0.005,
+    },
+    slotChoiceBox:
+    {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginTop: H * 0.03,
+    },
+    infoText:
+    {
+        ...Fonts.medBold,
+        textDecorationLine: 'underline'
     }
 
 });
