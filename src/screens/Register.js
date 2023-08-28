@@ -36,9 +36,6 @@ const Register = ({ navigation, route }) => {
         return regex2.test(num);
     };
     const onPressSignup = async () => {
-
-
-
         if (!testName(name)) {
             Alert.alert('Invalid First Name', 'First Name can not be empty or contain special characters and numbers');
         } else if (!testName(lastname)) {
