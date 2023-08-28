@@ -10,7 +10,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { login } from '../redux/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOCAL_STORE, handlePostRequest } from '../helper/Utils';
-import { getLocalValue, storeLocalValue } from '../helper/LocalStore';
+import { storeLocalValue } from '../helper/LocalStore';
 
 const Password = ({ navigation, route }) => {
 

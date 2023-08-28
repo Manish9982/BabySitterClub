@@ -63,6 +63,45 @@ export const handleGetRequest = async (name) => {
 
 };
 
+export function formatDate(inputDate) {
+    const date = new Date(inputDate);
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = date.getUTCFullYear();
+    return `${day}-${month}-${year}`;
+}
+
+export function formatDate_mmddyyyy(inputDate) {
+    function getDaySuffix(day) {
+        if (day >= 11 && day <= 13) {
+            return "th";
+        }
+        switch (day % 10) {
+            case 1:
+                return "st";
+            case 2:
+                return "nd";
+            case 3:
+                return "rd";
+            default:
+                return "th";
+        }
+    }
+    const months = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
+    const date = new Date(inputDate);
+    const month = months[date.getUTCMonth()];
+    const day = date.getUTCDate();
+    const year = date.getUTCFullYear();
+
+    const daySuffix = getDaySuffix(day);
+
+    return `${month} ${day}${daySuffix}, ${year}`;
+}
+
+
 export const Shadows =
 {
     shadowColor: "#000",
@@ -74,3 +113,20 @@ export const Shadows =
     shadowRadius: 3.84,
     elevation: 8,
 }
+
+export function calculateEndTime(startTime, duration) {
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+  
+    const totalMinutes = startHour * 60 + startMinute + duration * 60;
+  
+    const endHour = Math.floor(totalMinutes / 60) % 24; // Ensure it's within a 24-hour range
+    const endMinute = totalMinutes % 60;
+  
+    const formattedStartTime = startTime.padStart(5, "0");
+    const formattedEndTime = `${String(endHour).padStart(2, "0")}:${String(
+      endMinute
+    ).padStart(2, "0")}`;
+  
+    return `${formattedStartTime} - ${formattedEndTime}`;
+  }
+  
