@@ -36,55 +36,12 @@ const Account = ({ navigation }) => {
                 }
             }
         },
-
-
-      
-        {
-            title: 'Transaction History',
-            action: () => navigation.navigate('TransactionHistory')
-        },
-        {
-            title: 'Switch Role',
-            action: () => navigation.navigate('SwitchUserType')
-        },
-        // {
-        //     title: 'Tips & Articles',
-        // },
-        // {
-        //     title: 'How we work',
-        // },
-        // {
-        //     title: 'Pricing',
-        // },
-        // {
-        //     title: 'Trust & Safety',
-        // },
-        {
-            title: 'Help',
-        },
-        {
-            title: 'Logout',
-            action: () => handleLogout()
-        },
-    ]
-    const DATAPARENT = [
-        {
-            title: 'Account',
-            action: () => {
-                if (usertype == '2') {
-                    navigation.navigate('MyProfile_Sitter')
-                }
-                else if (usertype == '3') {
-                    navigation.navigate('MyProfile_Parent')
-                }
-            }
-        },
-
-
         {
             title: 'Manage Address',
             action: () => navigation.navigate('ManageAddress')
         },
+
+
         {
             title: 'Transaction History',
             action: () => navigation.navigate('TransactionHistory')
@@ -114,30 +71,30 @@ const Account = ({ navigation }) => {
         },
     ]
 
-    const renderOptions = ({ item }) => {
-        return (
-            <>
-                <List.Item
-                    onPress={item?.action}
-                    title={item?.title}
-                />
-                <Divider />
-            </>
-        )
-    }
 
+    const renderOptions = ({ item }) => {
+        if ((usertype == 2 && item.title !== 'Manage Address') || (usertype == 3)) {
+            return (
+                <>
+                    <List.Item
+                        onPress={item?.action}
+                        title={item?.title}
+                    />
+                    <Divider />
+                </>
+            )
+        }
+
+    }
     return (
         <View>
 
-            {usertype == "3" ?  <FlatList
-                data={DATAPARENT}
+            <FlatList
+                data={DATA}
                 renderItem={renderOptions}
                 keyExtractor={(item, index) => `${index}`}
-            /> :
-            
-            null}
+            />
 
-           
             {/* {
                 !isLoggedIn
                 &&

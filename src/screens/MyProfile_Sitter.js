@@ -24,7 +24,7 @@ const intervals = [
     { label: '4 hours', value: '4' },
 ]
 
-const MyProfile_Sitter = () => {
+const MyProfile_Sitter = ({ navigation }) => {
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
@@ -82,9 +82,9 @@ const MyProfile_Sitter = () => {
     }
 
     const toggleModal = (slots) => {
-        getSlots()
-        setShowSlots(prev => !prev)
-        //setSlots(slots)
+        // getSlots()
+        // setShowSlots(prev => !prev)
+        navigation.navigate('AddAvailabiltity_Sitter')
     }
 
     const getSlots = async (date, duration) => {

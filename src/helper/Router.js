@@ -28,6 +28,7 @@ import SwitchUserType from '../screens/SwitchUserType';
 import MyProfile_Parent from '../screens/MyProfile_Parent';
 import ManageAddress from '../screens/ManageAddress';
 import AddAddress from '../screens/AddAddress';
+import AddAvailabiltity_Sitter from '../screens/AddAvailability_Sitter';
 
 
 const Router = () => {
@@ -78,6 +79,7 @@ const Router = () => {
                         <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
                         <Stack.Screen name="MyProfile_Sitter" component={MyProfile_Sitter} options={{}} />
                         <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Switch Role' }} />
+                        <Stack.Screen name="AddAvailabiltity_Sitter" component={AddAvailabiltity_Sitter} options={{ headerTitle: 'Add Availabiltity' }} />
                     </Stack.Navigator>
                 )
             }

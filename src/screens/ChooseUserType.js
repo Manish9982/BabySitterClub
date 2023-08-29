@@ -64,15 +64,12 @@ const ChooseUserType = ({ navigation, route }) => {
                             renderItem={renderSubServices}
                             keyExtractor={(item, index) => `${index}`}
                         />
-
                         <Text style={[styles.textBottom, Fonts.smSemiBold]}>
-                            Note:-
+                            Note:
                             Choose "Care Provider" to offer your services and make a difference.{'\n\n'}
-                            Choose "Find Care" to find trusted caregivers who meet your needs."</Text>
-
+                            Choose "Find Care" to find trusted caregivers who meet your needs.</Text>
                     </View>
                 )
-
             }
         </ImageBackground>
     )
@@ -84,8 +81,6 @@ const makeStyles = (H, W) => StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
-
     },
     imageStyle: {
         opacity: 0.3,
@@ -94,23 +89,20 @@ const makeStyles = (H, W) => StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: Colors.grayTransparent,
         padding: Spaces.xl,
-        borderRadius: 10,
+        borderRadius: 20,
         alignSelf: 'center',
-        marginTop: H * 0.02
+        marginTop: H * 0.02,
+        width: W * 0.9
     },
     middlecontainer: {
-        justifyContent: 'center',
         padding: Spaces.xl,
         borderRadius: 10,
-        height: H,
-        alignSelf: 'center',
     },
     countryText: {
-        color: Colors.white,
+        // color: Colors.white,
     },
 
     text: {
-        marginTop: H * 0.3,
         width: W * 0.95,
         color: Colors.black,
         alignSelf: 'center',
@@ -120,10 +112,6 @@ const makeStyles = (H, W) => StyleSheet.create({
 
     },
     textBottom: {
-        width: W * 0.95,
-        color: "black",
-
-        textAlign: 'center'
-
+        top: H * 0.17
     }
 });
