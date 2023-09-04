@@ -14,7 +14,7 @@ const ServiceCard = ({ picture, name, isSelected, onPressServices }) => {
         <TouchableOpacity
             onPress={onPressServices}
             // style={[styles.container, { backgroundColor: Colors.buttoncolor }]}
-            style={[styles.container, { backgroundColor: isSelected ? Colors.buttoncolor : Colors.white }]}>
+            style={[styles.container, { backgroundColor: isSelected ? Colors.selectedcolor : Colors.white }]}>
 
             <View style={styles.checkBox}>
                 <AntDesign name={'checkcircle'} color={Colors.white} size={25} />
@@ -31,9 +31,11 @@ const ServiceCard = ({ picture, name, isSelected, onPressServices }) => {
             <View style={styles.card}>
                 {/* <Text style={[styles.name, Fonts.larSemiBold]}>{name}</Text> */}
 
-                <Text style={[styles.name, Fonts.larSemiBold, 
+                <Text style={[styles.name, Fonts.xlSemiBold, 
                     { color: isSelected ? Colors.white : Colors.black }]}>{name}</Text>
             </View>
+
+            
         </TouchableOpacity>
     );
 };
@@ -45,22 +47,24 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         padding: Spaces.sm,
         margin: Spaces.sm,
-        borderColor: Colors.blue,
+        borderColor: Colors.gray,
         borderWidth: 0.6,
         alignItems: 'center',
-        height: W * 0.35,
-        width: W * 0.35,
+        height: W * 0.4,
+        width: W * 0.8,
         borderRadius: 8,
         marginHorizontal: W * 0.05,
-        justifyContent: 'space-evenly',
+        justifyContent: 'center',
         alignSelf: 'center',
         borderWidth: 0.6
     },
     picture:
     {
-        width: 40,
-        height: 40,
-        tintColor: Colors.white
+        width: 55,
+        height: 55,
+        tintColor: Colors.white,
+        marginStart:W*0.02
+
     },
     card:
     {
@@ -68,7 +72,9 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     name:
     {
-        color: Colors.white
+        color: Colors.white, 
+        marginTop:H*0.015,
+        marginStart:W*0.02
     },
 
     description:
@@ -78,7 +84,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     checkBox:
     {
         position: 'absolute',
-        bottom: W * 0.27,
+        bottom: W * 0.3,
         left: W * 0.01,
     }
 

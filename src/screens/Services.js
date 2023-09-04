@@ -71,7 +71,7 @@ const Services = ({ navigation }) => {
             :
             <ImageBackground
                 imageStyle={styles.imageStyle}
-                source={require('../assets/images/app_bg.webp')}
+                source={require('../assets/images/background.png')}
                 style={styles.container}>
                 <Text style={[styles.textBottom, Fonts.larMedium]}>
                     Select one or more services to suit your needs.</Text>
@@ -80,7 +80,7 @@ const Services = ({ navigation }) => {
                     data={services}
                     renderItem={renderServices}
                     keyExtractor={(item) => item.id.toString()}
-                    numColumns={services?.length > 3 ? 2 : 1} // Set the number of columns here, you can adjust as needed
+                  //  numColumns={services?.length > 3 ? 2 : 1} // Set the number of columns here, you can adjust as needed
                 />
                 <CustomButton
                     style={styles.button}
@@ -106,7 +106,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         margin: Spaces.med
     },
     imageStyle: {
-        opacity: 0.3
+      //  opacity: 0.3
     },
     list: {
         marginTop: H * 0.05,

@@ -4,7 +4,7 @@ import Fonts from '../helper/Fonts';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 
-const BookingCard = ({ booking, onItemPress }) => {
+const BookingCard = ({ profileURL,booking, onItemPress }) => {
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
@@ -17,12 +17,12 @@ const BookingCard = ({ booking, onItemPress }) => {
             <View style={styles.leftContent}>
                 <Image
                     defaultSource={require('../assets/images/mother.png')}
-                    source={{ uri: booking.profileImage }} style={styles.profileImage} />
+                    source={{ uri: `${profileURL}${booking.picture}` }} style={styles.profileImage} />
             </View>
             <View style={styles.middleContent}>
-                <Text style={[styles.bookingName, Fonts.larMedium]}>{booking.name}</Text>
-                <Text style={[styles.bookingStatus, Fonts.sm]}>{booking.type}</Text>
-                <Text style={[styles.bookingStatus, Fonts.sm]}>{booking.status}</Text>
+                <Text style={[styles.bookingName, Fonts.xlSemiBold]}>{`${booking?.first_name} ${booking?.last_name}`}</Text>
+                <Text style={[styles.bookingStatus, Fonts.medMedium]}>{booking?.service}</Text>
+                <Text style={[styles.bookingStatus, Fonts.medMedium]}>$ {booking.hour_price}</Text>
             </View>
             <View
                 style={styles.rightContent}>

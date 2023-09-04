@@ -31,7 +31,7 @@ export default CustomButton
 const makeStyles = (H, W) => StyleSheet.create({
     button:
     {
-        height: 45,
+        height: 50,
         width: "100%",
         justifyContent: 'center',
         borderRadius: 10,
@@ -45,7 +45,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     text:
     {
         textAlign: 'center',
-        color: 'white',
-        fontFamily: "Poppins-Regular",
+        color: 'black',
+        fontFamily: "Poppins-Medium",
+        fontSize: 15
     }
 })

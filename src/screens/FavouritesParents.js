@@ -1,14 +1,22 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Spaces from '../helper/Spaces';
 import FavBabySittersCard from '../components/FavBabySittersCard';
-import { handleGetRequest } from '../helper/Utils';
+import { handleGetRequest, handlePostRequest } from '../helper/Utils';
+import { useIsFocused } from '@react-navigation/native';
+import Loader from '../components/Loader';
 
 const FavouritesParents = ({ navigation }) => {
     const [babySittersData, setBabySittersData] = useState([])
-    
+    const [loader, setLoader] = useState(true)
+
+    const isFocused = useIsFocused()
+
     useEffect(() => {
-        getFavUsers()
+        if (isFocused) {
+            getFavUsers()
+        }
+
     }, [])
 
 
@@ -20,34 +28,48 @@ const FavouritesParents = ({ navigation }) => {
         } else if (result?.status == '201') {
             Alert.alert("Alert", result?.message)
         }
-      //  setLoader(false)
+        setLoader(false)
     }
 
-    const handleFavourite = (id) => {
-        navigation.navigate("ProfileOfSitterDuringBooking_Parent", { 'userID': id })
-    }
+
+    const handleFavourite = async (Id) => {
+        const formdata = new FormData()
+        formdata.append('userId', Id)
+        const result = await handlePostRequest('add_fav', formdata)
+        if (result?.status == '200') {
+            //Alert.alert("Alert", result?.message)
+            getFavUsers()
+        } else if (result?.status == '201') {
+            Alert.alert("Alert", result?.message)
+        }
+    };
+
 
 
     const renderfavBabysitterCard = ({ item }) => (
         <FavBabySittersCard
-        profilePicture={`${babySittersData?.url}${item?.profilePicture}`}
-        name={item?.name}
-        description={item?.description}
-        hourlyPrice={item?.hourlyPrice}
-        isFavourite={item?.isFavourite}
-        onPressFavourite={() => handleFavourite(item?.Id)}
-        onPressItemSelected={() => handleNavigation(item?.Id)}
+            profilePicture={`${babySittersData?.url}${item?.profilePicture}`}
+            name={item?.name}
+            description={item?.description}
+            hourlyPrice={item?.hourlyPrice}
+            isFavourite={"1"}
+            onPressFavourite={() => handleFavourite(item?.Id)}
+            onPressItemSelected={() => handleNavigation(item?.Id)}
         />
     );
 
     return (
-        <View style={{ flex: 1 }}>
-            <FlatList
-                data={babySittersData?.users}
-                renderItem={renderfavBabysitterCard}
-                keyExtractor={(item) => item.Id}
-            />
-        </View>
+        loader
+            ?
+            <Loader />
+            :
+            <View style={{ flex: 1 }}>
+                <FlatList
+                    data={babySittersData?.users}
+                    renderItem={renderfavBabysitterCard}
+                    keyExtractor={(item) => item.Id}
+                />
+            </View>
     );
 };
 

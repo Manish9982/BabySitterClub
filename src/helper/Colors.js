@@ -1,7 +1,9 @@
 export default Colors = {
     'blue': '#007BFF',
     'outlineColor': '#ccc',
-    'buttoncolor': '#1e81b0',
+   // 'buttoncolor': '#1e81b0',
+    'buttoncolor': '#FDCC92',
+    'selectedcolor': '#FF6D82',
     'white': '#fff',
     'grayTransparent': 'rgba(151, 153, 152, 0.38)',
     'gray': 'rgba(151, 153, 152, 1)',

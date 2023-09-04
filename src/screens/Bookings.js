@@ -1,6 +1,7 @@
-import { StyleSheet, FlatList, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, FlatList, View , Alert} from 'react-native'
+import React , { useState, useEffect}from 'react'
 import BookingCard from '../components/BookingCard';
+import { handleGetRequest } from '../helper/Utils';
 
 const Bookings = ({ navigation }) => {
   const bookingData = [
@@ -28,6 +29,8 @@ const Bookings = ({ navigation }) => {
     // Add more booking data as needed
   ];
 
+  const [getbookingdata, setGetbookingdata] = useState()
+
   const onPressBookingCard = () => {
     navigation.navigate('ViewBookings')
   }
@@ -39,9 +42,26 @@ const Bookings = ({ navigation }) => {
 
   }
 
+  useEffect(() => {
+    getBookings()
+  }, [])
+  
+
+  const getBookings = async () => {
+    const result = await handleGetRequest('get_booking')
+    console.log("ResultsBOOKINGSSSSSSSSSSSSSSSSSSSSSSSSSSSSS==========   ", result)
+    setGetbookingdata(result)
+    if (result?.status == '200') {
+    } else if (result?.status == '201') {
+        Alert.alert("Alert", result?.message)
+    }
+    //setLoader(false)
+}
+
   const renderBookings = ({ item }) => (
     <BookingCard
       booking={item}
+      profileURL={getbookingdata?.url}
       onItemPress={() => { onClickHandle(item.id) }}
     />
 
@@ -52,7 +72,7 @@ const Bookings = ({ navigation }) => {
     <View style={styles.container}>
 
       <FlatList
-        data={bookingData}
+        data={getbookingdata?.data}
         renderItem={renderBookings}
         keyExtractor={(item) => item.id.toString()}
       />
