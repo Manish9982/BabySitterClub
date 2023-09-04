@@ -45,7 +45,7 @@ const ChooseUserType = ({ navigation, route }) => {
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}
-            source={require('../assets/images/app_bg.webp')}
+            source={require('../assets/images/background.png')}
             style={styles.container}>
             {
                 loader ? (
@@ -83,11 +83,10 @@ const makeStyles = (H, W) => StyleSheet.create({
         justifyContent: 'center',
     },
     imageStyle: {
-        opacity: 0.3,
     },
     box: {
         justifyContent: 'center',
-        backgroundColor: Colors.grayTransparent,
+       // backgroundColor: Colors.grayTransparent,
         padding: Spaces.xl,
         borderRadius: 20,
         alignSelf: 'center',

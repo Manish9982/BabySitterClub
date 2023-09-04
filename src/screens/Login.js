@@ -35,8 +35,9 @@ const Login = ({ navigation, route }) => {
       formdata.append("Email", email);
       setLoader(true)
       const result = await handlePostRequest('verify', formdata)
+      console.log("LoginResult" , result)
       if (result?.status == "200") {
-        navigation.navigate("Password", { name: result?.name, email: email })
+        navigation.navigate("Password", { name: result?.userdata?.first_name, email: email })
       } else if (result?.status == "201") {
         Alert.alert('Alert', result?.message, [
           {

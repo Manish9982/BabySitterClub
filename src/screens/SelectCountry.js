@@ -25,10 +25,10 @@ const SelectCountry = ({ navigation }) => {
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}
-            source={require('../assets/images/app_bg.webp')}
+            source={require('../assets/images/background.png')}
             style={styles.container}>
             <View style={styles.box}>
-                <Text style={[styles.heading, Fonts.larMedium]}>Select your city:</Text>
+                <Text style={[styles.heading, Fonts.xlSemiBold]}>Select your city</Text>
                 {(
                     <View style={styles.pickerContainer}>
                         <Picker
@@ -66,18 +66,19 @@ const styles = StyleSheet.create({
     },
     imageStyle:
     {
-        opacity: 0.4
+       // opacity: 0.4
     },
     box:
     {
         backgroundColor: Colors.white,
         padding: Spaces.med,
-        borderRadius: 8
+        borderRadius: 8, elevation:2
     },
     heading: {
         // fontSize: 24,
         // fontWeight: 'bold',
         marginBottom: Spaces.xl,
+        textAlign:'center',
         color: "black"
     },
     countryBox: {

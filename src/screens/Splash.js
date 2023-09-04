@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet } from 'react-native'
+import { ImageBackground, StyleSheet, Image, useWindowDimensions, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +10,9 @@ import { setUsertype } from '../redux/GlobalSlice'
 const Splash = ({ navigation }) => {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
     const dispatch = useDispatch()
+    const H = useWindowDimensions().height
+    const W = useWindowDimensions().width
+    const styles = makeStyles(H, W)
 
     useEffect(() => {
         setTimeout(() => {
@@ -37,22 +40,25 @@ const Splash = ({ navigation }) => {
         <ImageBackground
             style={styles.splash}
             imageStyle={styles.imgstyle}
-            source={require('../assets/images/splash.jpg')}>
-            <Text style={{
-                marginTop: -200,
-                fontSize: 18
-            }}>Insert Logo Here</Text>
-            <Text style={{
-                marginTop: 200,
-                fontSize: 25
-            }}>The BabySitters Club</Text>
+            source={require('../assets/images/background.png')}>
+           
+            <Image
+                style={{
+                    width: W * 0.99,
+                    height: W * 0.99,
+                    position: 'absolute'
+                }}
+                source={require('../assets/images/splashimage.png')}>
+
+
+            </Image>
         </ImageBackground>
     )
 }
 
 export default Splash
 
-const styles = StyleSheet.create({
+const makeStyles = (H, W) => StyleSheet.create({
     splash:
     {
         flex: 1,
@@ -61,6 +67,6 @@ const styles = StyleSheet.create({
     },
     imgstyle:
     {
-        opacity: 0.3
+    //    opacity: 0.3
     }
 })

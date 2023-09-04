@@ -4,8 +4,10 @@ import { Text } from 'react-native-paper';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
+import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 
-const FavBabySittersCard = ({ profilePicture, name, description,hourlyPrice, onPressFavourite }) => {
+
+const FavBabySittersCard = ({ profilePicture, name, description,hourlyPrice, onPressFavourite, isFavourite }) => {
     return (
         <TouchableOpacity 
         onPress={onPressFavourite}
@@ -19,6 +21,13 @@ const FavBabySittersCard = ({ profilePicture, name, description,hourlyPrice, onP
                 <Text style={styles.description}>{description}</Text>
                 <Text style={[styles.price, Fonts.medMedium]}>Hourly Price: ${hourlyPrice}</Text>
             </View>
+
+            <TouchableOpacity
+                style={styles.favButton}
+                onPress={onPressFavourite}>
+                <Text>{isFavourite == 1 ? <AntDesign name="star" size={20} color={Colors.blue} />
+                    : <AntDesign name="staro" size={20} />}</Text>
+            </TouchableOpacity>
           
         </TouchableOpacity>
     );
@@ -37,7 +46,9 @@ const styles = StyleSheet.create({
         marginHorizontal: Spaces.sm,
         borderColor: Colors.blue,
         borderWidth: 0.6,
-        borderRadius: 10
+        borderRadius: 10, 
+        paddingBottom:Spaces.sm
+        
     },
     profilePicture:
     {

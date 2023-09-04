@@ -10,9 +10,7 @@ const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavo
     return (
         <TouchableOpacity
             onPress={onPressItemSelected}
-            style={styles.container}
-
-        >
+            style={styles.container}>
             <Image
                 defaultSource={require('../assets/images/mother.png')}
                 source={{ uri: profilePicture }}

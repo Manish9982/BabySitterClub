@@ -10,6 +10,7 @@ import Loader from '../components/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { handleGetRequest, handlePostRequest } from '../helper/Utils';
+import { useIsFocused } from '@react-navigation/native';
 
 const SearchBabySitter = ({ navigation }) => {
     const H = useWindowDimensions().height
@@ -24,9 +25,11 @@ const SearchBabySitter = ({ navigation }) => {
 
     const selectedService = useSelector(state => state.global.selectedService)
 
+    const isFocused = useIsFocused()
+
     useEffect(() => {
         getUsers()
-    }, [])
+    }, [isFocused])
 
     const getUsers = async () => {
         const result = await handleGetRequest('users')

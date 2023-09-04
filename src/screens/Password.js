@@ -64,6 +64,7 @@ const Password = ({ navigation, route }) => {
                         <Text style={[styles.text2, Fonts.medMedium]}>Enter password to continue!</Text>
                         <TextInputComponent
                             placeholder='Enter Password'
+                            secureTextEntry={true}
                             value={password}
                             onChangeText={(text) => { setPassword(text) }}
                         />
