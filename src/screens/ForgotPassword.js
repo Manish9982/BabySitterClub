@@ -29,7 +29,7 @@ const ForgotPassword = ({ navigation }) => {
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}
-            source={require('../assets/images/app_bg.webp')}
+            source={require('../assets/images/background.png')}
             style={styles.ImageBackground}>
             <View style={styles.viewContainer2}>
                 <Text style={[styles.text1, Fonts.xlSemiBold]}>Forgot Password</Text>

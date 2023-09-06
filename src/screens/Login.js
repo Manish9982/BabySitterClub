@@ -65,7 +65,7 @@ const Login = ({ navigation, route }) => {
           flex: 1,
           opacity: 0.4
         }}
-        source={require('../assets/images/app_bg.webp')}
+        source={require('../assets/images/background.png')}
         style={styles.ImageBackground}>
         <View style={styles.viewContainer1}>
           <View style={styles.viewContainer2}>

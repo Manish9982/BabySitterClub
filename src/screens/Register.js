@@ -82,7 +82,7 @@ const Register = ({ navigation, route }) => {
         <KeyboardAwareScrollView contentContainerStyle={styles.mainContainer}>
             <ImageBackground
                 imageStyle={styles.imageStyle}
-                source={require('../assets/images/app_bg.webp')}
+                source={require('../assets/images/background.png')}
                 style={styles.imageBackground}>
                 <View style={styles.viewContainer}>
                     <Text style={[styles.text, Fonts.xlSemiBold]}>Sign up</Text>
