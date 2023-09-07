@@ -55,7 +55,9 @@ const Password = ({ navigation, route }) => {
             style={styles.mainContainer}>
             <ImageBackground
                 imageStyle={styles.imageStyle}
-                source={{ uri: 'https://cdn2.momjunction.com/wp-content/uploads/2023/02/15-Best-Babysitting-Apps-For-Reliable-Childcare-624x702.jpg.webp' }}
+                
+                source={require('../assets/images/background.png')}
+
                 style={styles.ImageBackground} >
                 <View style={styles.viewContainer2}>
                     <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome back, {route?.params?.name}</Text>
