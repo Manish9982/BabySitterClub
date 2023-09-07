@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform, useWindowDimensions } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { RadioButton, Text } from 'react-native-paper';
 import Fonts from '../helper/Fonts';
@@ -7,12 +7,16 @@ import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import CustomButton from '../components/Button';
 import { Picker } from '@react-native-picker/picker';
-import { convertTo24HourFormat, formatDate, handleGetRequest, handlePostRequest } from '../helper/Utils';
+import { convertTo24HourFormat, formatDate, formatDate_mmddyyyy, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import Loader from '../components/Loader';
 
 const AddAvailabiltity_Sitter = ({ navigation }) => {
+
+    const [showDatePicker, setShowDatePicker] = useState(false)
     const [date, setDate] = useState(new Date());
+    const [showStartTimePicker, setShowStartTimePicker] = useState(false)
     const [startTime, setStartTime] = useState(new Date());
+    const [showEndTimePicker, setShowEndTimePicker] = useState(false)
     const [endTime, setEndTime] = useState(new Date());
     const [repeatOption, setRepeatOption] = useState('');
     const [showPicker, setShowPicker] = useState(false)
@@ -21,6 +25,10 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
     const [filteredServices, setFilteredServices] = useState([])
     const [loader, setLoader] = useState(true)
     const [loaderButton, setLoaderButton] = useState(false)
+
+    const H = useWindowDimensions().height
+    const W = useWindowDimensions().width
+    const styles = makeStyles(H, W)
 
     useEffect(() => {
         applyFilterToServices()
@@ -39,6 +47,7 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
 
 
     const handleStartTimeChange = (selectedTime) => {
+        setShowStartTimePicker(false)
         setStartTime(selectedTime);
         // Ensure end time is always greater than start time
         if (endTime <= selectedTime) {
@@ -49,6 +58,7 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
     };
 
     const handleEndTimeChange = (selectedTime) => {
+        setShowEndTimePicker(false)
         // Ensure end time is always greater than start time
         if (selectedTime <= startTime) {
             const newStartTime = new Date(selectedTime);
@@ -57,13 +67,6 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
         }
         setEndTime(selectedTime);
     };
-
-    const addOneHourToTime = (timestamp) => {
-        const originalDate = new Date(timestamp);
-        originalDate.setHours(originalDate.getHours() + 1);
-        const updatedDateTime = originalDate.toISOString();
-        return updatedDateTime
-    }
 
     const onPressPickerContainer = () => {
         setShowPicker(prev => !prev)
@@ -120,25 +123,90 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                             <Text style={{ ...Fonts.medBold }}>{chosenService?.service_name}</Text>
                         </TouchableOpacity>
                 }
+
+
+
                 <Text style={styles.headingText}>Select Date:</Text>
-                <DateTimePicker
-                    style={styles.datePicker}
-                    value={date}
-                    mode="date"
-                    onChange={(event, selectedDate) => setDate(selectedDate)}
-                />
+
+
+                {
+                    Platform.OS == "android"
+                    &&
+                    <TouchableOpacity
+                        style={[styles.datetext, Fonts.medMedium]}
+
+                        onPress={() => setShowDatePicker(prev => !prev)}>
+                        <Text>{formatDate_mmddyyyy(date)}</Text>
+                    </TouchableOpacity>
+                }
+
+
+                {
+                    Platform.OS == 'android'
+                        ?
+                        showDatePicker
+                        &&
+                        <DateTimePicker
+                            style={styles.datePicker}
+                            value={date}
+                            mode="date"
+                            onChange={(event, selectedDate) => {
+                                setShowDatePicker(false)
+                                setDate(selectedDate)
+                            }}
+                        />
+
+                        :
+                        <DateTimePicker
+                            style={styles.datePicker}
+                            value={date}
+                            mode="date"
+                            onChange={(event, selectedDate) => setDate(selectedDate)}
+                        />
+                }
 
                 <View style={styles.durationContainer}>
                     <View style={styles.durationPicker}>
                         <Text style={[styles.headingText, { marginBottom: Spaces.vsm }]}>Start Time</Text>
-                        <DateTimePicker
-                            is24Hour={true}
-                            themeVariant='light'
-                            style={styles.timePicker}
-                            value={startTime}
-                            mode="time"
-                            onChange={(event, selectedTime) => handleStartTimeChange(selectedTime)}
-                        />
+
+                        {
+                            Platform.OS=="android"
+                            &&
+                            <TouchableOpacity
+                            style={[styles.datetext, Fonts.medMedium]}
+
+                            onPress={() => setShowStartTimePicker(prev => !prev)}>
+                            <Text>{convertTo24HourFormat(startTime)}</Text>
+                        </TouchableOpacity>
+                        }
+                      
+
+
+
+                        {
+                            Platform.OS == 'android'
+                                ?
+                                showStartTimePicker
+                                &&
+                                <DateTimePicker
+                                    is24Hour={true}
+                                    themeVariant='light'
+                                    style={styles.timePicker}
+                                    value={startTime}
+                                    mode="time"
+                                    onChange={(event, selectedTime) => handleStartTimeChange(selectedTime)}
+                                />
+                                :
+                                <DateTimePicker
+                                    is24Hour={true}
+                                    themeVariant='light'
+                                    style={styles.timePicker}
+                                    value={startTime}
+                                    mode="time"
+                                    onChange={(event, selectedTime) => handleStartTimeChange(selectedTime)}
+                                />
+                        }
+
                     </View>
                     <View style={styles.dashContainer}>
                         {/* <Text style={styles.redText}>Min Duration:{'\n'}1 hour</Text> */}
@@ -146,15 +214,46 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                     </View>
                     <View style={styles.durationPicker}>
                         <Text style={[styles.headingText, { marginBottom: Spaces.vsm }]}>End Time</Text>
-                        <DateTimePicker
-                            is24Hour={true}
-                            minimumDate={new Date(startTime)}
-                            themeVariant='light'
-                            style={styles.timePicker}
-                            value={endTime}
-                            mode="time"
-                            onChange={(event, selectedTime) => handleEndTimeChange(selectedTime)}
-                        />
+
+                        {
+                            Platform.OS=="android"
+                            &&
+                            <TouchableOpacity
+                            style={[styles.datetext, Fonts.medMedium]}
+
+                            onPress={() => setShowEndTimePicker(prev => !prev)}>
+                            <Text>{convertTo24HourFormat(endTime)}</Text>
+                        </TouchableOpacity>
+                        }
+
+                       
+
+                        {
+                            Platform.OS == 'android'
+                                ?
+                                showEndTimePicker
+                                &&
+                                <DateTimePicker
+                                    is24Hour={true}
+                                    minimumDate={new Date(startTime)}
+                                    themeVariant='light'
+                                    style={styles.timePicker}
+                                    value={endTime}
+                                    mode="time"
+                                    onChange={(event, selectedTime) => handleEndTimeChange(selectedTime)}
+                                />
+                                :
+                                <DateTimePicker
+                                    is24Hour={true}
+                                    minimumDate={new Date(startTime)}
+                                    themeVariant='light'
+                                    style={styles.timePicker}
+                                    value={endTime}
+                                    mode="time"
+                                    onChange={(event, selectedTime) => handleEndTimeChange(selectedTime)}
+                                />
+                        }
+
                     </View>
                 </View>
 
@@ -186,7 +285,7 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
     );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (H, W) => StyleSheet.create({
     container: {
         backgroundColor: '#fff',
         paddingBottom: Spaces.xxl
@@ -256,6 +355,20 @@ const styles = StyleSheet.create({
         padding: Spaces.lar,
         margin: Spaces.sm,
         borderRadius: 8
+    },
+
+
+    datetext: {
+        borderColor: "gray",
+        borderWidth: 1,
+        width: W * 0.4,
+        borderRadius: 5,
+        marginTop: H * 0.005,
+        marginHorizontal: W * 0.03,
+        textAlign: 'center',
+        alignItems: 'center',
+        padding: Spaces.xsm
+
     }
 
 });
