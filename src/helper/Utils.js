@@ -27,7 +27,7 @@ export const handlePostRequest = async (name, formdata) => {
         },
     };
 
-    console.log("Formdata=======>", formdata)
+    console.log(`Formdata of ${name}=======>`, formdata)
 
     return axios(config)
         .then(response => {
@@ -116,17 +116,25 @@ export const Shadows =
 
 export function calculateEndTime(startTime, duration) {
     const [startHour, startMinute] = startTime.split(":").map(Number);
-  
+
     const totalMinutes = startHour * 60 + startMinute + duration * 60;
-  
+
     const endHour = Math.floor(totalMinutes / 60) % 24; // Ensure it's within a 24-hour range
     const endMinute = totalMinutes % 60;
-  
+
     const formattedStartTime = startTime.padStart(5, "0");
     const formattedEndTime = `${String(endHour).padStart(2, "0")}:${String(
-      endMinute
+        endMinute
     ).padStart(2, "0")}`;
-  
+
     return `${formattedStartTime} - ${formattedEndTime}`;
-  }
-  
+}
+
+export function convertTo24HourFormat(timestamp) {
+    const date = new Date(timestamp);
+
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    return `${hours}:${minutes}`;
+}

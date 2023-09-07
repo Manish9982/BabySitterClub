@@ -29,7 +29,7 @@ import MyProfile_Parent from '../screens/MyProfile_Parent';
 import ManageAddress from '../screens/ManageAddress';
 import AddAddress from '../screens/AddAddress';
 import AddAvailabiltity_Sitter from '../screens/AddAvailability_Sitter';
-
+import BookingConfirmation_Parent from '../screens/BookingConfirmation_Parent';
 
 const Router = () => {
 
@@ -57,8 +57,9 @@ const Router = () => {
                         <Stack.Screen name="MyProfile_Parent" component={MyProfile_Parent} options={{}} />
                         <Stack.Screen name="SwitchServices" component={SwitchServices} options={{ headerTitle: 'Switch Services' }} />
                         <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Switch Role' }} />
-                        <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown : true,headerTitle: 'Manage Address' }} />
-                        <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown : true,headerTitle: 'Add Address' }} />
+                        <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
+                        <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
+                        <Stack.Screen name="BookingConfirmation_Parent" component={BookingConfirmation_Parent} options={{ headerShown: true, headerTitle: 'Confirm Booking' }} />
 
                     </Stack.Navigator>
                 )

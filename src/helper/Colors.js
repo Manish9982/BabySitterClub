@@ -8,7 +8,7 @@ export default Colors = {
     'grayTransparent': 'rgba(151, 153, 152, 0.38)',
     'gray': 'rgba(151, 153, 152, 1)',
     'black': '#000',
-    'Secondary': '#ff6f61',
+    'Secondary': '#FF6D82',
     'Accent': '#f9a856',
     'Background': '#f4f6f9',
     'TextPrimary': '#333333',
@@ -17,7 +17,7 @@ export default Colors = {
     'BackgroundAlt': '#e5e5e5',
     'TextonAccent': '#ffffff',
     'Divider': '#d1d1d1',
-    'PRIMARY_BLUE': '#1e81b0',
+    'PRIMARY': '#FDCC92',
     'DARK_BLUE': '#174b6b',
     'LIGHT_BLUE': '#4ea8d6',
     'ACCENT_YELLOW': '#f9c542',
@@ -27,5 +27,5 @@ export default Colors = {
     'COMPLEMENTARY_ORANGE': '#e76f51',
     'MUTED_GREEN': '#78a890',
     'MESSAGE_GREEN': '#DCF8C6',
-    'BlackTransparent': 'rgba(0,0,0,0.3)'
+    'BlackTransparent': 'rgba(0,0,0,0.5)'
 }

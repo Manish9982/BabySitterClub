@@ -676,7 +676,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderWidth: 0.2,
         paddingVertical: Spaces.med,
         borderRadius: 8,
-        borderColor: Colors.PRIMARY_BLUE,
+        borderColor: Colors.PRIMARY,
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: Spaces.sm
@@ -699,7 +699,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     weekButton:
     {
-        backgroundColor: Colors.PRIMARY_BLUE,
+        backgroundColor: Colors.PRIMARY,
         paddingHorizontal: Spaces.lar,
         marginHorizontal: Spaces.vsm,
         borderRadius: 8,
@@ -719,7 +719,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         marginVertical: Spaces.vsm,
         alignItems: 'center',
         borderWidth: 0.2,
-        borderColor: Colors.PRIMARY_BLUE
+        borderColor: Colors.PRIMARY
     },
     whiteText:
     {

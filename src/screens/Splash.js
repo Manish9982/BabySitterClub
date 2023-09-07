@@ -32,7 +32,7 @@ const Splash = ({ navigation }) => {
         }
         else {
             dispatch(logout());
-            navigation.navigate("SelectCountry")
+            navigation.replace("SelectCountry")
         }
     }
 
@@ -41,17 +41,10 @@ const Splash = ({ navigation }) => {
             style={styles.splash}
             imageStyle={styles.imgstyle}
             source={require('../assets/images/background.png')}>
-           
+
             <Image
-                style={{
-                    width: W * 0.99,
-                    height: W * 0.99,
-                    position: 'absolute'
-                }}
-                source={require('../assets/images/splashimage.png')}>
-
-
-            </Image>
+                style={styles.imageSplash}
+                source={require('../assets/images/splashimage.png')} />
         </ImageBackground>
     )
 }
@@ -67,6 +60,12 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     imgstyle:
     {
-    //    opacity: 0.3
+        //    opacity: 0.3
+    },
+    imageSplash:
+    {
+        width: W * 0.99,
+        height: W * 0.99,
+        position: 'absolute'
     }
 })

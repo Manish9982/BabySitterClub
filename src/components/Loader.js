@@ -10,7 +10,7 @@ const Loader = () => {
             source={require('../assets/images/app_bg.webp')}
             style={styles.container}>
             <ActivityIndicator
-                color={Colors.LIGHT_BLUE}
+                color={Colors.selectedcolor}
                 size={"large"} />
         </ImageBackground>
     )
