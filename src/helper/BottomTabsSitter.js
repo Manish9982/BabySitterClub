@@ -1,13 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import SearchBabySitter from '../screens/SearchBabySitter';
-import Favourites from '../screens/FavouritesParents';
 import Bookings from '../screens/Bookings';
 import Messages from '../screens/Messages';
 import Account from '../screens/Account';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
-import FavouritesParents from '../screens/FavouritesParents';
 import Dashboard_Sitter from '../screens/Dashboard_Sitter';
 
 const BottomTabsParent = () => {

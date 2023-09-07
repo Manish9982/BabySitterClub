@@ -1,13 +1,13 @@
-import { Alert, Image, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native'
+import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { DataTable, Divider, Text } from 'react-native-paper'
-import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import { Divider, SegmentedButtons, Text } from 'react-native-paper'
 import Spaces from '../helper/Spaces'
 import Fonts from '../helper/Fonts'
 import Colors from '../helper/Colors'
-import SmallWhiteButton from '../components/SmallWhiteButton'
 import Loader from '../components/Loader'
 import { handlePostRequest } from '../helper/Utils'
+import TagIcon from '../components/TagIcon'
+
 
 const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
 
@@ -19,18 +19,20 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
     const [profiledetailsdata, setProfiledetailsdata] = useState()
     const [loader, setLoader] = useState(true)
     const [image, setImage] = useState({})
-
+    const [serviceFilterId, setServiceFilterId] = useState(null);
 
     useEffect(() => {
         getUsersProfileDetails()
     }, [])
 
+    const onPressBookNow = () => {
+        navigation.navigate('BookingConfirmation_Parent')
+    }
 
     const getUsersProfileDetails = async () => {
         const formdata = new FormData()
         formdata.append('userId', route?.params?.userID)
         const result = await handlePostRequest('user_details', formdata)
-        console.log("Results==========   ", result)
 
         if (result?.status == '200') {
             setProfiledetailsdata(result)
@@ -40,6 +42,38 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
         }
         setLoader(false)
     }
+
+    const DateSection = ({ section }) => (
+        <View style={styles.datesection}>
+            <Text style={{ ...Fonts.medBold }}>{section.date}</Text>
+        </View>
+    );
+
+    const SlotItem = ({ item }) => (
+        <View style={styles.slotItem}>
+            <Text>
+                {item?.duration}
+                <Text> (
+                    {item?.service_id == 1 && <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />}
+                    {item?.service_id == 2 && <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />}
+                    {item?.service_id == 3 && <TagIcon name="home-outline" label="Homesit" style={styles.tag} />}
+                    )
+                </Text>
+            </Text>
+            {
+                item?.status === 0 ?
+                    <TouchableOpacity onPress={onPressBookNow}>
+                        <Text style={{ textDecorationLine: 'underline', color: Colors.blue }}>
+                            Book Now
+                        </Text>
+                    </TouchableOpacity>
+                    :
+                    <Text style={{ color: 'red' }}>
+                        Booked
+                    </Text>
+            }
+        </View>
+    );
 
 
     const styles = makeStyles(H, W)
@@ -79,7 +113,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         </Text> */}
                         <Text>
                             <Text style={styles.subheading}>Favorited: </Text>
-                            <Text style={[styles.text, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.no_of_children} times</Text>
+                            <Text style={[styles.text, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.no_of_favourite} times</Text>
                         </Text>
                         {/* <Text>
                             <Text style={styles.subheading}>Age of children: </Text>
@@ -94,10 +128,47 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         </Text>
                         <Text style={styles.textneedbabysittertitle}>Availability</Text>
                         <Divider style={styles.divider} />
+                        {profiledetailsdata?.userSlots?.length == 0
+                            ?
+                            <Text>You have not added your availability</Text>
+                            :
+                            <SegmentedButtons
+                                style={styles.segment}
+                                value={serviceFilterId}
+                                onValueChange={(t) => setServiceFilterId(prev => prev == t ? null : t)}
+                                buttons={[
+                                    {
+                                        value: '1',
+                                        label: <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
 
+                                    },
+                                    {
+                                        value: '3',
+                                        label: <TagIcon name="home-outline" label="Homesit" style={styles.tag} />,
+                                    },
+                                    {
+                                        value: '2',
+                                        label: <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />,
+                                    },
+                                ]}
+                            />
+                        }
+                        {profiledetailsdata?.userSlots?.map((section, index) => {
+                            if (section?.service?.includes(Number.parseInt(serviceFilterId, 10)) || serviceFilterId == null) {
+                                return (
+                                    <View key={index}>
+                                        <DateSection section={section} />
+                                        {section?.times?.map((time) => {
+                                            if (time?.service_id == serviceFilterId || serviceFilterId == null) {
+                                                return (<SlotItem key={time.id} item={time} />)
+                                            }
+                                        })}
+                                    </View>)
+                            }
+                        })}
                     </View>
                 </ScrollView>
-                <View style={styles.floatingView}>
+                {/* <View style={styles.floatingView}>
                     <View style={styles.secondaryFloatingView}>
                         <Text style={[styles.text, styles.floatText,
 
@@ -106,9 +177,9 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         <Text style={[styles.subheading, styles.floatText]}>Total Price</Text>
                     </View>
                     <View style={styles.secondaryFloatingView}>
-                        <SmallWhiteButton title={`${"Contact"} ${profiledetailsdata?.userDetails?.first_name}`} />
+                        <SmallWhiteButton title={`Contact ${profiledetailsdata?.userDetails?.first_name}`} />
                     </View>
-                </View>
+                </View> */}
             </View>
     )
 }
@@ -118,7 +189,7 @@ export default ProfileOfSitterDuringBooking_Parent
 const makeStyles = (H, W) => StyleSheet.create({
     container: {
         flex: 1,
-        paddingBottom: H * 0.13
+        paddingBottom: H * 0.02
     },
     secondaryFloatingView: {
         flex: 1,
@@ -211,4 +282,26 @@ const makeStyles = (H, W) => StyleSheet.create({
         marginVertical: 0,
         marginBottom: 0
     },
+    slotItem:
+    {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: Spaces.sm
+    },
+    datesection:
+    {
+        backgroundColor: Colors.grayTransparent,
+        padding: Spaces.med,
+        borderRadius: 10,
+    },
+    tag:
+    {
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    segment:
+    {
+        margin: Spaces.sm
+    }
 }) 

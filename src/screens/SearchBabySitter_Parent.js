@@ -7,12 +7,13 @@ import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 import Loader from '../components/Loader';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { handleGetRequest, handlePostRequest } from '../helper/Utils';
 import { useIsFocused } from '@react-navigation/native';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 
-const SearchBabySitter = ({ navigation }) => {
+const SearchBabySitter_Parent = ({ navigation }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
@@ -22,13 +23,16 @@ const SearchBabySitter = ({ navigation }) => {
     const [loader, setLoader] = useState(true)
     const [users, setUsers] = useState([])
     const [searchText, setSearchText] = useState("")
+    const [bookingDate, setbookingDate] = useState(new Date())
 
     const selectedService = useSelector(state => state.global.selectedService)
 
     const isFocused = useIsFocused()
 
     useEffect(() => {
-        getUsers()
+        if (isFocused) {
+            getUsers()
+        }
     }, [isFocused])
 
     const getUsers = async () => {
@@ -87,8 +91,7 @@ const SearchBabySitter = ({ navigation }) => {
         }
         return false;
     }
-  
-    console.log("filterData=======>", filterdata)
+
     const renderBabysitterCard = ({ item }) => {
         if ((haveCommonElements(filterdata, item?.service) || filterdata?.length == 0) && (item?.name?.toLowerCase()?.includes(searchText?.toLowerCase()))) {
             return (
@@ -109,6 +112,7 @@ const SearchBabySitter = ({ navigation }) => {
     const renderfilters = ({ item }) => {
         return (
             <Chip
+            style={styles.chip}
                 selectedColor={Colors.blue}
                 onPress={() => onPressChip(item.service_name)}
                 selected={throwChipSelection(item.service_name)}
@@ -127,6 +131,11 @@ const SearchBabySitter = ({ navigation }) => {
             :
             <View style={{ flex: 1 }}>
                 <View style={styles.upperconatiner}>
+                    <Text style={styles.textQuery}>When would you like to schedule a sitter?</Text>
+                    <RNDateTimePicker
+                        style={styles.datePicker}
+                        value={bookingDate}
+                    />
                     <Searchbar
                         loading={false}
                         mode='bar'
@@ -134,21 +143,20 @@ const SearchBabySitter = ({ navigation }) => {
                         style={styles.searchBar}
                         onChangeText={(text) => setSearchText(text)}
                     />
+                    {
+                        babySittersData?.status == '200' &&
+                        <View style={styles.uppercontainer2}>
+                            <FlatList
+                                horizontal={true}
+                                data={babySittersData?.filters}
+                                renderItem={renderfilters}
+                                keyExtractor={(item) => item.id}
+                            />
+
+                        </View>
+                    }
+
                 </View>
-
-                {
-                    babySittersData?.status == '200' &&
-                    <View style={styles.uppercontainer2}>
-                        <FlatList
-                            horizontal={true}
-                            data={babySittersData?.filters}
-                            renderItem={renderfilters}
-                            keyExtractor={(item) => item.id}
-                        />
-
-                    </View>
-                }
-
                 {
                     babySittersData?.users?.length == 0
                         ?
@@ -166,14 +174,17 @@ const SearchBabySitter = ({ navigation }) => {
 };
 
 
-export default SearchBabySitter
+export default SearchBabySitter_Parent
 
 const makeStyles = (H, W) => StyleSheet.create({
 
     upperconatiner: {
-        flexDirection: 'row',
         justifyContent: 'center',
-        margin: Spaces.med,
+        backgroundColor: Colors.PRIMARY,
+        alignItems: 'center',
+        padding: Spaces.vsm,
+        borderBottomLeftRadius: 25,
+        borderBottomRightRadius: 25,
     },
     uppercontainer2: {
         flexDirection: 'row',
@@ -205,5 +216,24 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         alignSelf: 'center',
         marginTop: '70%'
+    },
+    horizontal:
+    {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'center'
+    },
+    textQuery:
+    {
+        margin: Spaces.sm,
+        color:Colors.BlackTransparent
+    },
+    datePicker:
+    {
+        marginBottom: Spaces.sm
+    },
+    chip:
+    {
+      
     }
 })

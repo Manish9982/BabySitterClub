@@ -106,7 +106,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         // marginTop: Spaces.med,
     },
     statButton: {
-        backgroundColor: Colors.PRIMARY_BLUE,
+        backgroundColor: Colors.PRIMARY,
         borderRadius: 15,
         padding: 10,
         alignItems: 'center',

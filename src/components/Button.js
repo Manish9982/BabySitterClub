@@ -19,7 +19,7 @@ const CustomButton = ({ onPressButton, title, style, btnColor = Colors.buttoncol
                         color={Colors.white}
                     />
                     :
-                    <Text style={styles.text}>{title}</Text>
+                    <Text style={[styles.text, { color: btnColor == Colors.buttoncolor ? Colors.black : Colors.white,}]}>{title}</Text>
             }
 
         </TouchableOpacity>
@@ -45,7 +45,6 @@ const makeStyles = (H, W) => StyleSheet.create({
     text:
     {
         textAlign: 'center',
-        color: 'black',
         fontFamily: "Poppins-Medium",
         fontSize: 15
     }

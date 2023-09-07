@@ -3,8 +3,7 @@ import React from 'react'
 import { Text } from 'react-native-paper'
 import { Shadows } from '../helper/Utils'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
-import Ionicons from 'react-native-vector-icons/dist/Ionicons'
-import FontAwesome6 from 'react-native-vector-icons/dist/FontAwesome6'
+import TagIcon from './TagIcon'
 
 const ProfileOfSitter = ({ imageUrl, name, roles, location, price, about }) => {
 
@@ -53,24 +52,6 @@ const ProfileOfSitter = ({ imageUrl, name, roles, location, price, about }) => {
         </View>
     )
 }
-
-const TagIcon = ({ name, label, fontawesome = false }) => {
-    const H = useWindowDimensions().height
-    const W = useWindowDimensions().width
-    const styles = makeStyles(H, W)
-    return (
-        <View style={styles.tagIconContainer}>
-            {
-                fontawesome ?
-                    <FontAwesome6 name={name} size={Spaces.lar} color={Colors.blue} />
-                    :
-                    <Ionicons name={name} size={Spaces.lar} color={Colors.blue} />
-            }
-
-            {/* <Text style={styles.tagLabel}>{label}</Text> */}
-        </View>
-    );
-};
 
 export default ProfileOfSitter
 
@@ -130,7 +111,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         // marginTop: Spaces.med,
     },
     statButton: {
-        backgroundColor: Colors.PRIMARY_BLUE,
+        backgroundColor: Colors.PRIMARY,
         borderRadius: 15,
         padding: 10,
         alignItems: 'center',
