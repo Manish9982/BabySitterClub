@@ -80,7 +80,7 @@ const Router = () => {
                         <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
                         <Stack.Screen name="MyProfile_Sitter" component={MyProfile_Sitter} options={{}} />
                         <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Switch Role' }} />
-                        <Stack.Screen name="AddAvailabiltity_Sitter" component={AddAvailabiltity_Sitter} options={{ headerTitle: 'Add Availabiltity' }} />
+                        <Stack.Screen name="AddAvailabiltity_Sitter" component={AddAvailabiltity_Sitter} options={{headerShown:true, headerTitle: 'Add Availabiltity' }} />
                     </Stack.Navigator>
                 )
             }

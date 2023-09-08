@@ -426,7 +426,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     whiteText:
     {
-        color: Colors.white
+        color: Colors.black
     },
     weekContainer:
     {
@@ -520,7 +520,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     tag:
     {
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+     
     },
     segment:
     {

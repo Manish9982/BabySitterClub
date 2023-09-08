@@ -74,7 +74,7 @@ export function formatDate(inputDate) {
 export function formatDate_mmddyyyy(inputDate) {
     function getDaySuffix(day) {
         if (day >= 11 && day <= 13) {
-            return "th";
+            return "";
         }
         switch (day % 10) {
             case 1:
@@ -84,7 +84,7 @@ export function formatDate_mmddyyyy(inputDate) {
             case 3:
                 return "rd";
             default:
-                return "th";
+                return "";
         }
     }
     const months = [

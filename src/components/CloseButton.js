@@ -22,22 +22,29 @@ const CloseButton = ({ onPress, size = 20, id, callBack }) => {
 
     const showDeletPopup = async () => {
 
-        Alert.alert('Alert', "You want to delete this slot availability or want to delete all future availability also?", [
+        Alert.alert('Delete Slot Alert', "Delete this slot availability or want to delete all future slot availability also?", [
             {
-              text: 'Delete All',
-              onPress: () => { deleteSlot("true")},
-              style: 'cancel',
+                text: 'Delete All',
+                onPress: () => { deleteSlot("true") },
+                style: 'cancel',
+               
             },
+
             { text: 'Delete', onPress: () => deleteSlot("false") },
-          ]);
+        ],
+        {
+            cancelable: true,
         }
-    
+        
+        );
+    }
+
 
     return (
         <TouchableOpacity
             disabled={loader}
             style={styles.closeButton}
-            onPress={()=>showDeletPopup()}>
+            onPress={() => showDeletPopup()}>
             {loader ?
                 <ActivityIndicator size={size} color='red' />
                 :
