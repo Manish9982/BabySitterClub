@@ -1,5 +1,6 @@
 export default Spaces = {
     vsm:2,
+    xsm:4,
     sm: 8,
     med: 12,
     lar: 16,

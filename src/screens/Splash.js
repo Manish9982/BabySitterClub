@@ -64,8 +64,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     imageSplash:
     {
-        width: W * 0.99,
-        height: W * 0.99,
-        position: 'absolute'
+        width: W * 0.9,
+        height: W * 0.4,
+        resizeMode: "contain"
     }
 })
