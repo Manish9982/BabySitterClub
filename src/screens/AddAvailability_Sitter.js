@@ -20,11 +20,11 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
     const [endTime, setEndTime] = useState(new Date());
     const [repeatOption, setRepeatOption] = useState('');
     const [showPicker, setShowPicker] = useState(false)
-    const [customDate, setCustomDate] = useState(new Date())
-    const [chosenService, setChosenService] = useState({ "id": null, "service_name": "Choose Service" })
+    const [chosenService, setChosenService] = useState({ "id": 1, "service_name": "Choose a service" })
     const [filteredServices, setFilteredServices] = useState([])
     const [loader, setLoader] = useState(true)
     const [loaderButton, setLoaderButton] = useState(false)
+    const [loaderForStartEndTime, setLoaderForStartEndTime] = useState(false)
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
@@ -33,6 +33,15 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
     useEffect(() => {
         applyFilterToServices()
     }, [])
+
+    useEffect(() => {
+        checkSlots()
+    }, [startTime, endTime, date])
+
+
+    const checkSlots = () => {
+        console.log('CheckSlots===>')
+    }
 
     const applyFilterToServices = async () => {
         const result = await handleGetRequest('filters')
@@ -50,21 +59,21 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
         setShowStartTimePicker(false)
         setStartTime(selectedTime);
         // Ensure end time is always greater than start time
-        if (endTime <= selectedTime) {
-            const newEndTime = new Date(selectedTime);
-            newEndTime.setHours(selectedTime.getHours() + 1); // Ensuring at least a minute difference
-            setEndTime(newEndTime);
-        }
+        // if (endTime <= selectedTime) {
+        //     const newEndTime = new Date(selectedTime);
+        //     newEndTime.setHours(selectedTime.getHours() + 1); // Ensuring at least a minute difference
+        //     setEndTime(newEndTime);
+        // }
     };
 
     const handleEndTimeChange = (selectedTime) => {
         setShowEndTimePicker(false)
         // Ensure end time is always greater than start time
-        if (selectedTime <= startTime) {
-            const newStartTime = new Date(selectedTime);
-            newStartTime.setHours(selectedTime.getHours() - 1); // Ensuring at least a minute difference
-            setStartTime(newStartTime);
-        }
+        // if (selectedTime <= startTime) {
+        //     const newStartTime = new Date(selectedTime);
+        //     newStartTime.setHours(selectedTime.getHours() - 1); // Ensuring at least a minute difference
+        //     setStartTime(newStartTime);
+        // }
         setEndTime(selectedTime);
     };
 
@@ -79,22 +88,27 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
         })
     }
     const onPressAddAvailability = async () => {
-        setLoaderButton(true)
-        var formdata = new FormData()
-        formdata.append("date", formatDate(date));
-        formdata.append("start_time", convertTo24HourFormat(startTime));
-        formdata.append("end_time", convertTo24HourFormat(endTime));
-        formdata.append("repeat", repeatOption);
-        formdata.append("service_id", JSON.stringify(chosenService?.id));
-        const result = await handlePostRequest('slot_availability', formdata)
-        if (result?.status == '200') {
-            Alert.alert('Availability added', result?.message)
-            navigation.navigate('MyProfile_Sitter')
+        if (showPicker) {
+            setLoaderButton(true)
+            var formdata = new FormData()
+            formdata.append("date", formatDate(date));
+            formdata.append("start_time", convertTo24HourFormat(startTime));
+            formdata.append("end_time", convertTo24HourFormat(endTime));
+            formdata.append("repeat", repeatOption);
+            formdata.append("service_id", JSON.stringify(chosenService?.id));
+            const result = await handlePostRequest('slot_availability', formdata)
+            if (result?.status == '200') {
+                Alert.alert('Availability added', result?.message)
+                navigation.navigate('MyProfile_Sitter')
+            }
+            else {
+                Alert.alert('Error', result?.message)
+            }
+            setLoaderButton(false)
         }
         else {
-            Alert.alert('Error', result?.message)
+            Alert.alert("Invalid Selection", 'Please choose a service first')
         }
-        setLoaderButton(false)
     }
     return (
         loader
@@ -209,7 +223,7 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
 
                     </View>
                     <View style={styles.dashContainer}>
-                        {/* <Text style={styles.redText}>Min Duration:{'\n'}1 hour</Text> */}
+                        <Text style={styles.redText}>Min Duration:{'\n'}1 hour</Text>
                         <Text style={{ ...Fonts.larBold, alignSelf: 'center' }}>-</Text>
                     </View>
                     <View style={styles.durationPicker}>

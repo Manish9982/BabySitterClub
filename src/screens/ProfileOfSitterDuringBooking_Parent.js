@@ -7,6 +7,7 @@ import Colors from '../helper/Colors'
 import Loader from '../components/Loader'
 import { handlePostRequest } from '../helper/Utils'
 import TagIcon from '../components/TagIcon'
+import RNDateTimePicker from '@react-native-community/datetimepicker'
 
 
 const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
@@ -18,7 +19,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
 
     const [profiledetailsdata, setProfiledetailsdata] = useState()
     const [loader, setLoader] = useState(true)
-    const [image, setImage] = useState({})
+    const [slotsDate, setSlotsDate] = useState(new Date())
     const [serviceFilterId, setServiceFilterId] = useState(null);
 
     useEffect(() => {
@@ -88,7 +89,6 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                     style={styles.container}>
                     <View style={styles.upperContainer}>
                         <View>
-
                             <Image
                                 source={{ uri: `${profiledetailsdata?.url}${profiledetailsdata?.userDetails?.picture}` }}
                                 defaultSource={require('../assets/images/profile-user.png')}
@@ -119,9 +119,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                             <Text style={styles.subheading}>Age of children: </Text>
                             <Text style={styles.text}>Baby</Text>
                         </Text> */}
-
                         <Text style={styles.warningtitle}>Warning: </Text>
-
                         <Text style={[styles.warning, Fonts.smMedium]}>
                             For your own safety and protection, only communicate through this app.
                             Never pay for anything and don't share personal information like ID documents and bank details with someone you have never met.
@@ -132,6 +130,10 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                             ?
                             <Text>You have not added your availability</Text>
                             :
+                            <View>
+                                <RNDateTimePicker
+                                value={slotsDate}
+                                />
                             <SegmentedButtons
                                 style={styles.segment}
                                 value={serviceFilterId}
@@ -152,6 +154,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                                     },
                                 ]}
                             />
+                            </View>
                         }
                         {profiledetailsdata?.userSlots?.map((section, index) => {
                             if (section?.service?.includes(Number.parseInt(serviceFilterId, 10)) || serviceFilterId == null) {
