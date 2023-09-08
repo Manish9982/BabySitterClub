@@ -138,3 +138,40 @@ export function convertTo24HourFormat(timestamp) {
 
     return `${hours}:${minutes}`;
 }
+
+export function convertTo12HourFormat(time24) {
+    // Split the input time string into hours and minutes
+    const [hours, minutes] = time24.split(':');
+
+    // Convert hours to an integer
+    const hoursInt = parseInt(hours);
+
+    // Determine whether it's AM or PM
+    const period = hoursInt >= 12 ? 'PM' : 'AM';
+
+    // Calculate the 12-hour format hours
+    const hours12 = hoursInt % 12 || 12; // 0 should be converted to 12 in 12-hour format
+
+    // Format the result as 'hh:mm AM/PM'
+    const result = `${String(hours12).padStart(2, '0')}:${minutes} ${period}`;
+
+    return result;
+}
+
+export function convertTimeRangeTo12HourFormat(timeRange) {
+    const [startTime, endTime] = timeRange.split(' - ');
+  
+    // Helper function to convert a single time to 12-hour format
+    function convertTo12HourFormat(time) {
+      const [hours, minutes] = time.split(':');
+      const hoursInt = parseInt(hours);
+      const period = hoursInt >= 12 ? 'PM' : 'AM';
+      const hours12 = hoursInt % 12 || 12;
+      return `${String(hours12).padStart(2, '0')}:${minutes} ${period}`;
+    }
+  
+    const convertedStartTime = convertTo12HourFormat(startTime);
+    const convertedEndTime = convertTo12HourFormat(endTime);
+  
+    return `${convertedStartTime} - ${convertedEndTime}`;
+  }

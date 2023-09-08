@@ -8,7 +8,7 @@ import Fonts from '../helper/Fonts';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Shadows, handleGetRequest, handlePostRequest } from '../helper/Utils';
+import { Shadows, convertTimeRangeTo12HourFormat, convertTo12HourFormat, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import CustomButton from '../components/Button';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Loader from '../components/Loader';
@@ -119,7 +119,7 @@ const MyProfile_Sitter = ({ navigation }) => {
     const SlotItem = ({ item }) => (
         <View style={styles.slotItem}>
             <Text>
-                {item?.duration}
+                {convertTimeRangeTo12HourFormat(item?.duration)}
                 <Text> (
                     {item?.service_id == 1 && <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />}
                     {item?.service_id == 2 && <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />}
