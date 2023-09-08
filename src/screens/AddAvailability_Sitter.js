@@ -136,7 +136,7 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                         style={[styles.datetext, Fonts.medMedium]}
 
                         onPress={() => setShowDatePicker(prev => !prev)}>
-                        <Text>{formatDate_mmddyyyy(date)}</Text>
+                        <Text style={[Fonts.lar]}>{formatDate_mmddyyyy(date)}</Text>
                     </TouchableOpacity>
                 }
 
@@ -170,16 +170,16 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                         <Text style={[styles.headingText, { marginBottom: Spaces.vsm }]}>Start Time</Text>
 
                         {
-                            Platform.OS=="android"
+                            Platform.OS == "android"
                             &&
                             <TouchableOpacity
-                            style={[styles.datetext, Fonts.medMedium]}
+                                style={styles.timetext}
 
-                            onPress={() => setShowStartTimePicker(prev => !prev)}>
-                            <Text>{convertTo24HourFormat(startTime)}</Text>
-                        </TouchableOpacity>
+                                onPress={() => setShowStartTimePicker(prev => !prev)}>
+                                <Text style={[Fonts.lar]}>{convertTo24HourFormat(startTime)}</Text>
+                            </TouchableOpacity>
                         }
-                      
+
 
 
 
@@ -216,17 +216,17 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                         <Text style={[styles.headingText, { marginBottom: Spaces.vsm }]}>End Time</Text>
 
                         {
-                            Platform.OS=="android"
+                            Platform.OS == "android"
                             &&
                             <TouchableOpacity
-                            style={[styles.datetext, Fonts.medMedium]}
+                                style={[styles.timetext, Fonts.larMedium]}
 
-                            onPress={() => setShowEndTimePicker(prev => !prev)}>
-                            <Text>{convertTo24HourFormat(endTime)}</Text>
-                        </TouchableOpacity>
+                                onPress={() => setShowEndTimePicker(prev => !prev)}>
+                                <Text style={[Fonts.lar]}>{convertTo24HourFormat(endTime)}</Text>
+                            </TouchableOpacity>
                         }
 
-                       
+
 
                         {
                             Platform.OS == 'android'
@@ -313,7 +313,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     durationPicker: {
         //backgroundColor: Colors.PRIMARY,
-        borderRadius: 8
+        borderRadius: 8,
+        alignItems: "center"
     },
     timePicker: {
         alignSelf: 'flex-start',
@@ -331,7 +332,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     dashContainer:
     {
-        justifyContent: 'center'
+        justifyContent: 'center',
+        // marginTop:H*0.017
     },
     redText:
     {
@@ -359,15 +361,29 @@ const makeStyles = (H, W) => StyleSheet.create({
 
 
     datetext: {
-        borderColor: "gray",
+        borderColor: Colors.LIGHT_SILVER,
+        backgroundColor: Colors.LIGHT_SILVER,
         borderWidth: 1,
-        width: W * 0.4,
+        width: W * 0.3,
         borderRadius: 5,
-        marginTop: H * 0.005,
         marginHorizontal: W * 0.03,
         textAlign: 'center',
         alignItems: 'center',
-        padding: Spaces.xsm
+        padding: Spaces.vsm
+
+    },
+    timetext: {
+        borderColor: Colors.LIGHT_SILVER,
+        backgroundColor: Colors.LIGHT_SILVER,
+
+        borderWidth: 1,
+        width: W * 0.2,
+        borderRadius: 5,
+        marginHorizontal: W * 0.03,
+        textAlign: 'center',
+        alignItems: 'center',
+        padding: Spaces.vsm,
+
 
     }
 

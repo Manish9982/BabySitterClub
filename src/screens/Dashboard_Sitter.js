@@ -16,11 +16,11 @@ const ProfileScreen = () => {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <ProfileOfSitter 
-            name={'John Doe'}
-            location={'Dallas, Texas'}
-            price={'$ 15'}
-            about={'Lorem ipsum'}
+            <ProfileOfSitter
+                name={'John Doe'}
+                location={'Dallas, Texas'}
+                price={'$ 15'}
+                about={'Lorem ipsum'}
             />
             <View style={styles.statsContainer}>
                 <StatButton title="Total Bookings" count={20} />
@@ -44,7 +44,7 @@ const StatButton = ({ title, count }) => {
     return (
         <TouchableOpacity style={styles.statButton}>
             <Text style={styles.statTitle}>{title}</Text>
-            <Text style={styles.statCount}>{count}</Text>
+            <Text style={[styles.statCount, Fonts.xlSemiBold]}>{count}</Text>
         </TouchableOpacity>
     );
 };
@@ -114,13 +114,11 @@ const makeStyles = (H, W) => StyleSheet.create({
         marginVertical: Spaces.sm,
     },
     statTitle: {
-        color: 'white',
+        color: 'black',
         fontSize: 14,
     },
     statCount: {
-        color: 'white',
-        fontSize: Spaces.med,
-        fontWeight: 'bold',
+        color: 'black',
         marginTop: 5,
     },
     tagIconContainer: {
@@ -168,7 +166,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     text:
     {
         alignSelf: 'center',
-        marginVertical: H * 0.1
+        marginVertical: H * 0.1,
+        marginHorizontal:W*0.01
     },
     boxAvailability:
     {

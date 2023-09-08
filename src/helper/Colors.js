@@ -27,5 +27,6 @@ export default Colors = {
     'COMPLEMENTARY_ORANGE': '#e76f51',
     'MUTED_GREEN': '#78a890',
     'MESSAGE_GREEN': '#DCF8C6',
+    'LIGHT_SILVER':'#e1e1e1',
     'BlackTransparent': 'rgba(0,0,0,0.5)'
 }
