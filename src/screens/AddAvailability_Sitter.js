@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform, useWindowDimensions } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { RadioButton, Text } from 'react-native-paper';
+import { ActivityIndicator, RadioButton, Text } from 'react-native-paper';
 import Fonts from '../helper/Fonts';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import CustomButton from '../components/Button';
 import { Picker } from '@react-native-picker/picker';
-import { convertTo24HourFormat, formatDate, formatDate_mmddyyyy, handleGetRequest, handlePostRequest } from '../helper/Utils';
+import { convertTo12HourFormat, convertTo24HourFormat, formatDate, formatDate_mmddyyyy, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import Loader from '../components/Loader';
 
 const AddAvailabiltity_Sitter = ({ navigation }) => {
@@ -25,6 +25,7 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
     const [loader, setLoader] = useState(true)
     const [loaderButton, setLoaderButton] = useState(false)
     const [loaderForStartEndTime, setLoaderForStartEndTime] = useState(false)
+    const [slotCheckData, setSlotCheckData] = useState(null)
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
@@ -36,11 +37,20 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
 
     useEffect(() => {
         checkSlots()
-    }, [startTime, endTime, date])
+    }, [startTime, endTime, date, chosenService])
 
 
-    const checkSlots = () => {
-        console.log('CheckSlots===>')
+    const checkSlots = async () => {
+        setLoaderForStartEndTime(true)
+        var formdata = new FormData()
+        formdata.append("date", formatDate(date));
+        formdata.append("start_time", convertTo24HourFormat(startTime));
+        formdata.append("end_time", convertTo24HourFormat(endTime));
+        formdata.append("service_id", JSON.stringify(chosenService?.id));
+        const result = await handlePostRequest('slot_check', formdata)
+        console.log("slot check====>", result)
+        setSlotCheckData(result)
+        setLoaderForStartEndTime(false)
     }
 
     const applyFilterToServices = async () => {
@@ -53,7 +63,6 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
             Alert.alert('Error', result?.message)
         }
     }
-
 
     const handleStartTimeChange = (selectedTime) => {
         setShowStartTimePicker(false)
@@ -137,24 +146,17 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                             <Text style={{ ...Fonts.medBold }}>{chosenService?.service_name}</Text>
                         </TouchableOpacity>
                 }
-
-
-
                 <Text style={styles.headingText}>Select Date:</Text>
-
 
                 {
                     Platform.OS == "android"
                     &&
                     <TouchableOpacity
                         style={[styles.datetext, Fonts.medMedium]}
-
                         onPress={() => setShowDatePicker(prev => !prev)}>
                         <Text style={[Fonts.lar]}>{formatDate_mmddyyyy(date)}</Text>
                     </TouchableOpacity>
                 }
-
-
                 {
                     Platform.OS == 'android'
                         ?
@@ -169,7 +171,6 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                                 setDate(selectedDate)
                             }}
                         />
-
                         :
                         <DateTimePicker
                             style={styles.datePicker}
@@ -190,12 +191,11 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                                 style={styles.timetext}
 
                                 onPress={() => setShowStartTimePicker(prev => !prev)}>
-                                <Text style={[Fonts.lar]}>{convertTo24HourFormat(startTime)}</Text>
+                                <Text
+                                    numberOfLines={1}
+                                    style={[Fonts.lar]}>{convertTo12HourFormat(convertTo24HourFormat(startTime))}</Text>
                             </TouchableOpacity>
                         }
-
-
-
 
                         {
                             Platform.OS == 'android'
@@ -203,7 +203,6 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                                 showStartTimePicker
                                 &&
                                 <DateTimePicker
-                                    is24Hour={true}
                                     themeVariant='light'
                                     style={styles.timePicker}
                                     value={startTime}
@@ -212,7 +211,6 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                                 />
                                 :
                                 <DateTimePicker
-                                    is24Hour={true}
                                     themeVariant='light'
                                     style={styles.timePicker}
                                     value={startTime}
@@ -223,7 +221,14 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
 
                     </View>
                     <View style={styles.dashContainer}>
-                        <Text style={styles.redText}>Min Duration:{'\n'}1 hour</Text>
+                        {
+                            loaderForStartEndTime
+                                ?
+                                <ActivityIndicator color={Colors.Secondary} />
+                                :
+                                <Text style={slotCheckData?.status == '200' ? styles.greenText : styles.redText}>{slotCheckData?.message}</Text>
+                        }
+
                         <Text style={{ ...Fonts.larBold, alignSelf: 'center' }}>-</Text>
                     </View>
                     <View style={styles.durationPicker}>
@@ -233,10 +238,11 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                             Platform.OS == "android"
                             &&
                             <TouchableOpacity
-                                style={[styles.timetext, Fonts.larMedium]}
-
+                                style={[styles.timetext]}
                                 onPress={() => setShowEndTimePicker(prev => !prev)}>
-                                <Text style={[Fonts.lar]}>{convertTo24HourFormat(endTime)}</Text>
+                                <Text
+                                    numberOfLines={1}
+                                    style={[Fonts.lar]}>{convertTo12HourFormat(convertTo24HourFormat(endTime))}</Text>
                             </TouchableOpacity>
                         }
 
@@ -248,7 +254,6 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                                 showEndTimePicker
                                 &&
                                 <DateTimePicker
-                                    is24Hour={true}
                                     minimumDate={new Date(startTime)}
                                     themeVariant='light'
                                     style={styles.timePicker}
@@ -258,7 +263,6 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                                 />
                                 :
                                 <DateTimePicker
-                                    is24Hour={true}
                                     minimumDate={new Date(startTime)}
                                     themeVariant='light'
                                     style={styles.timePicker}
@@ -293,6 +297,8 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                 }
                 <CustomButton
                     loader={loaderButton}
+                    disabled={loaderForStartEndTime || slotCheckData?.status !== 200}
+                    btnColor={(loaderForStartEndTime || slotCheckData?.status !== 200) ? Colors.grayTransparent : Colors.PRIMARY}
                     onPressButton={onPressAddAvailability}
                     title={'Add Availability'} />
             </ScrollView>
@@ -347,13 +353,21 @@ const makeStyles = (H, W) => StyleSheet.create({
     dashContainer:
     {
         justifyContent: 'center',
-        // marginTop:H*0.017
+        // marginTop:H*0.017,
+        width: W * 0.3
     },
     redText:
     {
         alignSelf: 'center',
         textAlign: 'center',
         color: 'red',
+        ...Fonts.sm
+    },
+    greenText:
+    {
+        alignSelf: 'center',
+        textAlign: 'center',
+        color: 'green',
         ...Fonts.sm
     },
     pickerLabelContainer:
@@ -378,25 +392,23 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderColor: Colors.LIGHT_SILVER,
         backgroundColor: Colors.LIGHT_SILVER,
         borderWidth: 1,
-        width: W * 0.3,
         borderRadius: 5,
         marginHorizontal: W * 0.03,
         textAlign: 'center',
         alignItems: 'center',
-        padding: Spaces.vsm
-
+        paddingHorizontal: Spaces.sm,
+        alignSelf: 'flex-start'
     },
     timetext: {
         borderColor: Colors.LIGHT_SILVER,
         backgroundColor: Colors.LIGHT_SILVER,
-
         borderWidth: 1,
-        width: W * 0.2,
+        //width: W * 0.25,
         borderRadius: 5,
         marginHorizontal: W * 0.03,
         textAlign: 'center',
         alignItems: 'center',
-        padding: Spaces.vsm,
+        paddingHorizontal: Spaces.sm,
 
 
     }

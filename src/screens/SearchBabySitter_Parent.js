@@ -9,7 +9,7 @@ import Fonts from '../helper/Fonts';
 import Loader from '../components/Loader';
 import { useSelector } from 'react-redux';
 
-import { handleGetRequest, handlePostRequest } from '../helper/Utils';
+import { formatDate, formatDate_mmddyyyy, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import { useIsFocused } from '@react-navigation/native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 
@@ -23,7 +23,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
     const [loader, setLoader] = useState(true)
     const [users, setUsers] = useState([])
     const [searchText, setSearchText] = useState("")
-    const [bookingDate, setbookingDate] = useState(new Date())
+    const [bookingDate, setBookingDate] = useState(new Date())
 
     const selectedService = useSelector(state => state.global.selectedService)
 
@@ -33,18 +33,17 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         if (isFocused) {
             getUsers()
         }
-    }, [isFocused])
+    }, [isFocused, bookingDate])
 
     const getUsers = async () => {
-        const result = await handleGetRequest('users')
-        console.log("Results==========   ", result)
+        var formdata = new FormData()
+        formdata.append('date', formatDate(bookingDate))
+        const result = await handlePostRequest('filter_users', formdata)
         setBabySittersData(result)
 
         if (result?.status == '200') {
             setBabySittersData(result)
             setUsers(result?.users)
-        } else if (result?.status == '201') {
-            Alert.alert("Error", result?.message)
         }
         setLoader(false)
     }
@@ -62,7 +61,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
     };
 
     const handleNavigation = (userid, roleid) => {
-        navigation.navigate("ProfileOfSitterDuringBooking_Parent", { 'userID': userid })
+        navigation.navigate("ProfileOfSitterDuringBooking_Parent", { 'userID': userid, bookingDate: JSON.stringify(bookingDate) })
 
     }
 
@@ -107,12 +106,16 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                 />
             )
         }
-
     }
+
+    const onChangeDate = (time) => {
+        setBookingDate(time)
+    }
+
     const renderfilters = ({ item }) => {
         return (
             <Chip
-            style={styles.chip}
+                style={styles.chip}
                 selectedColor={Colors.blue}
                 onPress={() => onPressChip(item.service_name)}
                 selected={throwChipSelection(item.service_name)}
@@ -135,6 +138,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                     <RNDateTimePicker
                         style={styles.datePicker}
                         value={bookingDate}
+                        onChange={(a, time) => onChangeDate(time)}
                     />
                     <Searchbar
                         loading={false}
@@ -160,7 +164,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                 {
                     babySittersData?.users?.length == 0
                         ?
-                        <Text style={styles.nothingToShow}>No Data Found At This Moment!</Text>
+                        <Text style={styles.nothingToShow}>No Sitters are available for this date.</Text>
                         :
                         <FlatList
                             data={users}
@@ -226,7 +230,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     textQuery:
     {
         margin: Spaces.sm,
-        color:Colors.BlackTransparent
+        color: Colors.BlackTransparent
     },
     datePicker:
     {
@@ -234,6 +238,6 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     chip:
     {
-      
+
     }
 })

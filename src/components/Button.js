@@ -1,16 +1,17 @@
-import { StyleSheet, Text, Touchable, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native'
 import React from 'react'
 import Colors from '../helper/Colors'
 import Spaces from '../helper/Spaces'
-import { ActivityIndicator } from 'react-native-paper'
+import Fonts from '../helper/Fonts'
+import { ActivityIndicator, Text } from 'react-native-paper'
 
-const CustomButton = ({ onPressButton, title, style, btnColor = Colors.buttoncolor, loader }) => {
+const CustomButton = ({ onPressButton, title, style, btnColor = Colors.buttoncolor, loader, disabled = null }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
     return (
         <TouchableOpacity
-            disabled={loader}
+            disabled={disabled || loader}
             style={[styles.button, style, { backgroundColor: btnColor }]}
             onPress={onPressButton}>
             {
@@ -45,7 +46,6 @@ const makeStyles = (H, W) => StyleSheet.create({
     text:
     {
         textAlign: 'center',
-        fontFamily: "Poppins-Medium",
-        fontSize: 15
+        ...Fonts.medBold
     }
 })

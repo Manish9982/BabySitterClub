@@ -5,38 +5,49 @@ import Spaces from '../helper/Spaces'
 import Fonts from '../helper/Fonts'
 import Colors from '../helper/Colors'
 import Loader from '../components/Loader'
-import { handlePostRequest } from '../helper/Utils'
+import { convertTimeRangeTo12HourFormat, formatDate, handlePostRequest } from '../helper/Utils'
 import TagIcon from '../components/TagIcon'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 
 
 const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
 
-    console.log("UserID =    ", route?.params?.userID)
+    const { userID, bookingDate } = route.params
+
+    console.log("UserID =    ", userID)
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
 
     const [profiledetailsdata, setProfiledetailsdata] = useState()
     const [loader, setLoader] = useState(true)
-    const [slotsDate, setSlotsDate] = useState(new Date())
+    const [slotsDate, setSlotsDate] = useState(new Date(JSON.parse(bookingDate)))
     const [serviceFilterId, setServiceFilterId] = useState(null);
 
     useEffect(() => {
         getUsersProfileDetails()
-    }, [])
+    }, [slotsDate])
 
-    const onPressBookNow = () => {
-        navigation.navigate('BookingConfirmation_Parent')
+    const onPressBookNow = (time, amount) => {
+        navigation.navigate('BookingConfirmation_Parent', {
+            bookingDetails: JSON.stringify({
+                name: `${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`,
+                date: slotsDate,
+                time: time,
+                price: amount
+            })
+        })
     }
 
     const getUsersProfileDetails = async () => {
         const formdata = new FormData()
-        formdata.append('userId', route?.params?.userID)
+        formdata.append('userId', userID)
+        formdata.append('date', formatDate(slotsDate))
         const result = await handlePostRequest('user_details', formdata)
 
         if (result?.status == '200') {
             setProfiledetailsdata(result)
+            console.log(result)
         } else if (result?.status == '201') {
             Alert.alert("Error", result?.message)
             navigation.goBack()
@@ -53,7 +64,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
     const SlotItem = ({ item }) => (
         <View style={styles.slotItem}>
             <Text>
-                {item?.duration}
+                {convertTimeRangeTo12HourFormat(item?.duration)}
                 <Text> (
                     {item?.service_id == 1 && <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />}
                     {item?.service_id == 2 && <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />}
@@ -63,7 +74,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
             </Text>
             {
                 item?.status === 0 ?
-                    <TouchableOpacity onPress={onPressBookNow}>
+                    <TouchableOpacity onPress={() => onPressBookNow(convertTimeRangeTo12HourFormat(item?.duration), item?.amount)}>
                         <Text style={{ textDecorationLine: 'underline', color: Colors.blue }}>
                             Book Now
                         </Text>
@@ -107,10 +118,6 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         <Text style={styles.text}>
                             {profiledetailsdata?.userDetails?.description}
                         </Text>
-                        {/* <Text style={styles.text}>
-                            Characteristics of the children
-                            <Text style={styles.text}>Curious, Funny, Intelligent</Text>
-                        </Text> */}
                         <Text>
                             <Text style={styles.subheading}>Favorited: </Text>
                             <Text style={[styles.text, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.no_of_favourite} times</Text>
@@ -126,14 +133,14 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         </Text>
                         <Text style={styles.textneedbabysittertitle}>Availability</Text>
                         <Divider style={styles.divider} />
+                        <RNDateTimePicker
+                            value={slotsDate}
+                            onChange={(a, time) => setSlotsDate(time)}
+                        />
                         {profiledetailsdata?.userSlots?.length == 0
                             ?
-                            <Text>You have not added your availability</Text>
+                            <Text style={styles.errorText}>No slots are available for this date</Text>
                             :
-                            <View>
-                                <RNDateTimePicker
-                                value={slotsDate}
-                                />
                             <SegmentedButtons
                                 style={styles.segment}
                                 value={serviceFilterId}
@@ -154,7 +161,6 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                                     },
                                 ]}
                             />
-                            </View>
                         }
                         {profiledetailsdata?.userSlots?.map((section, index) => {
                             if (section?.service?.includes(Number.parseInt(serviceFilterId, 10)) || serviceFilterId == null) {
@@ -171,18 +177,6 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         })}
                     </View>
                 </ScrollView>
-                {/* <View style={styles.floatingView}>
-                    <View style={styles.secondaryFloatingView}>
-                        <Text style={[styles.text, styles.floatText,
-
-                        { ...Fonts.larBold }]}>{`$${profiledetailsdata?.userDetails?.hour_price}/hrs`}</Text>
-
-                        <Text style={[styles.subheading, styles.floatText]}>Total Price</Text>
-                    </View>
-                    <View style={styles.secondaryFloatingView}>
-                        <SmallWhiteButton title={`Contact ${profiledetailsdata?.userDetails?.first_name}`} />
-                    </View>
-                </View> */}
             </View>
     )
 }
@@ -200,7 +194,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     heading: {
         ...Fonts.larBold,
         marginBottom: Spaces.med,
-        color: "white"
+        color: Colors.black
     },
     textneedbabysittertitle: {
         ...Fonts.larMedium,
@@ -226,7 +220,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     textSecondary:
     {
         ...Fonts.sm,
-        color: Colors.white,
+        color: Colors.black,
         marginBottom: Spaces.med,
         width: W * 0.7
     },
@@ -306,5 +300,10 @@ const makeStyles = (H, W) => StyleSheet.create({
     segment:
     {
         margin: Spaces.sm
+    },
+    errorText:
+    {
+        textAlign: 'center',
+        marginTop: Spaces.xxl
     }
 }) 

@@ -6,9 +6,10 @@ import Spaces from '../helper/Spaces';
 import { handleGetRequest, handlePostRequest } from '../helper/Utils';
 import { useIsFocused } from '@react-navigation/native';
 import Loader from '../components/Loader';
+import CustomButton from '../components/Button';
 
 const ManageAddress = ({ navigation }) => {
-    const [adressdata, setAdressdata] = useState('')
+    const [addressdata, setAddressdata] = useState('')
     const [loader, setLoader] = useState(true)
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
@@ -25,8 +26,13 @@ const ManageAddress = ({ navigation }) => {
 
     const getAddress = async () => {
         const result = await handleGetRequest('address_get')
-        setAdressdata(result)
+        setAddressdata(result)
+        console.log(result)
         setLoader(false)
+    }
+
+    const onPressAddAdress = () => {
+        navigation.navigate('AddAddress')
     }
 
     const deleteAddress = async (id) => {
@@ -38,7 +44,7 @@ const ManageAddress = ({ navigation }) => {
         } else if (result.status == "201") {
             Alert.alert("Error", result.message)
         } else {
-            Alert.alert("Alert", result.message)
+            Alert.alert("Info", result.message)
         }
         setLoader(false)
 
@@ -46,7 +52,7 @@ const ManageAddress = ({ navigation }) => {
 
     const onPressClick = (id) => {
 
-        Alert.alert('Alert', "Are you sure, you want to delete?", [
+        Alert.alert('Delete Address', "Are you sure, you want to delete this address?", [
             {
                 text: 'Cancel',
                 onPress: () => { },
@@ -81,31 +87,15 @@ const ManageAddress = ({ navigation }) => {
             <Loader />
             :
             <View style={styles.container}>
-                <View style={[styles.addressCard]}>
-                    <TouchableOpacity
-
-                        onPress={() => {
-                            navigation.navigate("AddAddress")
-                        }}
-                        style={[styles.addButton, Fonts.larSemiBold]}
-                    >
-                        <Image
-                            source={require('../assets/images/plus.png')}
-                            style={styles.leftIcon}
-                        />
-                        <Text style={[styles.buttonText, Fonts.larMedium]}>Add Address</Text>
-                        
-                        <Image
-                            source={require('../assets/images/forwordarrow.png')}
-                            style={styles.rightIcon}
-                        />
-                    </TouchableOpacity>
-                </View>
                 <Text style={[styles.savedAddressesTitle, Fonts.larSemiBold]}>Saved Addresses</Text>
                 <FlatList
-                    data={adressdata?.data}
+                    data={addressdata?.data}
                     keyExtractor={(item) => item.id}
                     renderItem={renderAddressItem}
+                />
+                <CustomButton
+                    onPressButton={onPressAddAdress}
+                    title={'Add new address'}
                 />
             </View>
     );
@@ -128,21 +118,16 @@ const makeStyles = (H, W) => StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'transparent',
         borderWidth: 0,
-
-
+        justifyContent: 'space-between',
     },
     leftIcon: {
         width: 18,
         height: 18,
-        marginRight: Spaces.med,
-        tintColor: Colors.LIGHT_BLUE
-
-        // backgroundColor:'red'
+        tintColor: Colors.LIGHT_BLUE,
     },
     rightIcon: {
         width: 18,
         height: 18,
-        left: W * 0.35,
         tintColor: Colors.LIGHT_BLUE
     },
     rightIconaddresslist: {
@@ -150,8 +135,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         height: 18,
     },
     buttonText: {
-        color: '#007AFF',
-        marginLeft: W * 0.03
+        marginLeft: W * 0.02
     },
     savedAddressesTitle: {
         marginBottom: Spaces.med,
@@ -166,17 +150,9 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderRadius: Spaces.sm,
         marginBottom: Spaces.med,
         backgroundColor: 'white',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
     },
     addaddressCard: {
         flexDirection: 'row',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
         justifyContent: 'space-between'
     },
     addressTitle: {
