@@ -59,17 +59,6 @@ export default Fonts = {
         // fontWeight:'600',
         fontFamily: "Poppins-Medium"
     },
-
-
-
-
-
-
-
-
-
-
-
     xlSemiBold: {
         fontSize: 18,
         fontWeight: '600',

@@ -8,6 +8,7 @@ import Loader from '../components/Loader'
 import { convertTimeRangeTo12HourFormat, formatDate, handlePostRequest } from '../helper/Utils'
 import TagIcon from '../components/TagIcon'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
+import CustomDateTimePicker from '../components/CustomDateTimePicker'
 
 
 const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
@@ -60,6 +61,14 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
             <Text style={{ ...Fonts.medBold }}>{section.date}</Text>
         </View>
     );
+
+    const onChangeAndroidPicker = (a, time) => {
+        setSlotsDate(time)
+    }
+
+    const onChangeIosPicker = (a, time) => {
+        setSlotsDate(time)
+    }
 
     const SlotItem = ({ item }) => (
         <View style={styles.slotItem}>
@@ -133,9 +142,12 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         </Text>
                         <Text style={styles.textneedbabysittertitle}>Availability</Text>
                         <Divider style={styles.divider} />
-                        <RNDateTimePicker
+                        <CustomDateTimePicker
+                            alignSelf='flex-end'
+                            style={styles.datePicker}
                             value={slotsDate}
-                            onChange={(a, time) => setSlotsDate(time)}
+                            onChangeAndroid={onChangeAndroidPicker}
+                            onChangeIos={onChangeIosPicker}
                         />
                         {profiledetailsdata?.userSlots?.length == 0
                             ?
@@ -148,16 +160,16 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                                 buttons={[
                                     {
                                         value: '1',
-                                        label: <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
+                                        icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
 
                                     },
                                     {
                                         value: '3',
-                                        label: <TagIcon name="home-outline" label="Homesit" style={styles.tag} />,
+                                        icon: () => <TagIcon name="home-outline" label="Homesit" style={styles.tag} />,
                                     },
                                     {
                                         value: '2',
-                                        label: <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />,
+                                        icon: () => <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />,
                                     },
                                 ]}
                             />

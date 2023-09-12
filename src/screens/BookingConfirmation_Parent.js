@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, Button, Alert, useWindowDimensions } from 'react-native';
 import Colors from '../helper/Colors';
 import CustomButton from '../components/Button';
 import { Picker } from '@react-native-picker/picker';
 import Fonts from '../helper/Fonts';
-import { formatDate, formatDate_mmddyyyy, handleGetRequest } from '../helper/Utils';
+import { Shadows, formatDate_mmddyyyy, handleGetRequest } from '../helper/Utils';
+import Spaces from '../helper/Spaces';
 
 const BookingConfirmation_Parent = ({ route, navigation }) => {
+
+  const H = useWindowDimensions().height
+  const W = useWindowDimensions().width
+
   const [addressdata, setAddressdata] = useState()
   const [loader, setLoader] = useState(true)
   const [selectedAddress, setSelectedAddress] = useState('')
@@ -37,25 +42,33 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
       }]
     )
   }
-
+  const styles = makeStyles(H, W)
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Please review your booking and make sure all details are correct :</Text>
+      <Text style={styles.header}>Please review your booking and make sure all details are correct:</Text>
       <View style={styles.detailsContainer}>
 
-        <Text style={styles.label}>Name:</Text>
-        <Text style={styles.value}>{details.name}</Text>
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Name:</Text>
+          <Text style={styles.value}>{details.name}</Text>
+        </View>
 
-        <Text style={styles.label}>Date:</Text>
-        <Text style={styles.value}>{formatDate_mmddyyyy(details.date)}</Text>
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Date:</Text>
+          <Text style={styles.value}>{formatDate_mmddyyyy(details.date)}</Text>
+        </View>
 
-        <Text style={styles.label}>Time:</Text>
-        <Text style={styles.value}>{details.time}</Text>
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Time:</Text>
+          <Text style={styles.value}>{details.time}</Text>
+        </View>
 
-        <Text style={styles.label}>Price:</Text>
-        <Text style={styles.value}>$ {details.price}</Text>
+        <View style={styles.detailRow}>
+          <Text style={styles.label}>Price:</Text>
+          <Text style={styles.value}>$ {details.price}</Text>
+        </View>
       </View>
-      <View style={styles.detailsContainer}>
+      <View style={styles.addressContainer}>
         <Text style={styles.label}>Address:</Text>
         <Picker selectedValue={selectedAddress}
           onValueChange={(t) => setSelectedAddress(t)}
@@ -75,35 +88,51 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (H, W) => StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
   },
-  header: {
-    ...Fonts.medBold,
-    marginBottom: 20,
-  },
-  detailsContainer: {
-    width: '80%',
-    padding: 10,
-    backgroundColor: Colors.white,
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  value: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
   button: {
     marginTop: 20,
   },
+  header: {
+    ...Fonts.larMedium,
+    marginBottom: 20,
+    textAlign: 'center',
+    color: Colors.selectedcolor
+  },
+  detailsContainer: {
+    width: W*0.7,
+    ...Shadows,
+    backgroundColor: Colors.PRIMARY, // Change the background color to your preference
+    borderRadius: 10,
+    padding: Spaces.xxl,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spaces.med,
+  },
+  label: {
+    ...Fonts.medBold,
+    color: 'black', // Change the color to your preference
+  },
+  value: {
+    ...Fonts.med,
+    color: Colors.DEEP_GRAY // Change the color to your preference
+  },
+  addressContainer:
+  {
+    width: W*0.7,
+    backgroundColor: Colors.white,
+    margin: Spaces.med,
+    padding: Spaces.med,
+    borderRadius: 10,
+  }
 });
 
 export default BookingConfirmation_Parent
