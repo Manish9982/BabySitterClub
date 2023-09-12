@@ -29,7 +29,7 @@ const Bookings = ({ navigation }) => {
     // Add more booking data as needed
   ];
 
-  const [getbookingdata, setGetbookingdata] = useState()
+  const [bookingdata, setBookingData] = useState()
 
   const onPressBookingCard = () => {
     navigation.navigate('ViewBookings')
@@ -49,8 +49,7 @@ const Bookings = ({ navigation }) => {
 
   const getBookings = async () => {
     const result = await handleGetRequest('get_booking')
-    console.log("ResultsBOOKINGSSSSSSSSSSSSSSSSSSSSSSSSSSSSS==========   ", result)
-    setGetbookingdata(result)
+    setBookingData(result)
     if (result?.status == '200') {
     } else if (result?.status == '201') {
         Alert.alert("Alert", result?.message)
@@ -61,7 +60,7 @@ const Bookings = ({ navigation }) => {
   const renderBookings = ({ item }) => (
     <BookingCard
       booking={item}
-      profileURL={getbookingdata?.url}
+      profileURL={bookingdata?.url}
       onItemPress={() => { onClickHandle(item.id) }}
     />
 
@@ -72,7 +71,7 @@ const Bookings = ({ navigation }) => {
     <View style={styles.container}>
 
       <FlatList
-        data={getbookingdata?.data}
+        data={bookingdata?.data}
         renderItem={renderBookings}
         keyExtractor={(item) => item.id.toString()}
       />

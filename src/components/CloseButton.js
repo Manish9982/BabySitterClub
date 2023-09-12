@@ -1,4 +1,4 @@
-import { View, Text, Touchable, TouchableOpacity, StyleSheet, Alert } from 'react-native'
+import { TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import React, { useState } from 'react'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import { ActivityIndicator } from 'react-native-paper'
@@ -20,22 +20,27 @@ const CloseButton = ({ onPress, size = 20, id, callBack }) => {
     }
 
 
-    const showDeletPopup = async () => {
+    const showDeletePopup = async (time) => {
 
-        Alert.alert('Delete Slot Alert', "Delete this slot availability or want to delete all future slot availability also?", [
+        Alert.alert('Confirm Delete', "Do you want to delete just this slot or all available future slots for this time?", [
             {
-                text: 'Delete All',
+                text: 'Delete all',
                 onPress: () => { deleteSlot("true") },
-                style: 'cancel',
-               
+                //style: 'cancel',
             },
-
-            { text: 'Delete', onPress: () => deleteSlot("false") },
+            {
+                text: 'Delete this',
+                onPress: () => deleteSlot("false")
+            },
+            {
+                text: 'Cancel',
+                style: 'cancel'
+            },
         ],
-        {
-            cancelable: true,
-        }
-        
+            {
+                cancelable: true,
+            }
+
         );
     }
 
@@ -44,11 +49,13 @@ const CloseButton = ({ onPress, size = 20, id, callBack }) => {
         <TouchableOpacity
             disabled={loader}
             style={styles.closeButton}
-            onPress={() => showDeletPopup()}>
-            {loader ?
-                <ActivityIndicator size={size} color='red' />
-                :
-                <AntDesign name='closecircleo' color='red' size={size} />}
+            onPress={() => showDeletePopup()}>
+            {
+                loader ?
+                    <ActivityIndicator size={size} color='red' />
+                    :
+                    <AntDesign name='closecircleo' color='red' size={size} />
+            }
         </TouchableOpacity>
     )
 }

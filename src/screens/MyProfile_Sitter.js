@@ -250,33 +250,33 @@ const MyProfile_Sitter = ({ navigation }) => {
                             buttons={[
                                 {
                                     value: '1',
-                                    label: <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
+                                    icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
 
                                 },
                                 {
                                     value: '3',
-                                    label: <TagIcon name="home-outline" label="Homesit" style={styles.tag} />,
+                                    icon: () => <TagIcon name="home-outline" label="Homesit" style={styles.tag} />,
                                 },
                                 {
                                     value: '2',
-                                    label: <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />,
+                                    icon: () => <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />,
                                 },
                             ]}
                         />
                     }
                     {userdata?.userSlots?.map((section, index) => {
-                        if(section?.service?.includes(Number.parseInt(serviceFilterId, 10))||serviceFilterId == null)
-                        {
+                        if (section?.service?.includes(Number.parseInt(serviceFilterId, 10)) || serviceFilterId == null) {
                             return (
                                 <View key={index}>
                                     <DateSection section={section} />
                                     {section?.times?.map((time) => {
                                         if (time?.service_id == serviceFilterId || serviceFilterId == null) {
                                             return (<SlotItem key={time.id} item={time} />)
-                                        }})}
+                                        }
+                                    })}
                                 </View>)
                         }
-                        })}
+                    })}
                 </ScrollView>
 
                 <CustomButton
@@ -521,7 +521,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         justifyContent: 'center',
         alignItems: 'center',
-     
+
     },
     segment:
     {

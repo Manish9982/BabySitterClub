@@ -5,7 +5,7 @@ export default Colors = {
     'buttoncolor': '#FDCC92',
     'selectedcolor': '#FF6D82',
     'white': '#fff',
-    'grayTransparent': 'rgba(151, 153, 152, 0.38)',
+    'grayTransparent': 'rgba(151, 153, 152, 0.5)',
     'gray': 'rgba(151, 153, 152, 1)',
     'black': '#000',
     'Secondary': '#FF6D82',
