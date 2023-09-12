@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { formatDate, formatDate_mmddyyyy, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import { useIsFocused } from '@react-navigation/native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
+import CustomDateTimePicker from '../components/CustomDateTimePicker';
 
 const SearchBabySitter_Parent = ({ navigation }) => {
     const H = useWindowDimensions().height
@@ -24,6 +25,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
     const [users, setUsers] = useState([])
     const [searchText, setSearchText] = useState("")
     const [bookingDate, setBookingDate] = useState(new Date())
+    const [showPicker, setShowPicker] = useState(false)
 
     const selectedService = useSelector(state => state.global.selectedService)
 
@@ -102,14 +104,17 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                     isFavourite={item?.isFavourite}
                     onPressFavourite={() => handleFavourite(item?.Id)}
                     onPressItemSelected={() => handleNavigation(item?.Id)}
-
                 />
             )
         }
     }
 
-    const onChangeDate = (time) => {
-        setBookingDate(time)
+    const onChangeIosPicker = (a, date) => {
+        setBookingDate(date)
+    }
+    const onChangeAndroidPicker = (a, date) => {
+        console.log('date====>', date)
+        setBookingDate(date)
     }
 
     const renderfilters = ({ item }) => {
@@ -135,10 +140,18 @@ const SearchBabySitter_Parent = ({ navigation }) => {
             <View style={{ flex: 1 }}>
                 <View style={styles.upperconatiner}>
                     <Text style={styles.textQuery}>When would you like to schedule a sitter?</Text>
-                    <RNDateTimePicker
+                    {/* <RNDateTimePicker
                         style={styles.datePicker}
                         value={bookingDate}
                         onChange={(a, time) => onChangeDate(time)}
+                    /> */}
+                    <CustomDateTimePicker
+                        labelAndroid={'Choose Date'}
+                        show={showPicker}
+                        style={styles.datePicker}
+                        value={bookingDate}
+                        onChangeAndroid={onChangeAndroidPicker}
+                        onChangeIos={onChangeIosPicker}
                     />
                     <Searchbar
                         loading={false}
@@ -229,7 +242,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     textQuery:
     {
-        margin: Spaces.sm,
+        marginTop: Spaces.sm,
         color: Colors.BlackTransparent
     },
     datePicker:
