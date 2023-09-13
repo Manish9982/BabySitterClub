@@ -50,7 +50,7 @@ const Router = () => {
                     }}>
                         <Stack.Screen name="BottomTabsParent" component={BottomTabsParent} options={{ headerShown: false }} />
                         <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
-                        <Stack.Screen name="ProfileOfSitterDuringBooking_Parent" component={ProfileOfSitterDuringBooking_Parent} options={{}} />
+                        <Stack.Screen name="ProfileOfSitterDuringBooking_Parent" component={ProfileOfSitterDuringBooking_Parent} options={{headerShown:true, headerTitle:'Profile Details'}} />
                         <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
                         <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
                         <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
