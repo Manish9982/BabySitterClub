@@ -107,7 +107,6 @@ const Register = ({ navigation, route }) => {
                         />
                         <TextInputComponent
                             secureTextEntry={true}
-
                             placeholder='Enter Password'
                             value={password}
                             onChangeText={(text) => setPassword(text)}

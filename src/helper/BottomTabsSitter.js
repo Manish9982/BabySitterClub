@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Bookings from '../screens/Bookings';
 import Messages from '../screens/Messages';
 import Account from '../screens/Account';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import Dashboard_Sitter from '../screens/Dashboard_Sitter';
+import Bookings_Sitter from '../screens/Bookings_Sitter';
 
 const BottomTabsParent = () => {
 
@@ -19,12 +19,12 @@ const BottomTabsParent = () => {
             <Tab.Screen name="Home" component={Dashboard_Sitter} options={{
                 tabBarIcon: ({ color, size }) => <AntDesign name="home" size={size} color={color} />
             }} />
-            <Tab.Screen name="Bookings" component={Bookings} options={{
+            <Tab.Screen name="Bookings" component={Bookings_Sitter} options={{
                 tabBarIcon: ({ color, size }) => <AntDesign name="calendar" size={size} color={color} />
             }} />
-            <Tab.Screen name="Messages" component={Messages} options={{
+            {/* <Tab.Screen name="Messages" component={Messages} options={{
                 tabBarIcon: ({ color, size }) => <AntDesign name="mail" size={size} color={color} />
-            }} />
+            }} /> */}
             <Tab.Screen name="Account" component={Account} options={{
                 tabBarIcon: ({ color, size }) => <AntDesign name="user" size={size} color={color} />
             }} />

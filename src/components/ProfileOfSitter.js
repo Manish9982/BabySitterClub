@@ -61,14 +61,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     cardContainer: {
         flexWrap: 'wrap',
-        backgroundColor: 'white',
         padding: Spaces.lar,
         borderRadius: 10,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
-        elevation: 5,
         marginBottom: Spaces.med,
     },
     profileImage: {

@@ -1,5 +1,5 @@
 
-import { Alert, FlatList, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Alert, FlatList, ImageBackground, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Chip, Searchbar, Text } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
@@ -137,7 +137,9 @@ const SearchBabySitter_Parent = ({ navigation }) => {
             ?
             <Loader />
             :
-            <View style={{ flex: 1 }}>
+            <ImageBackground
+                source={require('../assets/images/background.png')}
+                style={{ flex: 1 }}>
                 <View style={styles.upperconatiner}>
                     <Text style={styles.textQuery}>When would you like to schedule a sitter?</Text>
                     {/* <RNDateTimePicker
@@ -186,7 +188,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                         />
                 }
 
-            </View>
+            </ImageBackground>
     );
 };
 
@@ -214,6 +216,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         width: W * 0.9,
         height: H * 0.07,
+        marginVertical: Spaces.sm
     },
     filterBox:
     {

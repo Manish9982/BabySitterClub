@@ -34,9 +34,9 @@ const ChooseUserType = ({ navigation, route }) => {
         navigation.navigate('Services')
     }
 
-    const renderSubServices = ({ item }) => {
+    const renderSubServices = ({ item, index }) => {
         return (
-            <CustomButton title={item?.name}
+            <CustomButton title={index == 1 ? 'Care Seeker' : item?.name}
                 onPressButton={() => onPressSubService(item?.id)}
             />
         )
@@ -56,7 +56,7 @@ const ChooseUserType = ({ navigation, route }) => {
                     <View style={styles.middlecontainer}>
 
                         <Text style={[styles.text, Fonts.larBold]}>
-                            Login As
+                            Are you a Care Provider or Care Seeker?
                         </Text>
                         <FlatList
                             contentContainerStyle={styles.box}
@@ -67,7 +67,7 @@ const ChooseUserType = ({ navigation, route }) => {
                         <Text style={[styles.textBottom, Fonts.smSemiBold]}>
                             Note:
                             Choose "Care Provider" to offer your services and make a difference.{'\n\n'}
-                            Choose "Find Care" to find trusted caregivers who meet your needs.</Text>
+                            Choose "Care Seeker" to find trusted caregivers who meet your needs.</Text>
                     </View>
                 )
             }
@@ -86,7 +86,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     box: {
         justifyContent: 'center',
-       // backgroundColor: Colors.grayTransparent,
+        // backgroundColor: Colors.grayTransparent,
         padding: Spaces.xl,
         borderRadius: 20,
         alignSelf: 'center',

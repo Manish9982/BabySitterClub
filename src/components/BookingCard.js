@@ -1,76 +1,104 @@
 import React from 'react';
-import { View, Image, Text, StyleSheet, useWindowDimensions, TouchableOpacity } from 'react-native';
-import Fonts from '../helper/Fonts';
+import { View, Image, StyleSheet, useWindowDimensions } from 'react-native';
+import { Divider, Text } from 'react-native-paper';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
+import { Shadows, convertTimeRangeTo12HourFormat, formatDate, formatDateWithTime, formatDate_mmddyyyy } from '../helper/Utils';
 
-const BookingCard = ({ profileURL,booking, onItemPress }) => {
+const BookingCard = ({ booking, profileURL }) => {
 
-    const H = useWindowDimensions().height
     const W = useWindowDimensions().width
-    const styles = makeStyles(H, W)
-    return (
 
-        <TouchableOpacity
-            onPress={onItemPress}
-            style={styles.cardContainer}>
-            <View style={styles.leftContent}>
+    const styles = makeStyles(W)
+    return (
+        <View style={[styles.cardContainer, { backgroundColor: Colors.PRIMARY }]}>
+            <View style={styles.profileContainer}>
                 <Image
-                    defaultSource={require('../assets/images/mother.png')}
-                    source={{ uri: `${profileURL}${booking.picture}` }} style={styles.profileImage} />
+                    source={{ uri: `${profileURL}${booking?.picture}` }} // Replace with your actual image path
+                    style={styles.profileImage}
+                />
             </View>
-            <View style={styles.middleContent}>
-                <Text style={[styles.bookingName, Fonts.xlSemiBold]}>{`${booking?.first_name} ${booking?.last_name}`}</Text>
-                <Text style={[styles.bookingStatus, Fonts.medMedium]}>{booking?.service}</Text>
-                <Text style={[styles.bookingStatus, Fonts.medMedium]}>$ {booking.hour_price}</Text>
+            <View style={styles.detailsContainer}>
+                <View style={styles.detail}>
+                    <Text style={styles.label}>Name:  </Text>
+                    <Text style={styles.value}>{booking?.first_name} {booking?.last_name}</Text>
+                </View>
+                <View style={styles.detail}>
+                    <Text style={styles.label}>Slot Date:  </Text>
+                    <Text style={styles.value}>{formatDate_mmddyyyy(booking?.slot_date)}</Text>
+                </View>
+                <View style={styles.detail}>
+                    <Text style={styles.label}>Slot Time:  </Text>
+                    <Text style={styles.value}>{convertTimeRangeTo12HourFormat(booking?.slot_id)}</Text>
+                </View>
+                <View style={styles.detail}>
+                    <Text style={styles.label}>Service:  </Text>
+                    <Text style={styles.value}>{booking?.booked_service_name}</Text>
+                </View>
+                <View style={styles.detail}>
+                    <Text style={styles.label}>Duration:  </Text>
+                    <Text style={styles.value}>{booking?.time_diffrence}</Text>
+                </View>
+                <View style={styles.detail}>
+                    <Text style={styles.label}>Price:  </Text>
+                    <Text style={styles.value}>$ {booking?.amount}</Text>
+                </View>
+                <View style={styles.detail}>
+                    <Text style={styles.label}>Payment Status:  </Text>
+                    {
+                        // (booking?.status == 1)
+                        //     ?
+                        <Text style={[styles.value, styles.paymentStatus]}>
+                            Done ✅
+                        </Text>
+                        // :
+                        // <Text style={[styles.value, styles.paymentStatus]}>
+                        //     Pending ⏳
+                        // </Text>
+                    }
+                </View>
+                <View style={styles.detail}>
+                    <Text style={styles.label}>Created At:  </Text>
+                    <Text style={styles.value}>{formatDateWithTime(booking?.created_at)}</Text>
+                </View>
             </View>
-            <View
-                style={styles.rightContent}>
-                <Text style={[styles.viewBookingText, Fonts.smMedium]}>View Booking</Text>
-            </View>
-        </TouchableOpacity>
+        </View>
     );
 };
 
-const makeStyles = (H, W) => StyleSheet.create({
+const makeStyles = (W) => StyleSheet.create({
     cardContainer: {
-        flexDirection: 'row',
+        width: W * 0.75,
+        margin: Spaces.med,
+        backgroundColor: Colors.PRIMARY,
+        borderRadius: 8,
+        ...Shadows
+    },
+    profileContainer: {
+        justifyContent: 'center',
         alignItems: 'center',
-        padding: Spaces.lar,
-        backgroundColor: Colors.white,
-        margin: Spaces.sm,
-        borderColor: Colors.blue,
-        borderWidth: 0.6,
-        borderRadius: 10
-    },
-    leftContent: {
-        flex: 1,
-        alignItems: 'center',
-    },
-    middleContent: {
-        flex: 3,
-        paddingHorizontal: Spaces.med,
-    },
-    rightContent: {
-        flex: 1,
-        alignItems: 'flex-end',
+        paddingTop: 16,
     },
     profileImage: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        marginRight: Spaces.med,
-        borderWidth: 0.6,
+        width: 80, // Adjust the width and height as needed
+        height: 80,
+        borderRadius: 40, // To make it circular
     },
-    bookingName: {
-        color: "black"
+    detailsContainer: {
+        padding: 16,
     },
-    bookingStatus: {
-        color: Colors.buttoncolor,
+    detail: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 8,
     },
-    viewBookingText: {
-        textDecorationLine: 'underline',
-        color: Colors.buttoncolor
+    label: {
+        fontWeight: 'bold',
+    },
+    value: {},
+    paymentStatus: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
 });
 

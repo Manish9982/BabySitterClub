@@ -1,13 +1,12 @@
-import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Alert, Image, ImageBackground, ScrollView, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Divider, SegmentedButtons, Text } from 'react-native-paper'
 import Spaces from '../helper/Spaces'
 import Fonts from '../helper/Fonts'
 import Colors from '../helper/Colors'
 import Loader from '../components/Loader'
-import { convertTimeRangeTo12HourFormat, formatDate, handlePostRequest } from '../helper/Utils'
+import { convertTimeRangeTo12HourFormat, formatDate, formatDateProfilePageDate, handlePostRequest } from '../helper/Utils'
 import TagIcon from '../components/TagIcon'
-import RNDateTimePicker from '@react-native-community/datetimepicker'
 import CustomDateTimePicker from '../components/CustomDateTimePicker'
 
 
@@ -29,13 +28,16 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
         getUsersProfileDetails()
     }, [slotsDate])
 
-    const onPressBookNow = (time, amount) => {
+    const onPressBookNow = (time, amount, slotId, price) => {
         navigation.navigate('BookingConfirmation_Parent', {
             bookingDetails: JSON.stringify({
                 name: `${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`,
                 date: slotsDate,
                 time: time,
-                price: amount
+                price: amount,
+                slot_id: slotId,
+                amount: price,
+                user_id:userID,
             })
         })
     }
@@ -58,7 +60,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
 
     const DateSection = ({ section }) => (
         <View style={styles.datesection}>
-            <Text style={{ ...Fonts.medBold }}>{section.date}</Text>
+            <Text style={{ ...Fonts.medBold }}>{formatDateProfilePageDate(section.date)}</Text>
         </View>
     );
 
@@ -83,7 +85,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
             </Text>
             {
                 item?.status === 0 ?
-                    <TouchableOpacity onPress={() => onPressBookNow(convertTimeRangeTo12HourFormat(item?.duration), item?.amount)}>
+                    <TouchableOpacity onPress={() => onPressBookNow(convertTimeRangeTo12HourFormat(item?.duration), item?.amount, item?.id, item?.amount)}>
                         <Text style={{ textDecorationLine: 'underline', color: Colors.blue }}>
                             Book Now
                         </Text>
@@ -103,7 +105,9 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
             ?
             <Loader />
             :
-            <View style={styles.container}>
+            <ImageBackground 
+            source={require('../assets/images/background.png')}
+            style={styles.container}>
                 <ScrollView
                     contentContainerStyle={styles.contentContainerStyle}
                     style={styles.container}>
@@ -189,7 +193,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         })}
                     </View>
                 </ScrollView>
-            </View>
+            </ImageBackground>
     )
 }
 
