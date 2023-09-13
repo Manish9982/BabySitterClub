@@ -160,18 +160,56 @@ export function convertTo12HourFormat(time24) {
 
 export function convertTimeRangeTo12HourFormat(timeRange) {
     const [startTime, endTime] = timeRange.split(' - ');
-  
+
     // Helper function to convert a single time to 12-hour format
     function convertTo12HourFormat(time) {
-      const [hours, minutes] = time.split(':');
-      const hoursInt = parseInt(hours);
-      const period = hoursInt >= 12 ? 'PM' : 'AM';
-      const hours12 = hoursInt % 12 || 12;
-      return `${String(hours12).padStart(2, '0')}:${minutes} ${period}`;
+        const [hours, minutes] = time.split(':');
+        const hoursInt = parseInt(hours);
+        const period = hoursInt >= 12 ? 'PM' : 'AM';
+        const hours12 = hoursInt % 12 || 12;
+        return `${String(hours12).padStart(2, '0')}:${minutes} ${period}`;
     }
-  
+
     const convertedStartTime = convertTo12HourFormat(startTime);
     const convertedEndTime = convertTo12HourFormat(endTime);
-  
+
     return `${convertedStartTime} - ${convertedEndTime}`;
+}
+
+export function formatDateWithTime(inputDate) {
+    // Create a Date object from the input string
+    const date = new Date(inputDate);
+
+    // Define month names
+    const monthNames = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
+    ];
+
+    // Extract date components
+    const year = date.getFullYear();
+    const month = monthNames[date.getMonth()];
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    // Determine AM/PM
+    const ampm = hours >= 12 ? "PM" : "AM";
+
+    // Convert hours to 12-hour format
+    const formattedHours = hours % 12 || 12;
+
+    // Create the formatted date and time string
+    const formattedDate = `${month} ${day}, ${year} at ${formattedHours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+
+    return formattedDate;
+}
+
+export function formatDateProfilePageDate(inputDate) {
+    // Split the input date into day, month, and year
+    const date = new Date(inputDate);
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
   }
+
+  

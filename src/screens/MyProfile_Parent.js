@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Platform, Alert, StyleSheet, View, TouchableOpacity, Modal, useWindowDimensions, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { Image, Platform, Alert, StyleSheet, View, TouchableOpacity, Modal, useWindowDimensions, FlatList, TouchableWithoutFeedback, ImageBackground } from 'react-native';
 import { Chip, DataTable, Text } from 'react-native-paper';
 import TextInputComponent from '../components/TextInputComponent';
 import Colors from '../helper/Colors';
@@ -390,8 +390,8 @@ const MyProfile_Parent = () => {
 
     const onPressButton = () => {
         if (price?.length == '0') {
-            Alert.alert("Warning" ,"Hourly price must be more than 0")
-        
+            Alert.alert("Warning", "Hourly price must be more than 0")
+
         } else {
             updateUserProfileData()
         }
@@ -480,122 +480,125 @@ const MyProfile_Parent = () => {
             ?
             <Loader />
             :
+
             <KeyboardAwareScrollView
                 contentContainerStyle={styles.container}
-                style={styles.container}>
-                <Modal
-                    visible={showSlots}
-                    transparent={true}
-
                 >
-                    <TouchableWithoutFeedback onPress={() => setShowSlots(false)}>
-                        <View style={styles.modalContainer}>
-                            <View style={styles.popup}>
-                                <Text style={styles.text}>Slots:</Text>
-                                <Text style={styles.text2}>(Monday)</Text>
-                                <FlatList
-                                    // horizontal
-                                    numColumns={3}
-                                    data={slots}
-                                    renderItem={renderSlots}
-                                    keyExtractor={(item, index) => `${item?.id}`}
-                                    columnWrapperStyle={styles.columnWrapperStyle}
-                                />
+                <ImageBackground
+                    style={{ flex: 1 }}
+                    source={require('../assets/images/background.png')}
+                >
+                    <Modal
+                        visible={showSlots}
+                        transparent={true}
+
+                    >
+                        <TouchableWithoutFeedback onPress={() => setShowSlots(false)}>
+                            <View style={styles.modalContainer}>
+                                <View style={styles.popup}>
+                                    <Text style={styles.text}>Slots:</Text>
+                                    <Text style={styles.text2}>(Monday)</Text>
+                                    <FlatList
+                                        // horizontal
+                                        numColumns={3}
+                                        data={slots}
+                                        renderItem={renderSlots}
+                                        keyExtractor={(item, index) => `${item?.id}`}
+                                        columnWrapperStyle={styles.columnWrapperStyle}
+                                    />
+                                </View>
                             </View>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </Modal>
-                <Text style={styles.sectionHeader}>Profile Photo</Text>
-                <TouchableOpacity
-                    onPress={pickImage}
-                    style={styles.profilePictureContainer}>
-                    {/* <View style={styles.profilePicturePlaceholder} /> */}
-                    <Image defaultSource={require('../assets/images/profile-user.png')}
-                        //source={require('../assets/images/profile-user.png')}
-                        source={{ uri: image?.uri }}
-                        style={styles.profilePicturePlaceholder}
+                        </TouchableWithoutFeedback>
+                    </Modal>
+                    <TouchableOpacity
+                        onPress={pickImage}
+                        style={styles.profilePictureContainer}>
+                        {/* <View style={styles.profilePicturePlaceholder} /> */}
+                        <Image defaultSource={require('../assets/images/profile-user.png')}
+                            //source={require('../assets/images/profile-user.png')}
+                            source={{ uri: image?.uri }}
+                            style={styles.profilePicturePlaceholder}
+                        />
+                    </TouchableOpacity>
+                    <View style={styles.availabilityContainer}></View>
+                    <TextInputComponent
+                        placeholder={"First Name"}
+                        value={name}
+                        onChangeText={(text) => {
+                            setName(text)
+                        }}
+                        style={styles.input} />
+
+                    <TextInputComponent
+                        placeholder={"Last Name"}
+                        value={lastname}
+                        onChangeText={(text) => {
+                            setLastName(text)
+                        }}
+                        style={styles.input} />
+
+                    <Text style={styles.sectionHeader}>About Me</Text>
+
+                    <Text style={styles.description}>
+                        Tell a little about yourself, so Sitters can get to know you.
+                    </Text>
+                    <TextInputComponent
+                        value={about}
+                        multiline={true}
+                        onChangeText={(text) => {
+                            setAbout(text)
+                        }}
+                        placeholder={"About Me"}
+                        style={styles.input} />
+
+                    <Text style={styles.guidingText}>
+                        Only communicate through the App, do not include contact details. Minimum 200 characters.
+                    </Text>
+                    <TextInputComponent
+                        value={address}
+                        onChangeText={(text) => {
+                            setAddress(text)
+                        }}
+                        placeholder={'Address'} style={styles.input} />
+                    <Text style={styles.guidingText}>
+                        Your address will never be shared with anyone. We will show your approximate location on profile.
+                    </Text>
+                    <Text style={styles.sectionHeader}>Hourly rate for babysitting</Text>
+                    <TextInputComponent
+                        keyboardType='numeric'
+                        maxlength={3}
+
+                        value={price}
+                        onChangeText={(text) => {
+                            setPrice(text)
+                        }}
+                        placeholder={"USD ($)"}
+                        style={styles.input} />
+
+
+                    <Text style={styles.sectionHeader}>No of children</Text>
+                    <TextInputComponent
+                        keyboardType='numeric'
+                        value={children}
+                        onChangeText={(text) => {
+                            setChildren(text)
+                        }}
+                        placeholder={"No of children"}
+                        style={styles.input} />
+
+                    <CustomButton
+                        style={styles.updateButton}
+                        loader={loaderButton}
+                        onPressButton={onPressButton}
+                        title={'Update'}
                     />
-                </TouchableOpacity>
-                <View style={styles.availabilityContainer}></View>
-                <TextInputComponent
-                    placeholder={"First Name"}
-                    value={name}
-                    onChangeText={(text) => {
-                        setName(text)
-                    }}
-                    style={styles.input} />
-
-                <TextInputComponent
-                    placeholder={"Last Name"}
-                    value={lastname}
-                    onChangeText={(text) => {
-                        setLastName(text)
-                    }}
-                    style={styles.input} />
-
-                <Text style={styles.sectionHeader}>About Me</Text>
-
-                <Text style={styles.description}>
-                    Tell a little about yourself, so Sitters can get to know you.
-                </Text>
-                <TextInputComponent
-                    value={about}
-                    multiline={true}
-                    onChangeText={(text) => {
-                        setAbout(text)
-                    }}
-                    placeholder={"About Me"}
-                    style={styles.input} />
-
-                <Text style={styles.guidingText}>
-                    Only communicate through the App, do not include contact details. Minimum 200 characters.
-                </Text>
-                <TextInputComponent
-                    value={address}
-                    onChangeText={(text) => {
-                        setAddress(text)
-                    }}
-                    placeholder={'Address'} style={styles.input} />
-                <Text style={styles.guidingText}>
-                    Your address will never be shared with anyone. We will show your approximate location on profile.
-                </Text>
-                <Text style={styles.sectionHeader}>Hourly rate for babysitting</Text>
-                <TextInputComponent
-                    keyboardType='numeric'
-                    maxlength={3}
-                
-                    value={price}
-                    onChangeText={(text) => {
-                        setPrice(text)
-                    }}
-                    placeholder={"USD ($)"}
-                    style={styles.input} />
-
-
-                <Text style={styles.sectionHeader}>No of children</Text>
-                <TextInputComponent
-                    keyboardType='numeric'
-                    value={children}
-                    onChangeText={(text) => {
-                        setChildren(text)
-                    }}
-                    placeholder={"No of children"}
-                    style={styles.input} />
-
-                <CustomButton
-                    style={styles.updateButton}
-                    loader={loaderButton}
-                    onPressButton={onPressButton}
-                    title={'Update'}
-                />
+                </ImageBackground>
             </KeyboardAwareScrollView>
     );
 }
 
 const makeStyles = (H, W) => StyleSheet.create({
     container: {
-        paddingBottom: Spaces.xxl,
-        padding: Spaces.med,
         backgroundColor: 'white',
     },
     popup:
@@ -621,11 +624,11 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     sectionHeader: {
         ...Fonts.larBold,
-        marginTop: Spaces.sm,
+        margin: Spaces.sm,
         marginBottom: Spaces.sm,
     },
     description: {
-        marginBottom: Spaces.sm,
+        margin: Spaces.sm,
     },
     input: {
         marginBottom: Spaces.sm,
@@ -633,7 +636,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     guidingText: {
         ...Fonts.sm,
         color: Colors.gray,
-        marginBottom: Spaces.sm,
+        margin: Spaces.sm,
+        marginTop:0,
     },
     chipContainer: {
         flexDirection: 'row',

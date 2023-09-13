@@ -1,10 +1,9 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, useWindowDimensions, ScrollView } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet, useWindowDimensions, ScrollView, ImageBackground, FlatList } from 'react-native';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
 import { Shadows } from '../helper/Utils';
-import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import { Text } from 'react-native-paper';
 import ProfileOfSitter from '../components/ProfileOfSitter';
 
@@ -15,25 +14,47 @@ const ProfileScreen = () => {
     const styles = makeStyles(H, W)
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <ProfileOfSitter
+        <ImageBackground
+            style={styles.container}
+            source={require('../assets/images/background.png')}
+        >
+            <ScrollView>
+                <View style={[styles.horizontalContainer, styles.headerContainer]}>
+                    <Text style={{ ...Fonts.xlSemiBold }}>Hello John,</Text>
+                    <View style={styles.horizontalContainer}>
+                        <TouchableOpacity>
+                            <Image source={require('../assets/images/bell.png')}
+                                style={styles.icon}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image source={require('../assets/images/account.png')}
+                                style={styles.icon}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <Text style={styles.greetings}>Here are your Bookings Stats:</Text>
+                {/* <ProfileOfSitter
                 name={'John Doe'}
                 location={'Dallas, Texas'}
                 price={'$ 15'}
                 about={'Lorem ipsum'}
-            />
-            <View style={styles.statsContainer}>
-                <StatButton title="Total Bookings" count={20} />
-                <StatButton title="Completed Bookings" count={15} />
-                <StatButton title="Pending Bookings" count={5} />
-            </View>
-            <Text style={{ ...Fonts.larBold }}>My Availability:</Text>
-            <View style={styles.boxAvailability}>
-                <Text style={styles.text}>
-                    You have not added your availability yet. Tap <Text style={styles.blueText}>here</Text> to add.
-                </Text>
-            </View>
-        </ScrollView>
+            /> */}
+                <View style={styles.statsContainer}>
+                    <StatButton title="Total Bookings" count={20} />
+                    <StatButton title="Completed Bookings" count={15} />
+                    <StatButton title="Pending Bookings" count={5} />
+                    <StatButton title="Cancelled Bookings" count={3} />
+                </View>
+                <Text style={styles.greetings}>Here is your availability:</Text>
+                <View style={styles.boxAvailability}>
+                    <Text style={styles.text}>
+                        You have not added your availability yet. Tap <Text style={styles.blueText}>here</Text> to add.
+                    </Text>
+                </View>
+            </ScrollView>
+        </ImageBackground>
     );
 };
 
@@ -52,7 +73,7 @@ const StatButton = ({ title, count }) => {
 
 const makeStyles = (H, W) => StyleSheet.create({
     container: {
-        padding: Spaces.med,
+        flex: 1
     },
     cardContainer: {
         flexWrap: 'wrap',
@@ -101,16 +122,17 @@ const makeStyles = (H, W) => StyleSheet.create({
         marginTop: 10,
     },
     statsContainer: {
-        // flexDirection: 'row',
-        // justifyContent: 'space-between',
-        // marginTop: Spaces.med,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-evenly',
     },
     statButton: {
+        height: H * 0.17,
+        width: W * 0.4,
         backgroundColor: Colors.PRIMARY,
         borderRadius: 15,
-        padding: 10,
         alignItems: 'center',
-        //flex: 1,
+        justifyContent: 'center',
         marginVertical: Spaces.sm,
     },
     statTitle: {
@@ -167,7 +189,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         alignSelf: 'center',
         marginVertical: H * 0.1,
-        marginHorizontal:W*0.01
+        marginHorizontal: W * 0.01
     },
     boxAvailability:
     {
@@ -175,6 +197,25 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderRadius: 8,
         margin: Spaces.sm,
         borderColor: Colors.blue
+    },
+    horizontalContainer:
+    {
+        flexDirection: 'row'
+    },
+    icon:
+    {
+        height: H * 0.04,
+        width: H * 0.04,
+        marginHorizontal: W * 0.015
+    },
+    headerContainer:
+    {
+        justifyContent: 'space-between',
+        padding: Spaces.med
+    },
+    greetings:
+    {
+        padding: Spaces.med
     }
 });
 

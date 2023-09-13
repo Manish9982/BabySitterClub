@@ -31,17 +31,37 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
   }
 
   const onPressPayment = () => {
-    Alert.alert(
-      'Proceed To Payment',
-      `Please ensure that booking details are correct as they can't be changed later.Are you sure you want to proceed to payment?`,
-      [{
-        text: 'Yes'
-      },
-      {
-        text: 'No'
-      }]
-    )
+    if (!(selectedAddress == 'choose')) {
+      Alert.alert(
+        'Proceed To Payment',
+        `Please ensure that booking details are correct as they can't be changed later.Are you sure you want to proceed to payment?`,
+        [{
+          text: 'Yes',
+          onPress: () => proceedToPayment()
+        },
+        {
+          text: 'No'
+        }]
+      )
+    }
+    else {
+      Alert.alert('Invalid Address', 'Please select an address first')
+    }
+
   }
+
+  const proceedToPayment = () => {
+    navigation.navigate('CreateBooking_Parent', {
+      createBooking: JSON.stringify({
+        user_id: details?.user_id,
+        slot_id: details?.slot_id,
+        amount: details?.amount
+      })
+
+
+    })
+  }
+
   const styles = makeStyles(H, W)
   return (
     <View style={styles.container}>
@@ -105,7 +125,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     color: Colors.selectedcolor
   },
   detailsContainer: {
-    width: W*0.7,
+    width: W * 0.7,
     ...Shadows,
     backgroundColor: Colors.PRIMARY, // Change the background color to your preference
     borderRadius: 10,
@@ -127,7 +147,7 @@ const makeStyles = (H, W) => StyleSheet.create({
   },
   addressContainer:
   {
-    width: W*0.7,
+    width: W * 0.7,
     backgroundColor: Colors.white,
     margin: Spaces.med,
     padding: Spaces.med,

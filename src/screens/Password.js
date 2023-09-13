@@ -55,7 +55,7 @@ const Password = ({ navigation, route }) => {
             style={styles.mainContainer}>
             <ImageBackground
                 imageStyle={styles.imageStyle}
-                
+
                 source={require('../assets/images/background.png')}
 
                 style={styles.ImageBackground} >

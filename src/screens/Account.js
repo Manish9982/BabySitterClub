@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View, useWindowDimensions } from 'react-native'
+import { FlatList, ImageBackground, StyleSheet, View, useWindowDimensions } from 'react-native'
 import React from 'react'
 import { Divider, List } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
@@ -85,7 +85,10 @@ const Account = ({ navigation }) => {
 
     }
     return (
-        <View>
+        <ImageBackground
+            style={{ flex: 1 }}
+            source={require('../assets/images/background.png')}
+        >
 
             <FlatList
                 data={DATA}
@@ -100,7 +103,7 @@ const Account = ({ navigation }) => {
                     style={styles.button}
                     title='Login' />
             } */}
-        </View>
+        </ImageBackground>
     )
 }
 

@@ -23,9 +23,9 @@ const BottomTabsParent = () => {
             <Tab.Screen name="Bookings" component={Bookings} options={{
                 tabBarIcon: ({ color, size }) => <AntDesign name="calendar" size={size} color={color} />
             }} />
-            <Tab.Screen name="Messages" component={Messages} options={{
+            {/* <Tab.Screen name="Messages" component={Messages} options={{
                 tabBarIcon: ({ color, size }) => <AntDesign name="mail" size={size} color={color} />
-            }} />
+            }} /> */}
             <Tab.Screen name="Account" component={Account} options={{
                 tabBarIcon: ({ color, size }) => <AntDesign name="user" size={size} color={color} />
             }} />

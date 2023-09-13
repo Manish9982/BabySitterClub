@@ -4,7 +4,8 @@ import { LOCAL_STORE } from '../helper/Utils'
 
 const initialState = {
   usertype: null,
-  selectedService: null
+  selectedService: null,
+  isProfileCompleted: false
 }
 
 const globalSlice = createSlice({
@@ -19,6 +20,9 @@ const globalSlice = createSlice({
       storeLocalValue(LOCAL_STORE.SELECTED_SERVICE, JSON.stringify(action.payload))
       state.selectedService = action.payload
     },
+    setIsProfileCompleted: (state, action) => {
+      state.isProfileCompleted = action.payload
+    }
   }
 })
 

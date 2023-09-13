@@ -71,7 +71,7 @@ const SwitchServices = ({ navigation }) => {
             :
             <ImageBackground
                 imageStyle={styles.imageStyle}
-                source={require('../assets/images/app_bg.webp')}
+                source={require('../assets/images/background.png')}
                 style={styles.container}>
                 <FlatList
                     contentContainerStyle={[styles.list]}

@@ -1,35 +1,19 @@
-import { StyleSheet, FlatList, View , Alert} from 'react-native'
-import React , { useState, useEffect}from 'react'
+import { StyleSheet, FlatList, View, Alert, ImageBackground } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import BookingCard from '../components/BookingCard';
 import { handleGetRequest } from '../helper/Utils';
+import { Divider, Text } from 'react-native-paper';
+import Loader from '../components/Loader';
+import { useIsFocused } from '@react-navigation/native';
+import Fonts from '../helper/Fonts';
+import Spaces from '../helper/Spaces';
 
 const Bookings = ({ navigation }) => {
-  const bookingData = [
-    {
-      id: 1,
-      name: 'John Doe',
-      profileImage: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
-      type: 'Baby Sitter',
-      status: 'Confirmed',
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      profileImage: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
-      type: 'Pet Sitter',
-      status: 'Pending',
-    },
-    {
-      id: 3,
-      name: 'Jane Smith',
-      profileImage: 'https://thumbs.dreamstime.com/b/mother-doughter-14742077.jpg',
-      type: 'Pet Sitter',
-      status: 'Pending',
-    },
-    // Add more booking data as needed
-  ];
 
   const [bookingdata, setBookingData] = useState()
+  const [loader, setLoader] = useState(true)
+
+  const isFocused = useIsFocused()
 
   const onPressBookingCard = () => {
     navigation.navigate('ViewBookings')
@@ -43,39 +27,62 @@ const Bookings = ({ navigation }) => {
   }
 
   useEffect(() => {
-    getBookings()
-  }, [])
-  
+    if (isFocused) {
+      getBookings()
+    }
+  }, [isFocused])
+
 
   const getBookings = async () => {
     const result = await handleGetRequest('get_booking')
     setBookingData(result)
+    console.log(result)
     if (result?.status == '200') {
     } else if (result?.status == '201') {
-        Alert.alert("Alert", result?.message)
+      Alert.alert("Alert", result?.message)
     }
-    //setLoader(false)
-}
+    setLoader(false)
+  }
 
-  const renderBookings = ({ item }) => (
-    <BookingCard
-      booking={item}
-      profileURL={bookingdata?.url}
-      onItemPress={() => { onClickHandle(item.id) }}
-    />
-
-  );
-
+  const renderBookings = ({ item }) => {
+    return (
+      <>
+        <BookingCard
+          booking={item}
+          profileURL={bookingdata?.url}
+          onItemPress={() => { onClickHandle(item.id) }}
+        />
+        <Divider style={styles.divider}/>
+      </>
+    );
+  }
 
   return (
-    <View style={styles.container}>
+    loader
+      ?
+      <Loader />
+      :
+      <ImageBackground 
+      source={require('../assets/images/background.png')}
+      style={styles.container}>
+        {
+          bookingdata?.data?.length == 0
+            ?
+            <View style={styles.mainContainer}>
+              <Text>No bookings found</Text>
+            </View>
+            :
+            <View style={styles.mainContainer}>
+              <FlatList
+                data={bookingdata?.data}
+                renderItem={renderBookings}
+                keyExtractor={(item) => item.id.toString()}
+              />
+              <Text style={styles.warning}>*All bookings are non-refundable.</Text>
+            </View>
+        }
 
-      <FlatList
-        data={bookingdata?.data}
-        renderItem={renderBookings}
-        keyExtractor={(item) => item.id.toString()}
-      />
-    </View>
+      </ImageBackground>
   )
 }
 
@@ -86,6 +93,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f0f0f0',
   },
-
+  mainContainer:
+  {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  warning:
+  {
+    ...Fonts.smMedium,
+    margin: Spaces.sm
+  },
 
 })

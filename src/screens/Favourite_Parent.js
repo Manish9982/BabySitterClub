@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View, Alert, useWindowDimensions } from 'react-native'
+import { FlatList, StyleSheet, View, Alert, useWindowDimensions, ImageBackground } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Spaces from '../helper/Spaces';
 import FavBabySittersCard from '../components/FavBabySittersCard';
@@ -66,7 +66,9 @@ const Favourite_Parent = ({ navigation }) => {
             ?
             <Loader />
             :
-            <View style={{ flex: 1 }}>
+            <ImageBackground 
+            source={require('../assets/images/background.png')}
+            style={{ flex: 1 }}>
                 {
                     babySittersData?.users?.length == 0
                     &&
@@ -77,7 +79,7 @@ const Favourite_Parent = ({ navigation }) => {
                     renderItem={renderfavBabysitterCard}
                     keyExtractor={(item) => item.Id}
                 />
-            </View>
+            </ImageBackground>
     );
 };
 

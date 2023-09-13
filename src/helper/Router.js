@@ -30,6 +30,8 @@ import ManageAddress from '../screens/ManageAddress';
 import AddAddress from '../screens/AddAddress';
 import AddAvailabiltity_Sitter from '../screens/AddAvailability_Sitter';
 import BookingConfirmation_Parent from '../screens/BookingConfirmation_Parent';
+import PaymentWebview_Parent from '../screens/PaymentWebview_Parent';
+import CreateBooking_Parent from '../screens/CreateBooking_Parent';
 
 const Router = () => {
 
@@ -60,6 +62,8 @@ const Router = () => {
                         <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
                         <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
                         <Stack.Screen name="BookingConfirmation_Parent" component={BookingConfirmation_Parent} options={{ headerShown: true, headerTitle: 'Confirm Booking' }} />
+                        <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{  }} />
+                        <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{  }} />
 
                     </Stack.Navigator>
                 )
