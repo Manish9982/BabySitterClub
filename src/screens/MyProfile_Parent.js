@@ -483,7 +483,7 @@ const MyProfile_Parent = () => {
 
             <KeyboardAwareScrollView
                 contentContainerStyle={styles.container}
-                >
+            >
                 <ImageBackground
                     style={{ flex: 1 }}
                     source={require('../assets/images/background.png')}
@@ -587,7 +587,7 @@ const MyProfile_Parent = () => {
                         style={styles.input} />
 
                     <CustomButton
-                    btnColor={Colors.selectedcolor}
+                        btnColor={Colors.selectedcolor}
                         style={styles.updateButton}
                         loader={loaderButton}
                         onPressButton={onPressButton}
@@ -638,7 +638,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         ...Fonts.sm,
         color: Colors.gray,
         margin: Spaces.sm,
-        marginTop:0,
+        marginTop: 0,
     },
     chipContainer: {
         flexDirection: 'row',

@@ -7,6 +7,8 @@ import { handleGetRequest, handlePostRequest } from '../helper/Utils'
 import Loader from '../components/Loader'
 import { useDispatch } from 'react-redux'
 import { setUsertype } from '../redux/GlobalSlice'
+import { Text } from 'react-native-paper'
+import Fonts from '../helper/Fonts'
 
 const SwitchUserType = ({ navigation, route }) => {
     const H = useWindowDimensions().height
@@ -49,12 +51,16 @@ const SwitchUserType = ({ navigation, route }) => {
             {loader ? (
                 <Loader />
             ) : (
-                <FlatList
-                    contentContainerStyle={styles.box}
-                    data={subServicesData?.user_type}
-                    renderItem={renderSubServices}
-                    keyExtractor={(item, index) => `${index}`}
-                />
+                <>
+                    <Text style={styles.text}>You're logged in as a "Care Provider" right now. Choose an option to switch your role/services.</Text>
+                    <FlatList
+                        contentContainerStyle={styles.box}
+                        data={subServicesData?.user_type}
+                        renderItem={renderSubServices}
+                        keyExtractor={(item, index) => `${index}`}
+                    />
+                </>
+
             )}
         </ImageBackground>
     )
@@ -73,7 +79,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     box: {
         justifyContent: 'center',
-        backgroundColor: Colors.grayTransparent,
+        //backgroundColor: Colors.grayTransparent,
         padding: Spaces.xl,
         borderRadius: 10,
         alignSelf: 'center',
@@ -82,4 +88,11 @@ const makeStyles = (H, W) => StyleSheet.create({
     countryText: {
         color: Colors.white,
     },
+    text:
+    {
+        ...Fonts.medSemiBold,
+        textAlign: 'center',
+        top: H * 0.3,
+        margin:Spaces.med
+    }
 });
