@@ -35,6 +35,7 @@ import CreateBooking_Parent from '../screens/CreateBooking_Parent';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import FAQs_Parent from '../screens/FAQs_Parent';
 import FAQs_Sitter from '../screens/FAQs_Sitter';
+import Help from '../screens/Help';
 
 const Router = () => {
 
@@ -68,6 +69,7 @@ const Router = () => {
                         <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{}} />
                         <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{}} />
                         <Stack.Screen name="FAQs_Parent" component={FAQs_Parent} options={{ headerTitle: 'FAQs' }} />
+                        <Stack.Screen name="Help" component={Help} options={{ headerShown:true,headerTitle: 'Help and Support' }} />
 
                     </Stack.Navigator>
                 )
@@ -91,6 +93,8 @@ const Router = () => {
                         <Stack.Screen name="AddAvailability_Sitter" component={AddAvailability_Sitter} options={{ headerShown: true, headerTitle: 'Add Availabiltity' }} />
                         <Stack.Screen name="NotificationsScreen" component={NotificationsScreen} options={{ headerShown: true, headerTitle: 'My Notifications' }} />
                         <Stack.Screen name="FAQs_Sitter" component={FAQs_Sitter} options={{ headerTitle: 'FAQs' }} />
+                        <Stack.Screen name="Help" component={Help} options={{ headerShown:true,headerTitle: 'Help and Support' }} />
+
                     </Stack.Navigator>
                 )
             }
