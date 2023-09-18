@@ -7,6 +7,7 @@ import { Shadows, convertTimeRangeTo12HourFormat, formatDateProfilePageDate, han
 import { SegmentedButtons, Text } from 'react-native-paper';
 import TagIcon from '../components/TagIcon';
 import CloseButton from '../components/CloseButton';
+import Loader from '../components/Loader';
 
 const ProfileScreen = ({ navigation }) => {
 
@@ -15,6 +16,7 @@ const ProfileScreen = ({ navigation }) => {
 
     const [dashboardData, setDashboardData] = useState(null)
     const [serviceFilterId, setServiceFilterId] = useState(null)
+    const [loader, setLoader] = useState(true)
 
     useEffect(() => {
         getDashboardData()
@@ -28,6 +30,7 @@ const ProfileScreen = ({ navigation }) => {
         else {
             Alert.Alert('Error', result?.message)
         }
+        setLoader(false)
     }
 
     const DateSection = ({ section }) => (
@@ -65,103 +68,124 @@ const ProfileScreen = ({ navigation }) => {
         navigation.navigate('NotificationsScreen')
     }
 
+    const onPressStatTotal = () => {
+        navigation.navigate('Bookings')
+    }
+    const onPressStatCancelled = () => {
+        navigation.navigate('Bookings')
+    }
+    const onPressStatCompleted = () => {
+        navigation.navigate('Bookings')
+    }
+    const onPressStatPending = () => {
+        navigation.navigate('Bookings')
+    }
+
     const styles = makeStyles(H, W)
     return (
         <ImageBackground
             style={styles.container}
             source={require('../assets/images/background.png')}
         >
-            <ScrollView>
-                <View style={[styles.horizontalContainer, styles.headerContainer]}>
-                    <Text style={{ ...Fonts.xlSemiBold }}>Hello, {dashboardData?.userDetails?.first_name}</Text>
-                    <View style={styles.horizontalContainer}>
-                        <TouchableOpacity onPress={onPressBell}>
-                            <View style={styles.notificationBadge}>
-                                <Text style={{
-                                    color: 'white'
-                                }}>{dashboardData?.userDetails?.notification_count}</Text>
+            {
+                loader
+                    ?
+                    <Loader />
+                    :
+                    <ScrollView>
+                        <View style={[styles.horizontalContainer, styles.headerContainer]}>
+                            <Text style={{ ...Fonts.xlSemiBold }}>Hello, {dashboardData?.userDetails?.first_name}</Text>
+                            <View style={styles.horizontalContainer}>
+                                <TouchableOpacity onPress={onPressBell}>
+                                    <View style={styles.notificationBadge}>
+                                        <Text style={{
+                                            color: 'white'
+                                        }}>{dashboardData?.userDetails?.notification_count}</Text>
+                                    </View>
+
+                                    <Image source={require('../assets/images/bell.png')}
+                                        style={styles.icon}
+                                    />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity>
+                                    <Image source={require('../assets/images/account.png')}
+                                        style={styles.icon}
+                                    />
+                                </TouchableOpacity>
                             </View>
+                        </View>
+                        <Text style={styles.greetings}>Here are your Bookings Stats:</Text>
+                        <View style={styles.statsContainer}>
+                            <StatButton title="Total" count={dashboardData?.userDetails?.total_booking} onPressStat={onPressStatTotal} />
+                            <StatButton title="Completed" count={dashboardData?.userDetails?.total_complete_booking} onPressStat={onPressStatCompleted} />
+                            <StatButton title="Pending" count={dashboardData?.userDetails?.total_pending_booking} onPressStat={onPressStatPending} />
+                            <StatButton title="Cancelled" count={dashboardData?.userDetails?.total_cancel_booking} onPressStat={onPressStatCancelled} />
+                        </View>
+                        <Text style={styles.greetings}>Your Availability:</Text>
+                        <View style={styles.boxAvailability}>
 
-                            <Image source={require('../assets/images/bell.png')}
-                                style={styles.icon}
-                            />
-                        </TouchableOpacity>
+                            {
+                                dashboardData?.slots?.length == 0
+                                    ?
+                                    <Text style={styles.text}>
+                                        You have not added your availability yet. Tap <Text
+                                            onPress={onPressAddAvailability}
+                                            style={styles.blueText}>here</Text> to add.
+                                    </Text>
+                                    :
+                                    <SegmentedButtons
+                                        style={styles.segment}
+                                        value={serviceFilterId}
+                                        onValueChange={(t) => setServiceFilterId(prev => prev == t ? null : t)}
+                                        buttons={[
+                                            {
+                                                value: '1',
+                                                icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
 
-                        <TouchableOpacity>
-                            <Image source={require('../assets/images/account.png')}
-                                style={styles.icon}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <Text style={styles.greetings}>Here are your Bookings Stats:</Text>
-                <View style={styles.statsContainer}>
-                    <StatButton title="Total" count={dashboardData?.userDetails?.total_booking} />
-                    <StatButton title="Completed" count={dashboardData?.userDetails?.total_complete_booking} />
-                    <StatButton title="Pending" count={dashboardData?.userDetails?.total_pending_booking} />
-                    <StatButton title="Cancelled" count={dashboardData?.userDetails?.total_cancel_booking} />
-                </View>
-                <Text style={styles.greetings}>Your Availability:</Text>
-                <View style={styles.boxAvailability}>
+                                            },
+                                            {
+                                                value: '3',
+                                                icon: () => <TagIcon name="home-outline" label="Homesit" style={styles.tag} />,
+                                            },
+                                            {
+                                                value: '2',
+                                                icon: () => <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />,
+                                            },
+                                        ]}
+                                    />
+                            }
 
-                    {
-                        dashboardData?.slots?.length == 0
-                            ?
-                            <Text style={styles.text}>
-                                You have not added your availability yet. Tap <Text
-                                    onPress={onPressAddAvailability}
-                                    style={styles.blueText}>here</Text> to add.
-                            </Text>
-                            :
-                            <SegmentedButtons
-                                style={styles.segment}
-                                value={serviceFilterId}
-                                onValueChange={(t) => setServiceFilterId(prev => prev == t ? null : t)}
-                                buttons={[
-                                    {
-                                        value: '1',
-                                        icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
-
-                                    },
-                                    {
-                                        value: '3',
-                                        icon: () => <TagIcon name="home-outline" label="Homesit" style={styles.tag} />,
-                                    },
-                                    {
-                                        value: '2',
-                                        icon: () => <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />,
-                                    },
-                                ]}
-                            />
-                    }
-
-                    {dashboardData?.slots?.map((section, index) => {
-                        if (section?.service?.includes(Number.parseInt(serviceFilterId, 10)) || serviceFilterId == null) {
-                            return (
-                                <View key={index}>
-                                    <DateSection section={section} />
-                                    {section?.times?.map((time) => {
-                                        if (time?.service_id == serviceFilterId || serviceFilterId == null) {
-                                            return (<SlotItem key={time.id} item={time} />)
-                                        }
-                                    })}
-                                </View>)
-                        }
-                    })}
+                            {dashboardData?.slots?.map((section, index) => {
+                                if (section?.service?.includes(Number.parseInt(serviceFilterId, 10)) || serviceFilterId == null) {
+                                    return (
+                                        <View key={index}>
+                                            <DateSection section={section} />
+                                            {section?.times?.map((time) => {
+                                                if (time?.service_id == serviceFilterId || serviceFilterId == null) {
+                                                    return (<SlotItem key={time.id} item={time} />)
+                                                }
+                                            })}
+                                        </View>)
+                                }
+                            })}
 
 
-                </View>
-            </ScrollView>
+                        </View>
+                    </ScrollView>
+            }
         </ImageBackground>
     );
 };
 
-const StatButton = ({ title, count }) => {
+const StatButton = ({ title, count, onPressStat }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
     return (
-        <TouchableOpacity style={styles.statButton}>
+        <TouchableOpacity
+            onPress={onPressStat}
+            style={styles.statButton}>
             <Text style={styles.statTitle}>{title}</Text>
             <Text style={[styles.statCount, Fonts.xlSemiBold]}>{count}</Text>
         </TouchableOpacity>
