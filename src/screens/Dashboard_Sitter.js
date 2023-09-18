@@ -1,18 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, TouchableOpacity, StyleSheet, useWindowDimensions, ScrollView, ImageBackground, FlatList } from 'react-native';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
-import { Shadows } from '../helper/Utils';
-import { Text } from 'react-native-paper';
-import ProfileOfSitter from '../components/ProfileOfSitter';
+import { Shadows, convertTimeRangeTo12HourFormat, formatDateProfilePageDate, handleGetRequest } from '../helper/Utils';
+import { SegmentedButtons, Text } from 'react-native-paper';
+import TagIcon from '../components/TagIcon';
+import CloseButton from '../components/CloseButton';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
-    const styles = makeStyles(H, W)
 
+    const [dashboardData, setDashboardData] = useState(null)
+    const [serviceFilterId, setServiceFilterId] = useState(null)
+
+    useEffect(() => {
+        getDashboardData()
+    }, [])
+
+    const getDashboardData = async () => {
+        const result = await handleGetRequest('dashboard')
+        if (result?.status == '200') {
+            setDashboardData(result)
+        }
+        else {
+            Alert.Alert('Error', result?.message)
+        }
+    }
+
+    const DateSection = ({ section }) => (
+        <View style={styles.datesection}>
+            <Text style={{ ...Fonts.medBold }}>{formatDateProfilePageDate(section.date)}</Text>
+        </View>
+    );
+
+    const SlotItem = ({ item }) => (
+        <View style={styles.slotItem}>
+            <Text>
+                {convertTimeRangeTo12HourFormat(item?.duration)}
+                <Text> (
+                    {item?.service_id == 1 && <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />}
+                    {item?.service_id == 2 && <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />}
+                    {item?.service_id == 3 && <TagIcon name="home-outline" label="Homesit" style={styles.tag} />}
+                    )
+                </Text>
+            </Text>
+            {item?.status === 0 ? <>
+                <Text>
+                    Available
+                </Text>
+                <CloseButton id={item?.id} callBack={getDashboardData} /></> : <Text>Booked</Text>}
+        </View>
+    );
+
+
+
+    const onPressAddAvailability = () => {
+        navigation.navigate('AddAvailability_Sitter')
+    }
+
+    const onPressBell = () => {
+        navigation.navigate('NotificationsScreen')
+    }
+
+    const styles = makeStyles(H, W)
     return (
         <ImageBackground
             style={styles.container}
@@ -20,13 +73,20 @@ const ProfileScreen = () => {
         >
             <ScrollView>
                 <View style={[styles.horizontalContainer, styles.headerContainer]}>
-                    <Text style={{ ...Fonts.xlSemiBold }}>Hello John,</Text>
+                    <Text style={{ ...Fonts.xlSemiBold }}>Hello, {dashboardData?.userDetails?.first_name}</Text>
                     <View style={styles.horizontalContainer}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={onPressBell}>
+                            <View style={styles.notificationBadge}>
+                                <Text style={{
+                                    color: 'white'
+                                }}>{dashboardData?.userDetails?.notification_count}</Text>
+                            </View>
+
                             <Image source={require('../assets/images/bell.png')}
                                 style={styles.icon}
                             />
                         </TouchableOpacity>
+
                         <TouchableOpacity>
                             <Image source={require('../assets/images/account.png')}
                                 style={styles.icon}
@@ -35,23 +95,61 @@ const ProfileScreen = () => {
                     </View>
                 </View>
                 <Text style={styles.greetings}>Here are your Bookings Stats:</Text>
-                {/* <ProfileOfSitter
-                name={'John Doe'}
-                location={'Dallas, Texas'}
-                price={'$ 15'}
-                about={'Lorem ipsum'}
-            /> */}
                 <View style={styles.statsContainer}>
-                    <StatButton title="Total Bookings" count={20} />
-                    <StatButton title="Completed Bookings" count={15} />
-                    <StatButton title="Pending Bookings" count={5} />
-                    <StatButton title="Cancelled Bookings" count={3} />
+                    <StatButton title="Total" count={dashboardData?.userDetails?.total_booking} />
+                    <StatButton title="Completed" count={dashboardData?.userDetails?.total_complete_booking} />
+                    <StatButton title="Pending" count={dashboardData?.userDetails?.total_pending_booking} />
+                    <StatButton title="Cancelled" count={dashboardData?.userDetails?.total_cancel_booking} />
                 </View>
-                <Text style={styles.greetings}>Here is your availability:</Text>
+                <Text style={styles.greetings}>Your Availability:</Text>
                 <View style={styles.boxAvailability}>
-                    <Text style={styles.text}>
-                        You have not added your availability yet. Tap <Text style={styles.blueText}>here</Text> to add.
-                    </Text>
+
+                    {
+                        dashboardData?.slots?.length == 0
+                            ?
+                            <Text style={styles.text}>
+                                You have not added your availability yet. Tap <Text
+                                    onPress={onPressAddAvailability}
+                                    style={styles.blueText}>here</Text> to add.
+                            </Text>
+                            :
+                            <SegmentedButtons
+                                style={styles.segment}
+                                value={serviceFilterId}
+                                onValueChange={(t) => setServiceFilterId(prev => prev == t ? null : t)}
+                                buttons={[
+                                    {
+                                        value: '1',
+                                        icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
+
+                                    },
+                                    {
+                                        value: '3',
+                                        icon: () => <TagIcon name="home-outline" label="Homesit" style={styles.tag} />,
+                                    },
+                                    {
+                                        value: '2',
+                                        icon: () => <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />,
+                                    },
+                                ]}
+                            />
+                    }
+
+                    {dashboardData?.slots?.map((section, index) => {
+                        if (section?.service?.includes(Number.parseInt(serviceFilterId, 10)) || serviceFilterId == null) {
+                            return (
+                                <View key={index}>
+                                    <DateSection section={section} />
+                                    {section?.times?.map((time) => {
+                                        if (time?.service_id == serviceFilterId || serviceFilterId == null) {
+                                            return (<SlotItem key={time.id} item={time} />)
+                                        }
+                                    })}
+                                </View>)
+                        }
+                    })}
+
+
                 </View>
             </ScrollView>
         </ImageBackground>
@@ -196,7 +294,8 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderWidth: 0.4,
         borderRadius: 8,
         margin: Spaces.sm,
-        borderColor: Colors.blue
+        borderColor: Colors.blue,
+        padding: Spaces.med
     },
     horizontalContainer:
     {
@@ -216,7 +315,41 @@ const makeStyles = (H, W) => StyleSheet.create({
     greetings:
     {
         padding: Spaces.med
-    }
+    },
+    segment:
+    {
+        margin: Spaces.sm
+    },
+    datesection:
+    {
+        backgroundColor: Colors.grayTransparent,
+        padding: Spaces.med,
+        borderRadius: 10,
+    },
+    slotItem:
+    {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: Spaces.sm
+    },
+    tag:
+    {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    notificationBadge:
+    {
+        position: 'absolute',
+        zIndex: 2,
+        left: W * 0.06,
+        backgroundColor: 'red',
+        height: H * 0.025,
+        width: H * 0.025,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+    },
 });
 
 export default ProfileScreen;

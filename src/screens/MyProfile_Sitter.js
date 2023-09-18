@@ -8,7 +8,7 @@ import Fonts from '../helper/Fonts';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Shadows, convertTimeRangeTo12HourFormat, convertTo12HourFormat, handleGetRequest, handlePostRequest } from '../helper/Utils';
+import { Shadows, convertTimeRangeTo12HourFormat, convertTo12HourFormat, formatDateProfilePageDate, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import CustomButton from '../components/Button';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Loader from '../components/Loader';
@@ -70,7 +70,7 @@ const MyProfile_Sitter = ({ navigation }) => {
     const toggleModal = (slots) => {
         // getSlots()
         // setShowSlots(prev => !prev)
-        navigation.navigate('AddAvailabiltity_Sitter')
+        navigation.navigate('AddAvailability_Sitter')
     }
 
     const updateUserProfileData = async () => {
@@ -112,7 +112,7 @@ const MyProfile_Sitter = ({ navigation }) => {
 
     const DateSection = ({ section }) => (
         <View style={styles.datesection}>
-            <Text style={{ ...Fonts.medBold }}>{section.date}</Text>
+            <Text style={{ ...Fonts.medBold }}>{formatDateProfilePageDate(section.date)}</Text>
         </View>
     );
 
@@ -276,6 +276,9 @@ const MyProfile_Sitter = ({ navigation }) => {
                                     })}
                                 </View>)
                         }
+                        else if((section?.service?.includes(Number.parseInt(serviceFilterId, 10)))) {
+                           console.log('Hi')
+                        }
                     })}
                 </ScrollView>
 
@@ -292,7 +295,7 @@ const MyProfile_Sitter = ({ navigation }) => {
 const makeStyles = (H, W) => StyleSheet.create({
     container: {
         paddingBottom: Spaces.xxl,
-        padding: Spaces.med,
+        padding: Spaces.sm,
         backgroundColor: 'white',
     },
     popup:

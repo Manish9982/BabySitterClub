@@ -33,14 +33,29 @@ const Bookings = ({ navigation }) => {
   }, [isFocused])
 
 
+  // const getBookings = async () => {
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", "Bearer 199|WtLkncCwC2L0rWyubAzKCM6gBXdJJTQx53KmNBUP");
+    
+  //   var requestOptions = {
+  //     method: 'GET',
+  //     headers: myHeaders,
+  //     redirect: 'follow'
+  //   };
+    
+  //   fetch("https://thebabysitterclubs.com/babysitter/api/v1/parent_get_booking", requestOptions)
+  //     .then(response => response.text())
+  //     .then(result => console.log(result))
+  //     .catch(error => console.log('error', error));
+  // }
   const getBookings = async () => {
-    const result = await handleGetRequest('get_booking')
+    const result = await handleGetRequest('parent_get_booking')
     setBookingData(result)
     console.log(result)
-    if (result?.status == '200') {
-    } else if (result?.status == '201') {
-      Alert.alert("Alert", result?.message)
-    }
+    // if (result?.status == '200') {
+    // } else if (result?.status == '201') {
+    //   Alert.alert("Alert", result?.message)
+    // }
     setLoader(false)
   }
 

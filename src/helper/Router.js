@@ -28,10 +28,13 @@ import SwitchUserType from '../screens/SwitchUserType';
 import MyProfile_Parent from '../screens/MyProfile_Parent';
 import ManageAddress from '../screens/ManageAddress';
 import AddAddress from '../screens/AddAddress';
-import AddAvailabiltity_Sitter from '../screens/AddAvailability_Sitter';
+import AddAvailability_Sitter from '../screens/AddAvailability_Sitter';
 import BookingConfirmation_Parent from '../screens/BookingConfirmation_Parent';
 import PaymentWebview_Parent from '../screens/PaymentWebview_Parent';
 import CreateBooking_Parent from '../screens/CreateBooking_Parent';
+import NotificationsScreen from '../screens/NotificationsScreen';
+import FAQs_Parent from '../screens/FAQs_Parent';
+import FAQs_Sitter from '../screens/FAQs_Sitter';
 
 const Router = () => {
 
@@ -62,8 +65,9 @@ const Router = () => {
                         <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
                         <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
                         <Stack.Screen name="BookingConfirmation_Parent" component={BookingConfirmation_Parent} options={{ headerShown: true, headerTitle: 'Confirm Booking' }} />
-                        <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{  }} />
-                        <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{  }} />
+                        <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{}} />
+                        <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{}} />
+                        <Stack.Screen name="FAQs_Parent" component={FAQs_Parent} options={{ headerTitle: 'FAQs' }} />
 
                     </Stack.Navigator>
                 )
@@ -84,7 +88,9 @@ const Router = () => {
                         <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
                         <Stack.Screen name="MyProfile_Sitter" component={MyProfile_Sitter} options={{}} />
                         <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Switch Role' }} />
-                        <Stack.Screen name="AddAvailabiltity_Sitter" component={AddAvailabiltity_Sitter} options={{headerShown:true, headerTitle: 'Add Availabiltity' }} />
+                        <Stack.Screen name="AddAvailability_Sitter" component={AddAvailability_Sitter} options={{ headerShown: true, headerTitle: 'Add Availabiltity' }} />
+                        <Stack.Screen name="NotificationsScreen" component={NotificationsScreen} options={{ headerShown: true, headerTitle: 'My Notifications' }} />
+                        <Stack.Screen name="FAQs_Sitter" component={FAQs_Sitter} options={{ headerTitle: 'FAQs' }} />
                     </Stack.Navigator>
                 )
             }

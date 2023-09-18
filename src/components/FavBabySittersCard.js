@@ -7,11 +7,11 @@ import Fonts from '../helper/Fonts';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 
 
-const FavBabySittersCard = ({ profilePicture, name, description,hourlyPrice, onPressFavourite, isFavourite }) => {
+const FavBabySittersCard = ({ profilePicture, name, description, hourlyPrice, onPressFavourite, isFavourite, onPressItemSelected }) => {
     return (
-        <TouchableOpacity 
-        onPress={onPressFavourite}
-        style={styles.container}>
+        <TouchableOpacity
+            onPress={onPressItemSelected}
+            style={styles.container}>
             <Image
                 defaultSource={require('../assets/images/mother.png')}
                 source={{ uri: profilePicture }}
@@ -28,7 +28,7 @@ const FavBabySittersCard = ({ profilePicture, name, description,hourlyPrice, onP
                 <Text>{isFavourite == 1 ? <AntDesign name="star" size={20} color={Colors.blue} />
                     : <AntDesign name="staro" size={20} />}</Text>
             </TouchableOpacity>
-          
+
         </TouchableOpacity>
     );
 };
@@ -46,9 +46,9 @@ const styles = StyleSheet.create({
         marginHorizontal: Spaces.sm,
         borderColor: Colors.blue,
         borderWidth: 0.6,
-        borderRadius: 10, 
-        paddingBottom:Spaces.sm
-        
+        borderRadius: 10,
+        paddingBottom: Spaces.sm
+
     },
     profilePicture:
     {
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 30,
         marginRight: Spaces.med,
-        borderWidth:0.6,
+        borderWidth: 0.6,
     },
     card:
     {
@@ -66,10 +66,10 @@ const styles = StyleSheet.create({
     {
 
     },
-   
+
     description:
     {
         color: Colors.gray
     },
-  
+
 })

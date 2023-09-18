@@ -154,7 +154,6 @@ const makeStyles = (H, W) => StyleSheet.create({
         padding: 5,
         textDecorationLine: 'underline',
         alignItems: 'flex-start',
-        color: Colors.buttoncolor
     },
     textInput:
     {
