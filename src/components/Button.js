@@ -5,7 +5,7 @@ import Spaces from '../helper/Spaces'
 import Fonts from '../helper/Fonts'
 import { ActivityIndicator, Text } from 'react-native-paper'
 
-const CustomButton = ({ onPressButton, title, style, btnColor = Colors.buttoncolor, loader, disabled = null }) => {
+const CustomButton = ({ onPressButton, title, style, btnColor = Colors.PRIMARY, loader, disabled = null }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
@@ -20,7 +20,7 @@ const CustomButton = ({ onPressButton, title, style, btnColor = Colors.buttoncol
                         color={Colors.white}
                     />
                     :
-                    <Text style={[styles.text, { color: btnColor == Colors.buttoncolor ? Colors.black : Colors.white,}]}>{title}</Text>
+                    <Text style={[styles.text, { color: btnColor == Colors.PRIMARY || Colors.selectedcolor ? Colors.black : Colors.white, }]}>{title}</Text>
             }
 
         </TouchableOpacity>
@@ -41,7 +41,9 @@ const makeStyles = (H, W) => StyleSheet.create({
         width: W * 0.85,
         alignItems: 'center',
         alignSelf: 'center',
-        marginVertical: Spaces.med
+        marginVertical: Spaces.med,
+        borderWidth: 0.6,
+        borderColor: Colors.selectedcolor
     },
     text:
     {

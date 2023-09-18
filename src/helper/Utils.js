@@ -60,7 +60,6 @@ export const handleGetRequest = async (name) => {
         }).finally(() => {
             console.log('GET request completed.=========================', `${name}`);
         });
-
 };
 
 export function formatDate(inputDate) {
@@ -210,6 +209,5 @@ export function formatDateProfilePageDate(inputDate) {
     const date = new Date(inputDate);
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
-  }
+}
 
-  

@@ -10,6 +10,8 @@ import { Text } from 'react-native-paper';
 const Favourite_Parent = ({ navigation }) => {
     const [babySittersData, setBabySittersData] = useState([])
     const [loader, setLoader] = useState(true)
+
+    const bookingDate = new Date()
     const isFocused = useIsFocused()
 
     const H = useWindowDimensions().height
@@ -47,7 +49,9 @@ const Favourite_Parent = ({ navigation }) => {
         }
     };
 
-
+    const handleNavigation = (userid, roleid) => {
+        navigation.navigate("ProfileOfSitterDuringBooking_Parent", { 'userID': userid, bookingDate: JSON.stringify(bookingDate) })
+    }
 
     const renderfavBabysitterCard = ({ item }) => (
         <FavBabySittersCard
@@ -66,9 +70,9 @@ const Favourite_Parent = ({ navigation }) => {
             ?
             <Loader />
             :
-            <ImageBackground 
-            source={require('../assets/images/background.png')}
-            style={{ flex: 1 }}>
+            <ImageBackground
+                source={require('../assets/images/background.png')}
+                style={{ flex: 1 }}>
                 {
                     babySittersData?.users?.length == 0
                     &&

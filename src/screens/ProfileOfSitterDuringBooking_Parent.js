@@ -238,7 +238,8 @@ const makeStyles = (H, W) => StyleSheet.create({
         ...Fonts.sm,
         color: Colors.black,
         marginBottom: Spaces.med,
-        width: W * 0.7
+        width: W * 0.6,
+        flexWrap:'wrap'
     },
     whiteBox:
     {

@@ -26,7 +26,7 @@ export default TextInputComponent
 const styles = StyleSheet.create({
   input:
   {
-    width:'85%',
+    width:'90%',
     alignSelf:'center',
     marginVertical: Spaces.med,
     justifyContent: 'center',

@@ -1,6 +1,6 @@
 import { FlatList, ImageBackground, StyleSheet, View, useWindowDimensions } from 'react-native'
 import React from 'react'
-import { Divider, List } from 'react-native-paper'
+import { Divider, List, Text } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, logout } from '../redux/AuthSlice'
 import { clearStorage } from '../helper/LocalStore'
@@ -24,6 +24,15 @@ const Account = ({ navigation }) => {
         dispatch(logout());
     };
 
+    const pressFAQs = () => {
+        if (usertype == '2') {
+            navigation.navigate('FAQs_Sitter')
+        }
+        else if (usertype == '3') {
+            navigation.navigate('FAQs_Parent')
+        }
+    }
+
     const DATA = [
         {
             title: 'Account',
@@ -45,7 +54,7 @@ const Account = ({ navigation }) => {
             action: () => navigation.navigate('TransactionHistory')
         },
         {
-            title: 'Switch Role',
+            title: 'Role',
             action: () => navigation.navigate('SwitchUserType')
         },
         // {
@@ -60,6 +69,10 @@ const Account = ({ navigation }) => {
         // {
         //     title: 'Trust & Safety',
         // },
+        {
+            title: 'FAQs',
+            action: () => pressFAQs()
+        },
         {
             title: 'Help',
         },
@@ -77,7 +90,7 @@ const Account = ({ navigation }) => {
                     <List.Item
                         onPress={item?.action}
                         title={item?.title}
-                    />
+                   />
                     <Divider />
                 </>
             )

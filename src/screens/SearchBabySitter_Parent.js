@@ -8,8 +8,7 @@ import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 import Loader from '../components/Loader';
 import { useSelector } from 'react-redux';
-
-import { formatDate, formatDate_mmddyyyy, handleGetRequest, handlePostRequest } from '../helper/Utils';
+import { formatDate, handlePostRequest } from '../helper/Utils';
 import { useIsFocused } from '@react-navigation/native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import CustomDateTimePicker from '../components/CustomDateTimePicker';
@@ -21,7 +20,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
 
     const [filterdata, setFilterdata] = useState([])
     const [babySittersData, setBabySittersData] = useState([])
-    const [loader, setLoader] = useState(true)
+    const [loader, setLoader] = useState(false)
     const [users, setUsers] = useState([])
     const [searchText, setSearchText] = useState("")
     const [bookingDate, setBookingDate] = useState(new Date())
@@ -38,6 +37,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
     }, [isFocused, bookingDate])
 
     const getUsers = async () => {
+        setLoader(true)
         var formdata = new FormData()
         formdata.append('date', formatDate(bookingDate))
         const result = await handlePostRequest('filter_users', formdata)
@@ -64,7 +64,6 @@ const SearchBabySitter_Parent = ({ navigation }) => {
 
     const handleNavigation = (userid, roleid) => {
         navigation.navigate("ProfileOfSitterDuringBooking_Parent", { 'userID': userid, bookingDate: JSON.stringify(bookingDate) })
-
     }
 
     const throwChipSelection = (name) => {

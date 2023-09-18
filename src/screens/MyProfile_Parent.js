@@ -587,6 +587,7 @@ const MyProfile_Parent = () => {
                         style={styles.input} />
 
                     <CustomButton
+                    btnColor={Colors.selectedcolor}
                         style={styles.updateButton}
                         loader={loaderButton}
                         onPressButton={onPressButton}

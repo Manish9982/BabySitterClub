@@ -10,7 +10,7 @@ import { Picker } from '@react-native-picker/picker';
 import { convertTo12HourFormat, convertTo24HourFormat, formatDate, formatDate_mmddyyyy, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import Loader from '../components/Loader';
 
-const AddAvailabiltity_Sitter = ({ navigation }) => {
+const AddAvailability_Sitter = ({ navigation }) => {
 
     const [showDatePicker, setShowDatePicker] = useState(false)
     const [date, setDate] = useState(new Date());
@@ -97,28 +97,24 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
         })
     }
     const onPressAddAvailability = async () => {
-        if (showPicker) {
-            setLoaderButton(true)
-            var formdata = new FormData()
-            formdata.append("date", formatDate(date));
-            formdata.append("start_time", convertTo24HourFormat(startTime));
-            formdata.append("end_time", convertTo24HourFormat(endTime));
-            formdata.append("repeat", repeatOption);
-            formdata.append("service_id", JSON.stringify(chosenService?.id));
-            const result = await handlePostRequest('slot_availability', formdata)
-            if (result?.status == '200') {
-                Alert.alert('Availability added', result?.message)
-                navigation.navigate('MyProfile_Sitter')
-            }
-            else {
-                Alert.alert('Error', result?.message)
-            }
-            setLoaderButton(false)
+        setLoaderButton(true)
+        var formdata = new FormData()
+        formdata.append("date", formatDate(date));
+        formdata.append("start_time", convertTo24HourFormat(startTime));
+        formdata.append("end_time", convertTo24HourFormat(endTime));
+        formdata.append("repeat", repeatOption);
+        formdata.append("service_id", JSON.stringify(chosenService?.id));
+        const result = await handlePostRequest('slot_availability', formdata)
+        if (result?.status == '200') {
+            Alert.alert('Availability added', result?.message)
+            navigation.goBack()
         }
         else {
-            Alert.alert("Invalid Selection", 'Please choose a service first')
+            Alert.alert('Error', result?.message)
         }
+        setLoaderButton(false)
     }
+
     return (
         loader
             ?
@@ -129,22 +125,17 @@ const AddAvailabiltity_Sitter = ({ navigation }) => {
                 contentContainerStyle={styles.container}>
                 <Text style={styles.headingText}>Select Service:</Text>
                 {
-                    showPicker ?
 
-                        <Picker
-                            selectedValue={chosenService?.id}
-                            onValueChange={onSelectService}
-                            style={styles.pickerContainer}>
-                            {
-                                filteredServices?.map(item => <Picker.Item key={item?.id} value={item?.id} label={item?.service_name} />)
-                            }
-                        </Picker>
-                        :
-                        <TouchableOpacity
-                            onPress={onPressPickerContainer}
-                            style={styles.pickerLabelContainer}>
-                            <Text style={{ ...Fonts.medBold }}>{chosenService?.service_name}</Text>
-                        </TouchableOpacity>
+
+                    <Picker
+                        selectedValue={chosenService?.id}
+                        onValueChange={onSelectService}
+                        style={styles.pickerContainer}>
+                        {
+                            filteredServices?.map(item => <Picker.Item key={item?.id} value={item?.id} label={item?.service_name} />)
+                        }
+                    </Picker>
+
                 }
                 <Text style={styles.headingText}>Select Date:</Text>
 
@@ -415,4 +406,4 @@ const makeStyles = (H, W) => StyleSheet.create({
 
 });
 
-export default AddAvailabiltity_Sitter;
+export default AddAvailability_Sitter;
