@@ -140,7 +140,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                 source={require('../assets/images/background.png')}
                 style={{ flex: 1 }}>
                 <View style={styles.upperconatiner}>
-                    <Text style={styles.textQuery}>When would you like to schedule a sitter?</Text>
+                    <Text style={[styles.textQuery, Fonts.medMedium]}>When would you like to schedule a sitter?</Text>
                     {/* <RNDateTimePicker
                         style={styles.datePicker}
                         value={bookingDate}
@@ -158,7 +158,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                         loading={false}
                         mode='bar'
                         placeholder='Search'
-                        style={styles.searchBar}
+                        style={[styles.searchBar, Fonts.medMedium]}
                         onChangeText={(text) => setSearchText(text)}
                     />
                     {
@@ -245,7 +245,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     textQuery:
     {
         marginTop: Spaces.sm,
-        color: Colors.BlackTransparent
+        color: Colors.black
     },
     datePicker:
     {
@@ -253,6 +253,6 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     chip:
     {
-
+margin:5
     }
 })
