@@ -75,6 +75,8 @@ const Account = ({ navigation }) => {
         },
         {
             title: 'Help',
+            action: () => navigation.navigate('Help')
+
         },
         {
             title: 'Logout',
