@@ -29,6 +29,7 @@ const Favourite_Parent = ({ navigation }) => {
         setLoader(true)
         const result = await handleGetRequest('fav_users')
         if (result?.status == '200') {
+            console.log('Fav USers ======>', result)
             setBabySittersData(result)
         } else if (result?.status == '201') {
             setBabySittersData(result)
@@ -55,6 +56,7 @@ const Favourite_Parent = ({ navigation }) => {
 
     const renderfavBabysitterCard = ({ item }) => (
         <FavBabySittersCard
+            rating={item?.rating}
             profilePicture={`${babySittersData?.url}${item?.profilePicture}`}
             name={item?.name}
             description={item?.description}

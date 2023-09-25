@@ -28,7 +28,6 @@ const Splash = ({ navigation }) => {
         if (status == 'true') {
             dispatch(login());
             dispatch(setUsertype(`${USER}`))
-            console.log("User at Splash==>", USER)
         }
         else {
             dispatch(logout());

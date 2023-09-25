@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Image, Platform, Alert, StyleSheet, View, TouchableOpacity, Modal, useWindowDimensions, FlatList, TouchableWithoutFeedback, ImageBackground } from 'react-native';
-import { Chip, DataTable, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import TextInputComponent from '../components/TextInputComponent';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
@@ -10,364 +10,16 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Shadows, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import CustomButton from '../components/Button';
-import { launchImageLibrary } from 'react-native-image-picker';
+// import { launchImageLibrary } from 'react-native-image-picker';
 import Loader from '../components/Loader';
+import { setIsProfileCompleted } from '../redux/GlobalSlice';
+import { useDispatch } from 'react-redux';
 
 const MyProfile_Parent = () => {
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
-
-    const SlotsData = {
-        days: [
-            {
-                day: 'Monday',
-                available: true,
-                slots:
-                    [
-                        {
-                            id: 1,
-                            slot: '09:00',
-                            active: true,
-                            isSelected: true
-                        },
-                        {
-                            id: 2,
-                            slot: '10:00',
-                            active: true,
-                            isSelected: false
-                        },
-                        {
-                            id: 3,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 4,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 5,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 6,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 7,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                    ]
-            },
-            {
-                day: 'Tuesday',
-                available: false,
-                slots:
-                    [
-                        {
-                            id: 1,
-                            slot: '09:00',
-                            active: true,
-                            isSelected: true
-                        },
-                        {
-                            id: 2,
-                            slot: '10:00',
-                            active: true,
-                            isSelected: false
-                        },
-                        {
-                            id: 3,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 4,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 5,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 6,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 7,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                    ]
-            },
-            {
-                day: 'Wednesday',
-                available: true,
-                slots:
-                    [
-                        {
-                            id: 1,
-                            slot: '09:00',
-                            active: true,
-                            isSelected: true
-                        },
-                        {
-                            id: 2,
-                            slot: '10:00',
-                            active: true,
-                            isSelected: false
-                        },
-                        {
-                            id: 3,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 4,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 5,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 6,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 7,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                    ]
-            },
-            {
-                day: 'Thursday',
-                available: true,
-                slots:
-                    [
-                        {
-                            id: 1,
-                            slot: '09:00',
-                            active: true,
-                            isSelected: true
-                        },
-                        {
-                            id: 2,
-                            slot: '10:00',
-                            active: true,
-                            isSelected: false
-                        },
-                        {
-                            id: 3,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 4,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 5,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 6,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 7,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                    ]
-            },
-            {
-                day: 'Friday',
-                available: false,
-                slots:
-                    [
-                        {
-                            id: 1,
-                            slot: '09:00',
-                            active: true,
-                            isSelected: true
-                        },
-                        {
-                            id: 2,
-                            slot: '10:00',
-                            active: true,
-                            isSelected: false
-                        },
-                        {
-                            id: 3,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 4,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 5,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 6,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 7,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                    ]
-            },
-            {
-                day: 'Saturday',
-                available: true,
-                slots:
-                    [
-                        {
-                            id: 1,
-                            slot: '09:00',
-                            active: true,
-                            isSelected: true
-                        },
-                        {
-                            id: 2,
-                            slot: '10:00',
-                            active: true,
-                            isSelected: false
-                        },
-                        {
-                            id: 3,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 4,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 5,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 6,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 7,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                    ]
-            },
-            {
-                day: 'Sunday',
-                available: true,
-                slots:
-                    [
-                        {
-                            id: 1,
-                            slot: '09:00',
-                            active: true,
-                            isSelected: true
-                        },
-                        {
-                            id: 2,
-                            slot: '10:00',
-                            active: true,
-                            isSelected: false
-                        },
-                        {
-                            id: 3,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 4,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 5,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 6,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                        {
-                            id: 7,
-                            slot: '11:00',
-                            active: false,
-                            isSelected: false
-                        },
-                    ]
-            },
-        ]
-
-    }
-
 
     const [userdata, setUserdata] = useState(null)
     const [loader, setLoader] = useState(true)
@@ -383,10 +35,11 @@ const MyProfile_Parent = () => {
     const [showSlots, setShowSlots] = useState(false)
     const [slots, setSlots] = useState(null)
 
+    const dispatch = useDispatch()
+
     useEffect(() => {
         getUserProfileData()
     }, [])
-
 
     const onPressButton = () => {
         if (price?.length == '0') {
@@ -455,6 +108,7 @@ const MyProfile_Parent = () => {
 
         if (result?.status == '200') {
             Alert.alert("Success", result?.message)
+            dispatch(setIsProfileCompleted(true))
         } else {
             Alert.alert("Error", result?.message)
         }
@@ -587,7 +241,6 @@ const MyProfile_Parent = () => {
                         style={styles.input} />
 
                     <CustomButton
-                        btnColor={Colors.selectedcolor}
                         style={styles.updateButton}
                         loader={loaderButton}
                         onPressButton={onPressButton}

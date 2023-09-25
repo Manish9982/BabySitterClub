@@ -5,7 +5,7 @@ import { LOCAL_STORE } from '../helper/Utils'
 const initialState = {
   usertype: null,
   selectedService: null,
-  isProfileCompleted: false
+  isProfileCompleted: true
 }
 
 const globalSlice = createSlice({
@@ -26,5 +26,5 @@ const globalSlice = createSlice({
   }
 })
 
-export const { setUsertype, setSelectedServices } = globalSlice.actions;
+export const { setUsertype, setSelectedServices, setIsProfileCompleted } = globalSlice.actions;
 export default globalSlice.reducer;

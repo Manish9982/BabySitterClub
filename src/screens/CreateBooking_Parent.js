@@ -20,8 +20,10 @@ const CreateBooking_Parent = ({ navigation, route }) => {
         formdata.append('slot_id', bookingParams.slot_id)
         formdata.append('amount', bookingParams.amount)
         const result = await handlePostRequest('booking', formdata)
-        if (result.status == '200') {
-            navigation.navigate('PaymentWebview_Parent')
+        if (result?.status == '200') {
+            console.log(result)
+            navigation.navigate('PaymentWebview_Parent', { bookingId: result?.booking_id })
+            //navigation.navigate('PaymentWebview_Parent')
         }
         else {
             Alert.alert('Error', result?.message)

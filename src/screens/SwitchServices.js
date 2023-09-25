@@ -4,27 +4,61 @@ import Spaces from '../helper/Spaces';
 import ServicesCard from '../components/ServicesCard';
 import CustomButton from '../components/Button';
 import Colors from '../helper/Colors';
-import { handleGetRequest } from '../helper/Utils';
+import { LOCAL_STORE, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import Loader from '../components/Loader';
-import { setSelectedServices } from '../redux/GlobalSlice'
-import { useDispatch } from 'react-redux';
+import { setSelectedServices, setUsertype } from '../redux/GlobalSlice'
+import { useDispatch, useSelector } from 'react-redux';
+import { storeLocalValue } from '../helper/LocalStore';
 
-const SwitchServices = ({ navigation }) => {
+const SwitchServices = ({ navigation, route }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
 
+    //const userType = useSelector(state => state.global.usertype)
     const dispatch = useDispatch()
 
     useEffect(() => {
         getServices()
     }, [])
 
-    const [services, setServices] = useState();
+    const [services, setServices] = useState([]);
     const [loader, setLoader] = useState(true)
     const [baseUrl, setBaseUrl] = useState('')
 
-    const onPressContinue = () => {
+    const onPressContinue = async () => {
+        var formdata = new FormData()
+        formdata.append("RoleId", `${route?.params?.user}`);
+        for (let i = 0; i < services.length; i++) {
+            if (services?.[i]?.isSelected) {
+                formdata.append("ServiceId[]", `${services?.[i]?.id}`);
+            }
+        }
+        setLoader(true)
+        const result = await handlePostRequest('switch_account', formdata)
+        //console.log(result)
+        if (result?.status == "200") {
+            await storeLocalValue(LOCAL_STORE.TOKEN, result?.token)
+            // if (userType == '3') {
+            dispatch(setUsertype(`${route?.params?.user}`))
+            if (route?.params?.user == '3') {
+                navigation.navigate('BottomTabsParent')
+            }
+            else if (route?.params?.user == '2') {
+                navigation.navigate('BottomTabsSitter')
+              
+            }
+            // }
+            // else if (userType == '2') {
+            //     dispatch(setUsertype('3'))
+            // }
+            // storeLocalValue(LOCAL_STORE.TOKEN, result?.token)
+            // dispatch(login())
+        }
+        else {
+            Alert.alert('Alert', result?.message)
+        }
+        setLoader(false)
         // if (services.every(item => !item?.isSelected)) {
         //     null
         // }
@@ -32,8 +66,7 @@ const SwitchServices = ({ navigation }) => {
         //     dispatch(setSelectedServices(services.filter(item => item?.isSelected)));
         //     navigation.navigate('Login')
         // }
-        navigation.goBack()
-
+        //navigation.goBack()
     }
 
     const getServices = async () => {
@@ -44,7 +77,6 @@ const SwitchServices = ({ navigation }) => {
     }
 
     const onPressService = (item) => {
-        console.log('item', item)
         const updatedService = services?.map(service => {
             if (service.id == item.id) {
                 const newItem = item
@@ -64,6 +96,7 @@ const SwitchServices = ({ navigation }) => {
             onPressServices={() => onPressService(item)}
         />
     );
+    console.log('service===>', services)
     return (
         loader
             ?

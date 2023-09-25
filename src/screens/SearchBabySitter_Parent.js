@@ -96,6 +96,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         if ((haveCommonElements(filterdata, item?.service) || filterdata?.length == 0) && (item?.name?.toLowerCase()?.includes(searchText?.toLowerCase()))) {
             return (
                 <BabySitterCard
+                    rating={item?.rating}
                     profilePicture={`${babySittersData?.url}${item?.profilePicture}`}
                     name={item?.name}
                     description={item?.description}
@@ -153,6 +154,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                         value={bookingDate}
                         onChangeAndroid={onChangeAndroidPicker}
                         onChangeIos={onChangeIosPicker}
+                        minimumDate={new Date()}
                     />
                     <Searchbar
                         loading={false}
@@ -253,6 +255,6 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     chip:
     {
-margin:5
+        // margin:5
     }
 })

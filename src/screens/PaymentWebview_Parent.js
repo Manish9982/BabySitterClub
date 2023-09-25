@@ -3,9 +3,9 @@ import React from 'react'
 import { Text } from 'react-native-paper'
 import WebView from 'react-native-webview'
 
-const PaymentWebview_Parent = () => {
+const PaymentWebview_Parent = ({ navigation, route }) => {
   return (
-    <WebView source={{ uri: '2' }} style={{ flex: 1 }} />
+    <WebView source={{ uri: `https://thebabysitterclubs.com/babysitter/payment/${route?.params?.bookingId}` }} style={{ flex: 1 }} />
   )
 }
 

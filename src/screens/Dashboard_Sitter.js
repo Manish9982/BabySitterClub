@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, TouchableOpacity, StyleSheet, useWindowDimensions, ScrollView, ImageBackground, FlatList } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet, useWindowDimensions, ScrollView, ImageBackground, Alert } from 'react-native';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
@@ -8,6 +8,7 @@ import { SegmentedButtons, Text } from 'react-native-paper';
 import TagIcon from '../components/TagIcon';
 import CloseButton from '../components/CloseButton';
 import Loader from '../components/Loader';
+import { useIsFocused } from '@react-navigation/native';
 
 const ProfileScreen = ({ navigation }) => {
 
@@ -18,9 +19,13 @@ const ProfileScreen = ({ navigation }) => {
     const [serviceFilterId, setServiceFilterId] = useState(null)
     const [loader, setLoader] = useState(true)
 
+    const isFocused = useIsFocused()
+
     useEffect(() => {
-        getDashboardData()
-    }, [])
+        if (isFocused) {
+            getDashboardData()
+        }
+    }, [isFocused])
 
     const getDashboardData = async () => {
         const result = await handleGetRequest('dashboard')
@@ -28,7 +33,7 @@ const ProfileScreen = ({ navigation }) => {
             setDashboardData(result)
         }
         else {
-            Alert.Alert('Error', result?.message)
+            Alert.alert('Error', result?.message)
         }
         setLoader(false)
     }
@@ -72,13 +77,17 @@ const ProfileScreen = ({ navigation }) => {
         navigation.navigate('Bookings')
     }
     const onPressStatCancelled = () => {
-        navigation.navigate('Bookings')
+        navigation.navigate('CancelledBookingDisplay_Sitter')
     }
     const onPressStatCompleted = () => {
         navigation.navigate('Bookings')
     }
     const onPressStatPending = () => {
         navigation.navigate('Bookings')
+    }
+
+    const onPressUserProfile = () => {
+        navigation.navigate('MyProfile_Sitter')
     }
 
     const styles = makeStyles(H, W)
@@ -108,7 +117,7 @@ const ProfileScreen = ({ navigation }) => {
                                     />
                                 </TouchableOpacity>
 
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={onPressUserProfile}>
                                     <Image source={require('../assets/images/account.png')}
                                         style={styles.icon}
                                     />

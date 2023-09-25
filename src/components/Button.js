@@ -4,6 +4,7 @@ import Colors from '../helper/Colors'
 import Spaces from '../helper/Spaces'
 import Fonts from '../helper/Fonts'
 import { ActivityIndicator, Text } from 'react-native-paper'
+import LinearGradient from 'react-native-linear-gradient'
 
 const CustomButton = ({ onPressButton, title, style, btnColor = Colors.PRIMARY, loader, disabled = null }) => {
     const H = useWindowDimensions().height
@@ -12,17 +13,21 @@ const CustomButton = ({ onPressButton, title, style, btnColor = Colors.PRIMARY, 
     return (
         <TouchableOpacity
             disabled={disabled || loader}
-            style={[styles.button, style, { backgroundColor: btnColor }]}
             onPress={onPressButton}>
-            {
-                loader ?
-                    <ActivityIndicator size={"small"}
-                        color={Colors.white}
-                    />
-                    :
-                    <Text style={[styles.text, { color: btnColor == Colors.PRIMARY || Colors.selectedcolor ? Colors.black : Colors.white, }]}>{title}</Text>
-            }
-
+            <LinearGradient
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={[styles.button, style, { backgroundColor: btnColor }]}
+                colors={btnColor == Colors.PRIMARY ? [Colors.PRIMARY, Colors.golden] : [btnColor, btnColor]}>
+                {
+                    loader ?
+                        <ActivityIndicator size={"small"}
+                            color={Colors.white}
+                        />
+                        :
+                        <Text style={[styles.text, { color: (btnColor == Colors.PRIMARY || btnColor == Colors.PRIMARY) ? Colors.black : Colors.white, }]}>{title}</Text>
+                }
+            </LinearGradient>
         </TouchableOpacity>
     )
 }
@@ -43,7 +48,6 @@ const makeStyles = (H, W) => StyleSheet.create({
         alignSelf: 'center',
         marginVertical: Spaces.med,
         borderWidth: 0.6,
-        borderColor: Colors.selectedcolor
     },
     text:
     {

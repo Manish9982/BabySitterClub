@@ -1,4 +1,4 @@
-import { StyleSheet, View, ImageBackground, useWindowDimensions, Alert, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, ImageBackground, useWindowDimensions, Alert, TouchableOpacity, Platform } from 'react-native'
 import { Text, Divider } from 'react-native-paper';
 import React, { useEffect, useState } from 'react'
 import Colors from '../helper/Colors';
@@ -37,6 +37,7 @@ const Password = ({ navigation, route }) => {
             for (let i = 0; i < selectedService.length; i++) {
                 formdata.append("ServiceId[]", `${selectedService?.[i]?.id}`);
             }
+            formdata.append("device_type", Platform.OS);
             setLoader(true)
             const result = await handlePostRequest('login', formdata)
             if (result?.status == "200") {

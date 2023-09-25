@@ -11,7 +11,7 @@ const BookingCard = ({ booking, profileURL }) => {
 
     const styles = makeStyles(W)
     return (
-        <View style={[styles.cardContainer, { backgroundColor: Colors.PRIMARY }]}>
+        <View style={[styles.cardContainer, { backgroundColor: Colors.white }]}>
             <View style={styles.profileContainer}>
                 <Image
                     source={{ uri: `${profileURL}${booking?.picture}` }} // Replace with your actual image path
@@ -37,24 +37,24 @@ const BookingCard = ({ booking, profileURL }) => {
                 </View>
                 <View style={styles.detail}>
                     <Text style={styles.label}>Duration:  </Text>
-                    <Text style={styles.value}>{booking?.time_diffrence}</Text>
+                    <Text style={styles.value}>{booking?.time_difference}</Text>
                 </View>
                 <View style={styles.detail}>
                     <Text style={styles.label}>Price:  </Text>
-                    <Text style={styles.value}>$ {booking?.amount}</Text>
+                    <Text style={styles.value}>${booking?.amount}</Text>
                 </View>
                 <View style={styles.detail}>
                     <Text style={styles.label}>Payment Status:  </Text>
                     {
-                        // (booking?.status == 1)
-                        //     ?
-                        <Text style={[styles.value, styles.paymentStatus]}>
-                            Done ✅
+                        (booking?.status == 1)
+                            ?
+                        <Text style={[styles.value, styles.paymentDone]}>
+                           Paid
                         </Text>
-                        // :
-                        // <Text style={[styles.value, styles.paymentStatus]}>
-                        //     Pending ⏳
-                        // </Text>
+                        :
+                        <Text style={[styles.value, styles.paymentPending]}>
+                            Pending
+                        </Text>
                     }
                 </View>
                 <View style={styles.detail}>
@@ -68,38 +68,46 @@ const BookingCard = ({ booking, profileURL }) => {
 
 const makeStyles = (W) => StyleSheet.create({
     cardContainer: {
-        width: W * 0.75,
-        margin: Spaces.med,
+        borderColor:Colors.PRIMARY,
+        borderWidth:2,
+        flexDirection: 'row',
+        width: W * 0.96,
+        marginVertical: Spaces.med,
         backgroundColor: Colors.PRIMARY,
-        borderRadius: 8,
+        borderRadius: 10,
+        padding: Spaces.med,
         ...Shadows
     },
     profileContainer: {
-        justifyContent: 'center',
+        //justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 16,
+        margin: Spaces.sm,
     },
     profileImage: {
         width: 80, // Adjust the width and height as needed
         height: 80,
         borderRadius: 40, // To make it circular
+        borderWidth: 0.2
     },
     detailsContainer: {
-        padding: 16,
     },
     detail: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexWrap:'wrap',
+        //justifyContent: 'space-between',
         marginBottom: 8,
     },
     label: {
         fontWeight: 'bold',
     },
     value: {},
-    paymentStatus: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    paymentDone: {
+        color: 'green'
     },
+    paymentPending:
+    {
+        color:'red'
+    }
 });
 
 export default BookingCard;

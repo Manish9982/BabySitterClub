@@ -5,7 +5,7 @@ import Colors from '../helper/Colors'
 import Spaces from '../helper/Spaces'
 import { handleGetRequest, handlePostRequest } from '../helper/Utils'
 import Loader from '../components/Loader'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setUsertype } from '../redux/GlobalSlice'
 import { Text } from 'react-native-paper'
 import Fonts from '../helper/Fonts'
@@ -15,6 +15,7 @@ const SwitchUserType = ({ navigation, route }) => {
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
 
+    const usertype = useSelector(state => state.global.usertype)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -31,8 +32,8 @@ const SwitchUserType = ({ navigation, route }) => {
     }
 
     const onPressSubService = (subservice) => {
-        dispatch(setUsertype(subservice))
-        navigation.navigate('SwitchServices')
+        //dispatch(setUsertype(subservice))
+        navigation.navigate('SwitchServices', { user: subservice })
     }
 
     const renderSubServices = ({ item }) => {
@@ -42,7 +43,7 @@ const SwitchUserType = ({ navigation, route }) => {
             />
         )
     }
-
+    console.log(usertype)
     return (
         <ImageBackground
             imageStyle={styles.imageStyle}
@@ -52,7 +53,13 @@ const SwitchUserType = ({ navigation, route }) => {
                 <Loader />
             ) : (
                 <>
-                    <Text style={styles.text}>You're logged in as a "Care Provider" right now. Choose an option to switch your role/services.</Text>
+                    {
+                        usertype == '2'
+                            ?
+                            <Text style={styles.text}>You're logged in as a "Care Provider" right now. Choose an option to switch your role/services.</Text>
+                            :
+                            <Text style={styles.text}>You're logged in as a "Care Seeker" right now. Choose an option to switch your role/services.</Text>
+                    }
                     <FlatList
                         contentContainerStyle={styles.box}
                         data={subServicesData?.user_type}
@@ -93,6 +100,6 @@ const makeStyles = (H, W) => StyleSheet.create({
         ...Fonts.medSemiBold,
         textAlign: 'center',
         top: H * 0.3,
-        margin:Spaces.med
+        margin: Spaces.med
     }
 });

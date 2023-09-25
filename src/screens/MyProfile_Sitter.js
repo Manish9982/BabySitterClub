@@ -10,11 +10,13 @@ import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Shadows, convertTimeRangeTo12HourFormat, convertTo12HourFormat, formatDateProfilePageDate, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import CustomButton from '../components/Button';
-import { launchImageLibrary } from 'react-native-image-picker';
+// import { launchImageLibrary } from 'react-native-image-picker';
 import Loader from '../components/Loader';
 import CloseButton from '../components/CloseButton';
 import { useIsFocused } from '@react-navigation/native';
 import TagIcon from '../components/TagIcon';
+import { setIsProfileCompleted } from '../redux/GlobalSlice';
+import { useDispatch } from 'react-redux';
 
 const MyProfile_Sitter = ({ navigation }) => {
 
@@ -53,9 +55,11 @@ const MyProfile_Sitter = ({ navigation }) => {
 
     }
 
+    const dispatch = useDispatch()
+
     const pickImage = async () => {
         try {
-            const image = await launchImageLibrary({ quality: 0 })
+            const image = await launchImageLibrary()
             setImage({
                 uri: image?.assets?.[0]?.uri,
                 name: image?.assets?.[0]?.fileName,
@@ -90,6 +94,7 @@ const MyProfile_Sitter = ({ navigation }) => {
         const result = await handlePostRequest('profile_update', formdata)
         if (result?.status == '200') {
             Alert.alert("Success", result?.message)
+            dispatch(setIsProfileCompleted(true))
         } else {
             Alert.alert("Error", result?.message)
         }
@@ -98,14 +103,17 @@ const MyProfile_Sitter = ({ navigation }) => {
 
     const getUserProfileData = async () => {
         const result = await handleGetRequest('profile')
-        setName(result?.userDetails?.first_name)
-        setLastName(result?.userDetails?.last_name)
-        setAbout(result?.userDetails?.description)
-        setAddress(result?.userDetails?.address)
-        setChildren(JSON.stringify(result?.userDetails?.no_of_children))
-        setPrice(JSON.stringify(result?.userDetails?.hour_price))
-        setImage({ uri: `${result?.url}${result?.userDetails?.picture}` })
-        setUserdata(result)
+        if (result?.status == '200') {
+            setName(result?.userDetails?.first_name)
+            setLastName(result?.userDetails?.last_name)
+            setAbout(result?.userDetails?.description)
+            setAddress(result?.userDetails?.address)
+            setChildren(JSON.stringify(result?.userDetails?.no_of_children))
+            setPrice(JSON.stringify(result?.userDetails?.hour_price))
+            setImage({ uri: `${result?.url}${result?.userDetails?.picture}` })
+            setUserdata(result)
+        }
+
         console.log("RESULT==========>", result)
         setLoader(false)
     }
@@ -134,7 +142,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                 <CloseButton id={item?.id} callBack={getUserProfileData} /></> : <Text>Booked</Text>}
         </View>
     );
-
+    console.log('image disp[layed at profile====>', image?.uri)
     return (
         loader
             ?
@@ -189,6 +197,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                     Only communicate through the App, do not include contact details. Minimum 200 characters.
                 </Text>
                 <TextInputComponent
+                    multiline
                     value={address}
                     onChangeText={(text) => {
                         setAddress(text)
@@ -206,7 +215,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                     }}
                     placeholder={"USD ($)"}
                     style={styles.input} />
-                <Text style={styles.sectionHeader}>No of children</Text>
+                {/* <Text style={styles.sectionHeader}>No of children</Text>
                 <TextInputComponent
                     keyboardType='numeric'
                     value={children}
@@ -214,7 +223,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                         setChildren(text)
                     }}
                     placeholder={"No of children"}
-                    style={styles.input} />
+                    style={styles.input} /> */}
                 <Text style={styles.sectionHeader}>Date of birth</Text>
                 {
                     Platform.OS == "ios"
@@ -276,8 +285,8 @@ const MyProfile_Sitter = ({ navigation }) => {
                                     })}
                                 </View>)
                         }
-                        else if((section?.service?.includes(Number.parseInt(serviceFilterId, 10)))) {
-                           console.log('Hi')
+                        else if ((section?.service?.includes(Number.parseInt(serviceFilterId, 10)))) {
+                            console.log('Hi')
                         }
                     })}
                 </ScrollView>

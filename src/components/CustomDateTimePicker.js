@@ -6,7 +6,7 @@ import Spaces from '../helper/Spaces'
 import Colors from '../helper/Colors'
 import { formatDate_mmddyyyy } from '../helper/Utils'
 
-const CustomDateTimePicker = ({ value, onChangeAndroid, onChangeIos, labelAndroid, style, alignSelf = 'center' }) => {
+const CustomDateTimePicker = ({ value, onChangeAndroid, onChangeIos, labelAndroid, style, alignSelf = 'center', minimumDate = null }) => {
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
@@ -29,6 +29,7 @@ const CustomDateTimePicker = ({ value, onChangeAndroid, onChangeIos, labelAndroi
                     <RNDateTimePicker
                         value={value}
                         onChange={(a, date) => onChangeAndroidPick(a, date)}
+                        minimumDate={minimumDate}
                     />
                 }
                 <TouchableOpacity
@@ -46,6 +47,7 @@ const CustomDateTimePicker = ({ value, onChangeAndroid, onChangeIos, labelAndroi
                 style={style}
                 value={value}
                 onChange={onChangeIos}
+                minimumDate={minimumDate}
             />
     )
 }

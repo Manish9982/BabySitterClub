@@ -6,7 +6,8 @@ export const LOCAL_STORE = {
     LOGIN: 'loginStatus',
     TOKEN: 'auth_token',
     USER_TYPE: 'userType',
-    SELECTED_SERVICE: 'selected_service'
+    SELECTED_SERVICE: 'selected_service',
+    FCM_TOKEN: 'fcm_token',
 }
 
 export const Constants = {

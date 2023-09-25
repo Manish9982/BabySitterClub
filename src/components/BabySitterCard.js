@@ -6,7 +6,7 @@ import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 
-const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavourite, onPressFavourite, onPressItemSelected, }) => {
+const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavourite, onPressFavourite, onPressItemSelected, rating = 0 }) => {
     return (
         <TouchableOpacity
             onPress={onPressItemSelected}
@@ -18,12 +18,13 @@ const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavo
             <View
                 style={styles.card}>
                 <Text style={[styles.name, Fonts.larSemiBold]}>{name}</Text>
-                <Text numberOfLines={2}
+                <Text
                     ellipsizeMode='tail'
-
+                    numberOfLines={3}
                     style={[styles.description, Fonts.smMedium]}>{description}
 
                 </Text>
+                <Text>Rating : {rating}/5 <AntDesign name="star" size={16} color={Colors.golden} /></Text>
                 <Text style={[styles.price, Fonts.medMedium]}>Hourly Price: ${hourlyPrice}</Text>
             </View>
             <TouchableOpacity
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     },
     price:
     {
-        marginTop: 8
+
     },
     description:
     {
