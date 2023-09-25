@@ -4,15 +4,19 @@ import { Text, SegmentedButtons } from 'react-native-paper'
 import Colors from '../helper/Colors';
 import BookingCardForSitter from '../components/BookingCardForSitter';
 import { convertTimeRangeTo12HourFormat, formatDate, formatDateProfilePageDate, formatDateWithTime, formatDate_mmddyyyy, handleGetRequest } from '../helper/Utils';
+import { useIsFocused } from '@react-navigation/native';
 
 const Bookings_Sitter = () => {
 
     const [value, setValue] = useState('all');
     const [bookingData, setBookingData] = useState(null)
+    const [loader, setLoader] = useState(true)
+
+    const isFocused = useIsFocused()
 
     useEffect(() => {
         getBookings()
-    }, [])
+    }, [isFocused])
 
     const getBookings = async () => {
         const result = await handleGetRequest('get_booking')
@@ -20,6 +24,7 @@ const Bookings_Sitter = () => {
             setBookingData(result)
             console.log(result)
         }
+        setLoader(false)
     }
 
     const renderBooking = ({ item, index }) => {
@@ -33,7 +38,7 @@ const Bookings_Sitter = () => {
                     date={formatDate_mmddyyyy(item?.slot_date)}
                     service={item?.booked_service_name}
                     slot={convertTimeRangeTo12HourFormat(item?.slot_id)}
-                    duration={item?.time_diffrence}
+                    duration={item?.time_difference}
                     address={item?.address}
                     createdAt={formatDateWithTime(item?.created_at)}
                     bookingId={item?.id}

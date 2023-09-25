@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Image, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, Image, StyleSheet, useWindowDimensions, Alert } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
 import SmallButtonSecondary from './SmallButtonSecondary';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
 import Colors from '../helper/Colors';
 import { Shadows, handlePostRequest } from '../helper/Utils';
+import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 
 const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status }) => {
 
@@ -18,42 +19,67 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
     var formdata = new FormData()
     formdata.append('booking_id', bookingId)
     formdata.append('status', '1')
-    const result = await handlePostRequest('check_booking_status', formdata)
-    console.log(result)
+    const result = await handlePostRequest('change_booking_status', formdata)
+    if (result?.status == '200') {
+      Alert.alert(result?.message)
+    }
+    else {
+      Alert.alert(result?.message)
+    }
   }
 
   const onPressCancel = async () => {
     var formdata = new FormData()
     formdata.append('booking_id', bookingId)
     formdata.append('status', '2')
-    const result = await handlePostRequest('check_booking_status', formdata)
+    const result = await handlePostRequest('change_booking_status', formdata)
+    if (result?.status == '200') {
+      console.log(result)
+    }
+    console.log(result)
   }
 
-  console.log("Image URL ======>", `${url}${profilePic}`)
+  const returnContainer = (t) => {
+    if (t == '0') {
+      return (<View>
+        <SmallButtonSecondary
+          onPressSmallButton={onPressMarkAsComplete}
+          style={styles.secondarySmallButton}
+          title={'Mark as complete'}
+        />
+        <SmallButtonSecondary
+          onPressSmallButton={onPressCancel}
+          style={styles.secondarySmallButton}
+          title={'Cancel booking'}
+        />
+      </View>)
+    }
+    else if (t == '1') {
+      return (
+        <View style={styles.statusContainer}>
+          <AntDesign name='checkcircle' size={30} color={'green'} />
+          <Text style={{ ...Fonts.larBold }}>Completed</Text>
+        </View>
+      )
+
+    }
+    else if (t == '2') {
+      return (
+        <View style={styles.statusContainer}>
+          <AntDesign name='closecircle' size={30} color={'red'} />
+          <Text style={{ ...Fonts.larBold }}>Cancelled</Text>
+        </View>
+      )
+    }
+  }
+
+  console.log("Status of bookings", status)
   return (
     <View style={styles.cardContainer}>
       <View style={styles.profileContainer}>
         <Image source={{ uri: `${url}${profilePic}` }} style={styles.profilePic} />
         <View>
-          {status == '0'
-            ?
-            <View>
-              <SmallButtonSecondary
-                onPressSmallButton={onPressMarkAsComplete}
-                style={styles.secondarySmallButton}
-                title={'Mark as complete'}
-              />
-              <SmallButtonSecondary
-                onPressSmallButton={onPressCancel}
-                style={styles.secondarySmallButton}
-                title={'Cancel booking'}
-              />
-            </View>
-            :
-            <View>
-
-            </View>
-          }
+          {returnContainer(status)}
         </View>
       </View>
       <Divider style={styles.divider} />
@@ -114,7 +140,8 @@ const makeStyles = (H, W) => StyleSheet.create({
   profileContainer:
   {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    alignItems:'center'
   },
   divider:
   {
@@ -133,6 +160,11 @@ const makeStyles = (H, W) => StyleSheet.create({
     alignSelf: 'flex-end',
     ...Fonts.sm,
     color: Colors.gray
+  },
+  statusContainer:
+  {
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 

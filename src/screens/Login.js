@@ -94,7 +94,7 @@ const Login = ({ navigation, route }) => {
 const makeStyles = (H, W) => StyleSheet.create({
   mainContainer:
   {
-    flex: 1
+    
   },
   upperContainer:
   {

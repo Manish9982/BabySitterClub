@@ -67,7 +67,6 @@ const Bookings = ({ navigation }) => {
           profileURL={bookingdata?.url}
           onItemPress={() => { onClickHandle(item.id) }}
         />
-        <Divider style={styles.divider}/>
       </>
     );
   }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "697634391096",
+    "project_id": "sitter-sphere",
+    "storage_bucket": "sitter-sphere.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697634391096:android:4654c263c39c2fc34452cd",
+        "android_client_info": {
+          "package_name": "com.babysittersclub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPPOCmp6qxMNOcYnC3P3mqxKs2DfbUFNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

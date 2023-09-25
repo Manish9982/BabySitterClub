@@ -1,4 +1,5 @@
 export default Colors = {
+    'golden':'#f5d742',
     'blue': '#007BFF',
     'outlineColor': '#ccc',
    // 'buttoncolor': '#1e81b0',
