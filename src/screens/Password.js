@@ -11,6 +11,8 @@ import { login } from '../redux/AuthSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOCAL_STORE, handlePostRequest } from '../helper/Utils';
 import { storeLocalValue } from '../helper/LocalStore';
+import { getTokenForApp } from '../helper/Notifications';
+import messaging from '@react-native-firebase/messaging';
 
 const Password = ({ navigation, route }) => {
 
@@ -21,6 +23,7 @@ const Password = ({ navigation, route }) => {
 
     const [password, setPassword] = useState("")
     const [loader, setLoader] = useState(false)
+    const [secureTextEntry, setSecureTextEntry] = useState(true)
 
     const userType = useSelector(state => state.global.usertype)
     const selectedService = useSelector(state => state.global.selectedService)
@@ -41,7 +44,16 @@ const Password = ({ navigation, route }) => {
             setLoader(true)
             const result = await handlePostRequest('login', formdata)
             if (result?.status == "200") {
-                storeLocalValue(LOCAL_STORE.TOKEN, result?.token)
+                if (Platform.OS == 'android') {
+                    await messaging()
+                        .getToken()
+                        .then(token => {
+                            console.log('FCM Token =========>', token)
+                            storeLocalValue(LOCAL_STORE.FCM_TOKEN, token)
+                            //return saveTokenToDatabase(token)
+                        });
+                }
+                await storeLocalValue(LOCAL_STORE.TOKEN, result?.token)
                 dispatch(login())
             }
             else {
@@ -52,6 +64,7 @@ const Password = ({ navigation, route }) => {
     }
     return (
         <KeyboardAwareScrollView
+            keyboardShouldPersistTaps='handled'
             contentContainerStyle={styles.mainContainer}
             style={styles.mainContainer}>
             <ImageBackground
@@ -66,8 +79,11 @@ const Password = ({ navigation, route }) => {
                     <View style={styles.textContainerForAlignment}>
                         <Text style={[styles.text2, Fonts.medMedium]}>Enter password to continue!</Text>
                         <TextInputComponent
+                            isRightIconNeeded={true}
+                            iconName={'eye'}
+                            onPressIcon={() => setSecureTextEntry(prev => !prev)}
                             placeholder='Enter Password'
-                            secureTextEntry={true}
+                            secureTextEntry={secureTextEntry}
                             value={password}
                             onChangeText={(text) => { setPassword(text) }}
                         />

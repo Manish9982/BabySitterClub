@@ -33,14 +33,16 @@ const SelectCountry = ({ navigation }) => {
                     <View style={styles.pickerContainer}>
                         <Picker
                             style={{
-                                ...Fonts.med
+                                fontFamily: 'Poppins-Regular',
+                                ...Fonts.med,
+                                color: Colors.black
                             }}
                             selectedValue={selectedCity}
                             onValueChange={(itemValue) => handleCountrySelect(itemValue)}
                         >
-                            <Picker.Item key={0} label='Choose a city' value='Choose a city' />
+                            <Picker.Item fontFamily='Poppins-Regular' key={0} label='Choose a city' value='Choose a city' />
                             {cities.map((city, index) => (
-                                <Picker.Item key={index + 1} label={city} value={city} />
+                                <Picker.Item fontFamily='Poppins-Regular' key={index + 1} label={city} value={city} />
                             ))}
                         </Picker>
                     </View>
@@ -66,19 +68,19 @@ const styles = StyleSheet.create({
     },
     imageStyle:
     {
-       // opacity: 0.4
+        // opacity: 0.4
     },
     box:
     {
         backgroundColor: Colors.white,
         padding: Spaces.med,
-        borderRadius: 8, elevation:2
+        borderRadius: 8, elevation: 2
     },
     heading: {
         // fontSize: 24,
         // fontWeight: 'bold',
         marginBottom: Spaces.xl,
-        textAlign:'center',
+        textAlign: 'center',
         color: "black"
     },
     countryBox: {

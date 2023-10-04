@@ -248,11 +248,13 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     profilePic:
     {
-        height: H * 0.13,
-        width: H * 0.13,
-        borderRadius: H * 0.13 / 2,
-        marginRight: Spaces.med
-    },
+        width: 100,
+        height: 100,
+        borderRadius: 100/3,
+        marginRight: Spaces.med,
+        borderWidth: 0.6,
+        borderColor: Colors.black
+      },
     lowerContainer:
     {
         padding: Spaces.med

@@ -5,12 +5,11 @@ import TextInputComponent from '../components/TextInputComponent';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
-import AntDesign from 'react-native-vector-icons/dist/AntDesign'
-import RNDateTimePicker from '@react-native-community/datetimepicker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Shadows, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import CustomButton from '../components/Button';
 // import { launchImageLibrary } from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import Loader from '../components/Loader';
 import { setIsProfileCompleted } from '../redux/GlobalSlice';
 import { useDispatch } from 'react-redux';
@@ -53,16 +52,30 @@ const MyProfile_Parent = () => {
 
     const pickImage = async () => {
         try {
-            const image = await launchImageLibrary({ quality: 0 })
+
+            const image = await ImagePicker.openPicker({
+                //multiple: true
+                //width: 300,
+                //height: 400,
+                compressImageQuality: 0.4,
+                cropping: true
+            })
             setImage({
-                uri: image?.assets?.[0]?.uri,
-                name: image?.assets?.[0]?.fileName,
-                type: image?.assets?.[0]?.type
+                uri: image?.path,
+                name: Platform.OS == 'android' ? image?.modificationDate : image?.filename,
+                type: image?.mime
             })
             console.log("Image", image)
         } catch (error) {
-            Alert.alert(error)
+            Alert.alert(JSON.stringify(error?.message))
         }
+        // ImagePicker.openCropper({
+        //     width: 300,
+        //     height: 400,
+        //     cropping: true,
+        //   }).then(image => {
+        //     console.log(image);
+        //   });
     }
 
     const renderSlots = ({ item, index }) => {
@@ -145,7 +158,6 @@ const MyProfile_Parent = () => {
                     <Modal
                         visible={showSlots}
                         transparent={true}
-
                     >
                         <TouchableWithoutFeedback onPress={() => setShowSlots(false)}>
                             <View style={styles.modalContainer}>
@@ -209,6 +221,7 @@ const MyProfile_Parent = () => {
                         Only communicate through the App, do not include contact details. Minimum 200 characters.
                     </Text>
                     <TextInputComponent
+                        multiline
                         value={address}
                         onChangeText={(text) => {
                             setAddress(text)
@@ -221,15 +234,12 @@ const MyProfile_Parent = () => {
                     <TextInputComponent
                         keyboardType='numeric'
                         maxlength={3}
-
                         value={price}
                         onChangeText={(text) => {
                             setPrice(text)
                         }}
                         placeholder={"USD ($)"}
                         style={styles.input} />
-
-
                     <Text style={styles.sectionHeader}>No of children</Text>
                     <TextInputComponent
                         keyboardType='numeric'
@@ -315,13 +325,19 @@ const makeStyles = (H, W) => StyleSheet.create({
         marginBottom: Spaces.sm,
     },
     profilePictureContainer: {
-        alignItems: 'center',
-        marginBottom: Spaces.sm,
+        alignSelf: 'center'
+        //alignItems: 'center',
+        //marginBottom: Spaces.sm,
     },
-    profilePicturePlaceholder: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
+    profilePicturePlaceholder:
+    {
+        width: 100,
+        height: 100,
+        borderRadius: 100 / 3,
+        marginRight: Spaces.med,
+        borderWidth: 0.6,
+        borderColor: Colors.black,
+        marginVertical: Spaces.med
     },
     updateButton:
     {

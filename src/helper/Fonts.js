@@ -1,4 +1,9 @@
 export default Fonts = {
+    vsm:
+    {
+        fontSize: 10,
+        fontFamily: "Poppins-Regular"
+    },
     sm: {
         fontSize: 12,
         fontFamily: "Poppins-Regular"

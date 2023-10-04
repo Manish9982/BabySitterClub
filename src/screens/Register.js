@@ -58,6 +58,7 @@ const Register = ({ navigation, route }) => {
             formdata.append("LastName", lastname);
             formdata.append("Email", route?.params?.email);
             formdata.append("Password", password);
+            formdata.append("ConfirmPassword", confirmpassword);
             formdata.append("RoleId", usertype?.toString());  //2 for ServiceProvider , // 3 for Client
             for (let i = 0; i < selectedService.length; i++) {
                 formdata.append("ServiceId[]", selectedService?.[i]?.id);
@@ -75,7 +76,6 @@ const Register = ({ navigation, route }) => {
             }
             setLoader(false)
         }
-
     };
 
     return (

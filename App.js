@@ -6,18 +6,12 @@ import { Provider } from 'react-redux';
 import Store from './src/redux/Store';
 import { LOCAL_STORE } from './src/helper/Utils';
 import { getLocalValue } from './src/helper/LocalStore';
-import { getTokenForApp } from './src/helper/Notifications';
 import { Platform } from 'react-native';
 
 const App = () => {
 
   useEffect(() => {
     getToken()
-    {
-      Platform.OS == 'android'
-        &&
-        getTokenForApp()//Notifications
-    }
   }, [])
 
 

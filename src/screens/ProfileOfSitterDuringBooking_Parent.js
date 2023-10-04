@@ -37,7 +37,8 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                 price: amount,
                 slot_id: slotId,
                 amount: price,
-                user_id:userID,
+                user_id: userID,
+                profile_pic: `${profiledetailsdata?.url}${profiledetailsdata?.userDetails?.picture}`
             })
         })
     }
@@ -105,9 +106,9 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
             ?
             <Loader />
             :
-            <ImageBackground 
-            source={require('../assets/images/background.png')}
-            style={styles.container}>
+            <ImageBackground
+                source={require('../assets/images/background.png')}
+                style={styles.container}>
                 <ScrollView
                     contentContainerStyle={styles.contentContainerStyle}
                     style={styles.container}>
@@ -147,6 +148,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         <Text style={styles.textneedbabysittertitle}>Availability</Text>
                         <Divider style={styles.divider} />
                         <CustomDateTimePicker
+                            minimumDate={new Date()}
                             alignSelf='flex-end'
                             style={styles.datePicker}
                             value={slotsDate}
@@ -239,7 +241,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         color: Colors.black,
         marginBottom: Spaces.med,
         width: W * 0.6,
-        flexWrap:'wrap'
+        flexWrap: 'wrap'
     },
     whiteBox:
     {
@@ -259,10 +261,12 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     profilePic:
     {
-        height: H * 0.13,
-        width: H * 0.13,
-        borderRadius: H * 0.13 / 2,
-        marginRight: Spaces.med
+        width: 100,
+        height: 100,
+        borderRadius: 100 / 3,
+        marginRight: Spaces.med,
+        borderWidth: 0.6,
+        borderColor: Colors.black
     },
     lowerContainer:
     {

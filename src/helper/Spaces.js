@@ -5,5 +5,6 @@ export default Spaces = {
     med: 12,
     lar: 16,
     xl: 20,
-    xxl: 24
+    xxl: 24,
+    xxxl: 30,
 }

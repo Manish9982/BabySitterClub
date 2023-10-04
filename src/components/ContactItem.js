@@ -36,11 +36,13 @@ const styles = StyleSheet.create({
     },
     avatar:
     {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        marginRight: 16,
-    },
+        width: 100,
+        height: 100,
+        borderRadius: 100/3,
+        marginRight: Spaces.med,
+        borderWidth: 0.6,
+        borderColor: Colors.black
+      },
     contactDetails:
     {
         flex: 1,

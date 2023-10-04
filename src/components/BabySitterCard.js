@@ -24,7 +24,7 @@ const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavo
                     style={[styles.description, Fonts.smMedium]}>{description}
 
                 </Text>
-                <Text>Rating : {rating}/5 <AntDesign name="star" size={16} color={Colors.golden} /></Text>
+                <Text>Rating : {rating}/5.0 <AntDesign name="star" size={16} color={Colors.golden} /></Text>
                 <Text style={[styles.price, Fonts.medMedium]}>Hourly Price: ${hourlyPrice}</Text>
             </View>
             <TouchableOpacity

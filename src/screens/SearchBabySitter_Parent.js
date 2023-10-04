@@ -141,12 +141,9 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                 source={require('../assets/images/background.png')}
                 style={{ flex: 1 }}>
                 <View style={styles.upperconatiner}>
+                    {/* <Text >Hello, James</Text> */}
                     <Text style={[styles.textQuery, Fonts.medMedium]}>When would you like to schedule a sitter?</Text>
-                    {/* <RNDateTimePicker
-                        style={styles.datePicker}
-                        value={bookingDate}
-                        onChange={(a, time) => onChangeDate(time)}
-                    /> */}
+                   
                     <CustomDateTimePicker
                         labelAndroid={'Choose Date'}
                         show={showPicker}

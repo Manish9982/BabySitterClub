@@ -38,6 +38,11 @@ import FAQs_Sitter from '../screens/FAQs_Sitter';
 import Help from '../screens/Help';
 import { clearStorage } from './LocalStore';
 import CancelledBookingDisplay_Sitter from '../screens/CancelledBookingDisplay_Sitter';
+import ViewPicture from '../screens/ViewPicture';
+import NotificationCenter_Parent from '../screens/NotificationCenter_Parent';
+import CancelledBookings_Parent from '../screens/CancelledBookings_Parent';
+import FindReplacements from '../screens/FindReplacements';
+import CreateReplacementBooking_Parent from '../screens/CreateReplacementBooking_Parent';
 
 const Router = () => {
 
@@ -53,7 +58,7 @@ const Router = () => {
                 return (
                     <Stack.Navigator screenOptions={{
                         headerBackTitleVisible: false,
-                        headerShown: Platform.OS == "android" ? false : true
+                        headerShown: Platform.OS == "android" ? true : true
                     }}>
                         <Stack.Screen name="BottomTabsParent" component={BottomTabsParent} options={{ headerShown: false }} />
                         <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
@@ -73,6 +78,11 @@ const Router = () => {
                         <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{}} />
                         <Stack.Screen name="FAQs_Parent" component={FAQs_Parent} options={{ headerTitle: 'FAQs' }} />
                         <Stack.Screen name="Help" component={Help} options={{ headerShown: true, headerTitle: 'Help and Support' }} />
+                        <Stack.Screen name="ViewPicture" component={ViewPicture} options={{ headerShown: true, headerTitle: '' }} />
+                        <Stack.Screen name="NotificationCenter_Parent" component={NotificationCenter_Parent} options={{ headerShown: true, headerTitle: 'Notification Center' }} />
+                        <Stack.Screen name="CancelledBookings_Parent" component={CancelledBookings_Parent} options={{ headerShown: true, headerTitle: 'Cancelled Bookings' }} />
+                        <Stack.Screen name="FindReplacements" component={FindReplacements} options={{ headerShown: true, headerTitle: 'Choose New Booking' }} />
+                        <Stack.Screen name="CreateReplacementBooking_Parent" component={CreateReplacementBooking_Parent} options={{ headerShown: true, headerTitle: 'Create Replacement Booking' }} />
 
                     </Stack.Navigator>
                 )
@@ -100,6 +110,7 @@ const Router = () => {
                         <Stack.Screen name="SwitchServices" component={SwitchServices} options={{ headerTitle: 'Switch Services' }} />
                         <Stack.Screen name="Help" component={Help} options={{ headerShown: true, headerTitle: 'Help and Support' }} />
                         <Stack.Screen name="CancelledBookingDisplay_Sitter" component={CancelledBookingDisplay_Sitter} options={{ headerShown: true, headerTitle: 'Cancelled Bookings' }} />
+                        <Stack.Screen name="ViewPicture" component={ViewPicture} options={{ headerShown: true, headerTitle: '' }} />
                     </Stack.Navigator>
                 )
             }

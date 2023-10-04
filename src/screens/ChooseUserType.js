@@ -1,4 +1,4 @@
-import { FlatList, ImageBackground, StyleSheet, useWindowDimensions, Text, View } from 'react-native'
+import { FlatList, ImageBackground, StyleSheet, useWindowDimensions, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomButton from '../components/Button'
 import Colors from '../helper/Colors'
@@ -8,6 +8,7 @@ import Loader from '../components/Loader'
 import { useDispatch } from 'react-redux'
 import { setUsertype } from '../redux/GlobalSlice'
 import Fonts from '../helper/Fonts'
+import { Text } from 'react-native-paper'
 
 const ChooseUserType = ({ navigation, route }) => {
     const H = useWindowDimensions().height

@@ -10,14 +10,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setIsProfileCompleted } from '../redux/GlobalSlice';
 import { LOCAL_STORE, handleGetRequest, handlePostRequest } from './Utils';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import CompleteYourProfile from '../screens/CompleteYourProfile';
 import MyProfile_Parent from '../screens/MyProfile_Parent';
 import { onNotificationReceiver, requestUserPermission } from './Notifications';
 import { getLocalValue } from './LocalStore';
 
-const BottomTabsParent = () => {
+const BottomTabsParent = ({ navigation }) => {
 
     useEffect(() => {
+        checkCancelledBookings()
         checkProfileStatus()
         if (Platform.OS == 'android') {
             requestUserPermission()
@@ -31,10 +31,18 @@ const BottomTabsParent = () => {
 
     // const [isProfileCompleted, setIsProfileCompleted] = useState(true)
 
+    const checkCancelledBookings = async () => {
+        const result = await handleGetRequest('get_cancel_booking')
+        console.log("Cancelled Bookings.", result)
+        if (result?.status == '200') {
+            navigation.navigate('CancelledBookings_Parent', { cancelled_bookings: JSON.stringify(result) })
+        }
+    }
+
     const updateFcmToken = async () => {
         const fcmToken = await getLocalValue(LOCAL_STORE.FCM_TOKEN)
         var formdata = new FormData()
-        formdata.append('fcm_token', JSON.parse(fcmToken))
+        formdata.append('fcm_token', fcmToken)
         formdata.append('device_type', Platform.OS)
         const result = await handlePostRequest('update_fcm', formdata)
         console.log('fcmToken API result==>', result)
@@ -63,6 +71,7 @@ const BottomTabsParent = () => {
 
             <Tab.Navigator>
                 <Tab.Screen name="Search" component={SearchBabySitter_Parent} options={{
+                    // headerRight: ({ color, size }) => <AntDesign name="search1" size={Spaces.xxxl} color={color} style={styles.search} />,
                     tabBarIcon: ({ color, size }) => <AntDesign name="search1" size={size} color={color} />
                 }} />
                 <Tab.Screen name="Favourites" component={Favourite_Parent} options={{
@@ -86,4 +95,9 @@ const BottomTabsParent = () => {
 }
 export default BottomTabsParent
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    search:
+    {
+        marginRight: 15
+    }
+})

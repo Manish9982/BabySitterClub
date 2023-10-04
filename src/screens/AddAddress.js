@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import {
-  View, Text, TextInput, Button, StyleSheet,
-  TouchableOpacity, useWindowDimensions, Alert
-} from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, useWindowDimensions, Alert } from 'react-native';
 import Fonts from '../helper/Fonts';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import CustomButton from '../components/Button';
 import { handleGetRequest, handlePostRequest } from '../helper/Utils';
+import TextInputComponent from '../components/TextInputComponent';
+import { Text } from 'react-native-paper';
 
 const AddAddress = ({ navigation }) => {
 
@@ -22,38 +21,34 @@ const AddAddress = ({ navigation }) => {
 
 
   const addAddress = async () => {
-    if (streetNo.length == 0) {
+    setLoader(true)
+    if (streetNo?.length == 0) {
       Alert.alert("Alert", "Street no. can not be empty")
-    } else if (completeAddress.length == 0) {
+    } else if (completeAddress?.length == 0) {
       Alert.alert("Alert", "Complete address can not be empty")
 
     } else {
-
       var formdata = new FormData()
       formdata.append("title", addressType);
       formdata.append("address", `${streetNo}, ${completeAddress}`);
 
       const result = await handlePostRequest('address_add', formdata)
-      console.log("RESULT ===  ", result)
 
-      if (result.status == "200") {
+      if (result?.status == "200") {
         navigation.navigate("ManageAddress")
-      } else if (result.status == "201") {
-        Alert.alert("Error", result.message)
+      } else if (result?.status == "201") {
+        Alert.alert("Error", result?.message)
       } else {
-        Alert.alert("Alert", result.message)
-
+        Alert.alert("Alert", result?.message)
       }
-      // setLoader(false)
     }
-
+    setLoader(false)
   }
 
 
   return (
     <View style={styles.container}>
       <Text style={[styles.title, Fonts.larMedium]}>Save Address As</Text>
-
 
       <View style={{
         flexDirection: "row",
@@ -99,14 +94,14 @@ const AddAddress = ({ navigation }) => {
       </View>
 
 
-      <TextInput
+      <TextInputComponent
         style={[styles.input, Fonts.medMedium]}
         placeholder="Street No."
         value={streetNo}
         onChangeText={setStreetNo}
       />
 
-      <TextInput
+      <TextInputComponent
         style={[styles.input2, Fonts.medMedium]}
         placeholder="Complete Address"
         value={completeAddress}
@@ -153,11 +148,11 @@ const makeStyles = (H, W) => StyleSheet.create({
 
   },
 
-textStyle:{
-  
-}
+  textStyle: {
 
-  
+  }
+
+
 });
 
 export default AddAddress;

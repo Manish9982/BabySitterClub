@@ -1,22 +1,32 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, useWindowDimensions } from 'react-native';
-import { Divider } from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { View, FlatList, StyleSheet, TouchableOpacity, Image, useWindowDimensions } from 'react-native';
+import { Divider, Text } from 'react-native-paper';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
+import { handleGetRequest } from '../helper/Utils';
+import Loader from '../components/Loader';
 
 const NotificationsScreen = () => {
+
+    const [notifications, setNotifications] = useState(null)
+    const [loader, setLoader] = useState(true)
+
+    useEffect(() => {
+        getNotifications()
+    }, [])
+
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
 
-    // Dummy data for notifications (replace with actual data)
-    const notifications = [
-        { id: '1', message: 'Lorem ipsum dolor sit amet. ', image: 'https://img.freepik.com/premium-vector/pet-friendly-sign-stamp-with-paw-animal-icon-sticker-allowed-entrance-dog-cat_352905-715.jpg?w=1060', created: 'Sept 15th, 2023 at 9:52 AM' },
-        { id: '2', message: 'Consectetur adipiscing A quick brown box jumped over a rock', image: 'https://img.freepik.com/premium-vector/pet-friendly-sign-stamp-with-paw-animal-icon-sticker-allowed-entrance-dog-cat_352905-715.jpg?w=1060', created: 'Sept 15th, 2023 at 9:52 AM' },
-        { id: '3', message: 'Sed do eiusmod tempor incididunt.', image: 'https://img.freepik.com/premium-vector/pet-friendly-sign-stamp-with-paw-animal-icon-sticker-allowed-entrance-dog-cat_352905-715.jpg?w=1060', created: 'Sept 15th, 2023 at 9:52 AM' },
-        // Add more notifications as needed
-    ];
+
+    const getNotifications = async () => {
+        const result = await handleGetRequest('get_notification')
+        console.log(result)
+        setNotifications(result)
+        setLoader(false)
+    }
 
     const renderNotifications = ({ item }) => {
         return (
@@ -44,13 +54,26 @@ const NotificationsScreen = () => {
     const styles = makeStyles(H, W)
 
     return (
-        <View style={styles.container}>
-            <FlatList
-                data={notifications}
-                keyExtractor={(item) => item.id}
-                renderItem={renderNotifications}
-            />
-        </View>
+        loader
+            ?
+            <Loader />
+            :
+            <View style={styles.container}>
+                {
+                    notifications?.data?.length == '0'
+                        ?
+                        <Text style={styles.errorText}>
+                            No Notifications found
+                        </Text>
+                        :
+                        <FlatList
+                            data={notifications?.data}
+                            keyExtractor={(item) => item.id}
+                            renderItem={renderNotifications}
+                        />
+                }
+
+            </View>
     );
 };
 
@@ -95,6 +118,11 @@ const makeStyles = (H, W) => StyleSheet.create({
     textView:
     {
         width: W * 0.8,
+    },
+    errorText:
+    {
+        alignSelf: 'center',
+        marginTop: H * 0.4
     }
 });
 

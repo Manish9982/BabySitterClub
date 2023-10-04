@@ -65,14 +65,14 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderRadius: 10,
         marginBottom: Spaces.med,
     },
-    profileImage: {
-        width: H * 0.14,
-        height: H * 0.14,
-        borderRadius: H * 0.14 / 2,
-        //marginBottom: 10,
+    profileImage:{
+        width: 100,
+        height: 100,
+        borderRadius: 100/3,
+        marginRight: Spaces.med,
         borderWidth: 0.6,
-        borderColor: Colors.blue
-    },
+        borderColor: Colors.black
+      },
     name: {
         ...Fonts.larBold,
     },
