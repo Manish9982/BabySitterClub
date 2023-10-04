@@ -15,19 +15,20 @@ const ManageAddress = ({ navigation }) => {
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
 
-    var isFocused = new useIsFocused()
+    const isFocused = useIsFocused()
 
     useEffect(() => {
         if (isFocused) {
             getAddress()
         }
-    }, [])
+    }, [isFocused])
 
 
     const getAddress = async () => {
         const result = await handleGetRequest('address_get')
-        setAddressdata(result)
-        console.log(result)
+        if (result?.status == '200') {
+            setAddressdata(result)
+        }
         setLoader(false)
     }
 

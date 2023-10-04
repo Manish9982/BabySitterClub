@@ -69,7 +69,7 @@ const Login = ({ navigation, route }) => {
         style={styles.ImageBackground}>
         <View style={styles.viewContainer1}>
           <View style={styles.viewContainer2}>
-            <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome to BabySitters Club</Text>
+            <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome to Sitter Sphere</Text>
             <Divider style={styles.divider} />
             <View style={styles.textContainerForAlignment}>
               <Text style={[styles.text2, Fonts.medMedium]}>Please enter email to login or sign up!</Text>

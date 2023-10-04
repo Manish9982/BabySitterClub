@@ -1,15 +1,22 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { Text } from 'react-native-paper'
+import { ActivityIndicator, Text } from 'react-native-paper'
 import Colors from '../helper/Colors'
 import Spaces from '../helper/Spaces'
+import Fonts from '../helper/Fonts'
 
-const SmallButtonSecondary = ({ title, onPressSmallButton, style }) => {
+const SmallButtonSecondary = ({ title, onPressSmallButton, style, loader = false }) => {
     return (
         <TouchableOpacity
             onPress={onPressSmallButton}
             style={[styles.button, style]}>
-            <Text style={styles.title}>{title}</Text>
+            {
+                loader
+                    ?
+                    <ActivityIndicator color={Colors.white} />
+                    :
+                    <Text style={styles.title}>{title}</Text>
+            }
         </TouchableOpacity>
     )
 }
@@ -20,16 +27,17 @@ const styles = StyleSheet.create({
     button:
     {
         backgroundColor: Colors.selectedcolor,
-        paddingVertical: Spaces.vsm,
-        borderRadius: 10,
+        //paddingVertical: Spaces.sm,
+        borderRadius: 8,
         justifyContent: 'center',
         alignSelf: 'center',
         alignItems: 'center'
     },
     title:
     {
+        ...Fonts.sm,
         color: Colors.DEEP_GRAY,
-        paddingHorizontal: Spaces.sm
+        padding: Spaces.sm
     }
 
 })

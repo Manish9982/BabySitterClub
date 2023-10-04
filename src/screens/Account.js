@@ -1,4 +1,4 @@
-import { FlatList, ImageBackground, StyleSheet, View, useWindowDimensions } from 'react-native'
+import { Alert, FlatList, ImageBackground, StyleSheet, View, useWindowDimensions } from 'react-native'
 import React from 'react'
 import { Divider, List, Text } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
@@ -46,6 +46,17 @@ const Account = ({ navigation }) => {
             }
         },
         {
+            title: 'Notification Center',
+            action: () => {
+                if (usertype == '2') {
+                    navigation.navigate('NotificationsScreen')
+                }
+                else if (usertype == '3') {
+                    navigation.navigate('NotificationCenter_Parent')
+                }
+            }
+        },
+        {
             title: 'Manage Address',
             action: () => navigation.navigate('ManageAddress')
         },
@@ -80,7 +91,20 @@ const Account = ({ navigation }) => {
         },
         {
             title: 'Logout',
-            action: () => handleLogout()
+            action: () => {
+                Alert.alert('Logout', 'Are you sure you want to logout?', [
+                    {
+                        text: 'Yes',
+                        onPress: () => handleLogout()
+                    },
+                    {
+                        text: 'No'
+                    }
+                ])
+
+
+            }
+
         },
     ]
 
@@ -92,7 +116,7 @@ const Account = ({ navigation }) => {
                     <List.Item
                         onPress={item?.action}
                         title={item?.title}
-                   />
+                    />
                     <Divider />
                 </>
             )

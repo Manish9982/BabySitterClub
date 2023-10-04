@@ -36,13 +36,13 @@ const Bookings = ({ navigation }) => {
   // const getBookings = async () => {
   //   var myHeaders = new Headers();
   //   myHeaders.append("Authorization", "Bearer 199|WtLkncCwC2L0rWyubAzKCM6gBXdJJTQx53KmNBUP");
-    
+
   //   var requestOptions = {
   //     method: 'GET',
   //     headers: myHeaders,
   //     redirect: 'follow'
   //   };
-    
+
   //   fetch("https://thebabysitterclubs.com/babysitter/api/v1/parent_get_booking", requestOptions)
   //     .then(response => response.text())
   //     .then(result => console.log(result))
@@ -51,7 +51,7 @@ const Bookings = ({ navigation }) => {
   const getBookings = async () => {
     const result = await handleGetRequest('parent_get_booking')
     setBookingData(result)
-    console.log(result)
+    console.log("bookings ====>", result)
     // if (result?.status == '200') {
     // } else if (result?.status == '201') {
     //   Alert.alert("Alert", result?.message)
@@ -63,6 +63,7 @@ const Bookings = ({ navigation }) => {
     return (
       <>
         <BookingCard
+          getDataForRefresh={getBookings}
           booking={item}
           profileURL={bookingdata?.url}
           onItemPress={() => { onClickHandle(item.id) }}
@@ -76,9 +77,9 @@ const Bookings = ({ navigation }) => {
       ?
       <Loader />
       :
-      <ImageBackground 
-      source={require('../assets/images/background.png')}
-      style={styles.container}>
+      <ImageBackground
+        source={require('../assets/images/background.png')}
+        style={styles.container}>
         {
           bookingdata?.data?.length == 0
             ?

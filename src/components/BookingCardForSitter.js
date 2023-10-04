@@ -16,27 +16,47 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
   const styles = makeStyles(H, W)
 
   const onPressMarkAsComplete = async () => {
-    var formdata = new FormData()
-    formdata.append('booking_id', bookingId)
-    formdata.append('status', '1')
-    const result = await handlePostRequest('change_booking_status', formdata)
-    if (result?.status == '200') {
-      Alert.alert(result?.message)
-    }
-    else {
-      Alert.alert(result?.message)
-    }
+    Alert.alert('Confirm Completion', 'Are you sure you want to mark this booking as complete ? This action is irreversible', [
+      {
+        text: 'Yes',
+        onPress: async () => {
+          var formdata = new FormData()
+          formdata.append('booking_id', bookingId)
+          formdata.append('status', '1')
+          const result = await handlePostRequest('change_booking_status', formdata)
+          if (result?.status == '200') {
+            Alert.alert(result?.message)
+          }
+          else {
+            Alert.alert(result?.message)
+          }
+        },
+      },
+      {
+        text: 'No'
+      }
+    ])
   }
 
   const onPressCancel = async () => {
-    var formdata = new FormData()
-    formdata.append('booking_id', bookingId)
-    formdata.append('status', '2')
-    const result = await handlePostRequest('change_booking_status', formdata)
-    if (result?.status == '200') {
-      console.log(result)
-    }
-    console.log(result)
+    Alert.alert('Confirm Cancellation', 'Are you sure you want to mark this booking as cancelled ? This action is irreversible', [
+      {
+        text: 'Yes',
+        onPress: async () => {
+          var formdata = new FormData()
+          formdata.append('booking_id', bookingId)
+          formdata.append('status', '2')
+          const result = await handlePostRequest('change_booking_status', formdata)
+          if (result?.status == '200') {
+            console.log(result)
+          }
+          console.log(result)
+        },
+      },
+      {
+        text: 'No'
+      }
+    ])
   }
 
   const returnContainer = (t) => {
@@ -108,7 +128,10 @@ const makeStyles = (H, W) => StyleSheet.create({
   profilePic: {
     width: 100,
     height: 100,
-    borderRadius: 50,
+    borderRadius: 100/3,
+    marginRight: Spaces.med,
+    borderWidth: 0.6,
+    borderColor: Colors.black
   },
   dateText: {
     marginTop: 5,
@@ -141,7 +164,7 @@ const makeStyles = (H, W) => StyleSheet.create({
   {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center'
+    alignItems: 'center'
   },
   divider:
   {

@@ -17,6 +17,8 @@ import { useIsFocused } from '@react-navigation/native';
 import TagIcon from '../components/TagIcon';
 import { setIsProfileCompleted } from '../redux/GlobalSlice';
 import { useDispatch } from 'react-redux';
+import CustomDateTimePicker from '../components/CustomDateTimePicker';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 const MyProfile_Sitter = ({ navigation }) => {
 
@@ -59,16 +61,30 @@ const MyProfile_Sitter = ({ navigation }) => {
 
     const pickImage = async () => {
         try {
-            const image = await launchImageLibrary()
+
+            const image = await ImageCropPicker.openPicker({
+                //multiple: true
+                //width: 300,
+                //height: 400,
+                compressImageQuality: 0.4,
+                cropping: true
+            })
             setImage({
-                uri: image?.assets?.[0]?.uri,
-                name: image?.assets?.[0]?.fileName,
-                type: image?.assets?.[0]?.type
+                uri: image?.path,
+                name: Platform.OS == 'android' ? image?.modificationDate : image?.filename,
+                type: image?.mime
             })
             console.log("Image", image)
         } catch (error) {
-            Alert.alert(error)
+            Alert.alert(JSON.stringify(error?.message))
         }
+        // ImagePicker.openCropper({
+        //     width: 300,
+        //     height: 400,
+        //     cropping: true,
+        //   }).then(image => {
+        //     console.log(image);
+        //   });
     }
 
     const toggleModal = (slots) => {
@@ -224,8 +240,8 @@ const MyProfile_Sitter = ({ navigation }) => {
                     }}
                     placeholder={"No of children"}
                     style={styles.input} /> */}
-                <Text style={styles.sectionHeader}>Date of birth</Text>
-                {
+                {/* <Text style={styles.sectionHeader}>Date of birth</Text> */}
+                {/* {
                     Platform.OS == "ios"
                     &&
                     <RNDateTimePicker
@@ -234,7 +250,14 @@ const MyProfile_Sitter = ({ navigation }) => {
                         }}
                         value={new Date()}
                     />
-                }
+                } */}
+                {/* <CustomDateTimePicker
+                            alignSelf='flex-start'
+                            style={styles.datePicker}
+                            value={slotsDate}
+                            onChangeAndroid={onChangeAndroidPicker}
+                            onChangeIos={onChangeIosPicker}
+                        /> */}
                 <Text style={styles.guidingText}>
                     Ask for permission from your parents if you are under 18 years old. Babysitters must be 16 years or older.
                 </Text>
@@ -387,9 +410,12 @@ const makeStyles = (H, W) => StyleSheet.create({
         marginBottom: Spaces.sm,
     },
     profilePicturePlaceholder: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
+        width: 100,
+        height: 100,
+        borderRadius: 100 / 3,
+        marginRight: Spaces.med,
+        borderWidth: 0.6,
+        borderColor: Colors.black
     },
     updateButton:
     {

@@ -125,17 +125,17 @@ const AddAvailability_Sitter = ({ navigation }) => {
                 contentContainerStyle={styles.container}>
                 <Text style={styles.headingText}>Select Service:</Text>
                 {
-
-
                     <Picker
+                        //itemStyle={{ color: 'black' }}
+                        //selectionColor={'black'}
                         selectedValue={chosenService?.id}
                         onValueChange={onSelectService}
-                        style={styles.pickerContainer}>
+                        style={styles.pickerContainer}
+                        >
                         {
                             filteredServices?.map(item => <Picker.Item key={item?.id} value={item?.id} label={item?.service_name} />)
                         }
                     </Picker>
-
                 }
                 <Text style={styles.headingText}>Select Date:</Text>
 
@@ -371,11 +371,13 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     pickerContainer:
     {
+        color: Colors.black,
         borderWidth: 0.6,
         borderColor: Colors.PRIMARY,
         padding: Spaces.lar,
         margin: Spaces.sm,
-        borderRadius: 8
+        borderRadius: 8,
+        //placeholderTextColor: Colors.black
     },
 
 

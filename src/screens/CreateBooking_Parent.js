@@ -19,6 +19,7 @@ const CreateBooking_Parent = ({ navigation, route }) => {
         formdata.append('user_id', bookingParams.user_id)
         formdata.append('slot_id', bookingParams.slot_id)
         formdata.append('amount', bookingParams.amount)
+        formdata.append('address', bookingParams.booking_address)
         const result = await handlePostRequest('booking', formdata)
         if (result?.status == '200') {
             console.log(result)

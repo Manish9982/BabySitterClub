@@ -106,12 +106,15 @@ const ProfileScreen = ({ navigation }) => {
                             <Text style={{ ...Fonts.xlSemiBold }}>Hello, {dashboardData?.userDetails?.first_name}</Text>
                             <View style={styles.horizontalContainer}>
                                 <TouchableOpacity onPress={onPressBell}>
-                                    <View style={styles.notificationBadge}>
-                                        <Text style={{
-                                            color: 'white'
-                                        }}>{dashboardData?.userDetails?.notification_count}</Text>
-                                    </View>
-
+                                    {
+                                        !(dashboardData?.userDetails?.notification_count == '0')
+                                        &&
+                                        <View style={styles.notificationBadge}>
+                                            <Text style={{
+                                                color: 'white'
+                                            }}>{dashboardData?.userDetails?.notification_count}</Text>
+                                        </View>
+                                    }
                                     <Image source={require('../assets/images/bell.png')}
                                         style={styles.icon}
                                     />

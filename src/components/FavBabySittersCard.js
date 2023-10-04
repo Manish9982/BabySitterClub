@@ -18,18 +18,23 @@ const FavBabySittersCard = ({ profilePicture, name, description, hourlyPrice, on
                 style={styles.profilePicture} />
             <View style={styles.card}>
                 <Text style={[styles.name, Fonts.larSemiBold]}>{name}</Text>
-                <Text 
-                numberOfLines={3}
-                style={styles.description}>{description}</Text>
-                <Text >{rating}/5 Rating <AntDesign name="star" size={16} color={Colors.golden}/></Text>
+                <Text
+                    numberOfLines={3}
+                    style={styles.description}>{description}</Text>
+                <Text >{rating}/5.0 Rating <AntDesign name="star" size={16} color={Colors.golden} /></Text>
                 <Text style={[styles.price, Fonts.medMedium]}>Hourly Price: ${hourlyPrice}</Text>
             </View>
 
             <TouchableOpacity
                 style={styles.favButton}
                 onPress={onPressFavourite}>
-                <Text>{isFavourite == 1 ? <AntDesign name="star" size={20} color={Colors.blue} />
-                    : <AntDesign name="staro" size={20} />}</Text>
+                <Text>{
+                    isFavourite == 1
+                        ?
+                        <AntDesign name="star" size={20} color={Colors.blue} />
+                        :
+                        <AntDesign name="staro" size={20} />
+                }</Text>
             </TouchableOpacity>
 
         </TouchableOpacity>
@@ -54,12 +59,13 @@ const styles = StyleSheet.create({
     },
     profilePicture:
     {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
+        width: 100,
+        height: 100,
+        borderRadius: 100/3,
         marginRight: Spaces.med,
         borderWidth: 0.6,
-    },
+        borderColor: Colors.black
+      },
     card:
     {
         flex: 1,

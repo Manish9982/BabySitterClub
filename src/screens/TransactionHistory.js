@@ -1,37 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome'; // You can use other icon libraries as well
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 import Spaces from '../helper/Spaces';
+import { handleGetRequest } from '../helper/Utils';
 
-const transactions = [
-    {
-        id: 'TH76347865478',
-        name: 'John Doe',
-        amount: '$50',
-        paymentMethod: 'Credit Card',
-        bookingSlot: 'Aug 10, 2023 - 3:00 PM',
-        paymentStatus: 'confirmed',
-    },
-    {
-        id: 'TH77567865478',
-        name: 'John Doe',
-        amount: '$50',
-        paymentMethod: 'Credit Card',
-        bookingSlot: 'Aug 10, 2023 - 6:00 PM',
-        paymentStatus: 'pending',
-    },
-    // Add more transactions here...
-];
 
 const TransactionCard = ({ transaction }) => (
     <View style={styles.card}>
         <Text style={styles.name}>Name: {transaction.name}</Text>
-        <Text>Transaction ID: {transaction.id}</Text>
-        <Text style={styles.amount}>Amount: {transaction.amount}</Text>
-        <Text>Payment Method: {transaction.paymentMethod}</Text>
+        <Text>Transaction ID: {transaction?.transaction_id}</Text>
+        <Text style={styles.amount}>Amount: ${transaction?.amount}</Text>
+        <Text>Payment Method: {transaction?.payment_method}</Text>
         <Text>Booking Slot: {transaction.bookingSlot}</Text>
         <View style={styles.paymentStatus}>
             <Icon
@@ -51,10 +33,24 @@ const TransactionCard = ({ transaction }) => (
 );
 
 const TransactionHistory = () => {
+
+    const [transactions, setTransactions] = useState(null)
+
+    useEffect(() => {
+        getTransactionDetails()
+    }, [])
+
+    const getTransactionDetails = async () => {
+        const result = await handleGetRequest('get_transaction')
+        console.log('Transaction===>', result)
+        setTransactions(result)
+    }
+
+
     return (
         <View style={styles.container}>
             <FlatList
-                data={transactions}
+                data={transactions?.data}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => <TransactionCard transaction={item} />}
             />

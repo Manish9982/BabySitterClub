@@ -2,6 +2,7 @@ import messaging from '@react-native-firebase/messaging';
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import { storeLocalValue } from './LocalStore';
 import { LOCAL_STORE } from './Utils';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 
 export async function requestUserPermission() {
     if (Platform.OS == 'ios') {
@@ -20,25 +21,40 @@ export async function requestUserPermission() {
     }
 }
 
+async function onDisplayNotification(title, body) {
+    // Request permissions (required for iOS)
+    await notifee.requestPermission()
+
+    // Create a channel (required for Android)
+    const channelId = await notifee.createChannel({
+        id: 'importantMsgs',
+        name: 'High Priority',
+        sound: 'default',
+        vibration: true,
+        importance: AndroidImportance.HIGH,
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+        title: title,
+        body: body,
+        android: {
+            channelId,
+            // optional, defaults to 'ic_launcher'.
+            // pressAction is needed if you want the notification to open the app when pressed
+            pressAction: {
+                id: 'default',
+            },
+        },
+    });
+}
+
 export function onNotificationReceiver() {
 
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-        Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+        console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+        onDisplayNotification(remoteMessage?.notification?.title, remoteMessage?.notification?.body)
     });
 
     return unsubscribe;
 }
-
-export function getTokenForApp() {
-    messaging()
-        .getToken()
-        .then(token => {
-            console.log('FCM Token =========>', token)
-            storeLocalValue(LOCAL_STORE.FCM_TOKEN, JSON.stringify(token))
-            //return saveTokenToDatabase(token);
-
-            return messaging().onTokenRefresh(token => {
-                storeLocalValue(LOCAL_STORE.FCM_TOKEN, JSON.stringify(token))
-            });
-        });
-} 

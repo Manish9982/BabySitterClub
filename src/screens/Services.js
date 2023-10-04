@@ -115,7 +115,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     button:
     {
-        top: - H * 0.04,
+       // top: - H * 0.04,
     },
     textBottom: {
         width: W * 0.95,

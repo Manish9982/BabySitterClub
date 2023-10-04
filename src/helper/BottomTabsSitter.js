@@ -49,7 +49,7 @@ const BottomTabsSitter = () => {
     const updateFcmToken = async () => {
         const fcmToken = await getLocalValue(LOCAL_STORE.FCM_TOKEN)
         var formdata = new FormData()
-        formdata.append('fcm_token', JSON.parse(fcmToken))
+        formdata.append('fcm_token', fcmToken)
         formdata.append('device_type', Platform.OS)
         const result = await handlePostRequest('update_fcm', formdata)
         console.log('fcmToken API result==>', result)
