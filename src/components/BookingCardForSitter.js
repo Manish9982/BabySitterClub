@@ -176,7 +176,7 @@ const makeStyles = (H, W) => StyleSheet.create({
   secondarySmallButton:
   {
     width: W * 0.4,
-    height: H * 0.04,
+    //height: H * 0.04,
     marginVertical: Spaces.sm
   },
   createdAtText:
