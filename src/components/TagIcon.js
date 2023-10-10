@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, useWindowDimensions } from 'react-native'
+import { StyleSheet, View, useWindowDimensions } from 'react-native'
 import React from 'react'
 import FontAwesome6 from 'react-native-vector-icons/dist/FontAwesome6'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'

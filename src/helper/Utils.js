@@ -12,7 +12,8 @@ export const LOCAL_STORE = {
 }
 
 export const Constants = {
-    BASE_URL: 'https://thebabysitterclubs.com/babysitter/api/v1/'
+    BASE_URL: 'https://thebabysitterclubs.com/babysitter/api/v1/',
+    VERSION:'1.0',
 }
 
 export const handlePostRequest = async (name, formdata) => {

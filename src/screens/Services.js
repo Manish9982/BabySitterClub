@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Alert, useWindowDimensions, ImageBackground, Text } from 'react-native'
+import { FlatList, StyleSheet, Alert, useWindowDimensions, ImageBackground } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Spaces from '../helper/Spaces';
 import ServicesCard from '../components/ServicesCard';
@@ -9,6 +9,8 @@ import Loader from '../components/Loader';
 import { setSelectedServices } from '../redux/GlobalSlice'
 import { useDispatch } from 'react-redux';
 import Fonts from '../helper/Fonts';
+import { Text } from 'react-native-paper';
+
 
 const Services = ({ navigation }) => {
     const H = useWindowDimensions().height

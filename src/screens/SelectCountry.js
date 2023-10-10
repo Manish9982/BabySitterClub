@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import CustomButton from '../components/Button';
 import Fonts from '../helper/Fonts';
+import { Text } from 'react-native-paper';
 
 const SelectCountry = ({ navigation }) => {
     const [selectedCity, setSelectedCity] = useState('');

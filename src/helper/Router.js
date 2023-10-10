@@ -1,4 +1,4 @@
-import { View, Text, Platform } from 'react-native'
+import { Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -43,96 +43,129 @@ import NotificationCenter_Parent from '../screens/NotificationCenter_Parent';
 import CancelledBookings_Parent from '../screens/CancelledBookings_Parent';
 import FindReplacements from '../screens/FindReplacements';
 import CreateReplacementBooking_Parent from '../screens/CreateReplacementBooking_Parent';
+import { Constants, handlePostRequest } from './Utils';
+import AppUpdateMessageScreen from '../screens/AppUpdateMessageScreen';
 
 const Router = () => {
+
+    const [isAppUpdate, setIsAppUpdate] = useState(true)
+
+    useEffect(() => {
+        checkVersion()
+    }, [])
 
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
     const usertype = useSelector(state => state.global.usertype)
     const Stack = createNativeStackNavigator();
 
+    const checkVersion = async () => {
+        var formdata = new FormData()
+        formdata.append('version', Constants.VERSION)
+        formdata.append('device_type', Platform.OS)
+        const result = await handlePostRequest('check_version', formdata)
+        if (!(result?.status == '200')) {
+            setIsAppUpdate(false)
+        }
+        console.log("checkVersion result===>", result)
+    }
+
     console.log("USERTYPE at Router(parent = 3; babysitter = 2 ) ========>", usertype)
     const returnStack = () => {
-        if (isLoggedIn) {
-            if (usertype == "3") {//Parent
-                console.log('------------Parent is Logged In--------------')
-                return (
-                    <Stack.Navigator screenOptions={{
-                        headerBackTitleVisible: false,
-                        headerShown: Platform.OS == "android" ? true : true
-                    }}>
-                        <Stack.Screen name="BottomTabsParent" component={BottomTabsParent} options={{ headerShown: false }} />
-                        <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
-                        <Stack.Screen name="ProfileOfSitterDuringBooking_Parent" component={ProfileOfSitterDuringBooking_Parent} options={{ headerShown: true, headerTitle: 'Profile Details' }} />
-                        <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
-                        <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
-                        <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
-                        <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerTitle: 'Transaction History' }} />
-                        <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
-                        <Stack.Screen name="MyProfile_Parent" component={MyProfile_Parent} options={{}} />
-                        <Stack.Screen name="SwitchServices" component={SwitchServices} options={{ headerTitle: 'Services' }} />
-                        <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Role' }} />
-                        <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
-                        <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
-                        <Stack.Screen name="BookingConfirmation_Parent" component={BookingConfirmation_Parent} options={{ headerShown: true, headerTitle: 'Confirm Booking' }} />
-                        <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{}} />
-                        <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{}} />
-                        <Stack.Screen name="FAQs_Parent" component={FAQs_Parent} options={{ headerTitle: 'FAQs' }} />
-                        <Stack.Screen name="Help" component={Help} options={{ headerShown: true, headerTitle: 'Help and Support' }} />
-                        <Stack.Screen name="ViewPicture" component={ViewPicture} options={{ headerShown: true, headerTitle: '' }} />
-                        <Stack.Screen name="NotificationCenter_Parent" component={NotificationCenter_Parent} options={{ headerShown: true, headerTitle: 'Notification Center' }} />
-                        <Stack.Screen name="CancelledBookings_Parent" component={CancelledBookings_Parent} options={{ headerShown: true, headerTitle: 'Cancelled Bookings' }} />
-                        <Stack.Screen name="FindReplacements" component={FindReplacements} options={{ headerShown: true, headerTitle: 'Choose New Booking' }} />
-                        <Stack.Screen name="CreateReplacementBooking_Parent" component={CreateReplacementBooking_Parent} options={{ headerShown: true, headerTitle: 'Create Replacement Booking' }} />
-
-                    </Stack.Navigator>
-                )
+        if(isAppUpdate)
+        {
+            if (isLoggedIn) {
+                if (usertype == "3") {//Parent
+                    console.log('------------Parent is Logged In--------------')
+                    return (
+                        <Stack.Navigator screenOptions={{
+                            headerBackTitleVisible: false,
+                            headerShown: Platform.OS == "android" ? true : true
+                        }}>
+                            <Stack.Screen name="BottomTabsParent" component={BottomTabsParent} options={{ headerShown: false }} />
+                            <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
+                            <Stack.Screen name="ProfileOfSitterDuringBooking_Parent" component={ProfileOfSitterDuringBooking_Parent} options={{ headerShown: true, headerTitle: 'Profile Details' }} />
+                            <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
+                            <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
+                            <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
+                            <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerTitle: 'Transaction History' }} />
+                            <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
+                            <Stack.Screen name="MyProfile_Parent" component={MyProfile_Parent} options={{}} />
+                            <Stack.Screen name="SwitchServices" component={SwitchServices} options={{ headerTitle: 'Services' }} />
+                            <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Role' }} />
+                            <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
+                            <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
+                            <Stack.Screen name="BookingConfirmation_Parent" component={BookingConfirmation_Parent} options={{ headerShown: true, headerTitle: 'Confirm Booking' }} />
+                            <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{}} />
+                            <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{}} />
+                            <Stack.Screen name="FAQs_Parent" component={FAQs_Parent} options={{ headerTitle: 'FAQs' }} />
+                            <Stack.Screen name="Help" component={Help} options={{ headerShown: true, headerTitle: 'Help and Support' }} />
+                            <Stack.Screen name="ViewPicture" component={ViewPicture} options={{ headerShown: true, headerTitle: '' }} />
+                            <Stack.Screen name="NotificationCenter_Parent" component={NotificationCenter_Parent} options={{ headerShown: true, headerTitle: 'Notification Center' }} />
+                            <Stack.Screen name="CancelledBookings_Parent" component={CancelledBookings_Parent} options={{ headerShown: true, headerTitle: 'Cancelled Bookings' }} />
+                            <Stack.Screen name="FindReplacements" component={FindReplacements} options={{ headerShown: true, headerTitle: 'Choose New Booking' }} />
+                            <Stack.Screen name="CreateReplacementBooking_Parent" component={CreateReplacementBooking_Parent} options={{ headerShown: true, headerTitle: 'Create Replacement Booking' }} />
+    
+                        </Stack.Navigator>
+                    )
+                }
+                else if (usertype == "2") {//Sitter
+                    console.log("---------Sitter is Logged in------------")
+                    return (
+                        <Stack.Navigator screenOptions={{
+                            headerBackTitleVisible: false,
+                            headerShown: Platform.OS == "android" ? true : true
+                        }}>
+                            <Stack.Screen name="BottomTabsSitter" component={BottomTabsSitter} options={{ headerShown: false }} />
+                            <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
+                            <Stack.Screen name="ProfileOfParentDuringBooking_Sitter" component={ProfileOfParentDuringBooking_Sitter} options={{ headerShown: true, headerTitle: 'Profile Details' }} />
+                            <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
+                            <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
+                            <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
+                            <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerTitle: 'Transaction History' }} />
+                            <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
+                            <Stack.Screen name="MyProfile_Sitter" component={MyProfile_Sitter} options={{ headerTitle: 'My Profile', headerShown: true }} />
+                            <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Switch Role' }} />
+                            <Stack.Screen name="AddAvailability_Sitter" component={AddAvailability_Sitter} options={{ headerShown: true, headerTitle: 'Add Availabiltity' }} />
+                            <Stack.Screen name="NotificationsScreen" component={NotificationsScreen} options={{ headerShown: true, headerTitle: 'My Notifications' }} />
+                            <Stack.Screen name="FAQs_Sitter" component={FAQs_Sitter} options={{ headerTitle: 'FAQs' }} />
+                            <Stack.Screen name="SwitchServices" component={SwitchServices} options={{ headerTitle: 'Switch Services' }} />
+                            <Stack.Screen name="Help" component={Help} options={{ headerShown: true, headerTitle: 'Help and Support' }} />
+                            <Stack.Screen name="CancelledBookingDisplay_Sitter" component={CancelledBookingDisplay_Sitter} options={{ headerShown: true, headerTitle: 'Cancelled Bookings' }} />
+                            <Stack.Screen name="ViewPicture" component={ViewPicture} options={{ headerShown: true, headerTitle: '' }} />
+                        </Stack.Navigator>
+                    )
+                }
             }
-            else if (usertype == "2") {//Sitter
-                console.log("---------Sitter is Logged in------------")
+            else {
                 return (
                     <Stack.Navigator screenOptions={{
                         headerBackTitleVisible: false,
                         headerShown: Platform.OS == "android" ? true : true
                     }}>
-                        <Stack.Screen name="BottomTabsSitter" component={BottomTabsSitter} options={{ headerShown: false }} />
-                        <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
-                        <Stack.Screen name="ProfileOfParentDuringBooking_Sitter" component={ProfileOfParentDuringBooking_Sitter} options={{ headerShown: true, headerTitle: 'Profile Details' }} />
-                        <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
-                        <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
-                        <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
-                        <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerTitle: 'Transaction History' }} />
-                        <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
-                        <Stack.Screen name="MyProfile_Sitter" component={MyProfile_Sitter} options={{headerTitle:'My Profile', headerShown:true}} />
-                        <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Switch Role' }} />
-                        <Stack.Screen name="AddAvailability_Sitter" component={AddAvailability_Sitter} options={{ headerShown: true, headerTitle: 'Add Availabiltity' }} />
-                        <Stack.Screen name="NotificationsScreen" component={NotificationsScreen} options={{ headerShown: true, headerTitle: 'My Notifications' }} />
-                        <Stack.Screen name="FAQs_Sitter" component={FAQs_Sitter} options={{ headerTitle: 'FAQs' }} />
-                        <Stack.Screen name="SwitchServices" component={SwitchServices} options={{ headerTitle: 'Switch Services' }} />
-                        <Stack.Screen name="Help" component={Help} options={{ headerShown: true, headerTitle: 'Help and Support' }} />
-                        <Stack.Screen name="CancelledBookingDisplay_Sitter" component={CancelledBookingDisplay_Sitter} options={{ headerShown: true, headerTitle: 'Cancelled Bookings' }} />
-                        <Stack.Screen name="ViewPicture" component={ViewPicture} options={{ headerShown: true, headerTitle: '' }} />
+                        <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+                        <Stack.Screen name="Services" component={Services} />
+                        <Stack.Screen name="SelectCountry" component={SelectCountry} options={{ headerTitle: '' }} />
+                        <Stack.Screen name="Login" component={Login} options={{ headerTitle: '' }} />
+                        <Stack.Screen name="Password" component={Password} options={{}} />
+                        <Stack.Screen name="Register" component={Register} options={{}} />
+                        <Stack.Screen name="ChooseUserType" component={ChooseUserType} options={{ headerTitle: '' }} />
+                        <Stack.Screen name="CountryList" component={CountryList} options={{ headerTitle: 'Choose Country' }} />
+                        <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{}} />
                     </Stack.Navigator>
                 )
             }
         }
-        else {
-            return (
+        else{
+            return(
                 <Stack.Navigator screenOptions={{
                     headerBackTitleVisible: false,
                     headerShown: Platform.OS == "android" ? true : true
                 }}>
-                    <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-                    <Stack.Screen name="Services" component={Services} />
-                    <Stack.Screen name="SelectCountry" component={SelectCountry} options={{ headerTitle: '' }} />
-                    <Stack.Screen name="Login" component={Login} options={{ headerTitle: '' }} />
-                    <Stack.Screen name="Password" component={Password} options={{}} />
-                    <Stack.Screen name="Register" component={Register} options={{}} />
-                    <Stack.Screen name="ChooseUserType" component={ChooseUserType} options={{ headerTitle: '' }} />
-                    <Stack.Screen name="CountryList" component={CountryList} options={{ headerTitle: 'Choose Country' }} />
-                    <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{}} />
-                </Stack.Navigator>
+                        <Stack.Screen name="AppUpdateMessageScreen" component={AppUpdateMessageScreen} options={{headerTitle:'App Update Reminder'}} />
+                </Stack.Navigator> 
             )
         }
+       
     }
 
     return (
