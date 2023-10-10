@@ -23,6 +23,7 @@ const Bookings_Sitter = () => {
     }, [isFocused])
 
     const getBookings = async () => {
+        setLoader(true)
         const result = await handleGetRequest('get_booking')
         if (result?.status == '200') {
             setBookingData(result)
@@ -35,6 +36,7 @@ const Bookings_Sitter = () => {
         if (((value == 'pending') && (item?.booking_status == 0)) || ((value == 'completed') && (item?.booking_status == 1)) || (value == 'all')) {
             return (
                 <BookingCardForSitter
+                    callBack={getBookings}
                     status={item?.booking_status}
                     url={bookingData?.url}
                     name={`${item?.first_name} ${item?.last_name}`}

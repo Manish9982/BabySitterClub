@@ -101,8 +101,6 @@ const Account = ({ navigation }) => {
                         text: 'No'
                     }
                 ])
-
-
             }
 
         },

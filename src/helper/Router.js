@@ -92,7 +92,7 @@ const Router = () => {
                 return (
                     <Stack.Navigator screenOptions={{
                         headerBackTitleVisible: false,
-                        headerShown: Platform.OS == "android" ? false : true
+                        headerShown: Platform.OS == "android" ? true : true
                     }}>
                         <Stack.Screen name="BottomTabsSitter" component={BottomTabsSitter} options={{ headerShown: false }} />
                         <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
@@ -102,7 +102,7 @@ const Router = () => {
                         <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
                         <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerTitle: 'Transaction History' }} />
                         <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
-                        <Stack.Screen name="MyProfile_Sitter" component={MyProfile_Sitter} options={{}} />
+                        <Stack.Screen name="MyProfile_Sitter" component={MyProfile_Sitter} options={{headerTitle:'My Profile', headerShown:true}} />
                         <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Switch Role' }} />
                         <Stack.Screen name="AddAvailability_Sitter" component={AddAvailability_Sitter} options={{ headerShown: true, headerTitle: 'Add Availabiltity' }} />
                         <Stack.Screen name="NotificationsScreen" component={NotificationsScreen} options={{ headerShown: true, headerTitle: 'My Notifications' }} />
@@ -119,7 +119,7 @@ const Router = () => {
             return (
                 <Stack.Navigator screenOptions={{
                     headerBackTitleVisible: false,
-                    headerShown: Platform.OS == "android" ? false : true
+                    headerShown: Platform.OS == "android" ? true : true
                 }}>
                     <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
                     <Stack.Screen name="Services" component={Services} />

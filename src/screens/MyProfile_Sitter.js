@@ -19,6 +19,8 @@ import { setIsProfileCompleted } from '../redux/GlobalSlice';
 import { useDispatch } from 'react-redux';
 import CustomDateTimePicker from '../components/CustomDateTimePicker';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import { logout } from '../redux/AuthSlice';
+
 
 const MyProfile_Sitter = ({ navigation }) => {
 
@@ -38,14 +40,21 @@ const MyProfile_Sitter = ({ navigation }) => {
     const [image, setImage] = useState({})
     const [loaderButton, setLoaderButton] = useState(false)
     const [serviceFilterId, setServiceFilterId] = useState(null);
+    const [slots, setSlots] = useState([])
 
     const isFocused = useIsFocused()
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        isFocused
-            &&
-            getUserProfileData()
+        if (isFocused) {
+            getSlots()
+        }
     }, [isFocused])
+
+    useEffect(() => {
+      getUserProfileData()
+    }, [])
+    
 
 
     const onPressButton = () => {
@@ -57,7 +66,12 @@ const MyProfile_Sitter = ({ navigation }) => {
 
     }
 
-    const dispatch = useDispatch()
+    const getSlots = async () => {
+        const result = await handleGetRequest('get_slot')
+        if (result?.status == '200') {
+            setSlots(result?.userSlots)
+        }
+    }
 
     const pickImage = async () => {
         try {
@@ -76,7 +90,7 @@ const MyProfile_Sitter = ({ navigation }) => {
             })
             console.log("Image", image)
         } catch (error) {
-            Alert.alert(JSON.stringify(error?.message))
+            Alert.alert(error?.message)
         }
         // ImagePicker.openCropper({
         //     width: 300,
@@ -155,10 +169,24 @@ const MyProfile_Sitter = ({ navigation }) => {
                 <Text>
                     Available
                 </Text>
-                <CloseButton id={item?.id} callBack={getUserProfileData} /></> : <Text>Booked</Text>}
+                <CloseButton id={item?.id} callBack={getSlots} /></> : <Text>Booked</Text>}
         </View>
     );
-    console.log('image disp[layed at profile====>', image?.uri)
+
+    const onPressLogoutButton = () => {
+
+        Alert.alert('Logout', 'Are you sure you want to logout?', [
+            {
+                text: 'Yes',
+                onPress: () => dispatch(logout())
+            },
+            {
+                text: 'No'
+            }
+        ])
+    }
+
+    console.log('image displayed at profile====>', image?.uri)
     return (
         loader
             ?
@@ -168,6 +196,14 @@ const MyProfile_Sitter = ({ navigation }) => {
                 contentContainerStyle={styles.container}
                 style={styles.container}>
                 <Text style={styles.sectionHeader}>Profile Photo</Text>
+                <TouchableOpacity
+                    onPress={onPressLogoutButton}
+                    style={styles.logoutIconContainer}>
+                    <Image source={require('../assets/images/logout.png')}
+                        style={styles.logoutIcon}
+                    />
+                </TouchableOpacity>
+
                 <TouchableOpacity
                     onPress={pickImage}
                     style={styles.profilePictureContainer}>
@@ -271,7 +307,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                 </View>
 
                 <ScrollView contentContainerStyle={{ paddingVertical: 10 }}>
-                    {userdata?.userSlots?.length == 0
+                    {slots?.length == 0
                         ?
                         <Text>You have not added your availability</Text>
                         :
@@ -296,7 +332,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                             ]}
                         />
                     }
-                    {userdata?.userSlots?.map((section, index) => {
+                    {slots?.map((section, index) => {
                         if (section?.service?.includes(Number.parseInt(serviceFilterId, 10)) || serviceFilterId == null) {
                             return (
                                 <View key={index}>
@@ -408,6 +444,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     profilePictureContainer: {
         alignItems: 'center',
         marginBottom: Spaces.sm,
+        alignSelf: 'center'
     },
     profilePicturePlaceholder: {
         width: 100,
@@ -564,6 +601,18 @@ const makeStyles = (H, W) => StyleSheet.create({
     segment:
     {
         margin: Spaces.sm
+    },
+    logoutIcon: {
+        height: 40,
+        width: 40,
+        borderRadius: 5,
+        backgroundColor: Colors.PRIMARY,
+    },
+    logoutIconContainer:
+    {
+        position: 'absolute',
+        alignSelf: 'flex-end',
+        top: H * 0.01,
     }
 
 });

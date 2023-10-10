@@ -29,6 +29,9 @@ const ManageAddress = ({ navigation }) => {
         if (result?.status == '200') {
             setAddressdata(result)
         }
+        else{
+            setAddressdata(null)
+        }
         setLoader(false)
     }
 
@@ -37,9 +40,11 @@ const ManageAddress = ({ navigation }) => {
     }
 
     const deleteAddress = async (id) => {
+        setLoader(true)
         var formdata = new FormData()
         formdata.append("address_id", id);
         const result = await handlePostRequest('address_delete', formdata)
+        
         if (result.status == "200") {
             getAddress()
         } else if (result.status == "201") {

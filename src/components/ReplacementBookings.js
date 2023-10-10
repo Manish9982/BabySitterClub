@@ -6,10 +6,9 @@ import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
 import Colors from '../helper/Colors';
 import { Shadows, handlePostRequest } from '../helper/Utils';
-import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import { useNavigation } from '@react-navigation/native';
 
-const ReplacementBookings = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status, commentNeeded, comment, commentColor }) => {
+const ReplacementBookings = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status, commentNeeded, comment, commentColor, callBack, refundStatus }) => {
 
     const W = useWindowDimensions().width
     const H = useWindowDimensions().height
@@ -34,18 +33,18 @@ const ReplacementBookings = ({ name, profilePic, date, service, slot, duration, 
         Alert.alert('Confirm Refund', 'Are you sure you want to raise a refund request?', [
             {
                 text: 'Yes',
-                // onPress: async () => {
-                //     var formdata = new FormData()
-                //     formdata.append('booking_id', bookingId)
-                //     formdata.append('status', '1')
-                //     const result = await handlePostRequest('change_booking_status', formdata)
-                //     if (result?.status == '200') {
-                //         Alert.alert(result?.message)
-                //     }
-                //     else {
-                //         Alert.alert(result?.message)
-                //     }
-                // },
+                onPress: async () => {
+                    var formdata = new FormData()
+                    formdata.append('booking_id', bookingId)
+                    const result = await handlePostRequest('refund_request', formdata)
+                    if (result?.status == '200') {
+                        callBack()
+                        Alert.alert(result?.message)
+                    }
+                    else {
+                        Alert.alert(result?.message)
+                    }
+                },
             },
             {
                 text: 'No'
@@ -99,21 +98,34 @@ const ReplacementBookings = ({ name, profilePic, date, service, slot, duration, 
 
     const returnContainer = (t) => {
         if (t == '2') {
-            return (
-                <View style={styles.replaceCOntainer}>
-                    <SmallButtonSecondary
-                        onPressSmallButton={onPressReplace}
-                        style={styles.replaceButton}
-                        title={'Replace'}
-                    />
-                    <Text style={styles.orText}>OR</Text>
-                    <SmallButtonSecondary
-                        onPressSmallButton={onPressRefund}
-                        style={styles.replaceButton}
-                        title={'Refund'}
-                    />
-                </View>
-            )
+            if (refundStatus == '0') {
+                return (
+                    <View style={styles.replaceCOntainer}>
+                        <SmallButtonSecondary
+                            onPressSmallButton={onPressReplace}
+                            style={styles.replaceButton}
+                            title={'Replace'}
+                        />
+                        <Text style={styles.orText}>OR</Text>
+                        <SmallButtonSecondary
+                            onPressSmallButton={onPressRefund}
+                            style={styles.replaceButton}
+                            title={'Refund'}
+                        />
+                    </View>
+                )
+            }
+            else if (refundStatus == '1') {
+                return (
+                    <Text>Refund Processing</Text>
+                )
+            }
+            else if (refundStatus == '2') {
+                return (
+                    <Text>Refund Completed</Text>
+                )
+            }
+
         }
         // else if (t == '2') {
         //   return (
