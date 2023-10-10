@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Alert } from "react-native";
-import { getLocalValue } from "./LocalStore";
+import { clearStorage, getLocalValue } from "./LocalStore";
+import RNRestart from 'react-native-restart';
 
 export const LOCAL_STORE = {
     LOGIN: 'loginStatus',
@@ -11,7 +12,8 @@ export const LOCAL_STORE = {
 }
 
 export const Constants = {
-    BASE_URL: 'https://thebabysitterclubs.com/babysitter/api/v1/'
+    BASE_URL: 'https://thebabysitterclubs.com/babysitter/api/v1/',
+    VERSION:'1.0',
 }
 
 export const handlePostRequest = async (name, formdata) => {
@@ -33,7 +35,14 @@ export const handlePostRequest = async (name, formdata) => {
     return axios(config)
         .then(response => {
             // console.log('POST response:', response);
-            return response.data;
+            if (response?.data?.status == '502') {
+                clearStorage()
+                Alert.alert('Session Expired', 'Logging you out..')
+                RNRestart.restart();
+            }
+            else {
+                return response.data;
+            }
         })
         .catch(error => {
             Alert.alert(error?.message);
@@ -54,7 +63,14 @@ export const handleGetRequest = async (name) => {
 
     return axios.request(config)
         .then((response) => {
-            return response.data
+            if (response?.data?.status == '502') {
+                clearStorage()
+                Alert.alert('Session Expired', 'Logging you out..')
+                RNRestart.restart();
+            }
+            else {
+                return response.data;
+            }
         })
         .catch((error) => {
             Alert.alert(error?.message);

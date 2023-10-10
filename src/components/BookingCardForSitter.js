@@ -8,7 +8,7 @@ import Colors from '../helper/Colors';
 import { Shadows, handlePostRequest } from '../helper/Utils';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 
-const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status }) => {
+const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status, callBack }) => {
 
   const W = useWindowDimensions().width
   const H = useWindowDimensions().height
@@ -25,6 +25,7 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
           formdata.append('status', '1')
           const result = await handlePostRequest('change_booking_status', formdata)
           if (result?.status == '200') {
+            callBack()
             Alert.alert(result?.message)
           }
           else {
@@ -48,9 +49,9 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
           formdata.append('status', '2')
           const result = await handlePostRequest('change_booking_status', formdata)
           if (result?.status == '200') {
-            console.log(result)
+            callBack()
           }
-          console.log(result)
+        
         },
       },
       {

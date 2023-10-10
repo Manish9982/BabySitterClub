@@ -9,6 +9,7 @@ import Spaces from '../helper/Spaces';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import SmallButtonSecondary from '../components/SmallButtonSecondary';
 import { Text } from 'react-native-paper';
+import { useIsFocused } from '@react-navigation/native';
 
 const BookingConfirmation_Parent = ({ route, navigation }) => {
 
@@ -22,10 +23,13 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
 
   const { bookingDetails } = route.params;
   const details = JSON.parse(bookingDetails)
+  const isFocused = useIsFocused()
 
   useEffect(() => {
-    getAddress()
-  }, [])
+    if (isFocused) {
+      getAddress()
+    }
+  }, [isFocused])
 
 
   const getAddress = async () => {
@@ -33,6 +37,10 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
     setAddressdata(result)
     console.log(result)
     setLoader(false)
+  }
+
+  const onPressAddAddress = () => {
+    navigation.navigate('AddAddress')
   }
 
   const toggleModal = () => {
@@ -110,7 +118,10 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
         </View>
 
         <View style={[styles.detailRow]}>
-          <Text style={styles.label}>Address:</Text>
+          <View style={styles.addressRow}>
+            <Text style={styles.label}>Address:</Text>
+            <AntDesign name="pluscircle" size={Spaces.xl} color={Colors.Secondary} onPress={onPressAddAddress} />
+          </View>
           {
             Platform.OS == "android"
               ?
@@ -235,7 +246,7 @@ const makeStyles = (H, W) => StyleSheet.create({
   {
     width: 100,
     height: 100,
-    borderRadius: 100/3,
+    borderRadius: 100 / 3,
     marginRight: Spaces.med,
     borderWidth: 0.6,
     borderColor: Colors.black
@@ -273,6 +284,13 @@ const makeStyles = (H, W) => StyleSheet.create({
   {
     position: 'absolute',
     left: W * 0.53
+  },
+  addressRow:
+  {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: Spaces.med
   }
 });
 

@@ -80,7 +80,7 @@ const BottomTabsSitter = () => {
             </Tab.Navigator>
             :
             <Stack.Navigator>
-                <Stack.Screen name='Complete Your Profile' component={MyProfile_Sitter} options={{ headerShown: false }} />
+                <Stack.Screen name='Complete Your Profile' component={MyProfile_Sitter} options={{ headerShown: true }} />
             </Stack.Navigator>
 
     )

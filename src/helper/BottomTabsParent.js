@@ -1,4 +1,4 @@
-import { Alert, Platform, StyleSheet, Text, View } from 'react-native'
+import { Alert, Platform, StyleSheet,} from 'react-native'
 import React, { useEffect } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SearchBabySitter_Parent from '../screens/SearchBabySitter_Parent';

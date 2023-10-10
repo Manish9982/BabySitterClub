@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { View, TouchableOpacity, useWindowDimensions } from 'react-native';
 import Fonts from '../helper/Fonts';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import HeaderToolbar from '../helper/HeaderToolbar';
 import { StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
 
 const BookingDetailsPage = () => {
     const H = useWindowDimensions().height

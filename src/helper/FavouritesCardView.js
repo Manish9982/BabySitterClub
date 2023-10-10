@@ -1,9 +1,10 @@
 // Card.js
 import React from 'react';
-import { View, Text, Image, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, Image, StyleSheet, useWindowDimensions } from 'react-native';
 import Spaces from './Spaces';
 import Colors from './Colors';
 import Fonts from './Fonts';
+import { Text } from 'react-native-paper';
 
 const FavouritesCardView = ({ name, location, imageUri }) => {
     const H = useWindowDimensions().height

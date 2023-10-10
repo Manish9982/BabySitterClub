@@ -35,7 +35,7 @@ const AddAddress = ({ navigation }) => {
       const result = await handlePostRequest('address_add', formdata)
 
       if (result?.status == "200") {
-        navigation.navigate("ManageAddress")
+        navigation.goBack()
       } else if (result?.status == "201") {
         Alert.alert("Error", result?.message)
       } else {

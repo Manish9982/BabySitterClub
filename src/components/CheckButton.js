@@ -1,4 +1,4 @@
-import { View, Text, Touchable, TouchableOpacity, StyleSheet } from 'react-native'
+import { Touchable, TouchableOpacity, StyleSheet } from 'react-native'
 import React from 'react'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import Colors from '../helper/Colors'

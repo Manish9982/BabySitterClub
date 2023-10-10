@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Linking, Alert, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, TextInput, Button, Linking, Alert, StyleSheet, useWindowDimensions } from 'react-native';
 import TextInputComponent from '../components/TextInputComponent';
 import CustomButton from '../components/Button';
 import Fonts from '../helper/Fonts';
 import Spaces from '../helper/Spaces';
 import { handlePostRequest } from '../helper/Utils';
+import { Text } from 'react-native-paper';
 
 
 const Help = ({ navigation }) => {

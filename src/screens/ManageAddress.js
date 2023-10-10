@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, Alert, FlatList, StyleSheet, useWindowDimensions, TouchableOpacity } from 'react-native';
+import { View, Image, Alert, FlatList, StyleSheet, useWindowDimensions, TouchableOpacity } from 'react-native';
 import Fonts from '../helper/Fonts';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
@@ -7,6 +7,7 @@ import { handleGetRequest, handlePostRequest } from '../helper/Utils';
 import { useIsFocused } from '@react-navigation/native';
 import Loader from '../components/Loader';
 import CustomButton from '../components/Button';
+import { Text } from 'react-native-paper';
 
 const ManageAddress = ({ navigation }) => {
     const [addressdata, setAddressdata] = useState('')
@@ -29,6 +30,9 @@ const ManageAddress = ({ navigation }) => {
         if (result?.status == '200') {
             setAddressdata(result)
         }
+        else{
+            setAddressdata(null)
+        }
         setLoader(false)
     }
 
@@ -37,9 +41,11 @@ const ManageAddress = ({ navigation }) => {
     }
 
     const deleteAddress = async (id) => {
+        setLoader(true)
         var formdata = new FormData()
         formdata.append("address_id", id);
         const result = await handlePostRequest('address_delete', formdata)
+        
         if (result.status == "200") {
             getAddress()
         } else if (result.status == "201") {
