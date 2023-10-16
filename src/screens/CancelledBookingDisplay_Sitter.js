@@ -56,16 +56,34 @@ const CancelledBookingDisplay_Sitter = () => {
             ?
             <Loader />
             :
-            <View style={{ flex: 1 }}>
-                <FlatList
-                    data={bookingData?.data}
-                    renderItem={renderBookings}
-                    keyExtractor={(item) => item.id.toString()}
-                />
+            <View style={styles.container}>
+                {
+                    bookingData?.data?.length == 0
+                        ?
+                        <Text style={styles.errorText}>You don't have any cancelled bookings.</Text>
+                        :
+                        <FlatList
+                            data={bookingData?.data}
+                            renderItem={renderBookings}
+                            keyExtractor={(item) => item.id.toString()}
+                        />
+                }
+
             </View>
     )
 }
 
 export default CancelledBookingDisplay_Sitter
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    errorText:
+    {
+        alignSelf: 'center'
+    },
+    container:
+    {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+})

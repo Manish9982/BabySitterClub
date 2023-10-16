@@ -27,7 +27,7 @@ const Bookings_Sitter = () => {
         const result = await handleGetRequest('get_booking')
         if (result?.status == '200') {
             setBookingData(result)
-            console.log(result)
+            console.log('bookings for sitter ===>', result)
         }
         setLoader(false)
     }
@@ -91,7 +91,7 @@ const Bookings_Sitter = () => {
                     ]}
                 />
                 {
-                    (((value == 'pending') && (bookingData?.data?.every(item => item?.booking_status == 0))) || ((value == 'completed') && (bookingData?.data?.every(item => item?.booking_status == 1))) || (value == 'all'))
+                    (((value == 'pending') && (bookingData?.data?.every(item => item?.booking_status == 0)) && (!(bookingData?.data?.length == 0))) || ((value == 'completed') && (bookingData?.data?.every(item => item?.booking_status == 1)) && (!(bookingData?.data?.length == 0))) || (value == 'all' && (!(bookingData?.data?.length == 0))))
                         ?
                         <FlatList
                             data={bookingData?.data}

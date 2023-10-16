@@ -4,7 +4,7 @@ import { Divider, Text } from 'react-native-paper';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
-import { handleGetRequest } from '../helper/Utils';
+import { formatDateWithTime, formatDate_mmddyyyy, handleGetRequest } from '../helper/Utils';
 import Loader from '../components/Loader';
 
 const NotificationsScreen = () => {
@@ -39,11 +39,12 @@ const NotificationsScreen = () => {
                             />
                         </View>
                         <View style={styles.textView}>
-                            <Text>{item.message}</Text>
+                            <Text style={styles.notificationTitle}>{item?.title}</Text>
+                            <Text>{item?.body}</Text>
                         </View>
                     </View>
                     <View>
-                        <Text style={styles.createdText}>{item?.created}</Text>
+                        <Text style={styles.createdText}>{formatDateWithTime(item?.updated_at)}</Text>
                     </View>
                 </TouchableOpacity>
                 <Divider style={styles.divider} />
@@ -87,7 +88,6 @@ const makeStyles = (H, W) => StyleSheet.create({
         marginBottom: 16,
     },
     notificationItem: {
-
         padding: Spaces.med,
         paddingBottom: 0,
     },
@@ -123,6 +123,10 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         alignSelf: 'center',
         marginTop: H * 0.4
+    },
+    notificationTitle:
+    {
+        ...Fonts.larBold
     }
 });
 

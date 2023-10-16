@@ -1,12 +1,11 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import React from 'react'
-import { Text } from 'react-native-paper'
 import WebView from 'react-native-webview'
 
 const FAQs_Parent = () => {
   return (
-    // <WebView source={{ uri: 'https://google.com' }} style={{ flex: 1 }} />
-    <WebView source={{ uri: 'https://thebabysitterclubs.com/babysitter/faq' }} style={{ flex: 1 }} />
+     <WebView source={{ uri: 'https://google.com' }} style={{ flex: 1 }} />
+    // <WebView source={{ uri: 'https://thebabysitterclubs.com/babysitter/faq' }} style={{ flex: 1 }} />
   )
 }
 
