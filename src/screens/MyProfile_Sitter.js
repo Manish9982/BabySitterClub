@@ -34,10 +34,9 @@ const MyProfile_Sitter = ({ navigation }) => {
     const [lastname, setLastName] = useState('')
     const [about, setAbout] = useState('')
     const [address, setAddress] = useState('')
-    const [price, setPrice] = useState('')
     const [dob, setDob] = useState('')
     const [children, setChildren] = useState('')
-    const [image, setImage] = useState({})
+    const [image, setImage] = useState(null)
     const [loaderButton, setLoaderButton] = useState(false)
     const [serviceFilterId, setServiceFilterId] = useState(null);
     const [slots, setSlots] = useState([])
@@ -52,18 +51,13 @@ const MyProfile_Sitter = ({ navigation }) => {
     }, [isFocused])
 
     useEffect(() => {
-      getUserProfileData()
+        getUserProfileData()
     }, [])
-    
+
 
 
     const onPressButton = () => {
-        if (price?.length == '0') {
-
-        } else {
-            updateUserProfileData()
-        }
-
+        updateUserProfileData()
     }
 
     const getSlots = async () => {
@@ -113,14 +107,17 @@ const MyProfile_Sitter = ({ navigation }) => {
         //  formdata.append('service_id', route?.params?.services?.id);
         formdata.append('firstName', name);
         formdata.append('lastName', lastname);
-        formdata.append('hourPrice', price);
+        // formdata.append('hourPrice', price);
         formdata.append('noOfChildren', children);
         formdata.append('comfirtableWith', "Cooking");
         formdata.append('experience', "I smoke");
         formdata.append('address', address);
         formdata.append('dob', "2000-01-10");
         formdata.append('description', about);
-        formdata.append('picture', image);
+        {
+            image &&
+                formdata.append('picture', image);
+        }
         const result = await handlePostRequest('profile_update', formdata)
         if (result?.status == '200') {
             Alert.alert("Success", result?.message)
@@ -139,8 +136,8 @@ const MyProfile_Sitter = ({ navigation }) => {
             setAbout(result?.userDetails?.description)
             setAddress(result?.userDetails?.address)
             setChildren(JSON.stringify(result?.userDetails?.no_of_children))
-            setPrice(JSON.stringify(result?.userDetails?.hour_price))
-            setImage({ uri: `${result?.url}${result?.userDetails?.picture}` })
+            //setPrice(JSON.stringify(result?.userDetails?.hour_price))
+            //setImage({ uri: `${result?.url}${result?.userDetails?.picture}` })
             setUserdata(result)
         }
 
@@ -210,7 +207,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                     {/* <View style={styles.profilePicturePlaceholder} /> */}
                     <Image defaultSource={require('../assets/images/profile-user.png')}
                         //source={require('../assets/images/profile-user.png')}
-                        source={{ uri: image?.uri }}
+                        source={{ uri: image?.uri || `${userdata?.url}${userdata?.userDetails?.picture}` }}
                         style={styles.profilePicturePlaceholder}
                     />
                 </TouchableOpacity>
@@ -258,15 +255,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                 <Text style={styles.guidingText}>
                     Your address will never be shared with anyone. We will show your approximate location on profile.
                 </Text>
-                <Text style={styles.sectionHeader}>Hourly Rate (Per Hour)</Text>
-                <TextInputComponent
-                    keyboardType='numeric'
-                    value={price}
-                    onChangeText={(text) => {
-                        setPrice(text)
-                    }}
-                    placeholder={"USD ($)"}
-                    style={styles.input} />
+
                 {/* <Text style={styles.sectionHeader}>No of children</Text>
                 <TextInputComponent
                     keyboardType='numeric'
@@ -294,9 +283,9 @@ const MyProfile_Sitter = ({ navigation }) => {
                             onChangeAndroid={onChangeAndroidPicker}
                             onChangeIos={onChangeIosPicker}
                         /> */}
-                <Text style={styles.guidingText}>
+                {/* <Text style={styles.guidingText}>
                     Ask for permission from your parents if you are under 18 years old. Babysitters must be 16 years or older.
-                </Text>
+                </Text> */}
                 <View style={styles.horizontalContainer}>
                     <Text style={styles.sectionHeader}>Availability</Text>
                     <TouchableOpacity

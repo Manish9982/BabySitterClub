@@ -75,8 +75,6 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
         amount: details?.amount,
         booking_address: selectedAddress
       })
-
-
     })
   }
 

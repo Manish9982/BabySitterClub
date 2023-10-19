@@ -13,6 +13,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Loader from '../components/Loader';
 import { setIsProfileCompleted } from '../redux/GlobalSlice';
 import { useDispatch } from 'react-redux';
+import { logout } from '../redux/AuthSlice';
 
 const MyProfile_Parent = () => {
 
@@ -29,7 +30,7 @@ const MyProfile_Parent = () => {
     const [price, setPrice] = useState('')
     const [dob, setDob] = useState('')
     const [children, setChildren] = useState('')
-    const [image, setImage] = useState({})
+    const [image, setImage] = useState(null)
     const [loaderButton, setLoaderButton] = useState(false)
     const [showSlots, setShowSlots] = useState(false)
     const [slots, setSlots] = useState(null)
@@ -48,6 +49,19 @@ const MyProfile_Parent = () => {
             updateUserProfileData()
         }
 
+    }
+
+    const onPressLogoutButton = () => {
+
+        Alert.alert('Logout', 'Are you sure you want to logout?', [
+            {
+                text: 'Yes',
+                onPress: () => dispatch(logout())
+            },
+            {
+                text: 'No'
+            }
+        ])
     }
 
     const pickImage = async () => {
@@ -109,14 +123,20 @@ const MyProfile_Parent = () => {
         //  formdata.append('service_id', route?.params?.services?.id);
         formdata.append('firstName', name);
         formdata.append('lastName', lastname);
-        formdata.append('hourPrice', price);
+        formdata.append('hourPrice', "12");
         formdata.append('noOfChildren', children);
         formdata.append('comfirtableWith', "Cooking");
         formdata.append('experience', "I smoke");
         formdata.append('address', address);
         formdata.append('dob', "2000-01-10");
         formdata.append('description', about);
-        formdata.append('picture', image);
+        {
+            image
+                ?
+                formdata.append('picture', image)
+                :
+                null
+        }
         const result = await handlePostRequest('profile_update', formdata)
 
         if (result?.status == '200') {
@@ -136,7 +156,7 @@ const MyProfile_Parent = () => {
         setAddress(result?.userDetails?.address)
         setChildren(JSON.stringify(result?.userDetails?.no_of_children))
         setPrice(JSON.stringify(result?.userDetails?.hour_price))
-        setImage({ uri: `${result?.url}${result?.userDetails?.picture}` })
+        //setImage({ uri: `${result?.url}${result?.userDetails?.picture}` })
         setUserdata(result)
         console.log("RESULT==========>", result)
         setLoader(false)
@@ -182,8 +202,15 @@ const MyProfile_Parent = () => {
                         {/* <View style={styles.profilePicturePlaceholder} /> */}
                         <Image defaultSource={require('../assets/images/profile-user.png')}
                             //source={require('../assets/images/profile-user.png')}
-                            source={{ uri: image?.uri }}
+                            source={{ uri: image?.uri || `${userdata?.url}${userdata?.userDetails?.picture}` }}
                             style={styles.profilePicturePlaceholder}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={onPressLogoutButton}
+                        style={styles.logoutIconContainer}>
+                        <Image source={require('../assets/images/logout.png')}
+                            style={styles.logoutIcon}
                         />
                     </TouchableOpacity>
                     <View style={styles.availabilityContainer}></View>
@@ -230,7 +257,7 @@ const MyProfile_Parent = () => {
                     <Text style={styles.guidingText}>
                         Your address will never be shared with anyone. We will show your approximate location on profile.
                     </Text>
-                    <Text style={styles.sectionHeader}>Hourly rate for babysitting</Text>
+                    {/* <Text style={styles.sectionHeader}>Hourly rate for babysitting</Text>
                     <TextInputComponent
                         keyboardType='numeric'
                         maxlength={3}
@@ -239,7 +266,7 @@ const MyProfile_Parent = () => {
                             setPrice(text)
                         }}
                         placeholder={"USD ($)"}
-                        style={styles.input} />
+                        style={styles.input} /> */}
                     <Text style={styles.sectionHeader}>No of children</Text>
                     <TextInputComponent
                         keyboardType='numeric'
@@ -403,6 +430,18 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         flexDirection: 'row',
         flexWrap: 'wrap',
+    },
+    logoutIcon: {
+        height: 40,
+        width: 40,
+        borderRadius: 5,
+        backgroundColor: Colors.PRIMARY,
+    },
+    logoutIconContainer:
+    {
+        position: 'absolute',
+        alignSelf: 'flex-end',
+        top: H * 0.01,
     }
 
 });
