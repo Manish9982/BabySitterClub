@@ -9,6 +9,7 @@ import CustomButton from '../components/Button';
 import { Picker } from '@react-native-picker/picker';
 import { convertTo12HourFormat, convertTo24HourFormat, formatDate, formatDate_mmddyyyy, handleGetRequest, handlePostRequest } from '../helper/Utils';
 import Loader from '../components/Loader';
+import TextInputComponent from '../components/TextInputComponent';
 
 const AddAvailability_Sitter = ({ navigation }) => {
 
@@ -26,6 +27,7 @@ const AddAvailability_Sitter = ({ navigation }) => {
     const [loaderButton, setLoaderButton] = useState(false)
     const [loaderForStartEndTime, setLoaderForStartEndTime] = useState(false)
     const [slotCheckData, setSlotCheckData] = useState(null)
+    const [price, setPrice] = useState('')
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
@@ -90,6 +92,15 @@ const AddAvailability_Sitter = ({ navigation }) => {
         setShowPicker(prev => !prev)
     }
 
+    const handlePriceChange = (t) => {
+        if (t?.length < 4 && (!isNaN(t)) && (!(t?.charAt(0) == '0'))) {
+            setPrice(t)
+        }
+        else if (t?.charAt(0) == '0') {
+            setPrice('')
+        }
+    }
+
     const onSelectService = (t) => {
         console.log("picker==>", t)
         setChosenService(prev => {
@@ -97,22 +108,29 @@ const AddAvailability_Sitter = ({ navigation }) => {
         })
     }
     const onPressAddAvailability = async () => {
-        setLoaderButton(true)
-        var formdata = new FormData()
-        formdata.append("date", formatDate(date));
-        formdata.append("start_time", convertTo24HourFormat(startTime));
-        formdata.append("end_time", convertTo24HourFormat(endTime));
-        formdata.append("repeat", repeatOption);
-        formdata.append("service_id", JSON.stringify(chosenService?.id));
-        const result = await handlePostRequest('slot_availability', formdata)
-        if (result?.status == '200') {
-            Alert.alert('Availability added', result?.message)
-            navigation.goBack()
+        if (price == '') {
+            Alert.alert('Price Missing', 'Kindly add your hourly price to add your slot')
         }
         else {
-            Alert.alert('Error', result?.message)
+            setLoaderButton(true)
+            var formdata = new FormData()
+            formdata.append("date", formatDate(date));
+            formdata.append("start_time", convertTo24HourFormat(startTime));
+            formdata.append("end_time", convertTo24HourFormat(endTime));
+            formdata.append("repeat", repeatOption);
+            formdata.append("hour_price", price);
+            formdata.append("service_id", JSON.stringify(chosenService?.id));
+            const result = await handlePostRequest('slot_availability', formdata)
+            if (result?.status == '200') {
+                Alert.alert('Availability added', result?.message)
+                navigation.goBack()
+            }
+            else {
+                Alert.alert('Error', result?.message)
+            }
+            setLoaderButton(false)
         }
-        setLoaderButton(false)
+
     }
 
     return (
@@ -131,7 +149,7 @@ const AddAvailability_Sitter = ({ navigation }) => {
                         selectedValue={chosenService?.id}
                         onValueChange={onSelectService}
                         style={styles.pickerContainer}
-                        >
+                    >
                         {
                             filteredServices?.map(item => <Picker.Item key={item?.id} value={item?.id} label={item?.service_name} />)
                         }
@@ -265,6 +283,17 @@ const AddAvailability_Sitter = ({ navigation }) => {
 
                     </View>
                 </View>
+
+                <Text style={styles.sectionHeader}>Hourly Rate (Per Hour)</Text>
+                <TextInputComponent
+                    keyboardType='numeric'
+                    value={price}
+                    maxlength={3}
+                    onChangeText={(text) => {
+                        handlePriceChange(text)
+                    }}
+                    placeholder={"USD ($)"}
+                    style={styles.input} />
 
                 <Text style={styles.headingText}>Repeat:</Text>
                 <RadioButton.Group onValueChange={(value) => setRepeatOption(prev => prev == value ? null : value)} value={repeatOption}>
@@ -402,9 +431,13 @@ const makeStyles = (H, W) => StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
         paddingHorizontal: Spaces.sm,
-
-
-    }
+    },
+    sectionHeader: {
+        ...Fonts.larBold,
+        marginTop: Spaces.sm,
+        marginBottom: Spaces.sm,
+        margin: Spaces.med,
+    },
 
 });
 

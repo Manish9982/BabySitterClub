@@ -13,7 +13,7 @@ export const LOCAL_STORE = {
 
 export const Constants = {
     BASE_URL: 'https://thebabysitterclubs.com/babysitter/api/v1/',
-    VERSION:'1.0',
+    VERSION: '1.0',
 }
 
 export const handlePostRequest = async (name, formdata) => {
@@ -227,4 +227,11 @@ export function formatDateProfilePageDate(inputDate) {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 }
+
+export function secondsToTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    const formattedTime = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    return formattedTime;
+};
 

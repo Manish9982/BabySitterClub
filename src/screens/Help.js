@@ -32,10 +32,8 @@ const Help = ({ navigation }) => {
 
             const result = await handlePostRequest('add_help_support', formdata)
 
-
-
             if (result.status == "200") {
-                //navigation.navigate("Account")
+                navigation.goBack()
                 Alert.alert('Success', 'Issue submitted successfully.');
 
             } else if (result.status == "201") {
@@ -43,7 +41,6 @@ const Help = ({ navigation }) => {
 
             } else {
                 Alert.alert("Alert", result.message)
-
             }
 
             setLoader(false)

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, useWindowDimensions } from 'react-native';
-import { Divider } from 'react-native-paper';
+import { View, FlatList, StyleSheet, TouchableOpacity, Image, useWindowDimensions } from 'react-native';
+import { Divider, Text } from 'react-native-paper';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';
 import { handleGetRequest } from '../helper/Utils';
+import Loader from '../components/Loader';
 
 const NotificationCenter_Parent = () => {
 
@@ -13,14 +14,17 @@ const NotificationCenter_Parent = () => {
   }, [])
 
   const [notifications, setNotifications] = useState(null)
+  const [loader, setLoader] = useState(true)
 
   const H = useWindowDimensions().height
   const W = useWindowDimensions().width
 
   const getNotifications = async () => {
+    setLoader(true)
     const result = await handleGetRequest('get_notification')
     console.log(result)
     setNotifications(result)
+    setLoader(false)
   }
 
   const renderNotifications = ({ item }) => {
@@ -34,7 +38,7 @@ const NotificationCenter_Parent = () => {
               />
             </View>
             <View style={styles.textView}>
-              <Text style={{...Fonts.medBold}}>{item?.title}</Text>
+              <Text style={{ ...Fonts.medBold }}>{item?.title}</Text>
               <Text>{item?.body}</Text>
             </View>
           </View>
@@ -50,19 +54,32 @@ const NotificationCenter_Parent = () => {
   const styles = makeStyles(H, W)
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={notifications?.data}
-        keyExtractor={(item) => item.id}
-        renderItem={renderNotifications}
-      />
-    </View>
+    loader
+      ?
+      <Loader />
+      :
+      <View style={styles.container}>
+        {
+          notifications?.data?.length == 0
+            ?
+            <Text style={styles.errorText}>No notifications found</Text>
+            :
+            <FlatList
+              data={notifications?.data}
+              keyExtractor={(item) => item.id}
+              renderItem={renderNotifications}
+            />
+
+        }
+
+      </View>
   );
 };
 
 const makeStyles = (H, W) => StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center'
   },
   title: {
     fontSize: 20,
@@ -101,6 +118,10 @@ const makeStyles = (H, W) => StyleSheet.create({
   textView:
   {
     width: W * 0.8,
+  },
+  errorText:
+  {
+    alignSelf: 'center'
   }
 });
 

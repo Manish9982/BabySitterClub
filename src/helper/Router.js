@@ -61,9 +61,10 @@ const Router = () => {
     const checkVersion = async () => {
         var formdata = new FormData()
         formdata.append('version', Constants.VERSION)
+        //formdata.append('version', '0.9')
         formdata.append('device_type', Platform.OS)
         const result = await handlePostRequest('check_version', formdata)
-        if (!(result?.status == '200')) {
+        if (result?.status == '201') {
             setIsAppUpdate(false)
         }
         console.log("checkVersion result===>", result)
@@ -95,7 +96,7 @@ const Router = () => {
                             <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
                             <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
                             <Stack.Screen name="BookingConfirmation_Parent" component={BookingConfirmation_Parent} options={{ headerShown: true, headerTitle: 'Confirm Booking' }} />
-                            <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{}} />
+                            <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{headerTitle:'PayPal'}} />
                             <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{}} />
                             <Stack.Screen name="FAQs_Parent" component={FAQs_Parent} options={{ headerTitle: 'FAQs' }} />
                             <Stack.Screen name="Help" component={Help} options={{ headerShown: true, headerTitle: 'Help and Support' }} />
