@@ -113,13 +113,13 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                     contentContainerStyle={styles.contentContainerStyle}
                     style={styles.container}>
                     <View style={styles.upperContainer}>
-                        <View>
+                        <TouchableOpacity onPress={()=> navigation.navigate('ViewPicture', {})}>
                             <Image
                                 source={{ uri: `${profiledetailsdata?.url}${profiledetailsdata?.userDetails?.picture}` }}
                                 defaultSource={require('../assets/images/profile-user.png')}
                                 style={styles.profilePic}
                             />
-                        </View>
+                        </TouchableOpacity>
                         <View>
                             <Text style={[styles.heading, { marginBottom: 0 }]}>{`${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`}</Text>
                             <Text style={[styles.textSecondary, { marginBottom: 0 }, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.address}</Text>

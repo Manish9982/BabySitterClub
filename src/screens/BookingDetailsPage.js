@@ -36,22 +36,14 @@ const BookingDetailsPage = () => {
             style={{
                 flex: 1
             }}>
-                
+
             <View style={styles.container}>
-
-
                 {/* <Text style={[styles.statusText1, Fonts.larMedium]}>Booking with James Anderson</Text> */}
-
                 <View style={styles.statusContainer}>
                     <Text style={[styles.aboutText, Fonts.larMedium]}>Booking Status:</Text>
-
-
                     <View style={styles.messageContainer}>
-
                         <Text style={[styles.messageText, Fonts.medMedium]}>{bookingStatus}</Text>
                     </View>
-
-
                     <Text style={[styles.aboutText, Fonts.larMedium]}>About:</Text>
                     <View style={styles.messageContainer}>
                         <Text style={[styles.messageText, Fonts.medMedium]}>{message}</Text>
@@ -60,13 +52,10 @@ const BookingDetailsPage = () => {
                 <View style={styles.detailsContainer}>
                     <Text style={[styles.bookingdetailsContainer, Fonts.larMedium]}>Booking Details:</Text>
                     <View style={styles.messageContainer}>
-
                         <Text style={[styles.messageText, Fonts.medMedium]}>{bookingStartDate} - {bookingEndDate}</Text>
                     </View>
-
                     <Text style={[styles.paymentdetailsContainer, Fonts.larMedium]}>Payment Details:</Text>
                     <View style={styles.messageContainer}>
-
                         <Text style={[styles.messageText, Fonts.medMedium]}>Amount: {paymentAmount}</Text>
                         <Text style={[styles.messageText, Fonts.medMedium]}>Payment Method: {paymentMethod}</Text>
                     </View>

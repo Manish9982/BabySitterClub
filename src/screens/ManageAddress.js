@@ -27,10 +27,11 @@ const ManageAddress = ({ navigation }) => {
 
     const getAddress = async () => {
         const result = await handleGetRequest('address_get')
+        console.log("adresses ==>", result)
         if (result?.status == '200') {
             setAddressdata(result)
         }
-        else{
+        else {
             setAddressdata(null)
         }
         setLoader(false)
@@ -45,7 +46,7 @@ const ManageAddress = ({ navigation }) => {
         var formdata = new FormData()
         formdata.append("address_id", id);
         const result = await handlePostRequest('address_delete', formdata)
-        
+
         if (result.status == "200") {
             getAddress()
         } else if (result.status == "201") {
@@ -95,11 +96,18 @@ const ManageAddress = ({ navigation }) => {
             :
             <View style={styles.container}>
                 <Text style={[styles.savedAddressesTitle, Fonts.larSemiBold]}>Saved Addresses</Text>
-                <FlatList
-                    data={addressdata?.data}
-                    keyExtractor={(item) => item.id}
-                    renderItem={renderAddressItem}
-                />
+                {
+                    (addressdata == null || addressdata?.data?.length == 0)
+                        ?
+                        <Text style={styles.errorText}>No saved addresses found</Text>
+                        :
+                        <FlatList
+                            data={addressdata?.data}
+                            keyExtractor={(item) => item.id}
+                            renderItem={renderAddressItem}
+                        />
+                }
+
                 <CustomButton
                     onPressButton={onPressAddAdress}
                     title={'Add new address'}
@@ -169,6 +177,11 @@ const makeStyles = (H, W) => StyleSheet.create({
     addressText: {
 
     },
+    errorText:
+    {
+        alignSelf:'center',
+        marginVertical:H*0.33
+    }
 });
 
 export default ManageAddress;
