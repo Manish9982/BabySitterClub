@@ -33,7 +33,7 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
 
 
   const getAddress = async () => {
-    const result = await handleGetRequest('address_get')
+    const result = await handleGetRequest('address_list')
     setAddressdata(result)
     console.log(result)
     setLoader(false)
@@ -135,7 +135,7 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
                   <Picker.Item
                     label='Choose Address' value='Choose Address' />
                   {
-                    addressdata?.data?.map((item) => <Picker.Item key={item?.id} label={item.address} value={item.address} />)
+                    addressdata?.data?.map((item, index) => <Picker.Item key={index} label={item.address} value={item.address} />)
                   }
                 </Picker>
               </View>
@@ -171,7 +171,7 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
               <Picker.Item
                 label='Choose Address' value='Choose Address' />
               {
-                addressdata?.data?.map((item) => <Picker.Item key={item?.id} label={item.address} value={item.address} />)
+                addressdata?.data?.map((item, index) => <Picker.Item key={index} label={item.address} value={item.address} />)
               }
             </Picker>
             <SmallButtonSecondary

@@ -10,10 +10,13 @@ import CustomButton from '../components/Button';
 import { Text } from 'react-native-paper';
 
 const ManageAddress = ({ navigation }) => {
+
     const [addressdata, setAddressdata] = useState('')
     const [loader, setLoader] = useState(true)
+
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
+
     const styles = makeStyles(H, W)
 
     const isFocused = useIsFocused()
@@ -103,7 +106,7 @@ const ManageAddress = ({ navigation }) => {
                         :
                         <FlatList
                             data={addressdata?.data}
-                            keyExtractor={(item) => item.id}
+                            keyExtractor={(item, index) => `${index}`}
                             renderItem={renderAddressItem}
                         />
                 }
