@@ -9,6 +9,7 @@ import Loader from '../components/Loader';
 import { setSelectedServices, setUsertype } from '../redux/GlobalSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { storeLocalValue } from '../helper/LocalStore';
+import { useIsFocused } from '@react-navigation/native';
 
 const SwitchServices = ({ navigation, route }) => {
     const H = useWindowDimensions().height
@@ -17,10 +18,13 @@ const SwitchServices = ({ navigation, route }) => {
 
     //const userType = useSelector(state => state.global.usertype)
     const dispatch = useDispatch()
+    const isFocused = useIsFocused()
 
     useEffect(() => {
-        getServices()
-    }, [])
+        if (isFocused) {
+            getServices()
+        }
+    }, [isFocused])
 
     const [services, setServices] = useState([]);
     const [loader, setLoader] = useState(true)
@@ -46,7 +50,7 @@ const SwitchServices = ({ navigation, route }) => {
             }
             else if (route?.params?.user == '2') {
                 navigation.navigate('BottomTabsSitter')
-              
+
             }
             // }
             // else if (userType == '2') {
@@ -140,12 +144,11 @@ const makeStyles = (H, W) => StyleSheet.create({
         opacity: 0.5
     },
     list: {
-        marginTop: H * 0.15,
         justifyContent: 'center',
         alignItems: 'center',
     },
     button:
     {
-        top: - H * 0.04,
+       
     }
 })

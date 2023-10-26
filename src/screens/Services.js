@@ -10,6 +10,7 @@ import { setSelectedServices } from '../redux/GlobalSlice'
 import { useDispatch } from 'react-redux';
 import Fonts from '../helper/Fonts';
 import { Text } from 'react-native-paper';
+import { useIsFocused } from '@react-navigation/native';
 
 
 const Services = ({ navigation }) => {
@@ -18,10 +19,13 @@ const Services = ({ navigation }) => {
     const styles = makeStyles(H, W)
 
     const dispatch = useDispatch()
+    const isFocused = useIsFocused()
 
     useEffect(() => {
-        getServices()
-    }, [])
+        if (isFocused) {
+            getServices()
+        }
+    }, [isFocused])
 
     const [services, setServices] = useState();
     const [loader, setLoader] = useState(true)
@@ -35,10 +39,10 @@ const Services = ({ navigation }) => {
             dispatch(setSelectedServices(services.filter(item => item?.isSelected)));
             navigation.navigate('Login')
         }
-
     }
 
     const getServices = async () => {
+        setLoader(true)
         const result = await handleGetRequest('services')
         setServices(result?.services)
         setBaseUrl(result?.url)
@@ -66,6 +70,9 @@ const Services = ({ navigation }) => {
             onPressServices={() => onPressService(item)}
         />
     );
+
+    console.log('services ==>', services)
+
     return (
         loader
             ?
@@ -82,7 +89,7 @@ const Services = ({ navigation }) => {
                     data={services}
                     renderItem={renderServices}
                     keyExtractor={(item) => item.id.toString()}
-                  //  numColumns={services?.length > 3 ? 2 : 1} // Set the number of columns here, you can adjust as needed
+                //  numColumns={services?.length > 3 ? 2 : 1} // Set the number of columns here, you can adjust as needed
                 />
                 <CustomButton
                     style={styles.button}
@@ -108,20 +115,20 @@ const makeStyles = (H, W) => StyleSheet.create({
         margin: Spaces.sm
     },
     imageStyle: {
-      //  opacity: 0.3
+        //  opacity: 0.3
     },
     list: {
-        marginTop: H * 0.05,
+        //marginTop: H * 0.05,
         justifyContent: 'center',
         alignItems: 'center',
     },
     button:
     {
-       // top: - H * 0.04,
+        // top: - H * 0.04,
     },
     textBottom: {
         width: W * 0.95,
-        marginTop: H * 0.05,
+        //marginTop: H * 0.05,
         color: "black",
 
         textAlign: 'center'
