@@ -29,6 +29,7 @@ const ManageAddress = ({ navigation }) => {
 
 
     const getAddress = async () => {
+        setLoader(true)
         const result = await handleGetRequest('address_get')
         console.log("adresses ==>", result)
         if (result?.status == '200') {
@@ -57,8 +58,6 @@ const ManageAddress = ({ navigation }) => {
         } else {
             Alert.alert("Info", result.message)
         }
-        setLoader(false)
-
     }
 
     const onPressClick = (id) => {

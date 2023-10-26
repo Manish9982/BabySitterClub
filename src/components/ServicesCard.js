@@ -50,7 +50,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderColor: Colors.gray,
         borderWidth: 0.6,
         alignItems: 'center',
-        height: W * 0.4,
+        height: H * 0.24,
         width: W * 0.8,
         borderRadius: 8,
         marginHorizontal: W * 0.05,
@@ -60,11 +60,9 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     picture:
     {
-        width: 55,
-        height: 55,
+        width: H*0.08,
+        height: H*0.08,
         tintColor: Colors.white,
-        marginStart:W*0.02
-
     },
     card:
     {
@@ -74,7 +72,6 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         color: Colors.white, 
         marginTop:H*0.015,
-        marginStart:W*0.02
     },
 
     description:
@@ -84,7 +81,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     checkBox:
     {
         position: 'absolute',
-        bottom: W * 0.3,
+        top: H * 0.02,
         left: W * 0.01,
     }
 
