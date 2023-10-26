@@ -77,11 +77,11 @@ const BookingDetailsPage = () => {
 const makeStyles = (H, W) => StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: Spaces.med,
+        paddingHorizontal: Spaces.sm,
         paddingTop: Spaces.xxl,
     },
     statusContainer: {
-        marginBottom: Spaces.med,
+        marginBottom: Spaces.sm,
     },
     statusText1: {
         color: Colors.black,
@@ -101,7 +101,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderWidth: 0,
         borderColor: 'white',
         borderRadius: 5,
-        padding: Spaces.med,
+        padding: Spaces.sm,
         marginTop: H * 0.01,
         elevation: 2
     },
@@ -142,7 +142,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     button: {
         backgroundColor: Colors.buttoncolor,
         paddingVertical: Spaces.sm,
-        paddingHorizontal: Spaces.med,
+        paddingHorizontal: Spaces.sm,
         borderRadius: 5,
         flex: 1,
         marginRight: Spaces.sm,

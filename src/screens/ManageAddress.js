@@ -122,7 +122,7 @@ const ManageAddress = ({ navigation }) => {
 const makeStyles = (H, W) => StyleSheet.create({
     container: {
         flex: 1,
-        padding: Spaces.med,
+        padding: Spaces.sm,
     },
     addButtonContainer: {
         flexDirection: 'row',
@@ -156,7 +156,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         marginLeft: W * 0.02
     },
     savedAddressesTitle: {
-        marginBottom: Spaces.med,
+        marginBottom: Spaces.sm,
         color: Colors.black,
         marginTop: H * 0.03
     },
@@ -166,7 +166,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: Spaces.sm,
-        marginBottom: Spaces.med,
+        marginBottom: Spaces.sm,
         backgroundColor: 'white',
     },
     addaddressCard: {

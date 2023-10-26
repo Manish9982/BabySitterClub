@@ -13,6 +13,8 @@ import { setIsProfileCompleted } from '../redux/GlobalSlice';
 import MyProfile_Sitter from '../screens/MyProfile_Sitter';
 import { onNotificationReceiver, requestUserPermission } from './Notifications';
 import { getLocalValue } from './LocalStore';
+import AddAvailability_Sitter from '../screens/AddAvailability_Sitter';
+import AddAddress from '../screens/AddAddress';
 
 const BottomTabsSitter = () => {
 
@@ -81,6 +83,8 @@ const BottomTabsSitter = () => {
             :
             <Stack.Navigator>
                 <Stack.Screen name='Complete Your Profile' component={MyProfile_Sitter} options={{ headerShown: true }} />
+                <Stack.Screen name="AddAvailability_Sitter" component={AddAvailability_Sitter} options={{ headerShown: true, headerTitle: 'Add Availabiltity' }} />
+                <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
             </Stack.Navigator>
 
     )

@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         width: 75,
         height: 75,
         borderRadius: 20,
-        marginRight: Spaces.med,
+        marginRight: Spaces.sm,
         borderWidth: 0.6,
         borderColor: Colors.black
     },

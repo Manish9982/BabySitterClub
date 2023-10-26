@@ -135,6 +135,8 @@ const Router = () => {
                             <Stack.Screen name="Help" component={Help} options={{ headerShown: true, headerTitle: 'Help and Support' }} />
                             <Stack.Screen name="CancelledBookingDisplay_Sitter" component={CancelledBookingDisplay_Sitter} options={{ headerShown: true, headerTitle: 'Cancelled Bookings' }} />
                             <Stack.Screen name="ViewPicture" component={ViewPicture} options={{ headerShown: true, headerTitle: '' }} />
+                            <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
+                            <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
                         </Stack.Navigator>
                     )
                 }

@@ -87,7 +87,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     box: {
         justifyContent: 'center',
         //backgroundColor: Colors.grayTransparent,
-        padding: Spaces.xl,
+        padding: Spaces.lar,
         borderRadius: 10,
         alignSelf: 'center',
         marginTop: H * 0.3
@@ -100,6 +100,6 @@ const makeStyles = (H, W) => StyleSheet.create({
         ...Fonts.medSemiBold,
         textAlign: 'center',
         top: H * 0.3,
-        margin: Spaces.med
+        margin: Spaces.sm
     }
 });

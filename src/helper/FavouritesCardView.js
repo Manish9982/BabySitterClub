@@ -36,7 +36,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         backgroundColor: Colors.white,
         borderRadius: 5,
         padding: Spaces.lar,
-        marginBottom: Spaces.med,
+        marginBottom: Spaces.sm,
         elevation: 5,
     },
     image: {

@@ -62,15 +62,15 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.LIGHT_GRAY,
-        padding: Spaces.med,
+        padding: Spaces.sm,
     },
     card: {
         borderWidth: 1,
         borderColor: Colors.DEEP_GRAY,
         borderRadius: 8,
         backgroundColor: Colors.SUBTLE_WHITE,
-        padding: Spaces.med,
-        marginBottom: Spaces.med,
+        padding: Spaces.sm,
+        marginBottom: Spaces.sm,
     },
     name: {
         color: Colors.buttoncolor,

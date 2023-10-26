@@ -97,7 +97,7 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
                     <Text style={styles.bookingValue}>{booking?.transaction_id}</Text>
                 </View>
                 {/* <AntDesign name={booking?.icon} color={booking?.b_color} /> */}
-                <AntDesign name={booking?.b_icon} color={booking?.b_color} size={Spaces.xl} style={{ marginTop: Spaces.sm }} />
+                <AntDesign name={booking?.b_icon} color={booking?.b_color} size={Spaces.lar} style={{ marginTop: Spaces.sm }} />
                 <Text style={styles.bookingValue2}>{booking?.booking_status}</Text>
                 <Text style={styles.createdAt}>{formatDateWithTime(booking?.created_at)}</Text>
             </View>
@@ -178,7 +178,7 @@ const makeStyles = (W) => StyleSheet.create({
         width: 75,
         height: 75,
         borderRadius: 20,
-        marginRight: Spaces.med,
+        marginRight: Spaces.sm,
         borderWidth: 0.6,
         borderColor: Colors.black
     },
@@ -250,7 +250,7 @@ const makeStyles = (W) => StyleSheet.create({
         width: W * 0.33,
         alignSelf: 'center',
         textAlign: 'center',
-        marginBottom: Spaces.med
+        marginBottom: Spaces.sm
     },
     createdAt: {
         position: 'absolute',

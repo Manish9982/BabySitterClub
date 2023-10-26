@@ -361,10 +361,10 @@ const makeStyles = (H, W) => StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 100 / 3,
-        marginRight: Spaces.med,
+        marginRight: Spaces.sm,
         borderWidth: 0.6,
         borderColor: Colors.black,
-        marginVertical: Spaces.med
+        marginVertical: Spaces.sm
     },
     updateButton:
     {
@@ -375,7 +375,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         width: W * 0.17,
         borderColor: Colors.black,
         borderWidth: 0.2,
-        paddingVertical: Spaces.med,
+        paddingVertical: Spaces.sm,
         borderRadius: 8,
         borderColor: Colors.PRIMARY,
         justifyContent: 'center',

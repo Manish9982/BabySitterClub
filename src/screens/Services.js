@@ -105,7 +105,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     searchBar:
     {
-        margin: Spaces.med
+        margin: Spaces.sm
     },
     imageStyle: {
       //  opacity: 0.3

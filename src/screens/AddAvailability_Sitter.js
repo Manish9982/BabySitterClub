@@ -337,7 +337,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     headingText: {
         ...Fonts.larBold,
-        margin: Spaces.med,
+        margin: Spaces.sm,
     },
     datePicker: {
         alignSelf: 'flex-start'
@@ -345,9 +345,9 @@ const makeStyles = (H, W) => StyleSheet.create({
     durationContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        margin: Spaces.med,
+        margin: Spaces.sm,
         borderWidth: 0.6,
-        padding: Spaces.med,
+        padding: Spaces.sm,
         borderRadius: 8,
         borderColor: Colors.PRIMARY
     },
@@ -368,7 +368,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         ...Fonts.medBold,
         alignSelf: 'center',
-        margin: Spaces.med
+        margin: Spaces.sm
     },
     dashContainer:
     {
@@ -436,7 +436,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         ...Fonts.larBold,
         marginTop: Spaces.sm,
         marginBottom: Spaces.sm,
-        margin: Spaces.med,
+        margin: Spaces.sm,
     },
 
 });

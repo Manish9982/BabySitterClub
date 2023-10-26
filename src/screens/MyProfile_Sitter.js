@@ -40,6 +40,7 @@ const MyProfile_Sitter = ({ navigation }) => {
     const [loaderButton, setLoaderButton] = useState(false)
     const [serviceFilterId, setServiceFilterId] = useState(null);
     const [slots, setSlots] = useState([])
+    const [addressdata, setAddressdata] = useState('')
 
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
@@ -47,6 +48,7 @@ const MyProfile_Sitter = ({ navigation }) => {
     useEffect(() => {
         if (isFocused) {
             getSlots()
+            getAddress()
         }
     }, [isFocused])
 
@@ -54,6 +56,47 @@ const MyProfile_Sitter = ({ navigation }) => {
         getUserProfileData()
     }, [])
 
+
+    const getAddress = async () => {
+        const result = await handleGetRequest('address_get')
+        console.log("adresses ==>", result)
+        if (result?.status == '200') {
+            setAddressdata(result)
+        }
+        else {
+            setAddressdata(null)
+        }
+        setLoader(false)
+    }
+
+    const onPressClick = (id) => {
+
+        Alert.alert('Delete Address', "Are you sure, you want to delete this address?", [
+            {
+                text: 'Cancel',
+                onPress: () => { },
+                style: 'cancel',
+            },
+            { text: 'OK', onPress: () => deleteAddress(id) },
+        ]);
+    }
+
+    const deleteAddress = async (id) => {
+        setLoader(true)
+        var formdata = new FormData()
+        formdata.append("address_id", id);
+        const result = await handlePostRequest('address_delete', formdata)
+
+        if (result.status == "200") {
+            getAddress()
+        } else if (result.status == "201") {
+            Alert.alert("Error", result.message)
+        } else {
+            Alert.alert("Info", result.message)
+        }
+        setLoader(false)
+
+    }
 
 
     const onPressButton = () => {
@@ -65,6 +108,10 @@ const MyProfile_Sitter = ({ navigation }) => {
         if (result?.status == '200') {
             setSlots(result?.userSlots)
         }
+    }
+
+    const addAddressButton = () => {
+        navigation.navigate('AddAddress')
     }
 
     const pickImage = async () => {
@@ -183,6 +230,27 @@ const MyProfile_Sitter = ({ navigation }) => {
         ])
     }
 
+    const renderAddressItem = (item, index) => (
+        <View
+            key={index}
+            style={[styles.addressCard, { marginTop: index == 0 ? Spaces.sm : null }]}>
+
+            <View style={styles.addaddressCard}>
+                <Text style={[styles.addressTitle, Fonts.larMedium]}>{item.title}</Text>
+                <TouchableOpacity
+                    onPress={() => onPressClick(item?.id)}>
+                    <Image
+                        source={require('../assets/images/delete.png')}
+                        style={styles.rightIconaddresslist} />
+                </TouchableOpacity>
+
+
+            </View>
+            <Text style={[styles.addressText, Fonts.medMedium]}>{item.address}</Text>
+
+        </View>
+    );
+
     console.log('image displayed at profile====>', image?.uri)
     return (
         loader
@@ -245,7 +313,17 @@ const MyProfile_Sitter = ({ navigation }) => {
                 <Text style={styles.guidingText}>
                     Only communicate through the App, do not include contact details. Minimum 200 characters.
                 </Text>
-                <TextInputComponent
+                <View style={styles.horizontalContainer}>
+                    <Text style={styles.sectionHeader}>Address</Text>
+                    <TouchableOpacity
+                        onPress={addAddressButton}
+                        style={styles.smallButton}>
+                        <Text style={styles.whiteText}><AntDesign name="pluscircle" /> Add</Text>
+                    </TouchableOpacity>
+                </View>
+                {addressdata?.data?.map((item, index) => renderAddressItem(item, index))}
+
+                {/* <TextInputComponent
                     multiline
                     value={address}
                     onChangeText={(text) => {
@@ -254,7 +332,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                     placeholder={'Address'} style={styles.input} />
                 <Text style={styles.guidingText}>
                     Your address will never be shared with anyone. We will show your approximate location on profile.
-                </Text>
+                </Text> */}
 
                 {/* <Text style={styles.sectionHeader}>No of children</Text>
                 <TextInputComponent
@@ -308,7 +386,6 @@ const MyProfile_Sitter = ({ navigation }) => {
                                 {
                                     value: '1',
                                     icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
-
                                 },
                                 {
                                     value: '3',
@@ -383,7 +460,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         backgroundColor: Colors.white,
         alignItems: 'center',
         borderRadius: 8,
-        padding: Spaces.xl
+        padding: Spaces.lar
     },
     pickerContainer: {
         marginBottom: Spaces.lar,
@@ -391,7 +468,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     slotContainer: {
         borderWidth: 1,
         borderColor: '#ccc',
-        padding: Spaces.med,
+        padding: Spaces.sm,
     },
     sectionHeader: {
         ...Fonts.larBold,
@@ -439,7 +516,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 100 / 3,
-        marginRight: Spaces.med,
+        marginRight: Spaces.sm,
         borderWidth: 0.6,
         borderColor: Colors.black
     },
@@ -500,7 +577,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     datesection:
     {
         backgroundColor: Colors.grayTransparent,
-        padding: Spaces.med,
+        padding: Spaces.sm,
         borderRadius: 10,
     },
     slotItem:
@@ -536,7 +613,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     slotList:
     {
-        padding: Spaces.med,
+        padding: Spaces.sm,
         height: H * 0.2,
         borderWidth: 0.6,
         borderRadius: 8,
@@ -602,6 +679,67 @@ const makeStyles = (H, W) => StyleSheet.create({
         position: 'absolute',
         alignSelf: 'flex-end',
         top: H * 0.01,
+    },
+    addButtonContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 16,
+        width: W * 0.9
+    },
+    addButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+        borderWidth: 0,
+        justifyContent: 'space-between',
+    },
+    leftIcon: {
+        width: 18,
+        height: 18,
+        tintColor: Colors.LIGHT_BLUE,
+    },
+    rightIcon: {
+        width: 18,
+        height: 18,
+        tintColor: Colors.LIGHT_BLUE
+    },
+    rightIconaddresslist: {
+        width: 18,
+        height: 18,
+    },
+    buttonText: {
+        marginLeft: W * 0.02
+    },
+    savedAddressesTitle: {
+        marginBottom: Spaces.sm,
+        color: Colors.black,
+        marginTop: H * 0.03
+    },
+
+    addressCard: {
+        padding: Spaces.lar,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: Spaces.sm,
+        marginBottom: Spaces.sm,
+        backgroundColor: 'white',
+    },
+    addaddressCard: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    addressTitle: {
+        marginBottom: 4,
+        color: Colors.black,
+    },
+    addressText: {
+
+    },
+    errorText:
+    {
+        alignSelf: 'center',
+        marginVertical: H * 0.33
     }
 
 });

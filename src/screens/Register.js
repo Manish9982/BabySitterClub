@@ -143,8 +143,8 @@ const styles = {
         backgroundColor: 'white',
         borderRadius: 8,
         elevation: 15,
-        paddingVertical: Spaces.med,
-        paddingHorizontal: Spaces.med,
+        paddingVertical: Spaces.sm,
+        paddingHorizontal: Spaces.sm,
         marginTop: Platform.OS === 'ios' ? 40 : 0, // Adjust marginTop for iOS header
     },
     text: {

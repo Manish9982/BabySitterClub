@@ -188,13 +188,13 @@ const makeStyles = (H, W) => StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
-    padding: Spaces.med,
+    padding: Spaces.sm,
   },
   input2: {
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
-    padding: Spaces.med,
+    padding: Spaces.sm,
     marginTop: H * 0.04,
     marginBottom: H * 0.05
 
