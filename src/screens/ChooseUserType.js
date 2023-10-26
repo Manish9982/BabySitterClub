@@ -88,14 +88,14 @@ const makeStyles = (H, W) => StyleSheet.create({
     box: {
         justifyContent: 'center',
         // backgroundColor: Colors.grayTransparent,
-        padding: Spaces.xl,
+        padding: Spaces.lar,
         borderRadius: 20,
         alignSelf: 'center',
         marginTop: H * 0.02,
         width: W * 0.9
     },
     middlecontainer: {
-        padding: Spaces.xl,
+        padding: Spaces.lar,
         borderRadius: 10,
     },
     countryText: {

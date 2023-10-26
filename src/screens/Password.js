@@ -152,7 +152,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     text1:
     {
-        fontSize: Spaces.xl,
+        fontSize: Spaces.lar,
         alignSelf: 'center',
         marginVertical: H * 0.03
     },

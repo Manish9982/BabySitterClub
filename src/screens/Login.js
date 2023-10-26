@@ -129,16 +129,16 @@ const makeStyles = (H, W) => StyleSheet.create({
   text1:
   {
     alignSelf: 'center',
-    marginVertical: Spaces.med
+    marginVertical: Spaces.sm
   },
   text2:
   {
-    marginTop: Spaces.med,
+    marginTop: Spaces.sm,
     alignItems: 'flex-start'
   },
   textUniversal:
   {
-    padding: Spaces.med,
+    padding: Spaces.sm,
     paddingRight: 0,
     marginVertical: 20
   },
@@ -152,14 +152,14 @@ const makeStyles = (H, W) => StyleSheet.create({
   },
   customButton:
   {
-    marginVertical: Spaces.med
+    marginVertical: Spaces.sm
   },
   viewContainer2: {
     width: W * 0.95,
     backgroundColor: Colors.white,
     borderRadius: 5,
     elevation: 15,
-    paddingVertical: Spaces.xl,
+    paddingVertical: Spaces.lar,
     marginBottom: H * 0.1
   },
 })

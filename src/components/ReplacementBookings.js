@@ -164,8 +164,8 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderWidth: 0.6,
         backgroundColor: 'white',
         borderRadius: 10,
-        padding: Spaces.med,
-        margin: Spaces.med,
+        padding: Spaces.sm,
+        margin: Spaces.sm,
         ...Shadows,
         paddingBottom: Spaces.vsm
     },
@@ -173,7 +173,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 100 / 3,
-        marginRight: Spaces.med,
+        marginRight: Spaces.sm,
         borderWidth: 0.6,
         borderColor: Colors.black
     },
@@ -212,7 +212,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     divider:
     {
-        marginVertical: Spaces.med,
+        marginVertical: Spaces.sm,
         height: 1,
         backgroundColor: Colors.ACCENT_YELLOW,
     },
@@ -237,7 +237,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         backgroundColor: Colors.PRIMARY,
         width: W * 0.3,
-        margin: Spaces.med
+        margin: Spaces.sm
     },
     orText:
     {

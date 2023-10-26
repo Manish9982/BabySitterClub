@@ -219,7 +219,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 5,
         elevation: 5,
-        marginBottom: Spaces.med,
+        marginBottom: Spaces.sm,
     },
     profileImage: {
         width: H * 0.14,
@@ -307,7 +307,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     detailsCard:
     {
-        marginHorizontal: Spaces.med,
+        marginHorizontal: Spaces.sm,
         width: W * 0.55,
     },
     texts:
@@ -331,7 +331,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderRadius: 8,
         margin: Spaces.sm,
         borderColor: Colors.blue,
-        padding: Spaces.med
+        padding: Spaces.sm
     },
     horizontalContainer:
     {
@@ -346,11 +346,11 @@ const makeStyles = (H, W) => StyleSheet.create({
     headerContainer:
     {
         justifyContent: 'space-between',
-        padding: Spaces.med
+        padding: Spaces.sm
     },
     greetings:
     {
-        padding: Spaces.med
+        padding: Spaces.sm
     },
     segment:
     {
@@ -359,7 +359,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     datesection:
     {
         backgroundColor: Colors.grayTransparent,
-        padding: Spaces.med,
+        padding: Spaces.sm,
         borderRadius: 10,
     },
     slotItem:

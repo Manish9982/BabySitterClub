@@ -199,7 +199,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     heading: {
         ...Fonts.larBold,
-        marginBottom: Spaces.med,
+        marginBottom: Spaces.sm,
         color: "white"
     },
     textneedbabysittertitle: {
@@ -209,15 +209,15 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     subheading: {
         ...Fonts.medBold,
-        marginBottom: Spaces.med,
+        marginBottom: Spaces.sm,
     },
     text: {
-        marginBottom: Spaces.med,
+        marginBottom: Spaces.sm,
     },
     divider: {
         borderBottomColor: 'black',
         borderBottomWidth: 1,
-        marginBottom: Spaces.med,
+        marginBottom: Spaces.sm,
     },
     contentContainerStyle:
     {
@@ -227,7 +227,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         ...Fonts.sm,
         color: Colors.white,
-        marginBottom: Spaces.med,
+        marginBottom: Spaces.sm,
         width: W * 0.7
     },
     whiteBox:
@@ -241,23 +241,23 @@ const makeStyles = (H, W) => StyleSheet.create({
     upperContainer:
     {
         backgroundColor: Colors.buttoncolor,
-        padding: Spaces.med,
+        padding: Spaces.sm,
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: Spaces.med
+        marginBottom: Spaces.sm
     },
     profilePic:
     {
         width: 100,
         height: 100,
         borderRadius: 100/3,
-        marginRight: Spaces.med,
+        marginRight: Spaces.sm,
         borderWidth: 0.6,
         borderColor: Colors.black
       },
     lowerContainer:
     {
-        padding: Spaces.med
+        padding: Spaces.sm
     },
     warning:
     {
@@ -277,7 +277,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         backgroundColor: Colors.buttoncolor,
         width: '100%',
         flexDirection: 'row',
-        padding: Spaces.xl,
+        padding: Spaces.lar,
         flex: 2,
         height: H * 0.13
     },

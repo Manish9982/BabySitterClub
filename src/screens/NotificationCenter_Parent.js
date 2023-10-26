@@ -88,7 +88,7 @@ const makeStyles = (H, W) => StyleSheet.create({
   },
   notificationItem: {
 
-    padding: Spaces.med,
+    padding: Spaces.sm,
     paddingBottom: 0,
   },
   divider:
@@ -106,7 +106,7 @@ const makeStyles = (H, W) => StyleSheet.create({
   {
     height: H * 0.04,
     width: H * 0.04,
-    marginRight: Spaces.med,
+    marginRight: Spaces.sm,
     borderRadius: 8,
   },
   createdText:

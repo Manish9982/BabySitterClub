@@ -134,17 +134,17 @@ const styles = StyleSheet.create({
     },
     header: {
         ...Fonts.medBold,
-        marginBottom: Spaces.med,
+        marginBottom: Spaces.sm,
     },
     option: {
         ...Fonts.med,
         marginBottom: 4,
     },
     divider: {
-        marginVertical: Spaces.med,
+        marginVertical: Spaces.sm,
     },
     slider: {
-        marginTop: Spaces.med,
+        marginTop: Spaces.sm,
     },
     checkboxContainer: {
         flexDirection: 'row',

@@ -206,7 +206,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     uppercontainer2: {
         flexDirection: 'row',
         justifyContent: 'center',
-        margin: Spaces.med,
+        margin: Spaces.sm,
 
     },
 

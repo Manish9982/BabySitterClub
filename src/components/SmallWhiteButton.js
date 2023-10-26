@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     {
         backgroundColor: Colors.Secondary,
         alignSelf: 'center',
-        padding: Spaces.med,
+        padding: Spaces.sm,
         borderRadius: 8,
     }
 })

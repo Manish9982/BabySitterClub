@@ -14,6 +14,10 @@ export const LOCAL_STORE = {
 export const Constants = {
     BASE_URL: 'https://thebabysitterclubs.com/babysitter/api/v1/',
     VERSION: '1.0',
+    GOOGLE_API_KEY: 'AIzaSyAiLpu932j2g8W6nfKLmQsxdpobCUYWXo8',
+    PLACES_API_URL: 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+    DALLAS_TEXAS_COORDS: '32.7767,-96.7970',
+    ADDRESS_RADIUS: '50000'
 }
 
 export const handlePostRequest = async (name, formdata) => {

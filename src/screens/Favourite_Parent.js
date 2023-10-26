@@ -96,7 +96,7 @@ const makeStyles = (H, W) => StyleSheet.create({
 
     searchBar:
     {
-        margin: Spaces.med
+        margin: Spaces.sm
     },
     favMessage:
     {

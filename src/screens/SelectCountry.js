@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: Spaces.xl,
+        padding: Spaces.lar,
     },
     imageStyle:
     {
@@ -74,13 +74,13 @@ const styles = StyleSheet.create({
     box:
     {
         backgroundColor: Colors.white,
-        padding: Spaces.med,
+        padding: Spaces.sm,
         borderRadius: 8, elevation: 2
     },
     heading: {
         // fontSize: 24,
         // fontWeight: 'bold',
-        marginBottom: Spaces.xl,
+        marginBottom: Spaces.lar,
         textAlign: 'center',
         color: "black"
     },
@@ -88,9 +88,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: Colors.outlineColor,
         borderRadius: 8,
-        padding: Spaces.med,
+        padding: Spaces.sm,
         width: '100%',
-        marginBottom: Spaces.xl,
+        marginBottom: Spaces.lar,
     },
     selectedCity: {
         fontSize: 18,

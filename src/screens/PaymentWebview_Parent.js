@@ -33,7 +33,7 @@ const PaymentWebview_Parent = ({ navigation, route }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.white }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: Spaces.med, flexWrap: 'wrap' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', padding: Spaces.sm, flexWrap: 'wrap' }}>
         <CountdownCircleTimer
           onComplete={onCompleteTimer}
           size={W * 0.2}

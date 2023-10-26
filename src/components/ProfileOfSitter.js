@@ -57,19 +57,19 @@ export default ProfileOfSitter
 
 const makeStyles = (H, W) => StyleSheet.create({
     container: {
-        padding: Spaces.med,
+        padding: Spaces.sm,
     },
     cardContainer: {
         flexWrap: 'wrap',
         padding: Spaces.lar,
         borderRadius: 10,
-        marginBottom: Spaces.med,
+        marginBottom: Spaces.sm,
     },
     profileImage:{
         width: 100,
         height: 100,
         borderRadius: 100/3,
-        marginRight: Spaces.med,
+        marginRight: Spaces.sm,
         borderWidth: 0.6,
         borderColor: Colors.black
       },
@@ -102,7 +102,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     statsContainer: {
         // flexDirection: 'row',
         // justifyContent: 'space-between',
-        // marginTop: Spaces.med,
+        // marginTop: Spaces.sm,
     },
     statButton: {
         backgroundColor: Colors.PRIMARY,
@@ -118,7 +118,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     statCount: {
         color: 'white',
-        fontSize: Spaces.med,
+        fontSize: Spaces.sm,
         fontWeight: 'bold',
         marginTop: 5,
     },
@@ -152,7 +152,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     detailsCard:
     {
-        marginHorizontal: Spaces.med,
+        marginHorizontal: Spaces.sm,
         width: W * 0.55,
     },
     texts:

@@ -59,6 +59,7 @@ const Account = ({ navigation }) => {
         {
             title: 'Manage Address',
             action: () => navigation.navigate('ManageAddress')
+            //action: () => navigation.navigate('AutoCompleteScreen')
         },
         {
             title: 'Transaction History',

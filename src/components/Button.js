@@ -46,7 +46,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         width: W * 0.85,
         alignItems: 'center',
         alignSelf: 'center',
-        marginVertical: Spaces.med,
+        marginVertical: Spaces.sm,
         borderWidth: 0.6,
     },
     text:

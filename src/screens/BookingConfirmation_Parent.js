@@ -33,7 +33,7 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
 
 
   const getAddress = async () => {
-    const result = await handleGetRequest('address_get')
+    const result = await handleGetRequest('address_list')
     setAddressdata(result)
     console.log(result)
     setLoader(false)
@@ -118,7 +118,7 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
         <View style={[styles.detailRow]}>
           <View style={styles.addressRow}>
             <Text style={styles.label}>Address:</Text>
-            <AntDesign name="pluscircle" size={Spaces.xl} color={Colors.Secondary} onPress={onPressAddAddress} />
+            <AntDesign name="pluscircle" size={Spaces.lar} color={Colors.Secondary} onPress={onPressAddAddress} />
           </View>
           {
             Platform.OS == "android"
@@ -135,7 +135,7 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
                   <Picker.Item
                     label='Choose Address' value='Choose Address' />
                   {
-                    addressdata?.data?.map((item) => <Picker.Item key={item?.id} label={item.address} value={item.address} />)
+                    addressdata?.data?.map((item, index) => <Picker.Item key={index} label={item.address} value={item.address} />)
                   }
                 </Picker>
               </View>
@@ -171,7 +171,7 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
               <Picker.Item
                 label='Choose Address' value='Choose Address' />
               {
-                addressdata?.data?.map((item) => <Picker.Item key={item?.id} label={item.address} value={item.address} />)
+                addressdata?.data?.map((item, index) => <Picker.Item key={index} label={item.address} value={item.address} />)
               }
             </Picker>
             <SmallButtonSecondary
@@ -211,7 +211,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     ...Shadows,
     //backgroundColor: Colors.PRIMARY, // Change the background color to your preference
     borderRadius: 10,
-    padding: Spaces.xl,
+    padding: Spaces.lar,
     backgroundColor: Colors.white,
     borderWidth: 1,
     borderColor: Colors.PRIMARY
@@ -236,8 +236,8 @@ const makeStyles = (H, W) => StyleSheet.create({
   {
     width: W * 0.7,
     backgroundColor: Colors.white,
-    margin: Spaces.med,
-    padding: Spaces.med,
+    margin: Spaces.sm,
+    padding: Spaces.sm,
     borderRadius: 10,
   },
   profilePic:
@@ -245,7 +245,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 100 / 3,
-    marginRight: Spaces.med,
+    marginRight: Spaces.sm,
     borderWidth: 0.6,
     borderColor: Colors.black
   },
@@ -259,7 +259,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     borderRadius: 8,
     borderColor: Colors.PRIMARY,
     flexDirection: 'row',
-    paddingRight: Spaces.xl
+    paddingRight: Spaces.lar
   },
   modalContainer:
   {
@@ -288,7 +288,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: Spaces.med
+    marginVertical: Spaces.sm
   }
 });
 
