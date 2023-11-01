@@ -1,4 +1,4 @@
-import { Alert, Platform, StyleSheet,} from 'react-native'
+import { Alert, Platform, StyleSheet, } from 'react-native'
 import React, { useEffect } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SearchBabySitter_Parent from '../screens/SearchBabySitter_Parent';
@@ -12,18 +12,21 @@ import { LOCAL_STORE, handleGetRequest, handlePostRequest } from './Utils';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MyProfile_Parent from '../screens/MyProfile_Parent';
 import { onNotificationReceiver, requestUserPermission } from './Notifications';
-import { getLocalValue } from './LocalStore';
+import { getLocalValue, storeLocalValue } from './LocalStore';
+import Geolocation from '@react-native-community/geolocation';
+import messaging from '@react-native-firebase/messaging';
+
 
 const BottomTabsParent = ({ navigation }) => {
 
     useEffect(() => {
         checkCancelledBookings()
         checkProfileStatus()
-        if (Platform.OS == 'android') {
-            requestUserPermission()
-            onNotificationReceiver()
-            updateFcmToken()
-        }
+        updateFcmToken()
+        // if (Platform.OS == 'android') {
+        requestUserPermission()
+        onNotificationReceiver()
+        //}
     }, [])
 
     const isProfileCompleted = useSelector((state) => state.global.isProfileCompleted)
@@ -40,12 +43,48 @@ const BottomTabsParent = ({ navigation }) => {
     }
 
     const updateFcmToken = async () => {
-        const fcmToken = await getLocalValue(LOCAL_STORE.FCM_TOKEN)
-        var formdata = new FormData()
-        formdata.append('fcm_token', fcmToken)
-        formdata.append('device_type', Platform.OS)
-        const result = await handlePostRequest('update_fcm', formdata)
-        console.log('fcmToken API result==>', result)
+        try {
+            const result = Geolocation.requestAuthorization()
+            console.log('Geolocation.requestAuthorization()', result)
+            //Geolocation.getCurrentPosition(info => console.log(info));
+        } catch (error) {
+            Alert.alert(error)
+        }
+        if (Platform.OS == "ios") {
+            const authStatus = await messaging().requestPermission();
+            if (authStatus === 1) {
+                // //console.log("Trying To Get Token ======================>")
+                let fcmToken = await messaging().getToken();
+                if (fcmToken) {
+                    const fcmToken = await messaging().getToken();
+                    storeLocalValue(LOCAL_STORE.FCM_TOKEN, fcmToken)
+                    var formdata = new FormData()
+                    formdata.append('fcm_token', fcmToken)
+                    formdata.append('device_type', Platform.OS)
+                    formdata.append('lat', '')
+                    formdata.append('long', '')
+                    const result = await handlePostRequest('update_fcm', formdata)
+                    console.log('fcmToken API result==>', result)
+                    // //console.log("fcmToken=========================================================================>", fcmToken)
+                    // //console.log(" result of getToken at Dashboard===>", result)
+                    // //console.log(" formdata  of getToken at Dashboard===>", formdata)
+                }
+            }
+        }
+        else {
+            const token = await messaging().getToken();
+            storeLocalValue('fcm_token', token)
+            var formdata = new FormData()
+            formdata.append('fcm_token', fcmToken)
+            formdata.append('device_type', Platform.OS)
+            formdata.append('lat', '')
+            formdata.append('long', '')
+            const result = await handlePostRequest('update_fcm', formdata)
+            console.log('fcmToken API result==>', result)
+            // //console.log("fcmToken===>", token)
+            // //console.log(" result of getToken at Dashboard===>", result)
+            // //console.log(" formdata  of getToken at Dashboard===>", formdata)
+        }
     }
 
     const checkProfileStatus = async () => {

@@ -14,8 +14,10 @@ import Loader from '../components/Loader';
 import { setIsProfileCompleted } from '../redux/GlobalSlice';
 import { useDispatch } from 'react-redux';
 import { logout } from '../redux/AuthSlice';
+import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import { useIsFocused } from '@react-navigation/native';
 
-const MyProfile_Parent = () => {
+const MyProfile_Parent = ({ navigation }) => {
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
@@ -34,12 +36,21 @@ const MyProfile_Parent = () => {
     const [loaderButton, setLoaderButton] = useState(false)
     const [showSlots, setShowSlots] = useState(false)
     const [slots, setSlots] = useState(null)
+    const [addressdata, setAddressdata] = useState('')
 
     const dispatch = useDispatch()
+    const isFocused = useIsFocused()
 
     useEffect(() => {
         getUserProfileData()
     }, [])
+
+    useEffect(() => {
+        if (isFocused) {
+            getAddress()
+        }
+    }, [isFocused])
+
 
     const onPressButton = () => {
         if (price?.length == '0') {
@@ -48,7 +59,43 @@ const MyProfile_Parent = () => {
         } else {
             updateUserProfileData()
         }
+    }
 
+    const renderAddressItem = (item, index) => (
+        <View
+            key={index}
+            style={[styles.addressCard, { marginTop: index == 0 ? Spaces.sm : null }]}>
+
+            <View style={styles.addaddressCard}>
+                <Text style={[styles.addressTitle, Fonts.larMedium]}>{item.title}</Text>
+                <TouchableOpacity
+                    onPress={() => onPressClick(item?.id)}>
+                    <Image
+                        source={require('../assets/images/delete.png')}
+                        style={styles.rightIconaddresslist} />
+                </TouchableOpacity>
+
+
+            </View>
+            <Text style={[styles.addressText, Fonts.medMedium]}>{item.address}</Text>
+
+        </View>
+    );
+
+    const getAddress = async () => {
+        const result = await handleGetRequest('address_get')
+        console.log("adresses ==>", result)
+        if (result?.status == '200') {
+            setAddressdata(result)
+        }
+        else {
+            setAddressdata(null)
+        }
+        setLoader(false)
+    }
+
+    const addAddressButton = () => {
+        navigation.navigate('AddAddress')
     }
 
     const onPressLogoutButton = () => {
@@ -247,7 +294,16 @@ const MyProfile_Parent = () => {
                     <Text style={styles.guidingText}>
                         Only communicate through the App, do not include contact details. Minimum 200 characters.
                     </Text>
-                    <TextInputComponent
+                    <View style={styles.horizontalContainer}>
+                        <Text style={styles.sectionHeader}>Address</Text>
+                        <TouchableOpacity
+                            onPress={addAddressButton}
+                            style={styles.smallButton}>
+                            <Text style={styles.whiteText}><AntDesign name="pluscircle" /> Add</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {addressdata?.data?.map((item, index) => renderAddressItem(item, index))}
+                    {/* <TextInputComponent
                         multiline
                         value={address}
                         onChangeText={(text) => {
@@ -256,7 +312,7 @@ const MyProfile_Parent = () => {
                         placeholder={'Address'} style={styles.input} />
                     <Text style={styles.guidingText}>
                         Your address will never be shared with anyone. We will show your approximate location on profile.
-                    </Text>
+                    </Text> */}
                     {/* <Text style={styles.sectionHeader}>Hourly rate for babysitting</Text>
                     <TextInputComponent
                         keyboardType='numeric'
@@ -271,8 +327,11 @@ const MyProfile_Parent = () => {
                     <TextInputComponent
                         keyboardType='numeric'
                         value={children}
+                        maxlength={2}
                         onChangeText={(text) => {
-                            setChildren(text)
+                            if (text?.length < 3) {
+                                setChildren(text)
+                            }
                         }}
                         placeholder={"No of children"}
                         style={styles.input} />
@@ -442,7 +501,90 @@ const makeStyles = (H, W) => StyleSheet.create({
         position: 'absolute',
         alignSelf: 'flex-end',
         top: H * 0.01,
-    }
+    },
+    addressCard: {
+        width: W * 0.95,
+        padding: Spaces.med,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: Spaces.sm,
+        marginBottom: Spaces.sm,
+        backgroundColor: 'white',
+        alignSelf: 'center'
+    },
+    addaddressCard: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    addressTitle: {
+        marginBottom: 4,
+        color: Colors.black,
+    },
+    addressText: {
+
+    },
+    errorText:
+    {
+        alignSelf: 'center',
+        marginVertical: H * 0.33
+    },
+    leftIcon: {
+        width: 18,
+        height: 18,
+        tintColor: Colors.LIGHT_BLUE,
+    },
+    rightIcon: {
+        width: 18,
+        height: 18,
+        tintColor: Colors.LIGHT_BLUE
+    },
+    rightIconaddresslist: {
+        width: 18,
+        height: 18,
+    },
+    buttonText: {
+        marginLeft: W * 0.02
+    },
+    addButtonContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 16,
+        width: W * 0.9
+    },
+    addButtonContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 16,
+        width: W * 0.9
+    },
+    addButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+        borderWidth: 0,
+        justifyContent: 'space-between',
+    },
+    horizontalContainer:
+    {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    smallButton:
+    {
+        backgroundColor: Colors.PRIMARY,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: Spaces.lar,
+        paddingVertical: Spaces.sm,
+        alignSelf: 'center',
+        borderRadius: 8,
+    },
+    whiteText:
+    {
+        color: Colors.black
+    },
 
 });
 
