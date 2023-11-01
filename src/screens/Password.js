@@ -44,15 +44,31 @@ const Password = ({ navigation, route }) => {
             setLoader(true)
             const result = await handlePostRequest('login', formdata)
             if (result?.status == "200") {
-                if (Platform.OS == 'android') {
-                    await messaging()
-                        .getToken()
-                        .then(token => {
-                            console.log('FCM Token =========>', token)
-                            storeLocalValue(LOCAL_STORE.FCM_TOKEN, token)
-                            //return saveTokenToDatabase(token)
-                        });
+                // if (Platform.OS == 'android') {
+                if (Platform.OS == "ios") {
+                    const authStatus = await messaging().requestPermission();
+                    if (authStatus === 1) {
+                        // //console.log("Trying To Get Token ======================>")
+                        let fcmToken = await messaging().getToken();
+                        if (fcmToken) {
+                            const fcmToken = await messaging().getToken();
+                            storeLocalValue(LOCAL_STORE.FCM_TOKEN, fcmToken)
+                            console.log('fcmToken ==>', fcmToken)
+                            // //console.log("fcmToken=========================================================================>", fcmToken)
+                            // //console.log(" result of getToken at Dashboard===>", result)
+                            // //console.log(" formdata  of getToken at Dashboard===>", formdata)
+                        }
+                    }
                 }
+                else {
+                    const token = await messaging().getToken();
+                    storeLocalValue(LOCAL_STORE.FCM_TOKEN, token)
+                    console.log('fcmToken ==>', token)
+                    // //console.log("fcmToken===>", token)
+                    // //console.log(" result of getToken at Dashboard===>", result)
+                    // //console.log(" formdata  of getToken at Dashboard===>", formdata)
+                }
+                // }
                 await storeLocalValue(LOCAL_STORE.TOKEN, result?.token)
                 dispatch(login())
             }
@@ -69,13 +85,11 @@ const Password = ({ navigation, route }) => {
             style={styles.mainContainer}>
             <ImageBackground
                 imageStyle={styles.imageStyle}
-
                 source={require('../assets/images/background.png')}
-
                 style={styles.ImageBackground} >
                 <View style={styles.viewContainer2}>
                     <Text style={[styles.text1, Fonts.xlSemiBold]}>Welcome back, {route?.params?.name}</Text>
-                    <Divider style={styles.Devider}></Divider>
+                    <Divider style={styles.Divider}></Divider>
                     <View style={styles.textContainerForAlignment}>
                         <Text style={[styles.text2, Fonts.medMedium]}>Enter password to continue!</Text>
                         <TextInputComponent
@@ -137,7 +151,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    Devider: {
+    Divider: {
         marginHorizontal: W * 0.02,
         color: "black",
     },
