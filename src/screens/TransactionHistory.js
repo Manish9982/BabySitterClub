@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, Alert } from 'react-native';
 import { Text } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome'; // You can use other icon libraries as well
 import Colors from '../helper/Colors';
@@ -8,31 +8,22 @@ import Spaces from '../helper/Spaces';
 import { handleGetRequest } from '../helper/Utils';
 
 
-const TransactionCard = ({ transaction }) => (
-    <View style={styles.card}>
-        <Text style={styles.name}>Name: {transaction.name}</Text>
-        <Text>Transaction ID: {transaction?.transaction_id}</Text>
-        <Text style={styles.amount}>Amount: ${transaction?.amount}</Text>
-        <Text>Payment Method: {transaction?.payment_method}</Text>
-        <Text>Booking Slot: {transaction.bookingSlot}</Text>
-        <View style={styles.paymentStatus}>
-            <Icon
-                name={transaction.paymentStatus === 'confirmed' ? 'check-circle' : 'exclamation-circle'}
-                size={20}
-                color={transaction.paymentStatus === 'confirmed' ? Colors.MUTED_GREEN : Colors.COMPLEMENTARY_ORANGE}
-            />
-            <Text
-                style={{
-                    color: transaction.paymentStatus === 'confirmed' ? Colors.MUTED_GREEN : Colors.COMPLEMENTARY_ORANGE,
-                }}
-            >
-                {transaction.paymentStatus === 'confirmed' ? 'Confirmed' : 'Pending'}
-            </Text>
+const TransactionCard = ({ transaction }) => {
+    return (
+        <View style={styles.card}>
+            <Text style={styles.name}>Transaction ID: {transaction?.transaction_id}</Text>
+            <Text>Name: {transaction.first_name} {transaction.last_name}</Text>
+            <Text>Booking ID: {transaction.b_id}</Text>
+            <Text style={styles.amount}>Amount: ${transaction?.amount}</Text>
+            <Text>Payment Method: {transaction?.payment_method}</Text>
+            <Text>Booking Slot: {transaction.bookingSlot}</Text>
+            <Text>{transaction.transaction_status}</Text>
+            
         </View>
-    </View>
-);
+    )
+}
 
-const TransactionHistory = () => {
+const TransactionHistory = ({ navigation }) => {
 
     const [transactions, setTransactions] = useState(null)
 
@@ -42,8 +33,18 @@ const TransactionHistory = () => {
 
     const getTransactionDetails = async () => {
         const result = await handleGetRequest('get_transaction')
-        console.log('Transaction===>', result)
-        setTransactions(result)
+        //console.log('Transaction===>', result)
+        if (result?.status == '200') {
+            setTransactions(result)
+        }
+        else {
+            Alert.alert('Info', result?.message, [
+                {
+                    text: 'Ok',
+                    onPress: () => navigation.goBack()
+                }
+            ])
+        }
     }
 
 
@@ -73,9 +74,8 @@ const styles = StyleSheet.create({
         marginBottom: Spaces.sm,
     },
     name: {
-        color: Colors.buttoncolor,
+        color: Colors.black,
         fontWeight: 'bold',
-        marginBottom: Spaces.sm,
     },
     amount: {
         ...Fonts.medBold,

@@ -145,7 +145,7 @@ const MyProfile_Sitter = ({ navigation }) => {
     const toggleModal = (slots) => {
         // getSlots()
         // setShowSlots(prev => !prev)
-        navigation.navigate('AddAvailability_Sitter')
+        navigation.navigate('AddAvailability_Sitter', { 'service': serviceFilterId })
     }
 
     const updateUserProfileData = async () => {
@@ -204,8 +204,8 @@ const MyProfile_Sitter = ({ navigation }) => {
                 {convertTimeRangeTo12HourFormat(item?.duration)}
                 <Text> (
                     {item?.service_id == 1 && <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />}
-                    {item?.service_id == 2 && <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />}
-                    {item?.service_id == 3 && <TagIcon name="home-outline" label="Homesit" style={styles.tag} />}
+                    {item?.service_id == 2 && <TagIcon name="paw" label="Petsit" style={styles.tag} />}
+                    {item?.service_id == 3 && <TagIcon name="home" label="Homesit" style={styles.tag} />}
                     )
                 </Text>
             </Text>
@@ -365,7 +365,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                     Ask for permission from your parents if you are under 18 years old. Babysitters must be 16 years or older.
                 </Text> */}
                 <View style={styles.horizontalContainer}>
-                    <Text style={styles.sectionHeader}>Availability</Text>
+                    <Text style={styles.sectionHeader}>Schedule</Text>
                     <TouchableOpacity
                         onPress={toggleModal}
                         style={styles.smallButton}>
@@ -389,11 +389,11 @@ const MyProfile_Sitter = ({ navigation }) => {
                                 },
                                 {
                                     value: '3',
-                                    icon: () => <TagIcon name="home-outline" label="Homesit" style={styles.tag} />,
+                                    icon: () => <TagIcon name="home" label="Homesit" style={styles.tag} />,
                                 },
                                 {
                                     value: '2',
-                                    icon: () => <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />,
+                                    icon: () => <TagIcon name="paw" label="Petsit" style={styles.tag} />,
                                 },
                             ]}
                         />
@@ -660,12 +660,14 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     tag:
     {
+        color: Colors.black,
         justifyContent: 'center',
         alignItems: 'center',
 
     },
     segment:
     {
+       // backgroundColor: Colors.PRIMARY,
         margin: Spaces.sm
     },
     logoutIcon: {

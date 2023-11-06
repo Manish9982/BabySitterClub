@@ -116,6 +116,7 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
         </View>
 
         <View style={[styles.detailRow]}>
+            <Text style={styles.guidingText}>Please select your preferred service location</Text>
           <View style={styles.addressRow}>
             <Text style={styles.label}>Address:</Text>
             <AntDesign name="pluscircle" size={Spaces.lar} color={Colors.Secondary} onPress={onPressAddAddress} />
@@ -289,7 +290,11 @@ const makeStyles = (H, W) => StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginVertical: Spaces.sm
-  }
+  },
+  guidingText: {
+    ...Fonts.sm,
+    color: Colors.gray,
+},
 });
 
 export default BookingConfirmation_Parent

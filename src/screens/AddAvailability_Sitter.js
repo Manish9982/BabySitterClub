@@ -11,7 +11,7 @@ import { convertTo12HourFormat, convertTo24HourFormat, formatDate, formatDate_mm
 import Loader from '../components/Loader';
 import TextInputComponent from '../components/TextInputComponent';
 
-const AddAvailability_Sitter = ({ navigation }) => {
+const AddAvailability_Sitter = ({ navigation, route }) => {
 
     const [showDatePicker, setShowDatePicker] = useState(false)
     const [date, setDate] = useState(new Date());
@@ -35,6 +35,18 @@ const AddAvailability_Sitter = ({ navigation }) => {
 
     useEffect(() => {
         applyFilterToServices()
+        if (route?.params?.service == 1) {
+            //babysitter
+            setChosenService({ "id": 1, "service_name": "Baby Sitter" })
+        }
+        else if (route?.params?.service == 2) {
+            //petsitter
+            setChosenService({ "id": 2, "service_name": "Pet Sitter" })
+        }
+        else if (route?.params?.service == 3) {
+            //homesitter
+            setChosenService({ "id": 3, "service_name": "Home Sitter" })
+        }
     }, [])
 
     useEffect(() => {

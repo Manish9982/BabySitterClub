@@ -127,7 +127,12 @@ const BottomTabsParent = ({ navigation }) => {
                 }} />
             </Tab.Navigator>
             :
-            <Stack.Navigator>
+            <Stack.Navigator
+                screenOptions={{
+                    headerBackTitleVisible: false,
+                    headerShown: Platform.OS == "android" ? true : true
+                }}
+            >
                 <Stack.Screen name='Complete Your Profile' component={MyProfile_Parent} options={{ headerShown: true }} />
             </Stack.Navigator>
     )

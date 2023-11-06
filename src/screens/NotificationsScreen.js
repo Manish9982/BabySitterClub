@@ -14,6 +14,7 @@ const NotificationsScreen = () => {
 
     useEffect(() => {
         getNotifications()
+        readNotifications()
     }, [])
 
 
@@ -26,6 +27,10 @@ const NotificationsScreen = () => {
         console.log(result)
         setNotifications(result)
         setLoader(false)
+    }
+
+    const readNotifications = async () => {
+        const result = await handleGetRequest('read_notification')
     }
 
     const renderNotifications = ({ item }) => {
@@ -67,11 +72,13 @@ const NotificationsScreen = () => {
                             No Notifications found
                         </Text>
                         :
-                        <FlatList
-                            data={notifications?.data}
-                            keyExtractor={(item) => item.id}
-                            renderItem={renderNotifications}
-                        />
+                        <View>
+                            <FlatList
+                                data={notifications?.data}
+                                keyExtractor={(item) => item.id}
+                                renderItem={renderNotifications}
+                            />
+                        </View>
                 }
 
             </View>

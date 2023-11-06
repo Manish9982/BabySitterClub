@@ -79,8 +79,8 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                 {convertTimeRangeTo12HourFormat(item?.duration)}
                 <Text> (
                     {item?.service_id == 1 && <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />}
-                    {item?.service_id == 2 && <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />}
-                    {item?.service_id == 3 && <TagIcon name="home-outline" label="Homesit" style={styles.tag} />}
+                    {item?.service_id == 2 && <TagIcon name="paw" label="Petsit" style={styles.tag} />}
+                    {item?.service_id == 3 && <TagIcon name="home" label="Homesit" style={styles.tag} />}
                     )
                 </Text>
             </Text>
@@ -167,15 +167,14 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                                     {
                                         value: '1',
                                         icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
-
                                     },
                                     {
                                         value: '3',
-                                        icon: () => <TagIcon name="home-outline" label="Homesit" style={styles.tag} />,
+                                        icon: () => <TagIcon name="home" label="Homesit" style={styles.tag} />,
                                     },
                                     {
                                         value: '2',
-                                        icon: () => <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />,
+                                        icon: () => <TagIcon name="paw" label="Petsit" style={styles.tag} />,
                                     },
                                 ]}
                             />
