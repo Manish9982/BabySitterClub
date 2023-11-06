@@ -9,6 +9,7 @@ import TagIcon from '../components/TagIcon';
 import CloseButton from '../components/CloseButton';
 import Loader from '../components/Loader';
 import { useIsFocused } from '@react-navigation/native';
+import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 
 const ProfileScreen = ({ navigation }) => {
 
@@ -26,6 +27,12 @@ const ProfileScreen = ({ navigation }) => {
             getDashboardData()
         }
     }, [isFocused])
+
+    const toggleModal = (slots) => {
+        // getSlots()
+        // setShowSlots(prev => !prev)
+        navigation.navigate('AddAvailability_Sitter', { 'service': serviceFilterId })
+    }
 
     const getDashboardData = async () => {
         const result = await handleGetRequest('dashboard')
@@ -50,8 +57,8 @@ const ProfileScreen = ({ navigation }) => {
                 {convertTimeRangeTo12HourFormat(item?.duration)}
                 <Text> (
                     {item?.service_id == 1 && <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />}
-                    {item?.service_id == 2 && <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />}
-                    {item?.service_id == 3 && <TagIcon name="home-outline" label="Homesit" style={styles.tag} />}
+                    {item?.service_id == 2 && <TagIcon name="paw" label="Petsit" style={styles.tag} />}
+                    {item?.service_id == 3 && <TagIcon name="home" label="Homesit" style={styles.tag} />}
                     )
                 </Text>
             </Text>
@@ -121,7 +128,10 @@ const ProfileScreen = ({ navigation }) => {
                                 </TouchableOpacity>
 
                                 <TouchableOpacity onPress={onPressUserProfile}>
-                                    <Image source={require('../assets/images/account.png')}
+                                    {/* <Image source={require('../assets/images/account.png')}
+                                        style={styles.icon}
+                                    /> */}
+                                    <Image source={{ uri: `${dashboardData?.url}${dashboardData?.userDetails?.picture}` }}
                                         style={styles.icon}
                                     />
                                 </TouchableOpacity>
@@ -131,10 +141,17 @@ const ProfileScreen = ({ navigation }) => {
                         <View style={styles.statsContainer}>
                             <StatButton title="Total" count={dashboardData?.userDetails?.total_booking} onPressStat={onPressStatTotal} />
                             <StatButton title="Completed" count={dashboardData?.userDetails?.total_complete_booking} onPressStat={onPressStatCompleted} />
-                            <StatButton title="Pending" count={dashboardData?.userDetails?.total_pending_booking} onPressStat={onPressStatPending} />
+                            <StatButton title="Upcoming" count={dashboardData?.userDetails?.total_pending_booking} onPressStat={onPressStatPending} />
                             <StatButton title="Cancelled" count={dashboardData?.userDetails?.total_cancel_booking} onPressStat={onPressStatCancelled} />
                         </View>
-                        <Text style={styles.greetings}>Your Availability:</Text>
+                        <View style={styles.horizontalContainer}>
+                            <Text style={styles.greetings}>Your Schedule:</Text>
+                            <TouchableOpacity
+                                onPress={toggleModal}
+                                style={styles.smallButton}>
+                                <Text style={styles.whiteText}><AntDesign name="pluscircle" /> Add</Text>
+                            </TouchableOpacity>
+                        </View>
                         <View style={styles.boxAvailability}>
 
                             {
@@ -154,15 +171,14 @@ const ProfileScreen = ({ navigation }) => {
                                             {
                                                 value: '1',
                                                 icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
-
                                             },
                                             {
                                                 value: '3',
-                                                icon: () => <TagIcon name="home-outline" label="Homesit" style={styles.tag} />,
+                                                icon: () => <TagIcon name="home" label="Homesit" style={styles.tag} />,
                                             },
                                             {
                                                 value: '2',
-                                                icon: () => <TagIcon name="paw-outline" label="Petsit" style={styles.tag} />,
+                                                icon: () => <TagIcon name="paw" label="Petsit" style={styles.tag} />,
                                             },
                                         ]}
                                     />
@@ -341,6 +357,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         height: H * 0.04,
         width: H * 0.04,
+        borderRadius: H * 0.02,
         marginHorizontal: W * 0.015
     },
     headerContainer:
@@ -385,6 +402,22 @@ const makeStyles = (H, W) => StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
+    },
+    horizontalContainer:
+    {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingRight: Spaces.sm
+    },
+    smallButton:
+    {
+        backgroundColor: Colors.PRIMARY,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: Spaces.lar,
+        paddingVertical: Spaces.sm,
+        alignSelf: 'center',
+        borderRadius: 8,
     },
 });
 

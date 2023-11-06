@@ -1,5 +1,5 @@
 import { FlatList, ImageBackground, StyleSheet, View, useWindowDimensions } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import { Text, SegmentedButtons } from 'react-native-paper'
 import Colors from '../helper/Colors';
 import BookingCardForSitter from '../components/BookingCardForSitter';
@@ -33,9 +33,12 @@ const Bookings_Sitter = () => {
     }
 
     const renderBooking = ({ item, index }) => {
+        //console.log("item?.booking_status====>", item?.booking_status)
+        console.log("value ====>", item)
         if (((value == 'pending') && (item?.booking_status == 0)) || ((value == 'completed') && (item?.booking_status == 1)) || (value == 'all')) {
             return (
                 <BookingCardForSitter
+                    bookingNumberId={item?.b_id}
                     callBack={getBookings}
                     status={item?.booking_status}
                     url={bookingData?.url}
@@ -48,6 +51,8 @@ const Bookings_Sitter = () => {
                     address={item?.address}
                     createdAt={formatDateWithTime(item?.created_at)}
                     bookingId={item?.id}
+                    //price={item?.price}
+                    price={12}
                 />
             )
         }
@@ -59,6 +64,7 @@ const Bookings_Sitter = () => {
             ?
             <Loader />
             :
+
             <ImageBackground
                 source={require('../assets/images/background.png')}
                 style={styles.background}>
@@ -69,7 +75,7 @@ const Bookings_Sitter = () => {
                     buttons={[
                         {
                             value: 'pending',
-                            label: 'Pending',
+                            label: 'Upcoming',
                             labelStyle: {
                                 color: Colors.gray
                             }
@@ -91,15 +97,15 @@ const Bookings_Sitter = () => {
                     ]}
                 />
                 {
-                    (((value == 'pending') && (bookingData?.data?.every(item => item?.booking_status == 0)) && (!(bookingData?.data?.length == 0))) || ((value == 'completed') && (bookingData?.data?.every(item => item?.booking_status == 1)) && (!(bookingData?.data?.length == 0))) || (value == 'all' && (!(bookingData?.data?.length == 0))))
-                        ?
-                        <FlatList
-                            data={bookingData?.data}
-                            renderItem={renderBooking}
-                            keyExtractor={(item, index) => `${index}`}
-                        />
-                        :
-                        <Text style={styles.errorText}>No Bookings Found</Text>
+                    // (((value == 'pending') && (bookingData?.data?.every(item => item?.booking_status == 0)) && (!(bookingData?.data?.length == 0))) || ((value == 'completed') && (bookingData?.data?.every(item => item?.booking_status == 1)) && (!(bookingData?.data?.length == 0))) || (value == 'all' && (!(bookingData?.data?.length == 0))))
+                    //     ?
+                    <FlatList
+                        data={bookingData?.data}
+                        renderItem={renderBooking}
+                        keyExtractor={(item, index) => `${index}`}
+                    />
+                    // :
+                    // <Text style={styles.errorText}>No Bookings Found</Text>
                 }
             </ImageBackground>
     )

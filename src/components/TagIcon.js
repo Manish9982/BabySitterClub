@@ -14,9 +14,9 @@ const TagIcon = ({ name, label, fontawesome = false, style }) => {
         <View style={style || styles.tagIconContainer}>
             {
                 fontawesome ?
-                    <FontAwesome6 name={name} size={Spaces.lar} color={Colors.Secondary} />
+                    <FontAwesome6 name={name} size={Spaces.lar} color={Colors.black} />
                     :
-                    <Ionicons name={name} size={Spaces.lar} color={Colors.Secondary} />
+                    <Ionicons name={name} size={Spaces.lar} color={Colors.black} />
             }
         </View>
     );

@@ -100,11 +100,11 @@ const ReplacementBookings = ({ name, profilePic, date, service, slot, duration, 
         if (t == '2') {
             if (refundStatus == '0') {
                 return (
-                    <View style={styles.replaceCOntainer}>
+                    <View style={styles.replaceContainer}>
                         <SmallButtonSecondary
                             onPressSmallButton={onPressReplace}
                             style={styles.replaceButton}
-                            title={'Replace'}
+                            title={'Request New'}
                         />
                         <Text style={styles.orText}>OR</Text>
                         <SmallButtonSecondary

@@ -60,9 +60,9 @@ const CancelledBookings_Parent = ({ navigation, route }) => {
                     <Text style={styles.warnText}>Your following bookings were </Text>
                     <Text style={{ ...Fonts.larSemiBold }}>cancelled</Text>
                     <Text style={styles.warnText}>. We regret the inconvenience caused. You can </Text>
-                    <Text style={{ ...Fonts.larSemiBold }}>replace </Text>
-                    <Text style={styles.warnText}>the cancelled booking or get </Text>
-                    <Text style={{ ...Fonts.larSemiBold }}>refund: </Text>
+                    <Text style={{ ...Fonts.larSemiBold }}>Request </Text>
+                    <Text style={styles.warnText}>a new booking or get </Text>
+                    <Text style={{ ...Fonts.larSemiBold }}>Refund: </Text>
                     <Text style={styles.warnText}></Text>
                 </Text>
                 <FlatList

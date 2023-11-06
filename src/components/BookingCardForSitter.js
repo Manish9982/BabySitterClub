@@ -8,7 +8,7 @@ import Colors from '../helper/Colors';
 import { Shadows, handlePostRequest } from '../helper/Utils';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 
-const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status, callBack }) => {
+const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status, callBack, price, bookingNumberId }) => {
 
   const W = useWindowDimensions().width
   const H = useWindowDimensions().height
@@ -40,7 +40,7 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
   }
 
   const onPressCancel = async () => {
-    Alert.alert('Confirm Cancellation', 'Are you sure you want to mark this booking as cancelled ? This action is irreversible', [
+    Alert.alert('Confirm Cancellation', 'Are you sure you want to mark this booking as cancelled ? This action is irreversible and will affect your rating', [
       {
         text: 'Yes',
         onPress: async () => {
@@ -51,7 +51,10 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
           if (result?.status == '200') {
             callBack()
           }
-        
+          else {
+            Alert.alert(result?.message)
+          }
+
         },
       },
       {
@@ -94,7 +97,6 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
     }
   }
 
-  console.log("Status of bookings", status)
   return (
     <View style={styles.cardContainer}>
       <View style={styles.profileContainer}>
@@ -106,7 +108,9 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
       <Divider style={styles.divider} />
       <Text style={[styles.dateText, { ...Fonts.larBold }]}>Name: {name}</Text>
       <Text style={styles.dateText}>Date: {date}</Text>
+      <Text style={styles.slotText}>Booking ID: {bookingNumberId}</Text>
       <Text style={styles.slotText}>Slot: {slot}</Text>
+      <Text style={styles.slotText}>Price: $ {price}</Text>
       <Text style={styles.serviceText}>Service: {service}</Text>
       <Text style={styles.durationText}>Duration: {duration}</Text>
       <Text style={styles.addressText}>Address: {address}</Text>
@@ -129,7 +133,7 @@ const makeStyles = (H, W) => StyleSheet.create({
   profilePic: {
     width: 100,
     height: 100,
-    borderRadius: 100/3,
+    borderRadius: 100 / 3,
     marginRight: Spaces.sm,
     borderWidth: 0.6,
     borderColor: Colors.black

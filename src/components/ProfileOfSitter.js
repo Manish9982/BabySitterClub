@@ -24,9 +24,9 @@ const ProfileOfSitter = ({ imageUrl, name, roles, location, price, about }) => {
                 <View style={styles.detailsCard}>
                     <Text style={styles.name}>{name}</Text>
                     <View style={styles.tagsContainer}>
-                        <TagIcon name="home-outline" label="Homesit" />
+                        <TagIcon name="home" label="Homesit" />
                         <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} />
-                        <TagIcon name="paw-outline" label="Petsit" />
+                        <TagIcon name="paw" label="Petsit" />
                     </View>
                     {/* <Text style={styles.address}>123 Main St, City, Country</Text> */}
                     <Text style={styles.texts}>
