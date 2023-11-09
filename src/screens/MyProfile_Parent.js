@@ -91,7 +91,7 @@ const MyProfile_Parent = ({ navigation }) => {
         else {
             setAddressdata(null)
         }
-        setLoader(false)
+        // setLoader(false)
     }
 
     const addAddressButton = () => {
@@ -407,7 +407,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         justifyContent: 'space-between',
     },
     calendar: {
-        color: Colors.blue,
+        color: Colors.Secondary,
         marginBottom: Spaces.sm,
     },
     profilePictureContainer: {

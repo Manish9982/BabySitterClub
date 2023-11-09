@@ -1,15 +1,18 @@
 export default Colors = {
-    'golden':'#f5d742',
+    'golden': '#f5d742',
     'blue': '#007BFF',
     'outlineColor': '#ccc',
-   // 'buttoncolor': '#1e81b0',
+    // 'buttoncolor': '#1e81b0',
     'buttoncolor': '#fdeeb3',
-    'selectedcolor': '#8be1fd',
+    //'selectedcolor': '#8be1fd', // baby blue color OG
+    'selectedcolor': '#b3a7fd',
     'white': '#fff',
     'grayTransparent': 'rgba(151, 153, 152, 0.5)',
     'gray': 'rgba(151, 153, 152, 1)',
     'black': '#000',
-    'Secondary': '#8be1fd',
+    //'Secondary': '#8be1fd', // baby blue color OG
+    //'Secondary': '#b3fdea', // baby blue alternative
+    'Secondary': '#b3a7fd',
     'Accent': '#f9a856',
     'Background': '#f4f6f9',
     'TextPrimary': '#333333',
@@ -28,6 +31,6 @@ export default Colors = {
     'COMPLEMENTARY_ORANGE': '#e76f51',
     'MUTED_GREEN': '#78a890',
     'MESSAGE_GREEN': '#DCF8C6',
-    'LIGHT_SILVER':'#e1e1e1',
+    'LIGHT_SILVER': '#e1e1e1',
     'BlackTransparent': 'rgba(0,0,0,0.5)'
 }

@@ -3,6 +3,7 @@
  */
 
 import { AppRegistry, Platform } from 'react-native';
+import { en, registerTranslation } from 'react-native-paper-dates'
 import App from './App';
 import { name as appName } from './app.json';
 import messaging, { firebase } from '@react-native-firebase/messaging';
@@ -13,7 +14,7 @@ let config = {
   apiKey: "AIzaSyDVldg1C46WvH3l-wgdQK_wzYFNo9zNYZI",
   appId: "1:697634391096:ios:d62dd6ad039156a24452cd"
 };
-
+registerTranslation('en', en)
 messaging().requestPermission()
 
 PushNotification.createChannel(

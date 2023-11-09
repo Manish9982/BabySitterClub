@@ -102,7 +102,7 @@ const BookingConfirmation_Parent = ({ route, navigation }) => {
 
         <View style={styles.detailRow}>
           <Text style={styles.label}>Date:</Text>
-          <Text style={styles.value}>{formatDate_mmddyyyy(details.date)}</Text>
+          <Text style={styles.value}>{formatDate_mmddyyyy(details.date, true)}</Text>
         </View>
 
         <View style={styles.detailRow}>

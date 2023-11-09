@@ -41,6 +41,7 @@ const MyProfile_Sitter = ({ navigation }) => {
     const [serviceFilterId, setServiceFilterId] = useState(null);
     const [slots, setSlots] = useState([])
     const [addressdata, setAddressdata] = useState('')
+    const [filteredServices, setFilteredServices] = useState([])
 
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
@@ -49,12 +50,24 @@ const MyProfile_Sitter = ({ navigation }) => {
         if (isFocused) {
             getSlots()
             getAddress()
+            applyFilterToSegment()
         }
     }, [isFocused])
 
     useEffect(() => {
         getUserProfileData()
     }, [])
+
+    const applyFilterToSegment = async () => {
+        const result = await handleGetRequest('filters')
+        if (result?.status == '200') {
+            console.log("result?.filters==>", result)
+            setFilteredServices(result?.filters)
+        }
+        else {
+            Alert.alert('Error', result?.message)
+        }
+    }
 
 
     const getAddress = async () => {
@@ -66,7 +79,7 @@ const MyProfile_Sitter = ({ navigation }) => {
         else {
             setAddressdata(null)
         }
-        setLoader(false)
+        //setLoader(false)
     }
 
     const onPressClick = (id) => {
@@ -251,6 +264,34 @@ const MyProfile_Sitter = ({ navigation }) => {
         </View>
     );
 
+    const returnButtonsArray = () => {
+        var serviceArr = []
+        if (filteredServices?.length < 2) {
+            return []
+        }
+        else {
+            if (filteredServices?.some(service => service?.id == '1')) {
+                serviceArr?.push({
+                    value: '1',
+                    icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
+                })
+            }
+            if (filteredServices?.some(service => service?.id == '2')) {
+                serviceArr?.push({
+                    value: '2',
+                    icon: () => <TagIcon name="paw" label="Petsit" style={styles.tag} />,
+                })
+            }
+            if (filteredServices?.some(service => service?.id == '3')) {
+                serviceArr?.push({
+                    value: '3',
+                    icon: () => <TagIcon name="home" label="Homesit" style={styles.tag} />,
+                })
+            }
+            return serviceArr
+        }
+    }
+
     console.log('image displayed at profile====>', image?.uri)
     return (
         loader
@@ -276,6 +317,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                     <Image defaultSource={require('../assets/images/profile-user.png')}
                         //source={require('../assets/images/profile-user.png')}
                         source={{ uri: image?.uri || `${userdata?.url}${userdata?.userDetails?.picture}` }}
+                        //source={{ uri: `${userdata?.url}${userdata?.userDetails?.picture}` }}
                         style={styles.profilePicturePlaceholder}
                     />
                 </TouchableOpacity>
@@ -382,20 +424,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                             style={styles.segment}
                             value={serviceFilterId}
                             onValueChange={(t) => setServiceFilterId(prev => prev == t ? null : t)}
-                            buttons={[
-                                {
-                                    value: '1',
-                                    icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
-                                },
-                                {
-                                    value: '3',
-                                    icon: () => <TagIcon name="home" label="Homesit" style={styles.tag} />,
-                                },
-                                {
-                                    value: '2',
-                                    icon: () => <TagIcon name="paw" label="Petsit" style={styles.tag} />,
-                                },
-                            ]}
+                            buttons={returnButtonsArray()}
                         />
                     }
                     {slots?.map((section, index) => {
@@ -504,7 +533,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         justifyContent: 'space-between',
     },
     calendar: {
-        color: Colors.blue,
+        color: Colors.Secondary,
         marginBottom: Spaces.sm,
     },
     profilePictureContainer: {
@@ -618,7 +647,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderWidth: 0.6,
         borderRadius: 8,
         width: '98%',
-        borderColor: Colors.blue
+        borderColor: Colors.Secondary
     },
     slot:
     {
@@ -667,7 +696,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     segment:
     {
-       // backgroundColor: Colors.PRIMARY,
+        // backgroundColor: Colors.PRIMARY,
         margin: Spaces.sm
     },
     logoutIcon: {

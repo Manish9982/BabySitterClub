@@ -136,7 +136,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     tagLabel: {
         marginLeft: 5,
-        color: Colors.blue,
+        color: Colors.Secondary,
         fontSize: 14,
     },
     tagsContainer: {
@@ -161,7 +161,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     blueText:
     {
-        color: Colors.blue,
+        color: Colors.Secondary,
         textDecorationLine: 'underline'
     },
     text:
@@ -174,6 +174,6 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderWidth: 0.4,
         borderRadius: 8,
         margin: Spaces.sm,
-        borderColor: Colors.blue
+        borderColor: Colors.Secondary
     }
 });

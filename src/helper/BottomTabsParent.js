@@ -15,6 +15,7 @@ import { onNotificationReceiver, requestUserPermission } from './Notifications';
 import { getLocalValue, storeLocalValue } from './LocalStore';
 import Geolocation from '@react-native-community/geolocation';
 import messaging from '@react-native-firebase/messaging';
+import Colors from './Colors';
 
 
 const BottomTabsParent = ({ navigation }) => {
@@ -108,7 +109,7 @@ const BottomTabsParent = ({ navigation }) => {
 
             ?
 
-            <Tab.Navigator>
+            <Tab.Navigator screenOptions={{}}>
                 <Tab.Screen name="Search" component={SearchBabySitter_Parent} options={{
                     // headerRight: ({ color, size }) => <AntDesign name="search1" size={Spaces.xxxl} color={color} style={styles.search} />,
                     tabBarIcon: ({ color, size }) => <AntDesign name="search1" size={size} color={color} />

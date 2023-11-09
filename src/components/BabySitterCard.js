@@ -30,7 +30,7 @@ const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavo
             <TouchableOpacity
                 style={styles.favButton}
                 onPress={onPressFavourite}>
-                <Text>{isFavourite == 1 ? <AntDesign name="star" size={20} color={Colors.blue} />
+                <Text>{isFavourite == 1 ? <AntDesign name="star" size={20} color={Colors.Secondary} />
                     : <AntDesign name="staro" size={20} />}</Text>
             </TouchableOpacity>
         </TouchableOpacity>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         padding: Spaces.lar,
         backgroundColor: Colors.white,
         margin: Spaces.sm,
-        borderColor: Colors.blue,
+        borderColor: Colors.Secondary,
         borderWidth: 0.6,
         borderRadius: 10
     },
