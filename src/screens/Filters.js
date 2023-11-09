@@ -117,7 +117,7 @@ const CheckboxItem = ({ label, checked, onChange }) => {
     return (
         <View style={styles.checkboxContainer}>
             <Checkbox.Android
-                color={Colors.blue}
+                color={Colors.Secondary}
                 status={checked ? 'checked' : 'unchecked'}
                 onPress={onChange}
             />

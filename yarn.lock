@@ -2815,7 +2815,7 @@ color-string@^1.6.0, color-string@^1.9.0:
     color-name "^1.0.0"
     simple-swizzle "^0.2.2"
 
-color@^3.1.2:
+color@^3.1.2, color@^3.2.1:
   version "3.2.1"
   resolved "https://registry.npmjs.org/color/-/color-3.2.1.tgz"
   integrity sha512-aBl7dZI9ENN6fUGC7mWpMTPNHmWUSNan9tuWN6ahh5ZLNk9baLJOnSMlrQkHcrfFgz2/RigjUVAjdx36VcemKA==
@@ -4930,6 +4930,11 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+lottie-react-native@^6.4.0:
+  version "6.4.0"
+  resolved "https://registry.npmjs.org/lottie-react-native/-/lottie-react-native-6.4.0.tgz"
+  integrity sha512-wFO/gLPN1KliyznBa8OtYWkc9Vn9OEmIg1/b1536KANFtGaFAeoAGhijVxYKF3UPKJgjJYFmqg0W//FVrSXj+g==
+
 lru-cache@^5.1.1:
   version "5.1.1"
   resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz"
@@ -5953,7 +5958,14 @@ react-native-network-info@^5.2.1:
   resolved "https://registry.npmjs.org/react-native-network-info/-/react-native-network-info-5.2.1.tgz"
   integrity sha512-iam74xXtrSqqZurCl1/bSjZ9jXcsJY84g7brx1/4uVGCY26c6m+4CArHNSHOsz5ATg2NQT+81sjNy0KlCPyK4g==
 
-react-native-paper@^5.9.1:
+react-native-paper-dates@^0.20.3:
+  version "0.20.3"
+  resolved "https://registry.npmjs.org/react-native-paper-dates/-/react-native-paper-dates-0.20.3.tgz"
+  integrity sha512-/wa7rOBQrRFGOqtJnAkFa/SVUIz1NXbty6fOL3TsAcyw4CivolY2ADs+VKa1mGwEgjUsHsvGXvedc/P5B3cdug==
+  dependencies:
+    color "^3.2.1"
+
+react-native-paper@*, react-native-paper@^5.9.1:
   version "5.9.1"
   resolved "https://registry.npmjs.org/react-native-paper/-/react-native-paper-5.9.1.tgz"
   integrity sha512-zsOdKQ+mXxeY+qZDSpizBTFVFrnV4P/84ZgSjTKQjbmPU5MnO1xJtntWVmk7Pba81x5Hbcf3Q1/9VP3LHy1anA==
@@ -6027,7 +6039,7 @@ react-native-webview@^13.6.0:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
 
-react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", "react-native@>= 0.30.0", react-native@>=0.33, react-native@>=0.40.0, react-native@>=0.42.0, react-native@>=0.47, react-native@>=0.48.4, react-native@>=0.50.0, react-native@>=0.57, react-native@>=0.58.4, react-native@>=0.59, react-native@>=0.63.3, react-native@0.72.3:
+react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", "react-native@>= 0.30.0", react-native@>=0.33, react-native@>=0.40.0, react-native@>=0.42.0, react-native@>=0.46, react-native@>=0.47, react-native@>=0.48.4, react-native@>=0.50.0, react-native@>=0.57, react-native@>=0.58.4, react-native@>=0.59, react-native@>=0.63.3, react-native@0.72.3:
   version "0.72.3"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.72.3.tgz"
   integrity sha512-QqISi+JVmCssNP2FlQ4MWhlc4O/I00MRE1/GClvyZ8h/6kdsyk/sOirkYdZqX3+DrJfI3q+OnyMnsyaXIQ/5tQ==

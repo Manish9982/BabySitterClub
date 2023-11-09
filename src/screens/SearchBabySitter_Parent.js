@@ -1,17 +1,18 @@
 
 import { Alert, FlatList, ImageBackground, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { Chip, Searchbar, Text } from 'react-native-paper'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Button, Chip, Searchbar, Text } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 import Loader from '../components/Loader';
 import { useSelector } from 'react-redux';
-import { formatDate, handlePostRequest } from '../helper/Utils';
+import { convertTimeRangeTo12HourFormat, formatDate, formatDate_mmddyyyy, handlePostRequest } from '../helper/Utils';
 import { useIsFocused } from '@react-navigation/native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import CustomDateTimePicker from '../components/CustomDateTimePicker';
+import { DatePickerModal } from 'react-native-paper-dates';
 
 const SearchBabySitter_Parent = ({ navigation }) => {
     const H = useWindowDimensions().height
@@ -23,8 +24,8 @@ const SearchBabySitter_Parent = ({ navigation }) => {
     const [loader, setLoader] = useState(false)
     const [users, setUsers] = useState([])
     const [searchText, setSearchText] = useState("")
-    const [bookingDate, setBookingDate] = useState(new Date())
-    const [showPicker, setShowPicker] = useState(false)
+    const [range, setRange] = useState({ startDate: undefined, endDate: undefined });
+    const [open, setOpen] = useState(false);
 
     const selectedService = useSelector(state => state.global.selectedService)
 
@@ -34,12 +35,26 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         if (isFocused) {
             getUsers()
         }
-    }, [isFocused, bookingDate])
+    }, [isFocused, range])
+
+    const onDismiss = useCallback(() => {
+        setOpen(false);
+    }, [setOpen]);
+
+    const onConfirm = useCallback(
+        ({ startDate, endDate }) => {
+            setOpen(false);
+            setRange({ startDate, endDate });
+            console.log("Range===>", { startDate, endDate })
+        },
+        [setOpen, setRange]
+    );
 
     const getUsers = async () => {
         setLoader(true)
         var formdata = new FormData()
-        formdata.append('date', formatDate(bookingDate))
+        formdata.append('start_date', formatDate(range?.startDate, true))
+        formdata.append('end_date', formatDate(range?.endDate))
         const result = await handlePostRequest('filter_users', formdata)
         setBabySittersData(result)
 
@@ -49,7 +64,6 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         }
         setLoader(false)
     }
-
     const handleFavourite = async (Id) => {
         const formdata = new FormData()
         formdata.append('userId', Id)
@@ -63,7 +77,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
     };
 
     const handleNavigation = (userid, roleid) => {
-        navigation.navigate("ProfileOfSitterDuringBooking_Parent", { 'userID': userid, bookingDate: JSON.stringify(bookingDate) })
+        navigation.navigate("ProfileOfSitterDuringBooking_Parent", { 'userID': userid, bookingDate: JSON.stringify(range) })
     }
 
     const throwChipSelection = (name) => {
@@ -109,14 +123,6 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         }
     }
 
-    const onChangeIosPicker = (a, date) => {
-        setBookingDate(date)
-    }
-    const onChangeAndroidPicker = (a, date) => {
-        console.log('date====>', date)
-        setBookingDate(date)
-    }
-
     const renderfilters = ({ item }) => {
         return (
             <Chip
@@ -143,8 +149,8 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                 <View style={styles.upperconatiner}>
                     {/* <Text >Hello, James</Text> */}
                     <Text style={[styles.textQuery, Fonts.medMedium]}>When would you like to schedule a sitter?</Text>
-                   
-                    <CustomDateTimePicker
+
+                    {/* <CustomDateTimePicker
                         labelAndroid={'Choose Date'}
                         show={showPicker}
                         style={styles.datePicker}
@@ -152,6 +158,23 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                         onChangeAndroid={onChangeAndroidPicker}
                         onChangeIos={onChangeIosPicker}
                         minimumDate={new Date()}
+                    /> */}
+                    <Button style={styles.button} onPress={() => setOpen(true)} uppercase={false} mode="outlined">
+                        {(range?.startDate && range?.endDate) ? `${formatDate_mmddyyyy(range.startDate, true)} - ${formatDate_mmddyyyy(range.endDate)}` : 'Pick Start and End Date'}
+                    </Button>
+
+                    <DatePickerModal
+                        validRange={{ startDate: new Date() }}
+                        locale="en"
+                        mode="range"
+                        visible={open}
+                        onDismiss={onDismiss}
+                        startDate={range.startDate}
+                        endDate={range.endDate}
+                        onConfirm={onConfirm}
+                        style={{
+                            backgroundColor: 'red'
+                        }}
                     />
                     <Searchbar
                         loading={false}
@@ -177,7 +200,10 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                 {
                     babySittersData?.users?.length == 0
                         ?
-                        <Text style={styles.nothingToShow}>No Sitters are available for this date.</Text>
+                        range?.endDate ?
+                            <Text style={styles.nothingToShow}>Please select a date range to see results.</Text>
+                            :
+                            <Text style={styles.nothingToShow}>No Sitters are available for this date range. Kindly try splitting your range to see results</Text>
                         :
                         <FlatList
                             data={users}
@@ -189,7 +215,6 @@ const SearchBabySitter_Parent = ({ navigation }) => {
             </ImageBackground>
     );
 };
-
 
 export default SearchBabySitter_Parent
 
@@ -233,7 +258,9 @@ const makeStyles = (H, W) => StyleSheet.create({
     nothingToShow:
     {
         alignSelf: 'center',
-        marginTop: '70%'
+        marginTop: H * 0.3,
+        textAlign:'center',
+        marginHorizontal:W*0.05,
     },
     horizontal:
     {
@@ -253,5 +280,9 @@ const makeStyles = (H, W) => StyleSheet.create({
     chip:
     {
         // margin:5
+    },
+    button:
+    {
+        backgroundColor: Colors.white
     }
 })

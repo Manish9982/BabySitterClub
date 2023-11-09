@@ -31,7 +31,7 @@ const FavBabySittersCard = ({ profilePicture, name, description, hourlyPrice, on
                 <Text>{
                     isFavourite == 1
                         ?
-                        <AntDesign name="star" size={20} color={Colors.blue} />
+                        <AntDesign name="star" size={20} color={Colors.Secondary} />
                         :
                         <AntDesign name="staro" size={20} />
                 }</Text>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         marginTop: Spaces.sm,
         marginHorizontal: Spaces.sm,
-        borderColor: Colors.blue,
+        borderColor: Colors.Secondary,
         borderWidth: 0.6,
         borderRadius: 10,
         paddingBottom: Spaces.sm

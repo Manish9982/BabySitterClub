@@ -7,6 +7,7 @@ import Store from './src/redux/Store';
 import { LOCAL_STORE } from './src/helper/Utils';
 import { getLocalValue } from './src/helper/LocalStore';
 import { Platform } from 'react-native';
+import Colors from './src/helper/Colors';
 
 const App = () => {
 
@@ -23,10 +24,10 @@ const App = () => {
       regular: Fonts.med
     }
   };
-
   const theme = {
     ...MD2LightTheme,
     fonts: configureFonts({ config: fontConfig, isV3: false }),
+    colors: { ...MD2LightTheme.colors, primary: Colors.Secondary }
   };
 
   const getToken = async () => {

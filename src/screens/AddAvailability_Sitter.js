@@ -21,7 +21,7 @@ const AddAvailability_Sitter = ({ navigation, route }) => {
     const [endTime, setEndTime] = useState(new Date());
     const [repeatOption, setRepeatOption] = useState('');
     const [showPicker, setShowPicker] = useState(false)
-    const [chosenService, setChosenService] = useState({ "id": 1, "service_name": "Choose a service" })
+    const [chosenService, setChosenService] = useState(null)
     const [filteredServices, setFilteredServices] = useState([])
     const [loader, setLoader] = useState(true)
     const [loaderButton, setLoaderButton] = useState(false)
@@ -35,18 +35,6 @@ const AddAvailability_Sitter = ({ navigation, route }) => {
 
     useEffect(() => {
         applyFilterToServices()
-        if (route?.params?.service == 1) {
-            //babysitter
-            setChosenService({ "id": 1, "service_name": "Baby Sitter" })
-        }
-        else if (route?.params?.service == 2) {
-            //petsitter
-            setChosenService({ "id": 2, "service_name": "Pet Sitter" })
-        }
-        else if (route?.params?.service == 3) {
-            //homesitter
-            setChosenService({ "id": 3, "service_name": "Home Sitter" })
-        }
     }, [])
 
     useEffect(() => {
@@ -70,7 +58,23 @@ const AddAvailability_Sitter = ({ navigation, route }) => {
     const applyFilterToServices = async () => {
         const result = await handleGetRequest('filters')
         if (result?.status == '200') {
+            console.log("result?.filters==>", result)
             setFilteredServices(result?.filters)
+            if (route?.params?.service == 1) {
+                //babysitter
+                setChosenService({ "id": 1, "service_name": "Baby Sitter" })
+            }
+            else if (route?.params?.service == 2) {
+                //petsitter
+                setChosenService({ "id": 2, "service_name": "Pet Sitter" })
+            }
+            else if (route?.params?.service == 3) {
+                //homesitter
+                setChosenService({ "id": 3, "service_name": "Home Sitter" })
+            }
+            else{
+                setChosenService(result?.filters[0])
+            }
             setLoader(false)
         }
         else {
@@ -142,9 +146,9 @@ const AddAvailability_Sitter = ({ navigation, route }) => {
             }
             setLoaderButton(false)
         }
-
     }
-
+console.log("route?.params?.service ====>", route?.params?.service)
+console.log("chosenService ====>", chosenService)
     return (
         loader
             ?

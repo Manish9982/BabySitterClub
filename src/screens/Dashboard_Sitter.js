@@ -19,12 +19,14 @@ const ProfileScreen = ({ navigation }) => {
     const [dashboardData, setDashboardData] = useState(null)
     const [serviceFilterId, setServiceFilterId] = useState(null)
     const [loader, setLoader] = useState(true)
+    const [filteredServices, setFilteredServices] = useState([])
 
     const isFocused = useIsFocused()
 
     useEffect(() => {
         if (isFocused) {
             getDashboardData()
+            applyFilterToSegment()
         }
     }, [isFocused])
 
@@ -32,6 +34,17 @@ const ProfileScreen = ({ navigation }) => {
         // getSlots()
         // setShowSlots(prev => !prev)
         navigation.navigate('AddAvailability_Sitter', { 'service': serviceFilterId })
+    }
+
+    const applyFilterToSegment = async () => {
+        const result = await handleGetRequest('filters')
+        if (result?.status == '200') {
+            console.log("result?.filters==>", result)
+            setFilteredServices(result?.filters)
+        }
+        else {
+            Alert.alert('Error', result?.message)
+        }
     }
 
     const getDashboardData = async () => {
@@ -95,6 +108,33 @@ const ProfileScreen = ({ navigation }) => {
 
     const onPressUserProfile = () => {
         navigation.navigate('MyProfile_Sitter')
+    }
+    const returnButtonsArray = () => {
+        var serviceArr = []
+        if (filteredServices?.length < 2) {
+            return []
+        }
+        else {
+            if (filteredServices?.some(service => service?.id == '1')) {
+                serviceArr?.push({
+                    value: '1',
+                    icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
+                })
+            }
+            if (filteredServices?.some(service => service?.id == '2')) {
+                serviceArr?.push({
+                    value: '2',
+                    icon: () => <TagIcon name="paw" label="Petsit" style={styles.tag} />,
+                })
+            }
+            if (filteredServices?.some(service => service?.id == '3')) {
+                serviceArr?.push({
+                    value: '3',
+                    icon: () => <TagIcon name="home" label="Homesit" style={styles.tag} />,
+                })
+            }
+            return serviceArr
+        }
     }
 
     const styles = makeStyles(H, W)
@@ -167,20 +207,7 @@ const ProfileScreen = ({ navigation }) => {
                                         style={styles.segment}
                                         value={serviceFilterId}
                                         onValueChange={(t) => setServiceFilterId(prev => prev == t ? null : t)}
-                                        buttons={[
-                                            {
-                                                value: '1',
-                                                icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
-                                            },
-                                            {
-                                                value: '3',
-                                                icon: () => <TagIcon name="home" label="Homesit" style={styles.tag} />,
-                                            },
-                                            {
-                                                value: '2',
-                                                icon: () => <TagIcon name="paw" label="Petsit" style={styles.tag} />,
-                                            },
-                                        ]}
+                                        buttons={returnButtonsArray()}
                                     />
                             }
 
@@ -243,7 +270,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderRadius: H * 0.14 / 2,
         //marginBottom: 10,
         borderWidth: 0.6,
-        borderColor: Colors.blue
+        borderColor: Colors.Secondary
     },
     name: {
         ...Fonts.larBold,
@@ -307,7 +334,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     tagLabel: {
         marginLeft: 5,
-        color: Colors.blue,
+        color: Colors.Secondary,
         fontSize: 14,
     },
     tagsContainer: {
@@ -332,7 +359,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     blueText:
     {
-        color: Colors.blue,
+        color: Colors.Secondary,
         textDecorationLine: 'underline'
     },
     text:
@@ -346,7 +373,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderWidth: 0.4,
         borderRadius: 8,
         margin: Spaces.sm,
-        borderColor: Colors.blue,
+        borderColor: Colors.Secondary,
         padding: Spaces.sm
     },
     horizontalContainer:

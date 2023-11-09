@@ -92,13 +92,13 @@ const AddAddress = ({ navigation }) => {
           <TouchableOpacity
             onPress={() => { setAddresstype("Home") }}
             style={{
-              backgroundColor: addressType == "Home" ? Colors.blue : "white",
-              borderColor: Colors.blue,
+              backgroundColor: addressType == "Home" ? Colors.Secondary : "white",
+              borderColor: Colors.Secondary,
               alignItems: 'center',
               width: W * 0.17,
               borderRadius: 8,
               justifyContent: 'center',
-              borderColor: Colors.blue,
+              borderColor: Colors.Secondary,
               borderWidth: 1
             }}>
 
@@ -112,10 +112,10 @@ const AddAddress = ({ navigation }) => {
             onPress={() => { setAddresstype("Work") }}
 
             style={{
-              backgroundColor: addressType == "Work" ? Colors.blue : "white",
+              backgroundColor: addressType == "Work" ? Colors.Secondary : "white",
               borderColor: 'gray',
               borderWidth: 1,
-              borderColor: Colors.blue,
+              borderColor: Colors.Secondary,
               alignItems: "center",
               width: W * 0.17,
               justifyContent: 'center',

@@ -36,7 +36,7 @@ const CustomDateTimePicker = ({ value, onChangeAndroid, onChangeIos, labelAndroi
                     style={[styles.dateContainer, {alignSelf:alignSelf}]}
                     onPress={() => setShowPicker(prev => !prev)}>
                     <Text>
-                        {formatDate_mmddyyyy(value)}
+                        {formatDate_mmddyyyy(value, true)}
                     </Text>
                 </TouchableOpacity>
 

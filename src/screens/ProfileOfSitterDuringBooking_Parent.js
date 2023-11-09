@@ -8,20 +8,20 @@ import Loader from '../components/Loader'
 import { convertTimeRangeTo12HourFormat, formatDate, formatDateProfilePageDate, handlePostRequest } from '../helper/Utils'
 import TagIcon from '../components/TagIcon'
 import CustomDateTimePicker from '../components/CustomDateTimePicker'
-
+import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 
 const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
 
     const { userID, bookingDate } = route.params
 
-    console.log("UserID =    ", userID)
+    console.log("bookingDate ====>", bookingDate)
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
 
     const [profiledetailsdata, setProfiledetailsdata] = useState()
     const [loader, setLoader] = useState(true)
-    const [slotsDate, setSlotsDate] = useState(new Date(JSON.parse(bookingDate)))
+    const [slotsDate, setSlotsDate] = useState(JSON.parse(bookingDate)?.startDate ? new Date(JSON.parse(bookingDate)?.startDate) : new Date(JSON.parse(bookingDate)))
     const [serviceFilterId, setServiceFilterId] = useState(null);
 
     useEffect(() => {
@@ -46,7 +46,12 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
     const getUsersProfileDetails = async () => {
         const formdata = new FormData()
         formdata.append('userId', userID)
-        formdata.append('date', formatDate(slotsDate))
+        {
+            JSON.parse(bookingDate)?.startDate ?
+                formdata.append('date', formatDate(slotsDate, true))
+                :
+                formdata.append('date', formatDate(slotsDate))
+        }
         const result = await handlePostRequest('user_details', formdata)
 
         if (result?.status == '200') {
@@ -87,19 +92,19 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
             {
                 item?.status === 0 ?
                     <TouchableOpacity onPress={() => onPressBookNow(convertTimeRangeTo12HourFormat(item?.duration), item?.amount, item?.id, item?.amount)}>
-                        <Text style={{ textDecorationLine: 'underline', color: Colors.blue }}>
+                        <Text style={{ textDecorationLine: 'underline', color: Colors.Secondary }}>
                             Book Now
                         </Text>
                     </TouchableOpacity>
                     :
-                    <Text style={{ color: 'red' }}>
-                        Booked
+                    <Text style={{}}>
+                        Booked <AntDesign name="checkcircleo" color={Colors.MUTED_GREEN} />
                     </Text>
             }
         </View>
     );
 
-
+    console.log("new Date(bookingDate)====>", new Date(JSON.parse(bookingDate)))
     const styles = makeStyles(H, W)
     return (
         loader
@@ -113,7 +118,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                     contentContainerStyle={styles.contentContainerStyle}
                     style={styles.container}>
                     <View style={styles.upperContainer}>
-                        <TouchableOpacity onPress={()=> navigation.navigate('ViewPicture', {})}>
+                        <TouchableOpacity onPress={() => navigation.navigate('ViewPicture', { imageUrl: `${profiledetailsdata?.url}${profiledetailsdata?.userDetails?.picture}` })}>
                             <Image
                                 source={{ uri: `${profiledetailsdata?.url}${profiledetailsdata?.userDetails?.picture}` }}
                                 defaultSource={require('../assets/images/profile-user.png')}

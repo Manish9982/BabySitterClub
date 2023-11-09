@@ -83,15 +83,19 @@ export const handleGetRequest = async (name) => {
         });
 };
 
-export function formatDate(inputDate) {
+export function formatDate(inputDate, increment = false) {
     const date = new Date(inputDate);
+    {
+        increment &&
+            date.setDate(date.getDate() + 1)
+    }
     const day = String(date.getUTCDate()).padStart(2, '0');
     const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
     const year = date.getUTCFullYear();
     return `${day}-${month}-${year}`;
 }
 
-export function formatDate_mmddyyyy(inputDate) {
+export function formatDate_mmddyyyy(inputDate, increment = false) {
     function getDaySuffix(day) {
         if (day >= 11 && day <= 13) {
             return "";
@@ -112,13 +116,17 @@ export function formatDate_mmddyyyy(inputDate) {
     ];
 
     const date = new Date(inputDate);
+    {
+        increment &&
+            date.setDate(date.getDate() + 1)
+    }
     const month = months[date.getUTCMonth()];
     const day = date.getUTCDate();
     const year = date.getUTCFullYear();
 
     const daySuffix = getDaySuffix(day);
 
-    return `${month} ${day}${daySuffix}, ${year}`;
+    return `${month} ${day}, ${year}`;
 }
 
 
