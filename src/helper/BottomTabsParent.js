@@ -1,5 +1,5 @@
 import { Alert, Platform, StyleSheet, } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SearchBabySitter_Parent from '../screens/SearchBabySitter_Parent';
 import Bookings from '../screens/Bookings';
@@ -14,8 +14,8 @@ import MyProfile_Parent from '../screens/MyProfile_Parent';
 import { onNotificationReceiver, requestUserPermission } from './Notifications';
 import { getLocalValue, storeLocalValue } from './LocalStore';
 import Geolocation from '@react-native-community/geolocation';
+import { check, request, PERMISSIONS, RESULTS, openSettings } from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
-import Colors from './Colors';
 
 
 const BottomTabsParent = ({ navigation }) => {
@@ -29,6 +29,8 @@ const BottomTabsParent = ({ navigation }) => {
         onNotificationReceiver()
         //}
     }, [])
+
+    const [location, setLocation] = useState(null)
 
     const isProfileCompleted = useSelector((state) => state.global.isProfileCompleted)
     const dispatch = useDispatch();
@@ -45,48 +47,102 @@ const BottomTabsParent = ({ navigation }) => {
 
     const updateFcmToken = async () => {
         try {
-            const result = Geolocation.requestAuthorization()
-            console.log('Geolocation.requestAuthorization()', result)
-            //Geolocation.getCurrentPosition(info => console.log(info));
-        } catch (error) {
-            Alert.alert(error)
-        }
-        if (Platform.OS == "ios") {
-            const authStatus = await messaging().requestPermission();
-            if (authStatus === 1) {
-                // //console.log("Trying To Get Token ======================>")
-                let fcmToken = await messaging().getToken();
-                if (fcmToken) {
-                    const fcmToken = await messaging().getToken();
-                    storeLocalValue(LOCAL_STORE.FCM_TOKEN, fcmToken)
-                    var formdata = new FormData()
-                    formdata.append('fcm_token', fcmToken)
-                    formdata.append('device_type', Platform.OS)
-                    formdata.append('lat', '')
-                    formdata.append('long', '')
-                    const result = await handlePostRequest('update_fcm', formdata)
-                    console.log('fcmToken API result==>', result)
-                    // //console.log("fcmToken=========================================================================>", fcmToken)
-                    // //console.log(" result of getToken at Dashboard===>", result)
-                    // //console.log(" formdata  of getToken at Dashboard===>", formdata)
+            let permission;
+            if (Platform.OS === 'ios') {
+                permission = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+                if (permission === RESULTS.DENIED) {
+                    const permissionRequest = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+                    if (permissionRequest !== RESULTS.GRANTED) {
+                        Alert.alert('Permission Denied', 'Please enable location services to help us refine your search results', [
+                            {
+                                text: 'OK',
+                                onPress: () => openSettings()
+                            }
+                        ]);
+                        const authStatus = await messaging().requestPermission();
+                        if (authStatus === 1) {
+                            // //console.log("Trying To Get Token ======================>")
+                            let fcmToken = await messaging().getToken();
+                            if (fcmToken) {
+                                const fcmToken = await messaging().getToken();
+                                storeLocalValue(LOCAL_STORE.FCM_TOKEN, fcmToken)
+                                var formdata = new FormData()
+                                formdata.append('fcm_token', fcmToken)
+                                formdata.append('device_type', Platform.OS)
+                                const result = await handlePostRequest('update_fcm', formdata)
+                            }
+                        }
+                    } else {
+                        fetchLocation();
+                    }
+                } else {
+                    fetchLocation();
+                }
+            } else if (Platform.OS === 'android') {
+                permission = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+                console.log("permission", permission)
+                console.log("RESULTS.DENIED", RESULTS.DENIED)
+                if (permission === RESULTS.DENIED) {
+                    const permissionRequest = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+                    console.log("permissionRequest", permissionRequest)
+                    if (permissionRequest !== RESULTS.GRANTED) {
+                        Alert.alert('Permission Denied', 'Please enable location services to help us refine your search results', [
+                            {
+                                text: 'OK',
+                                onPress: () => openSettings()
+                            }
+                        ]);
+                        const authStatus = await messaging().requestPermission();
+                        if (authStatus === 1) {
+                            // //console.log("Trying To Get Token ======================>")
+                            let fcmToken = await messaging().getToken();
+                            if (fcmToken) {
+                                const fcmToken = await messaging().getToken();
+                                storeLocalValue(LOCAL_STORE.FCM_TOKEN, fcmToken)
+                                var formdata = new FormData()
+                                formdata.append('fcm_token', fcmToken)
+                                formdata.append('device_type', Platform.OS)
+                                const result = await handlePostRequest('update_fcm', formdata)
+                            }
+                        }
+                    } else {
+                        fetchLocation();
+                    }
+                } else {
+                    fetchLocation();
                 }
             }
-        }
-        else {
-            const token = await messaging().getToken();
-            storeLocalValue('fcm_token', token)
-            var formdata = new FormData()
-            formdata.append('fcm_token', fcmToken)
-            formdata.append('device_type', Platform.OS)
-            formdata.append('lat', '')
-            formdata.append('long', '')
-            const result = await handlePostRequest('update_fcm', formdata)
-            console.log('fcmToken API result==>', result)
-            // //console.log("fcmToken===>", token)
-            // //console.log(" result of getToken at Dashboard===>", result)
-            // //console.log(" formdata  of getToken at Dashboard===>", formdata)
+        } catch (error) {
+            console.error('Error requesting location permission:', error);
         }
     }
+
+    const fetchLocation = () => {
+        Geolocation.getCurrentPosition(
+            async (position) => {
+                const authStatus = await messaging().requestPermission();
+                if (authStatus === 1) {
+                    // //console.log("Trying To Get Token ======================>")
+                    let fcmToken = await messaging().getToken();
+                    if (fcmToken) {
+                        const fcmToken = await messaging().getToken();
+                        storeLocalValue(LOCAL_STORE.FCM_TOKEN, fcmToken)
+                        var formdata = new FormData()
+                        formdata.append('fcm_token', fcmToken)
+                        formdata.append('device_type', Platform.OS)
+                        formdata.append('lat', position?.coords?.latitude)
+                        formdata.append('long', position?.coords?.longitude)
+                        const result = await handlePostRequest('update_fcm', formdata)
+                    }
+                }
+            },
+            (error) => {
+                console.error('Error getting location:', error);
+                Alert.alert('Error', 'Failed to fetch location.');
+            },
+            { enableHighAccuracy: true, }
+        );
+    };
 
     const checkProfileStatus = async () => {
         const result = await handleGetRequest('profile')
