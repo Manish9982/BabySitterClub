@@ -50,7 +50,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
             JSON.parse(bookingDate)?.startDate ?
                 formdata.append('date', formatDate(slotsDate, true))
                 :
-                formdata.append('date', formatDate(slotsDate))
+                formdata.append('date', formatDate(slotsDate, true))
         }
         const result = await handlePostRequest('user_details', formdata)
 

@@ -18,8 +18,6 @@ const ProfileOfParentDuringBooking_Sitter = ({ navigation, route }) => {
 
     const [profiledetailsdata, setProfiledetailsdata] = useState()
     const [loader, setLoader] = useState(true)
-    const [image, setImage] = useState({})
-
 
     useEffect(() => {
         getUsersProfileDetails()

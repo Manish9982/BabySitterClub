@@ -12,13 +12,12 @@ const TransactionCard = ({ transaction }) => {
     return (
         <View style={styles.card}>
             <Text style={styles.name}>Transaction ID: {transaction?.transaction_id}</Text>
-            <Text>Name: {transaction.first_name} {transaction.last_name}</Text>
-            <Text>Booking ID: {transaction.b_id}</Text>
+            <Text>Name: {transaction?.first_name} {transaction?.last_name}</Text>
+            <Text>Booking ID: {transaction?.b_id}</Text>
             <Text style={styles.amount}>Amount: ${transaction?.amount}</Text>
             <Text>Payment Method: {transaction?.payment_method}</Text>
-            <Text>Booking Slot: {transaction.bookingSlot}</Text>
-            <Text>{transaction.transaction_status}</Text>
-            
+            <Text>Booking Slot: {transaction?.bookingSlot}</Text>
+            <Text>{transaction?.transaction_status}</Text>
         </View>
     )
 }

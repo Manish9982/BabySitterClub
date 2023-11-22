@@ -166,7 +166,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                     <DatePickerModal
                         validRange={{ startDate: new Date() }}
                         locale="en"
-                        mode="range"
+                        mode="multiple"
                         visible={open}
                         onDismiss={onDismiss}
                         startDate={range.startDate}
