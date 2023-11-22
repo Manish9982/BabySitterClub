@@ -23,7 +23,7 @@ const Help = ({ navigation }) => {
         if (issueName.trim() === '' || description.trim() === '') {
             Alert.alert('Error', 'Please fill in all fields.');
         } else {
-            
+
             setLoader(true)
 
             var formdata = new FormData()
@@ -44,9 +44,7 @@ const Help = ({ navigation }) => {
             }
 
             setLoader(false)
-
         }
-
     };
 
     const handleCallSupport = () => {
@@ -69,8 +67,6 @@ const Help = ({ navigation }) => {
                 onChangeText={(text) => { setDescription(text) }}
             />
 
-
-
             <CustomButton
                 loader={loader}
                 title={'Continue'}
@@ -79,14 +75,11 @@ const Help = ({ navigation }) => {
 
             <Text style={[styles.text1, Fonts.medSemiBold]}>Or</Text>
 
-
             <CustomButton
                 //loader={loader}
                 title={'Call Support'}
                 onPressButton={handleCallSupport}
             />
-
-
         </View>
     );
 };
@@ -96,9 +89,9 @@ export default Help
 const makeStyles = (H, W) => StyleSheet.create({
 
     uppercontainer: {
-        flex: 1, padding: Spaces.sm
+        flex: 1,
+        padding: Spaces.sm
     },
-
 
     text1:
     {
