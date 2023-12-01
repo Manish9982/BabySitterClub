@@ -6,7 +6,7 @@ import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import { Shadows } from '../helper/Utils';
 
-const TagIcon = ({ name, label, fontawesome = false, style }) => {
+const TagIcon = ({ name, label, fontawesome = false, style, color = Colors.black }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
@@ -14,9 +14,9 @@ const TagIcon = ({ name, label, fontawesome = false, style }) => {
         <View style={style || styles.tagIconContainer}>
             {
                 fontawesome ?
-                    <FontAwesome6 name={name} size={Spaces.lar} color={Colors.black} />
+                    <FontAwesome6 name={name} size={Spaces.lar} color={color} />
                     :
-                    <Ionicons name={name} size={Spaces.lar} color={Colors.black} />
+                    <Ionicons name={name} size={Spaces.lar} color={color} />
             }
         </View>
     );

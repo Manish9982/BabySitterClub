@@ -51,19 +51,12 @@ const ProfileOfParentDuringBooking_Sitter = ({ navigation, route }) => {
                     contentContainerStyle={styles.contentContainerStyle}
                     style={styles.container}>
                     <View style={styles.upperContainer}>
-                        <View>
-
-                            <Image
-                                source={{ uri: `${profiledetailsdata?.url}${profiledetailsdata?.userDetails?.picture}` }}
-                                defaultSource={require('../assets/images/profile-user.png')}
-                                style={styles.profilePic}
-                            />
-                        </View>
+                        
                         <View>
                             <Text style={[styles.heading, { marginBottom: 0 }]}>{`${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`}</Text>
                             <Text style={[styles.textSecondary, { marginBottom: 0 }, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.address}</Text>
                             <View style={styles.whiteBox}>
-                                <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.hour_price}/hrs`}</Text>
+                                <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.hour_price}/Hr`}</Text>
                             </View>
                         </View>
                     </View>
@@ -145,35 +138,13 @@ const ProfileOfParentDuringBooking_Sitter = ({ navigation, route }) => {
                                 <DataTable.Title></DataTable.Title>
                             </DataTable.Row>
                         </DataTable>
-                        {/* <Text style={styles.textneedbabysittertitle}>About our family</Text> */}
-                        {/* <Text style={styles.text}>
-                            <Text style={styles.subheading}>Type of babysitter needed: </Text>
-                            <Text style={styles.text}>Babysitter</Text>
-                        </Text> */}
-                        {/* <Text style={styles.text}>
-                            <Text style={styles.subheading}>Preferred babysitting location: </Text>
-                            <Text style={styles.text}>At the family</Text>
-                        </Text> */}
-                        {/* <Text style={styles.text}>
-                            <Text style={styles.subheading}>Languages we speak: </Text>
-                            <Text style={styles.text}>English</Text>
-                        </Text> */}
-                        {/* <Text style={styles.text}>
-                            <Text style={styles.subheading}>Favorited: </Text>
-                            <Text style={styles.text}>0 Times</Text>
-                        </Text> */}
-                        {/* <Text style={styles.text}>
-                            <Text style={styles.subheading}>We need a babysitter comfortable with: </Text>
-                            <Text style={styles.text}>Pets</Text>
-                        </Text> */}
-
                     </View>
                 </ScrollView>
                 <View style={styles.floatingView}>
                     <View style={styles.secondaryFloatingView}>
                         <Text style={[styles.text, styles.floatText,
 
-                        { ...Fonts.larBold }]}>{`$${profiledetailsdata?.userDetails?.hour_price}/hrs`}</Text>
+                        { ...Fonts.larBold }]}>{`$${profiledetailsdata?.userDetails?.hour_price}/Hr`}</Text>
 
                         <Text style={[styles.subheading, styles.floatText]}>Total Price</Text>
                     </View>

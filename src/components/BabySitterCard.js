@@ -5,8 +5,10 @@ import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
+import TagIcon from './TagIcon';
 
-const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavourite, onPressFavourite, onPressItemSelected, rating = 0 }) => {
+const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavourite, onPressFavourite, onPressItemSelected, rating = 0, serviceIds }) => {
+    const services = serviceIds.split(",").map(Number)
     return (
         <TouchableOpacity
             onPress={onPressItemSelected}
@@ -18,6 +20,27 @@ const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavo
             <View
                 style={styles.card}>
                 <Text style={[styles.name, Fonts.larSemiBold]}>{name}</Text>
+                <View style={{ flexDirection: 'row' }}>
+                    {
+                        services?.includes(1)
+                        &&
+                        <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} color={Colors.Secondary} />
+                    }
+                    {
+                        services?.includes(2)
+                        &&
+                        <TagIcon name="paw" label="Petsit" style={styles.tag} color={Colors.Secondary} />
+
+                    }
+                    {
+                        services?.includes(3)
+                        &&
+                        <TagIcon name="home" label="Homesit" style={styles.tag} color={Colors.Secondary} />
+                    }
+
+
+
+                </View>
                 <Text
                     ellipsizeMode='tail'
                     numberOfLines={3}
@@ -80,5 +103,12 @@ const styles = StyleSheet.create({
     favButton:
     {
         alignSelf: 'flex-start'
-    }
+    },
+    tag:
+    {
+        marginHorizontal: Spaces.sm,
+        marginVertical: Spaces.vsm,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
 })
