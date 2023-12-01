@@ -1,47 +1,124 @@
-import { Alert, Image, ImageBackground, ScrollView, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Alert, Image, ImageBackground, ScrollView, StyleSheet, TouchableOpacity, View, useWindowDimensions, Modal, FlatList } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { Divider, SegmentedButtons, Text } from 'react-native-paper'
+import { Divider, RadioButton, Text } from 'react-native-paper'
 import Spaces from '../helper/Spaces'
 import Fonts from '../helper/Fonts'
 import Colors from '../helper/Colors'
 import Loader from '../components/Loader'
-import { convertTimeRangeTo12HourFormat, formatDate, formatDateProfilePageDate, handlePostRequest } from '../helper/Utils'
+import { Shadows, convertTimeRangeTo12HourFormat, convertTo12HourFormat, convertTo24HourFormat, formatDate, formatDateProfilePageDate, formatDate_mmddyyyy, handleGetRequest, handlePostRequest } from '../helper/Utils'
 import TagIcon from '../components/TagIcon'
-import CustomDateTimePicker from '../components/CustomDateTimePicker'
+import { Picker } from '@react-native-picker/picker';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import SmallButtonSecondary from '../components/SmallButtonSecondary'
+import CustomButton from '../components/Button'
+import { useIsFocused } from '@react-navigation/native'
+
 
 const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
 
-    const { userID, bookingDate } = route.params
-
-    console.log("bookingDate ====>", bookingDate)
+    const { userID, bookingDate, startTime, endTime, service } = route.params
+    const dateParse = JSON.parse(bookingDate)
+    const usedDate = dateParse.map(item => formatDate(item, true))
+    console.log("bookingDate ====>", dateParse)
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
 
+    const [addressdata, setAddressdata] = useState()
     const [profiledetailsdata, setProfiledetailsdata] = useState()
     const [loader, setLoader] = useState(true)
     const [slotsDate, setSlotsDate] = useState(JSON.parse(bookingDate)?.startDate ? new Date(JSON.parse(bookingDate)?.startDate) : new Date(JSON.parse(bookingDate)))
     const [serviceFilterId, setServiceFilterId] = useState(null);
+    const [isAddressModalVisible, setIsAddressModalVisible] = useState(false)
+    const [selectedAddress, setSelectedAddress] = useState(null);
+    const [error, setError] = useState(false);
+    const [price, setPrice] = useState('')
+
+    const isFocused = useIsFocused()
 
     useEffect(() => {
         getUsersProfileDetails()
     }, [slotsDate])
 
+    useEffect(() => {
+        calculatePrice()
+        getAddress()
+    }, [isFocused])
+
+    const getAddress = async () => {
+        const result = await handleGetRequest('address_list')
+        setAddressdata(result)
+        console.log(result)
+    }
+
+    const calculatePrice = async () => {
+        console.log('usedDate', usedDate)
+        var formdata = new FormData()
+        formdata?.append('user_id', userID)
+        formdata?.append('start_time', convertTo24HourFormat(JSON.parse(startTime)))
+        formdata?.append('end_time', convertTo24HourFormat(JSON.parse(endTime)))
+        formdata?.append('date', usedDate?.join(','))
+        formdata?.append('service_id', service?.id)
+        const result = await handlePostRequest('price_calculate', formdata)
+        if (result?.status == '200') {
+            setPrice(result?.price)
+        }
+        else {
+            Alert.alert("Info", result?.message)
+            navigation.goBack()
+        }
+        console.log("formdata", result)
+    }
+
+    const toggleModal = () => {
+        setIsAddressModalVisible(prev => !prev)
+    }
+
     const onPressBookNow = (time, amount, slotId, price) => {
-        navigation.navigate('BookingConfirmation_Parent', {
+        navigation.navigate('CreateBooking_Parent', {
             bookingDetails: JSON.stringify({
                 name: `${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`,
-                date: slotsDate,
-                time: time,
-                price: amount,
-                slot_id: slotId,
-                amount: price,
+                date: usedDate,
+                start_time: startTime,
+                end_time: endTime,
+                price: price,
                 user_id: userID,
-                profile_pic: `${profiledetailsdata?.url}${profiledetailsdata?.userDetails?.picture}`
+                booking_address: selectedAddress
             })
         })
     }
+
+    const handleAddressSelection = (address) => {
+        setSelectedAddress(address?.address);
+        setError(false);
+    };
+
+    const handleAddAddress = () => {
+        // Logic to add a new address
+        // This could open a modal or navigate to a different screen
+        // to enter a new address
+        console.log('Add new address functionality here');
+    };
+
+    const renderAddressItem = (item, index) => (
+        <TouchableOpacity
+            key={index}
+            onPress={() => handleAddressSelection(item)}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <RadioButton.Android
+                    theme={{ colors: { accent: Colors.Secondary } }}
+                    value={item}
+                    status={selectedAddress && selectedAddress === item?.address ? 'checked' : 'unchecked'}
+                    onPress={() => handleAddressSelection(item)}
+                />
+                <Text>{item?.address}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+
+    const handleProceed = () => {
+
+    };
 
     const getUsersProfileDetails = async () => {
         const formdata = new FormData()
@@ -104,6 +181,29 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
         </View>
     );
 
+    const onPressProceed = () => {
+        if (!selectedAddress) {
+            setError(true);
+            // Show an error message or perform any other action
+            return;
+        }
+        else {
+            console.log('Proceed with address:', selectedAddress);
+            navigation.navigate('CreateBooking_Parent', {
+                createBooking: JSON.stringify({
+                    name: `${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`,
+                    date: usedDate,
+                    start_time: startTime,
+                    end_time: endTime,
+                    price: price,
+                    user_id: userID,
+                    booking_address: selectedAddress,
+                    service: service
+                })
+            })
+        }
+    }
+
     console.log("new Date(bookingDate)====>", new Date(JSON.parse(bookingDate)))
     const styles = makeStyles(H, W)
     return (
@@ -129,7 +229,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                             <Text style={[styles.heading, { marginBottom: 0 }]}>{`${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`}</Text>
                             <Text style={[styles.textSecondary, { marginBottom: 0 }, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.address}</Text>
                             <View style={styles.whiteBox}>
-                                <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.hour_price}/hrs`}</Text>
+                                <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.hour_price}/Hr`}</Text>
                             </View>
                         </View>
                     </View>
@@ -150,17 +250,18 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                             For your own safety and protection, only communicate through this app.
                             Never pay for anything and don't share personal information like ID documents and bank details with someone you have never met.
                         </Text>
-                        <Text style={styles.textneedbabysittertitle}>Availability</Text>
+                        {/* <Text style={styles.textneedbabysittertitle}>Availability</Text> */}
                         <Divider style={styles.divider} />
-                        <CustomDateTimePicker
+                        <Text style={styles.mainHeading}>Booking Summary :</Text>
+                        {/* <CustomDateTimePicker
                             minimumDate={new Date()}
                             alignSelf='flex-end'
                             style={styles.datePicker}
                             value={slotsDate}
                             onChangeAndroid={onChangeAndroidPicker}
                             onChangeIos={onChangeIosPicker}
-                        />
-                        {profiledetailsdata?.userSlots?.length == 0
+                        /> */}
+                        {/* {profiledetailsdata?.userSlots?.length == 0
                             ?
                             <Text style={styles.errorText}>No slots are available for this date</Text>
                             :
@@ -183,8 +284,8 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                                     },
                                 ]}
                             />
-                        }
-                        {profiledetailsdata?.userSlots?.map((section, index) => {
+                        } */}
+                        {/* {profiledetailsdata?.userSlots?.map((section, index) => {
                             if (section?.service?.includes(Number.parseInt(serviceFilterId, 10)) || serviceFilterId == null) {
                                 return (
                                     <View key={index}>
@@ -196,10 +297,122 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                                         })}
                                     </View>)
                             }
-                        })}
+                        })} */}
+                        <Text style={styles.detailRow}>
+                            <Text style={styles.label}>
+                                Date(s) : </Text>
+                            <Text style={styles.bookingSpecs}>
+                                {dateParse?.map((item, index) => index == dateParse?.length - 1 ? `${formatDate_mmddyyyy(item, true)}` : `${formatDate_mmddyyyy(item, true)} ; `)}
+                            </Text>
+                        </Text>
+                        <Text style={styles.detailRow}>
+                            <Text style={styles.label}>
+                                Time : </Text>
+                            <Text style={styles.bookingSpecs}>
+                                {`${convertTo12HourFormat(convertTo24HourFormat(JSON.parse(startTime)))} - ${convertTo12HourFormat(convertTo24HourFormat(JSON.parse(endTime)))}`}
+                            </Text>
+                        </Text>
+                        <Text style={styles.detailRow}>
+                            <Text style={styles.label}>
+                                Price : </Text>
+                            <Text style={styles.bookingSpecs}>
+                                $ {price}
+                            </Text>
+                        </Text>
+                        <Text style={styles.detailRow}>
+                            <Text style={styles.label}>
+                                Service : </Text>
+                            <Text style={styles.bookingSpecs}>
+                                {service?.service_name}
+                            </Text>
+                        </Text>
+                        <View style={styles.horizontal}>
+                            <Text style={[styles.detailRow, { marginBottom: Spaces.sm }]}>
+                                <Text style={styles.mainHeading}>
+                                    Address :
+                                </Text>
+                            </Text>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('AddAddress')}
+                                style={styles.smallButton}>
+                                <Text style={styles.whiteText}><AntDesign name="pluscircle" /> Add</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        {/* {
+                            Platform.OS == "android"
+                                ?
+                                <View style={styles.boxOutline}>
+                                    <Picker
+                                        mode='dropdown'
+                                        style={{
+                                            color: Colors.black,
+                                        }}
+                                        selectedValue={selectedAddress}
+                                        onValueChange={(t) => setSelectedAddress(t)}
+                                    >
+                                        <Picker.Item
+                                            label='Choose Address' value='Choose Address' />
+                                        {
+                                            addressdata?.data?.map((item, index) => <Picker.Item key={index} label={item.address} value={item.address} />)
+                                        }
+                                    </Picker>
+                                </View>
+                                :
+                                <TouchableOpacity
+                                    onPress={toggleModal}
+                                    style={styles.valueBox}>
+                                    <Text style={[styles.value]}>{selectedAddress}</Text>
+                                    <AntDesign
+                                        name="caretdown"
+                                        size={Spaces.lar}
+                                        style={styles.caretIcon}
+                                        color={Colors.black}
+                                    />
+                                </TouchableOpacity>
+                        } */}
+                        {/* <Modal
+                            visible={isAddressModalVisible}
+                            transparent>
+                            <View style={styles.modalContainer}>
+                                <View style={styles.addressContainer}>
+                                    <Text style={styles.label}>Address:</Text>
+                                    <Picker
+                                        style={{
+                                            color: Colors.black
+                                        }}
+                                        selectedValue={selectedAddress}
+                                        onValueChange={(t) => setSelectedAddress(t)}
+                                    >
+                                        <Picker.Item
+                                            label='Choose Address' value='Choose Address' />
+                                        {
+                                            addressdata?.data?.map((item, index) => <Picker.Item key={index} label={item.address} value={item.address} />)
+                                        }
+                                    </Picker>
+                                    <SmallButtonSecondary
+                                        onPressSmallButton={toggleModal}
+                                        title={'OK'}
+                                        style={styles.smallButtonSecondary}
+                                    />
+                                </View>
+                            </View>
+                        </Modal> */}
+                        {/* <FlatList
+                            data={addressdata?.data}
+                            renderItem={renderAddressItem}
+                            keyExtractor={(item, index) => index.toString()}
+                        /> */}
+                        {
+                            addressdata?.data?.map((item, index) => renderAddressItem(item, index))
+                        }
+                        {error && <Text style={{ color: 'red' }}>Please select an address</Text>}
                     </View>
+                    <CustomButton
+                        onPressButton={onPressProceed}
+                        title={"Proceed to Payment"} />
                 </ScrollView>
-            </ImageBackground>
+            </ImageBackground >
     )
 }
 
@@ -233,7 +446,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     divider: {
         borderBottomColor: 'black',
         borderBottomWidth: 1,
-        marginBottom: Spaces.sm,
+        margin: Spaces.sm,
     },
     contentContainerStyle:
     {
@@ -330,5 +543,121 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         textAlign: 'center',
         marginTop: Spaces.xxl
-    }
+    },
+    header: {
+        ...Fonts.larMedium,
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    detailsContainer: {
+        width: W * 0.7,
+        ...Shadows,
+        //backgroundColor: Colors.PRIMARY, // Change the background color to your preference
+        borderRadius: 10,
+        padding: Spaces.lar,
+        backgroundColor: Colors.white,
+        borderWidth: 1,
+        borderColor: Colors.PRIMARY
+    },
+    detailRow: {
+        //flexDirection: 'row',
+        //justifyContent: 'space-between',
+        //alignItems: 'center',
+        marginTop: Spaces.sm,
+    },
+    label: {
+        width: W * 0.18,
+        ...Fonts.medBold,
+        color: 'black', // Change the color to your preference
+    },
+    value: {
+        ...Fonts.med,
+        color: Colors.DEEP_GRAY, // Change the color to your preference
+        //width: W * 0.41
+    },
+    addressContainer:
+    {
+        width: W * 0.7,
+        backgroundColor: Colors.white,
+        margin: Spaces.sm,
+        padding: Spaces.sm,
+        borderRadius: 10,
+    },
+    profilePic:
+    {
+        width: 100,
+        height: 100,
+        borderRadius: 100 / 3,
+        marginRight: Spaces.sm,
+        borderWidth: 0.6,
+        borderColor: Colors.black
+    },
+    valueBox:
+    {
+        flexWrap: 'wrap',
+        borderWidth: 1.2,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: Spaces.sm,
+        borderRadius: 8,
+        borderColor: Colors.PRIMARY,
+        flexDirection: 'row',
+        paddingRight: Spaces.lar
+    },
+    modalContainer:
+    {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.grayTransparent
+    },
+    smallButtonSecondary:
+    {
+        width: W * 0.2,
+        backgroundColor: Colors.PRIMARY
+    },
+    boxOutline:
+    {
+        borderWidth: 1,
+        borderRadius: 8,
+    },
+    caretIcon:
+    {
+        position: 'absolute',
+        right: W * 0.02
+    },
+    addressRow:
+    {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginVertical: Spaces.sm
+    },
+    guidingText: {
+        ...Fonts.sm,
+        color: Colors.gray,
+    },
+    mainHeading:
+    {
+        ...Fonts.larBold
+    },
+    bookingSpecs:
+    {
+        textDecorationLine: 'underline'
+    },
+    horizontal:
+    {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    smallButton:
+    {
+        backgroundColor: Colors.PRIMARY,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: Spaces.lar,
+        paddingVertical: Spaces.sm,
+        alignSelf: 'center',
+        borderRadius: 8,
+    },
 }) 

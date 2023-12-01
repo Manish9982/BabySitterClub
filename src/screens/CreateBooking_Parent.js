@@ -2,7 +2,7 @@ import { Alert, StyleSheet, View } from 'react-native'
 import React, { useEffect } from 'react'
 import { Text, ActivityIndicator } from 'react-native-paper'
 import Colors from '../helper/Colors'
-import { handlePostRequest } from '../helper/Utils'
+import { convertTo24HourFormat, handlePostRequest } from '../helper/Utils'
 
 const CreateBooking_Parent = ({ navigation, route }) => {
 
@@ -15,11 +15,15 @@ const CreateBooking_Parent = ({ navigation, route }) => {
     }, [])
 
     const createBookingNow = async () => {
+        console.log('bookingParams', bookingParams)
         var formdata = new FormData()
-        formdata.append('user_id', bookingParams.user_id)
-        formdata.append('slot_id', bookingParams.slot_id)
-        formdata.append('amount', bookingParams.amount)
-        formdata.append('address', bookingParams.booking_address)
+        formdata.append('user_id', bookingParams?.user_id)
+        formdata.append('start_time', convertTo24HourFormat(JSON.parse(bookingParams?.start_time)))
+        formdata.append('end_time', convertTo24HourFormat(JSON.parse(bookingParams?.end_time)))
+        formdata.append('date', bookingParams?.date?.join(','))
+        formdata.append('service_id', bookingParams?.service?.id)
+        formdata.append('address', bookingParams?.booking_address)
+        formdata.append('price', bookingParams?.price)
         const result = await handlePostRequest('booking', formdata)
         if (result?.status == '200') {
             console.log(result)

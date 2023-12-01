@@ -50,14 +50,19 @@ const BottomTabsParent = ({ navigation }) => {
             let permission;
             if (Platform.OS === 'ios') {
                 permission = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-                if (permission === RESULTS.DENIED) {
+                console.log("permission", permission)
+                if ((permission === RESULTS.DENIED) || (permission === RESULTS.UNAVAILABLE)) {
                     const permissionRequest = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+                    console.log('permissionRequest', permissionRequest)
                     if (permissionRequest !== RESULTS.GRANTED) {
                         Alert.alert('Permission Denied', 'Please enable location services to help us refine your search results', [
                             {
                                 text: 'OK',
                                 onPress: () => openSettings()
-                            }
+                            },
+                            {
+                                text: 'Cancel',
+                            },
                         ]);
                         const authStatus = await messaging().requestPermission();
                         if (authStatus === 1) {
@@ -73,9 +78,11 @@ const BottomTabsParent = ({ navigation }) => {
                             }
                         }
                     } else {
+                        console.log("Condition 1")
                         fetchLocation();
                     }
                 } else {
+                    console.log("Condition 2")
                     fetchLocation();
                 }
             } else if (Platform.OS === 'android') {
@@ -90,7 +97,10 @@ const BottomTabsParent = ({ navigation }) => {
                             {
                                 text: 'OK',
                                 onPress: () => openSettings()
-                            }
+                            },
+                            {
+                                text: 'Cancel',
+                            },
                         ]);
                         const authStatus = await messaging().requestPermission();
                         if (authStatus === 1) {

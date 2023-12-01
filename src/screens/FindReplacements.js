@@ -19,7 +19,6 @@ const FindReplacements = ({ navigation, route }) => {
         console.log('replace_booking ===>', result)
         if (result?.status == '200') {
             setReplacementData(result)
-            Alert.alert(result?.message)
         }
         else {
             Alert.alert(result?.message)
@@ -53,7 +52,7 @@ const FindReplacements = ({ navigation, route }) => {
             <FlatList
                 data={replacementData?.users}
                 renderItem={renderReplacementBookings}
-                keyExtractor={(item, index) => `${item?.id}`}
+                keyExtractor={(item, index) => `${index}`}
             />
         </View>
     )

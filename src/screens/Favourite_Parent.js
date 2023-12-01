@@ -34,6 +34,9 @@ const Favourite_Parent = ({ navigation }) => {
         } else if (result?.status == '201') {
             setBabySittersData(result)
         }
+        else {
+            setBabySittersData(null)
+        }
         setLoader(false)
     }
 
@@ -63,7 +66,7 @@ const Favourite_Parent = ({ navigation }) => {
             hourlyPrice={item?.hourlyPrice}
             isFavourite={"1"}
             onPressFavourite={() => handleFavourite(item?.Id)}
-            onPressItemSelected={() => handleNavigation(item?.Id)}
+            //onPressItemSelected={() => handleNavigation(item?.Id)}
         />
     );
 

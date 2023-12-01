@@ -73,8 +73,7 @@ const Router = () => {
 
     console.log("USERTYPE at Router(parent = 3; babysitter = 2 ) ========>", usertype)
     const returnStack = () => {
-        if(isAppUpdate)
-        {
+        if (isAppUpdate) {
             if (isLoggedIn) {
                 if (usertype == "3") {//Parent
                     console.log('------------Parent is Logged In--------------')
@@ -91,14 +90,14 @@ const Router = () => {
                             <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
                             <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerTitle: 'Transaction History' }} />
                             <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
-                            <Stack.Screen name="MyProfile_Parent" component={MyProfile_Parent} options={{}} />
+                            <Stack.Screen name="MyProfile_Parent" component={MyProfile_Parent} options={{ headerTitle: 'My Profile' }} />
                             <Stack.Screen name="SwitchServices" component={SwitchServices} options={{ headerTitle: 'Services' }} />
                             <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Role' }} />
                             <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
                             <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
                             <Stack.Screen name="BookingConfirmation_Parent" component={BookingConfirmation_Parent} options={{ headerShown: true, headerTitle: 'Confirm Booking' }} />
-                            <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{headerTitle:'PayPal'}} />
-                            <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{}} />
+                            <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{ headerTitle: 'PayPal' }} />
+                            <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{headerTitle: 'Creating Booking'}} />
                             <Stack.Screen name="FAQs_Parent" component={FAQs_Parent} options={{ headerTitle: 'FAQs' }} />
                             <Stack.Screen name="Help" component={Help} options={{ headerShown: true, headerTitle: 'Help and Support' }} />
                             <Stack.Screen name="ViewPicture" component={ViewPicture} options={{ headerShown: true, headerTitle: '' }} />
@@ -107,7 +106,7 @@ const Router = () => {
                             <Stack.Screen name="FindReplacements" component={FindReplacements} options={{ headerShown: true, headerTitle: 'Choose New Booking' }} />
                             <Stack.Screen name="CreateReplacementBooking_Parent" component={CreateReplacementBooking_Parent} options={{ headerShown: true, headerTitle: 'Create Replacement Booking' }} />
                             <Stack.Screen name="AutoCompleteScreen" component={AutoCompleteScreen} options={{ headerShown: true, headerTitle: 'AutoCompleteScreen' }} />
-    
+
                         </Stack.Navigator>
                     )
                 }
@@ -160,17 +159,17 @@ const Router = () => {
                 )
             }
         }
-        else{
-            return(
+        else {
+            return (
                 <Stack.Navigator screenOptions={{
                     headerBackTitleVisible: false,
                     headerShown: Platform.OS == "android" ? true : true
                 }}>
-                        <Stack.Screen name="AppUpdateMessageScreen" component={AppUpdateMessageScreen} options={{headerTitle:'App Update Reminder'}} />
-                </Stack.Navigator> 
+                    <Stack.Screen name="AppUpdateMessageScreen" component={AppUpdateMessageScreen} options={{ headerTitle: 'App Update Reminder' }} />
+                </Stack.Navigator>
             )
         }
-       
+
     }
 
     return (
