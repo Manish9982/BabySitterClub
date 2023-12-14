@@ -394,7 +394,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     greetings:
     {
-        padding: Spaces.sm
+        padding: Spaces.sm,
+        
     },
     segment:
     {

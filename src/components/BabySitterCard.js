@@ -8,7 +8,7 @@ import Fonts from '../helper/Fonts';
 import TagIcon from './TagIcon';
 
 const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavourite, onPressFavourite, onPressItemSelected, rating = 0, serviceIds }) => {
-    const services = serviceIds.split(",").map(Number)
+    const services = serviceIds?.split(",").map(Number)
     return (
         <TouchableOpacity
             onPress={onPressItemSelected}

@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Account from '../screens/Account';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons'
 import Dashboard_Sitter from '../screens/Dashboard_Sitter';
 import Bookings_Sitter from '../screens/Bookings_Sitter';
 import { LOCAL_STORE, handleGetRequest, handlePostRequest } from './Utils';
@@ -17,6 +18,8 @@ import AddAvailability_Sitter from '../screens/AddAvailability_Sitter';
 import AddAddress from '../screens/AddAddress';
 import Geolocation from '@react-native-community/geolocation';
 import messaging from '@react-native-firebase/messaging';
+import RapidSearch_Sitter from '../screens/RapidSearch_Sitter';
+
 
 const BottomTabsSitter = () => {
 
@@ -114,6 +117,9 @@ const BottomTabsSitter = () => {
             }} /> */}
                 <Tab.Screen name="Account" component={Account} options={{
                     tabBarIcon: ({ color, size }) => <AntDesign name="user" size={size} color={color} />
+                }} />
+                <Tab.Screen name="Rapid Search" component={RapidSearch_Sitter} options={{
+                    tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="fast-forward" size={size} color={color} />
                 }} />
             </Tab.Navigator>
             :

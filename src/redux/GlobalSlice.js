@@ -5,7 +5,9 @@ import { LOCAL_STORE } from '../helper/Utils'
 const initialState = {
   usertype: null,
   selectedService: null,
-  isProfileCompleted: true
+  isProfileCompleted: true,
+  defaultAdressModalVisible: false,
+  defaultAddress: null
 }
 
 const globalSlice = createSlice({
@@ -22,9 +24,15 @@ const globalSlice = createSlice({
     },
     setIsProfileCompleted: (state, action) => {
       state.isProfileCompleted = action.payload
+    },
+    setDefaultAdressModalVisible: (state, action) => {
+      state.defaultAdressModalVisible = action.payload
+    },
+    setDefaultAdress: (state, action) => {
+      state.defaultAddress = action.payload
     }
   }
 })
 
-export const { setUsertype, setSelectedServices, setIsProfileCompleted } = globalSlice.actions;
+export const { setUsertype, setSelectedServices, setIsProfileCompleted, setDefaultAdressModalVisible, setDefaultAdress } = globalSlice.actions;
 export default globalSlice.reducer;

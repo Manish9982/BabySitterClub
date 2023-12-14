@@ -20,6 +20,7 @@ import { useDispatch } from 'react-redux';
 import CustomDateTimePicker from '../components/CustomDateTimePicker';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { logout } from '../redux/AuthSlice';
+import Slider from '@react-native-community/slider';
 
 
 const MyProfile_Sitter = ({ navigation }) => {
@@ -42,6 +43,7 @@ const MyProfile_Sitter = ({ navigation }) => {
     const [slots, setSlots] = useState([])
     const [addressdata, setAddressdata] = useState('')
     const [filteredServices, setFilteredServices] = useState([])
+    const [distance, setDistance] = useState(0);
 
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
@@ -69,6 +71,9 @@ const MyProfile_Sitter = ({ navigation }) => {
         }
     }
 
+    const onDistanceChange = (value) => {
+        setDistance(value);
+    };
 
     const getAddress = async () => {
         const result = await handleGetRequest('address_get')
@@ -406,6 +411,18 @@ const MyProfile_Sitter = ({ navigation }) => {
                 {/* <Text style={styles.guidingText}>
                     Ask for permission from your parents if you are under 18 years old. Babysitters must be 16 years or older.
                 </Text> */}
+                <Text style={styles.sectionHeader}>Select Range: {distance} mi</Text>
+                <Slider
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={100}
+                    minimumTrackTintColor={Colors.Secondary}
+                    maximumTrackTintColor={Colors.DEEP_GRAY}
+                    onValueChange={onDistanceChange}
+                    step={10}
+                    thumbTintColor={Colors.Secondary}
+                />
+                <Text style={styles.guidingText}>We will only display your profile to Care Providers located within this specified range from your address.</Text>
                 <View style={styles.horizontalContainer}>
                     <Text style={styles.sectionHeader}>Schedule</Text>
                     <TouchableOpacity

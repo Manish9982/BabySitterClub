@@ -46,6 +46,7 @@ import CreateReplacementBooking_Parent from '../screens/CreateReplacementBooking
 import { Constants, handlePostRequest } from './Utils';
 import AppUpdateMessageScreen from '../screens/AppUpdateMessageScreen';
 import AutoCompleteScreen from '../screens/AutoCompleteScreen';
+import Radar_Parent from '../screens/Radar_Parent';
 
 const Router = () => {
 
@@ -106,6 +107,7 @@ const Router = () => {
                             <Stack.Screen name="FindReplacements" component={FindReplacements} options={{ headerShown: true, headerTitle: 'Choose New Booking' }} />
                             <Stack.Screen name="CreateReplacementBooking_Parent" component={CreateReplacementBooking_Parent} options={{ headerShown: true, headerTitle: 'Create Replacement Booking' }} />
                             <Stack.Screen name="AutoCompleteScreen" component={AutoCompleteScreen} options={{ headerShown: true, headerTitle: 'AutoCompleteScreen' }} />
+                            <Stack.Screen name="Radar_Parent" component={Radar_Parent} options={{ headerShown: true, headerTitle: 'Searching..' }} />
 
                         </Stack.Navigator>
                     )
