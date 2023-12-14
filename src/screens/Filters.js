@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Text, Divider, Checkbox } from 'react-native-paper';
-import Slider from '@react-native-community/slider';
 import { View, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import Spaces from '../helper/Spaces';
 import Fonts from '../helper/Fonts';

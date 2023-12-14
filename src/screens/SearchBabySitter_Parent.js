@@ -12,6 +12,9 @@ import { useIsFocused } from '@react-navigation/native';
 import { DatePickerModal } from 'react-native-paper-dates';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import Ionicons from 'react-native-vector-icons/dist/Ionicons'
+import { useDispatch, useSelector } from 'react-redux';
+import { setDefaultAdress, setDefaultAdressModalVisible } from '../redux/GlobalSlice';
 
 const SearchBabySitter_Parent = ({ navigation }) => {
     const H = useWindowDimensions().height
@@ -36,6 +39,18 @@ const SearchBabySitter_Parent = ({ navigation }) => {
     const [searchFormVisible, setSearchFormVisible] = useState(true)
     const [services, setServices] = useState([])
     const [baseUrl, setBaseUrl] = useState('')
+    const [selectedAddress, setSelectedAddress] = useState('')
+    const [addresses, setAddresses] = useState([
+        {
+            "address": "4411 Frederick Street",
+            "title": "Home"
+        }
+    ])
+
+    const dispatch = useDispatch()
+
+    const defaultAdressModalVisible = useSelector((state) => state.global.defaultAdressModalVisible)
+    const defaultAddress = useSelector((state) => state.global.defaultAddress)
 
     const handleOptionSelect = (option) => {
         setSelectedOption(option);
@@ -49,23 +64,44 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         const result = await handleGetRequest('get_services')
         console.log('result', result)
         setServices(result?.services)
+        setSelectedOption(result?.services[0])
         setBaseUrl(result?.url)
         setLoader(false)
     }
+    const getAddress = async () => {
+        setLoader(true)
+        const result = await handleGetRequest('address_get')
+        console.log('result', result)
+        if (result?.status == '200') {
+            setAddresses(result?.data)
+            setSelectedAddress(result?.data[0])
+            dispatch(setDefaultAdress(result?.data[0]))
+            //dispatch(setDefaultAdress("hello"))
+            console.log("result?.data[0]", result?.data[0])
+        }
+        else {
+            Alert.alert(result?.message)
+        }
+        setLoader(false)
+    }
+
 
     const isFocused = useIsFocused()
-
-
 
     useEffect(() => {
         if (isFocused) {
             getServices()
+            getAddress()
         }
     }, [isFocused])
 
     const onDismiss = useCallback(() => {
         setOpen(false);
     }, [setOpen]);
+
+    const onClose = () => {
+        dispatch(setDefaultAdressModalVisible(false))
+    }
 
     const onConfirm = useCallback((params) => {
         console.log("Params", params)
@@ -152,13 +188,24 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         }
     }
 
-    const onPressChip = (name) => {
-        if (filterdata?.includes(name)) {
-            setFilterdata(prev => prev?.filter(item => item !== name))
+    const updateAddress = async (ID) => {
+        setLoader(true)
+        var formdata = new FormData()
+        formdata.append('address_id', ID)
+        const result = await handlePostRequest('make_address_default', formdata)
+        console.log("result", result)
+        if (result?.status == '200') {
+            getAddress()
         }
         else {
-            setFilterdata(prev => [...prev, name])
+            Alert.alert("Info", result?.message)
         }
+        setLoader(false)
+    }
+
+    const onPressAddressItem = (address) => {
+        dispatch(setDefaultAdressModalVisible(false))
+        updateAddress(address?.id)
     }
 
     function haveCommonElements(arr1, arr2) {
@@ -190,6 +237,29 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         }
     }
 
+    const renderAddressItem = ({ item }) => {
+        return (
+            <TouchableOpacity
+                onPress={() => onPressAddressItem(item)}
+                style={styles.addressItem}>
+                <View style={styles.addressDetails}>
+                    <Text>
+                        <Ionicons name="location-outline" size={Spaces.lar} color={Colors.Secondary} />
+                        <Text style={styles.title}> {item.title}</Text>
+                        {
+                            item?.default == 1
+                            &&
+                            <Text> (Primary)</Text>
+                        }
+
+                    </Text>
+                    <Text>{item.address}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+
     const returnTextForButton = () => {
         if (dates?.length == 1) {
             return `${formatDate_mmddyyyy(dates[0], true)}`
@@ -201,6 +271,8 @@ const SearchBabySitter_Parent = ({ navigation }) => {
             return "Pick Dates"
         }
     }
+
+    console.log("defaultAddress", defaultAddress)
 
     return (
         loader
@@ -334,7 +406,6 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                                                 onChange={(event, selectedTime) => handleEndTimeChange(selectedTime)}
                                             />
                                     }
-
                                 </View>
                             </View>
                             <Text style={[styles.services, Fonts.medMedium]}>Choose Service</Text>
@@ -382,6 +453,26 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                                 </View>
                             </TouchableOpacity>
 
+                        </Modal>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={defaultAdressModalVisible}
+                            onRequestClose={onClose}
+                        >
+                            <View style={styles.modal}>
+                                <View style={styles.modalContainer}>
+                                    <Text style={styles.modalHeading}>Choose Address</Text>
+                                    <FlatList
+                                        data={addresses}
+                                        renderItem={renderAddressItem}
+                                        keyExtractor={(item, index) => `${index}`}
+                                    />
+                                    {/* <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                                        <Text style={styles.closeText}>Close</Text>
+                                    </TouchableOpacity> */}
+                                </View>
+                            </View>
                         </Modal>
                     </View>
 
@@ -594,6 +685,46 @@ const makeStyles = (H, W) => StyleSheet.create({
     hyperlink:
     {
         color: Colors.Secondary,
+        textDecorationLine: 'underline'
+    },
+    modalContainer: {
+        backgroundColor: Colors.white,
+        width: W * 0.8,
+        borderRadius: 8,
+        padding: Spaces.med
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // padding: 20,
+    },
+    addressItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        paddingVertical: 10,
+    },
+
+    addressDetails: {
+
+    },
+    title: {
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    closeButton: {
+        marginTop: 20,
+        padding: 10,
+        backgroundColor: 'red',
+        borderRadius: 5,
+    },
+    closeText: {
+        color: 'white',
+        textAlign: 'center',
+    },
+    modalHeading:
+    {
+        ...Fonts.medBold,
+        textAlign: 'center',
         textDecorationLine: 'underline'
     }
 })
