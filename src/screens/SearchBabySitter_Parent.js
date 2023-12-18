@@ -15,6 +15,7 @@ import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import { useDispatch, useSelector } from 'react-redux';
 import { setDefaultAdress, setDefaultAdressModalVisible } from '../redux/GlobalSlice';
+import RenderOptions from '../components/RenderOptions';
 
 const SearchBabySitter_Parent = ({ navigation }) => {
     const H = useWindowDimensions().height
@@ -40,12 +41,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
     const [services, setServices] = useState([])
     const [baseUrl, setBaseUrl] = useState('')
     const [selectedAddress, setSelectedAddress] = useState('')
-    const [addresses, setAddresses] = useState([
-        {
-            "address": "4411 Frederick Street",
-            "title": "Home"
-        }
-    ])
+    const [addresses, setAddresses] = useState([])
 
     const dispatch = useDispatch()
 
@@ -249,7 +245,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                         {
                             item?.default == 1
                             &&
-                            <Text> (Primary)</Text>
+                            <Text> (Primary)  <AntDesign name='checkcircle' size={Spaces.xl} color={Colors.MUTED_GREEN} /></Text>
                         }
 
                     </Text>
@@ -454,7 +450,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                             </TouchableOpacity>
 
                         </Modal>
-                        <Modal
+                        {/* <Modal
                             animationType="slide"
                             transparent={true}
                             visible={defaultAdressModalVisible}
@@ -468,12 +464,17 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                                         renderItem={renderAddressItem}
                                         keyExtractor={(item, index) => `${index}`}
                                     />
-                                    {/* <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                                        <Text style={styles.closeText}>Close</Text>
-                                    </TouchableOpacity> */}
+                                    
                                 </View>
                             </View>
-                        </Modal>
+                        </Modal> */}
+                        <RenderOptions
+                        renderItem={renderAddressItem}
+                            data={addresses}
+                            visible={defaultAdressModalVisible}
+                            onClose={onClose}
+                            onValueChange={onPressAddressItem}
+                        />
                     </View>
 
                 </View>

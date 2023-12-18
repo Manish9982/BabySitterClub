@@ -36,6 +36,7 @@
 		79E3AE5D12FA4314B7480E26 /* Poppins-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DF6D2A528B5B4BF7A2AC8419 /* Poppins-ExtraLight.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		887A54E8ED97434D8ACC31AB /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F5D8990E297946C69C7CE830 /* Poppins-Italic.ttf */; };
+		891BF2992B2C4A380063C0B6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 891BF2982B2C4A370063C0B6 /* GoogleService-Info.plist */; };
 		89CA66C22AF11B2D00399413 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89CA66C12AF11B2D00399413 /* GoogleService-Info.plist */; };
 		8C3047F7D34E45A4938938FD /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 19594DEC840A41FBA123261F /* Fontisto.ttf */; };
 		9992369E74F1425B8F8A3FD3 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 045123F6D1724DDEBB09F387 /* Ionicons.ttf */; };
@@ -97,6 +98,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = BabySittersClub/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		853C8163FF6E4558884877DA /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBold.ttf"; path = "../src/assets/fonts/Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
 		870A6FEF24CE4BFF9265776B /* FontAwesome6_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome6_Regular.ttf; path = ../src/assets/fonts/FontAwesome6_Regular.ttf; sourceTree = "<group>"; };
+		891BF2982B2C4A370063C0B6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		89770DC02AF0C5870020AE3B /* BabySittersClub.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BabySittersClub.entitlements; path = BabySittersClub/BabySittersClub.entitlements; sourceTree = "<group>"; };
 		89CA66C12AF11B2D00399413 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8CCC1826B7FC4704ADC187D3 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = ../src/assets/fonts/Foundation.ttf; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				891BF2982B2C4A370063C0B6 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* BabySittersClub */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BabySittersClubTests */,
@@ -406,6 +409,7 @@
 				3C43B532B1DB43DFB57CC915 /* MaterialIcons.ttf in Resources */,
 				69C4B1AA73894A1C98152708 /* Octicons.ttf in Resources */,
 				B21B2CC97D1F43C6AEAE647F /* SimpleLineIcons.ttf in Resources */,
+				891BF2992B2C4A380063C0B6 /* GoogleService-Info.plist in Resources */,
 				64D8F4285650464AAB4C59CC /* Zocial.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
