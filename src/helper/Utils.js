@@ -19,7 +19,10 @@ export const Constants = {
     DALLAS_TEXAS_COORDS: '32.7767,-96.7970',
     ADDRESS_RADIUS: '50000',
     PLACE_DETAILS_URL: `https://maps.googleapis.com/maps/api/place/details/json?`
+}
 
+export const Regexes = {
+    PRICE_REGEX: /^\d{1,3}$/
 }
 
 export const handlePostRequest = async (name, formdata) => {

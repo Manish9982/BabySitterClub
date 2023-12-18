@@ -179,6 +179,7 @@ const MyProfile_Sitter = ({ navigation }) => {
         formdata.append('address', address);
         formdata.append('dob', "2000-01-10");
         formdata.append('description', about);
+        formdata.append('miles', distance);
         {
             image &&
                 formdata.append('picture', image);
@@ -201,6 +202,7 @@ const MyProfile_Sitter = ({ navigation }) => {
             setAbout(result?.userDetails?.description)
             setAddress(result?.userDetails?.address)
             setChildren(JSON.stringify(result?.userDetails?.no_of_children))
+            setDistance(result?.userDetails?.miles)
             //setPrice(JSON.stringify(result?.userDetails?.hour_price))
             //setImage({ uri: `${result?.url}${result?.userDetails?.picture}` })
             setUserdata(result)
@@ -413,6 +415,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                 </Text> */}
                 <Text style={styles.sectionHeader}>Select Range: {distance} mi</Text>
                 <Slider
+                    value={distance}
                     style={styles.slider}
                     minimumValue={0}
                     maximumValue={100}
@@ -422,7 +425,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                     step={10}
                     thumbTintColor={Colors.Secondary}
                 />
-                <Text style={styles.guidingText}>We will only display your profile to Care Providers located within this specified range from your address.</Text>
+                <Text style={styles.guidingText}>We will only display your profile to Care Seekers located within this specified range from your address.</Text>
                 <View style={styles.horizontalContainer}>
                     <Text style={styles.sectionHeader}>Schedule</Text>
                     <TouchableOpacity

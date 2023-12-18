@@ -12,21 +12,21 @@ const CustomButton = ({ onPressButton, title, style, btnColor = Colors.PRIMARY, 
     const styles = makeStyles(H, W)
     return (
         <TouchableOpacity
-            style={[styles.button, style, { backgroundColor: btnColor }]}
+            style={[styles.button, style]}
             disabled={disabled || loader}
             onPress={onPressButton}>
             <LinearGradient
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.linearGradientButton}
-                colors={btnColor == Colors.PRIMARY ? [Colors.PRIMARY, Colors.golden] : [btnColor, btnColor]}>
+                colors={(btnColor == Colors.PRIMARY) && (!disabled) ? [Colors.PRIMARY, Colors.golden] : [Colors.gray, Colors.gray]}>
                 {
                     loader ?
                         <ActivityIndicator size={"small"}
                             color={Colors.white}
                         />
                         :
-                        <Text style={[styles.text, { color: (btnColor == Colors.PRIMARY || btnColor == Colors.PRIMARY) ? Colors.black : Colors.white, }]}>{title}</Text>
+                        <Text style={[styles.text, { color: (btnColor == Colors.PRIMARY || btnColor == Colors.PRIMARY) && (!disabled) ? Colors.black : Colors.white, }]}>{title}</Text>
                 }
             </LinearGradient>
         </TouchableOpacity>
@@ -38,17 +38,16 @@ export default CustomButton
 const makeStyles = (H, W) => StyleSheet.create({
     button:
     {
-        height: 50,
-        width: "100%",
-        justifyContent: 'center',
-        borderRadius: 10,
-        alignSelf: 'center',
-        alignItems: 'center',
-        width: W * 0.85,
-        alignItems: 'center',
+
+        //justifyContent: 'center',
+        //borderRadius: 10,
+        //alignSelf: 'center',
+        //alignItems: 'center',
+        //width: W * 0.85,
+        //alignItems: 'center',
         alignSelf: 'center',
         marginVertical: Spaces.sm,
-        borderWidth: 0.6,
+        //borderWidth: 0.6,
     },
     text:
     {
@@ -57,8 +56,9 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     linearGradientButton:
     {
-        height: "95%",
-        width: "100%",
+        borderWidth: 0.6,
+        height: 50,
+        width: W * 0.85,
         borderRadius: 10,
         justifyContent: 'center',
     }
