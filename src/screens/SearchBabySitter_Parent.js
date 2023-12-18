@@ -469,7 +469,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                             </View>
                         </Modal> */}
                         <RenderOptions
-                        renderItem={renderAddressItem}
+                            renderItem={renderAddressItem}
                             data={addresses}
                             visible={defaultAdressModalVisible}
                             onClose={onClose}

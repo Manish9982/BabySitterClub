@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, FlatList, Image, StyleSheet, ImageBackground } from 'react-native';
+import { View, TouchableOpacity, FlatList, Image, StyleSheet, ImageBackground, Platform } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import Fonts from '../helper/Fonts';
 import Spaces from '../helper/Spaces';
@@ -18,7 +18,8 @@ const BlitzCareListingSuccess_Sitter = ({ navigation }) => {
             <Image
                 style={styles.checkImage}
                 source={require('../assets/images/checklist.png')} />
-            <Text style={styles.greeting1}>Congratulations! You're now visible to those looking for bookings today.{"\n"}We'll inform you once you're booked.{"\n\n"}Just a reminder, if you receive a booking, it's crucial to complete it to maintain your rating.</Text>
+            <Text style={styles.greeting1}>Congratulations! You're now visible to those looking for bookings today.{"\n"}We'll inform you once you're booked.</Text>
+            <Text style={[styles.greeting1, { color: 'red' }]}>{`\n`}Note: If you receive a booking, it's crucial to complete it to maintain your rating.</Text>
             <CustomButton title={"Return to Dashboard"}
                 style={styles.button}
                 onPressButton={onPressReturn}
@@ -43,8 +44,8 @@ const styles = StyleSheet.create({
     {
         alignSelf: 'center',
         height: '40%',
-        width: '40%',
-        resizeMode: 'center'
+        aspectRatio: 1,
+        resizeMode: Platform.OS == "ios" ? "cover" : "contain",
     },
     button:
     {

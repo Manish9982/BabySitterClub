@@ -1,7 +1,7 @@
 import { FlatList, Image, ImageBackground, Modal, ScrollView, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Button, Checkbox, Text } from 'react-native-paper'
-import { handleGetRequest, handlePostRequest } from '../helper/Utils'
+import { Regexes, handleGetRequest, handlePostRequest } from '../helper/Utils'
 import Colors from '../helper/Colors'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import Fonts from '../helper/Fonts'
@@ -12,6 +12,7 @@ import CustomButton from '../components/Button'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useDispatch, useSelector } from 'react-redux'
 import { setDefaultAdress, setDefaultAdressModalVisible } from '../redux/GlobalSlice'
+import RenderOptions from '../components/RenderOptions'
 
 const RapidSearch_Parent = ({ navigation }) => {
 
@@ -56,11 +57,12 @@ const RapidSearch_Parent = ({ navigation }) => {
     const [services, setServices] = useState(null)
     const [baseUrl, setBaseUrl] = useState('')
     const [selectedService, setSelectedService] = useState(null)
-    const [selectedDuration, setSelectedDuration] = useState(null)
+    const [selectedDuration, setSelectedDuration] = useState('4 Hrs')
     const [price, setPrice] = useState('')
     const [priceModalVisible, setPriceModalVisible] = useState(false)
     const [durationModalVisible, setDurationModalVisible] = useState(false)
     const [addresses, setAddresses] = useState([])
+    const [showWarning, setShowWarning] = useState(true)
 
     useEffect(() => {
         getAddress()
@@ -96,6 +98,10 @@ const RapidSearch_Parent = ({ navigation }) => {
         setSelectedDuration(duration?.hours);
         setDurationModalVisible(prev => !prev)
     };
+
+    const onCloseDurationModal = () => {
+        setDurationModalVisible(prev => !prev)
+    }
 
     const renderAddressItem = ({ item }) => {
         return (
@@ -134,11 +140,12 @@ const RapidSearch_Parent = ({ navigation }) => {
     //         </View>
     //     </TouchableOpacity>
     // );
-    const renderDurationItem = (item, index) => (
+    const renderDurationItem = ({ item, index }) => (
         <TouchableOpacity
             style={styles.durationItem}
             key={index}
-            onPress={() => handleDurationSelection(item)}>
+        //onPress={() => handleDurationSelection(item)}
+        >
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Checkbox.Android
                     theme={{ colors: { accent: Colors.Secondary } }}
@@ -215,6 +222,12 @@ const RapidSearch_Parent = ({ navigation }) => {
 
     const handlePriceChange = (t) => {
         setPrice(t)
+        if (Regexes.PRICE_REGEX.test(t)) {
+            setShowWarning(false)
+        }
+        else {
+            setShowWarning(true)
+        }
     }
 
     const handleSetPriceButton = () => {
@@ -235,7 +248,7 @@ const RapidSearch_Parent = ({ navigation }) => {
             <KeyboardAwareScrollView
                 contentContainerStyle={styles.container}
             >
-                <Modal
+                {/* <Modal
                     transparent={true}
                     visible={durationModalVisible}>
                     <View style={styles.durationListOverlay}>
@@ -245,7 +258,14 @@ const RapidSearch_Parent = ({ navigation }) => {
                             }
                         </View>
                     </View>
-                </Modal>
+                </Modal> */}
+                <RenderOptions
+                    renderItem={renderDurationItem}
+                    data={duration}
+                    visible={durationModalVisible}
+                    onClose={onCloseDurationModal}
+                    onValueChange={handleDurationSelection}
+                />
                 <Modal
                     transparent={true}
                     visible={priceModalVisible}>
@@ -255,8 +275,15 @@ const RapidSearch_Parent = ({ navigation }) => {
                                 value={price}
                                 onChangeText={handlePriceChange}
                                 placeholder={'Enter Your Price Here($)'} />
-                            <Text style={styles.warningText}>Price is not valid</Text>
+                            {
+                                showWarning
+                                &&
+                                <Text style={styles.warningText}>Price is not valid</Text>
+                            }
+
                             <CustomButton
+                                disabled={showWarning}
+                                //btnColor={showWarning ? 'gray' : null}
                                 onPressButton={handleSetPriceButton}
                                 title={'Set Price'} />
                         </View>
@@ -319,6 +346,7 @@ const RapidSearch_Parent = ({ navigation }) => {
                     <TextInputComponent
                         multiline={true}
                         numberOflines={3}
+                        maxlength={400}
                         style={styles.inputText} />
                 </View>
                 <TouchableOpacity
@@ -503,6 +531,6 @@ const makeStyles = (H, W) => StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: Spaces.med
-    }
+    },
 
 })

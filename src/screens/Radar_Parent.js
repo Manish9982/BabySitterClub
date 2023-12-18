@@ -1,12 +1,16 @@
-import { FlatList, ImageBackground, StyleSheet, View, useWindowDimensions } from 'react-native'
-import React from 'react'
+import { FlatList, ImageBackground, StyleSheet, View, useWindowDimensions, Modal } from 'react-native'
+import React, { useState } from 'react'
 import { ActivityIndicator, Text } from 'react-native-paper'
 import Colors from '../helper/Colors'
 import LottieView from 'lottie-react-native'
 import AcceptSitterCard from '../components/AcceptSitterCard'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import AcceptSitterCardDetailsOnly from '../components/AcceptSitterCardDetailsOnly'
 
 const Radar_Parent = () => {
+
+  const [selectedProfile, setSelectedProfile] = useState(null)
+  const [showSitterDetails, setShowSitterDetails] = useState(false)
 
   const H = useWindowDimensions().height
   const W = useWindowDimensions().width
@@ -19,6 +23,10 @@ const Radar_Parent = () => {
     },
   ]
 
+  const onCloseDetails = () => {
+    setShowSitterDetails(prev => !prev)
+  }
+
   const renderSittersAvailable = ({ item, index }) => {
     return (
       <AcceptSitterCard
@@ -29,7 +37,7 @@ const Radar_Parent = () => {
         priceOffered={"12"}
         //isFavourite={}
         //onPressFavourite={() => handleFavourite(item?.Id)}
-        //onPressItemSelected={() => handleNavigation(item?.Id)}
+        onPressItemSelected={() => handleSitterCardPress(item)}
         serviceIds={"1,2,3"}
         onAccept={() => console.log("Accept")}
         onReject={() => console.log("Reject")}
@@ -37,11 +45,39 @@ const Radar_Parent = () => {
     )
   }
 
+  const handleSitterCardPress = (item) => {
+    setSelectedProfile(item)
+    setShowSitterDetails(prev => !prev)
+  }
+
   return (
     <ImageBackground
       imageStyle={styles.imageStyle}
       source={require('../assets/images/background.png')}
       style={styles.container}>
+      <Modal
+        visible={showSitterDetails}
+        //visible={true}
+        transparent={true}
+      >
+        <View style={styles.overlay}>
+          <AcceptSitterCardDetailsOnly
+            onClose={onCloseDetails}
+            rating={"3.5"}
+            profilePicture={`https://thebabysitterclubs.com/babysitter/public/uploads/profile/1701254250.`}
+            name={selectedProfile?.name}
+            description={"As a professional babysitter, pet sitter, and home sitter, I'm dedicated to creating a safe and nurturing environment for your little ones, furry friends, and your cherished home. With years of experience in childcare, a passion for animals, and a keen eye for household management, I ensure peace of mind while you're away."}
+            priceOffered={"12"}
+            //isFavourite={}
+            //onPressFavourite={() => handleFavourite(item?.Id)}
+            // onPressItemSelected={() => handleSitterCardPress(item)}
+            serviceIds={"1,2,3"}
+            onAccept={() => console.log("Accept")}
+            onReject={() => console.log("Reject")}
+          />
+        </View>
+      </Modal>
+
       {/* <ActivityIndicator
                 color={Colors.Secondary}
                 size={"large"} /> */}
@@ -86,5 +122,12 @@ const styles = StyleSheet.create({
   horizontal:
   {
     flexDirection: 'row'
+  },
+  overlay:
+  {
+    backgroundColor: "rgba(0,0,0,0.4)",
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
