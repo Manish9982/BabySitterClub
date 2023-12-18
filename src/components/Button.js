@@ -12,12 +12,13 @@ const CustomButton = ({ onPressButton, title, style, btnColor = Colors.PRIMARY, 
     const styles = makeStyles(H, W)
     return (
         <TouchableOpacity
+            style={[styles.button, style, { backgroundColor: btnColor }]}
             disabled={disabled || loader}
             onPress={onPressButton}>
             <LinearGradient
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                style={[styles.button, style, { backgroundColor: btnColor }]}
+                style={styles.linearGradientButton}
                 colors={btnColor == Colors.PRIMARY ? [Colors.PRIMARY, Colors.golden] : [btnColor, btnColor]}>
                 {
                     loader ?
@@ -53,5 +54,12 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         textAlign: 'center',
         ...Fonts.medBold
+    },
+    linearGradientButton:
+    {
+        height: "95%",
+        width: "100%",
+        borderRadius: 10,
+        justifyContent: 'center',
     }
 })

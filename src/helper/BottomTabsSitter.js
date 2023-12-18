@@ -19,6 +19,7 @@ import AddAddress from '../screens/AddAddress';
 import Geolocation from '@react-native-community/geolocation';
 import messaging from '@react-native-firebase/messaging';
 import RapidSearch_Sitter from '../screens/RapidSearch_Sitter';
+import Colors from './Colors';
 
 
 const BottomTabsSitter = () => {
@@ -102,7 +103,11 @@ const BottomTabsSitter = () => {
     return (
         isProfileCompleted
             ?
-            <Tab.Navigator>
+            <Tab.Navigator screenOptions={{
+                headerStyle: {
+                    backgroundColor: Colors.PRIMARY
+                }
+            }}>
                 {/* <Tab.Screen name="Search" component={SearchBabySitter} options={{
                 tabBarIcon: ({ color, size }) => <AntDesign name="search1" size={size} color={color} />
             }} /> */}
@@ -118,7 +123,7 @@ const BottomTabsSitter = () => {
                 <Tab.Screen name="Account" component={Account} options={{
                     tabBarIcon: ({ color, size }) => <AntDesign name="user" size={size} color={color} />
                 }} />
-                <Tab.Screen name="Rapid Search" component={RapidSearch_Sitter} options={{
+                <Tab.Screen name="BlitzCare" component={RapidSearch_Sitter} options={{
                     tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="fast-forward" size={size} color={color} />
                 }} />
             </Tab.Navigator>

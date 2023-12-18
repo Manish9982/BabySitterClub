@@ -47,6 +47,7 @@ import { Constants, handlePostRequest } from './Utils';
 import AppUpdateMessageScreen from '../screens/AppUpdateMessageScreen';
 import AutoCompleteScreen from '../screens/AutoCompleteScreen';
 import Radar_Parent from '../screens/Radar_Parent';
+import BlitzCareListingSuccess_Sitter from '../screens/BlitzCareListingSuccess_Sitter';
 
 const Router = () => {
 
@@ -138,6 +139,7 @@ const Router = () => {
                             <Stack.Screen name="ViewPicture" component={ViewPicture} options={{ headerShown: true, headerTitle: '' }} />
                             <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
                             <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
+                            <Stack.Screen name="BlitzCareListingSuccess_Sitter" component={BlitzCareListingSuccess_Sitter} options={{ headerShown: true, headerTitle: 'Success' }} />
                         </Stack.Navigator>
                     )
                 }

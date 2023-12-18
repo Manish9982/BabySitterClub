@@ -28,6 +28,8 @@ const BottomTabsParent = ({ navigation }) => {
     const W = useWindowDimensions().width
     const H = useWindowDimensions().height
 
+    const styles = makeStyles(H, W)
+
     useEffect(() => {
         checkCancelledBookings()
         checkProfileStatus()
@@ -195,24 +197,25 @@ const BottomTabsParent = ({ navigation }) => {
 
             ?
 
-            <Tab.Navigator screenOptions={{}}>
+            <Tab.Navigator screenOptions={{
+                headerStyle: {
+                    backgroundColor: Colors.PRIMARY,
+                },
+                headerShadowVisible: true
+            }}>
                 <Tab.Screen name="Search" component={SearchBabySitter_Parent} options={{
                     headerStyle: {
-                        height: H * 0.12
+                        height: H * 0.14,
+                        backgroundColor: Colors.PRIMARY
                     },
                     headerLeft: ({ color, size }) => {
                         return (
                             <TouchableOpacity
                                 onPress={onPressLocation}
-                                style={{
-                                    justifyContent: 'center',
-                                    //alignItems:'center'
-                                }}>
+                                style={styles.locationBox}>
                                 <AntDesign name="enviromento" size={Spaces.xxxl} color={Colors.DEEP_GRAY} style={styles.search} />
                                 <Text
-                                    style={{
-                                        width: W * 0.35,
-                                    }}
+                                    style={styles.locationText}
                                     numberOfLines={1}>{defaultAddress?.city || "No address selected"}</Text>
                             </TouchableOpacity>
                         )
@@ -231,7 +234,23 @@ const BottomTabsParent = ({ navigation }) => {
                 <Tab.Screen name="Account" component={Account} options={{
                     tabBarIcon: ({ color, size }) => <AntDesign name="user" size={size} color={color} />
                 }} />
-                <Tab.Screen name="Rapid Search" component={RapidSearch_Parent} options={{
+                <Tab.Screen name="BlitzCare" component={RapidSearch_Parent} options={{
+                    headerStyle: {
+                        height: H * 0.14,
+                        backgroundColor: Colors.PRIMARY
+                    },
+                    headerLeft: ({ color, size }) => {
+                        return (
+                            <TouchableOpacity
+                                onPress={onPressLocation}
+                                style={styles.locationBox}>
+                                <AntDesign name="enviromento" size={Spaces.xxxl} color={Colors.DEEP_GRAY} style={styles.search} />
+                                <Text
+                                    style={styles.locationText}
+                                    numberOfLines={1}>{defaultAddress?.city || "No address selected"}</Text>
+                            </TouchableOpacity>
+                        )
+                    },
                     tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="fast-forward" size={size} color={color} />
                 }} />
             </Tab.Navigator>
@@ -248,9 +267,22 @@ const BottomTabsParent = ({ navigation }) => {
 }
 export default BottomTabsParent
 
-const styles = StyleSheet.create({
+const makeStyles = (H, W) => StyleSheet.create({
     search:
     {
-       
+
+    },
+    locationBox:
+    {
+        borderWidth: 1,
+        borderRadius: 8,
+        padding: Spaces.sm,
+        margin: Spaces.sm,
+        justifyContent: 'center',
+        //alignItems:'center'
+    },
+    locationText:
+    {
+        maxWidth: W * 0.35,
     }
 })

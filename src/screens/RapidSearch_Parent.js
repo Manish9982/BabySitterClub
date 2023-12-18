@@ -1,14 +1,17 @@
-import { FlatList, Image, Modal, ScrollView, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { FlatList, Image, ImageBackground, Modal, ScrollView, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { Button, RadioButton, Text } from 'react-native-paper'
-import { handleGetRequest } from '../helper/Utils'
+import { Button, Checkbox, Text } from 'react-native-paper'
+import { handleGetRequest, handlePostRequest } from '../helper/Utils'
 import Colors from '../helper/Colors'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import Fonts from '../helper/Fonts'
 import Spaces from '../helper/Spaces'
 import TextInputComponent from '../components/TextInputComponent'
+import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import CustomButton from '../components/Button'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { useDispatch, useSelector } from 'react-redux'
+import { setDefaultAdress, setDefaultAdressModalVisible } from '../redux/GlobalSlice'
 
 const RapidSearch_Parent = ({ navigation }) => {
 
@@ -57,25 +60,31 @@ const RapidSearch_Parent = ({ navigation }) => {
     const [price, setPrice] = useState('')
     const [priceModalVisible, setPriceModalVisible] = useState(false)
     const [durationModalVisible, setDurationModalVisible] = useState(false)
+    const [addresses, setAddresses] = useState([])
 
     useEffect(() => {
         getAddress()
         getServices()
     }, [])
 
+    const dispatch = useDispatch()
+    const defaultAdressModalVisible = useSelector((state) => state.global.defaultAdressModalVisible)
+
     const getServices = async () => {
         setLoader(true)
         const result = await handleGetRequest('get_services')
         console.log('result', result)
         setServices(result)
+        setSelectedService(result?.services[0])
         setBaseUrl(result?.url)
         setLoader(false)
     }
 
     const getAddress = async () => {
-        const result = await handleGetRequest('address_list')
-        setAddressdata(result)
-        console.log(result)
+        const result = await handleGetRequest('address_get')
+        setAddresses(result?.data)
+        setSelectedAddress(result?.data[0])
+        dispatch(setDefaultAdress(result?.data[0]))
         setLoader(false)
     }
 
@@ -88,28 +97,50 @@ const RapidSearch_Parent = ({ navigation }) => {
         setDurationModalVisible(prev => !prev)
     };
 
-    const renderAddressItem = (item, index) => (
-        <TouchableOpacity
-            key={index}
-            onPress={() => handleAddressSelection(item)}>
-            <View style={styles.addressItem}>
-                <RadioButton.Android
-                    theme={{ colors: { accent: Colors.Secondary } }}
-                    value={item}
-                    status={selectedAddress && selectedAddress === item?.address ? 'checked' : 'unchecked'}
-                    onPress={() => handleAddressSelection(item)}
-                />
-                <Text style={styles.addressText}>{item?.address}</Text>
-            </View>
-        </TouchableOpacity>
-    );
+    const renderAddressItem = ({ item }) => {
+        return (
+            <TouchableOpacity
+                onPress={() => onPressAddressItem(item)}
+                style={styles.addressItem}>
+                <View style={styles.addressDetails}>
+                    <Text>
+                        <Ionicons name="location-outline" size={Spaces.lar} color={Colors.Secondary} />
+                        <Text style={styles.title}> {item.title}</Text>
+                        {
+                            item?.default == 1
+                            &&
+                            <Text> (Primary)  <AntDesign name='checkcircle' size={Spaces.xl} color={Colors.MUTED_GREEN} /></Text>
+                        }
+
+                    </Text>
+                    <Text>{item.address}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    // const renderAddressItem = (item, index) => (
+    //     <TouchableOpacity
+    //         key={index}
+    //         onPress={() => handleAddressSelection(item)}>
+    //         <View style={styles.addressItem}>
+    //             <Checkbox.Android
+    //                 theme={{ colors: { accent: Colors.Secondary } }}
+    //                 value={item}
+    //                 status={selectedAddress && selectedAddress === item?.address ? 'checked' : 'unchecked'}
+    //                 onPress={() => handleAddressSelection(item)}
+    //             />
+    //             <Text style={styles.addressText}>{item?.address}</Text>
+    //         </View>
+    //     </TouchableOpacity>
+    // );
     const renderDurationItem = (item, index) => (
         <TouchableOpacity
             style={styles.durationItem}
             key={index}
             onPress={() => handleDurationSelection(item)}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <RadioButton.Android
+                <Checkbox.Android
                     theme={{ colors: { accent: Colors.Secondary } }}
                     value={item}
                     status={selectedDuration && selectedDuration === item?.hours ? 'checked' : 'unchecked'}
@@ -119,6 +150,25 @@ const RapidSearch_Parent = ({ navigation }) => {
             </View>
         </TouchableOpacity>
     );
+
+    const onClose = () => {
+        dispatch(setDefaultAdressModalVisible(false))
+    }
+
+    const updateAddress = async (ID) => {
+        setLoader(true)
+        var formdata = new FormData()
+        formdata.append('address_id', ID)
+        const result = await handlePostRequest('make_address_default', formdata)
+        console.log("result", result)
+        if (result?.status == '200') {
+            getAddress()
+        }
+        else {
+            Alert.alert("Info", result?.message)
+        }
+        setLoader(false)
+    }
 
     const handleServicePress = (service) => {
         console.log(service)
@@ -144,6 +194,13 @@ const RapidSearch_Parent = ({ navigation }) => {
                 <Text style={[styles.itemText, selectedService?.service_name == item?.service_name && styles.selectedItemText]}>
                     {item?.service_name}
                 </Text>
+                {
+                    selectedService?.service_name == item?.service_name
+                    &&
+                    <View style={styles.checkIconBox}>
+                        <AntDesign name='checkcircle' size={Spaces.xl} color={Colors.MUTED_GREEN} />
+                    </View>
+                }
             </TouchableOpacity>
         )
     }
@@ -164,79 +221,114 @@ const RapidSearch_Parent = ({ navigation }) => {
         setPriceModalVisible(prev => !prev)
     }
 
+    const onPressAddressItem = (address) => {
+        dispatch(setDefaultAdressModalVisible(false))
+        updateAddress(address?.id)
+    }
 
     return (
-        <KeyboardAwareScrollView
-            contentContainerStyle={styles.container}
-        >
-            <Modal
-                transparent={true}
-                visible={durationModalVisible}>
-                <View style={styles.durationListOverlay}>
-                    <View style={styles.durationList}>
-                        {
-                            duration?.map((item, index) => renderDurationItem(item, index))
-                        }
+        <ImageBackground
+            style={styles.primaryContainer}
+            source={require('../assets/images/background.png')}>
+
+
+            <KeyboardAwareScrollView
+                contentContainerStyle={styles.container}
+            >
+                <Modal
+                    transparent={true}
+                    visible={durationModalVisible}>
+                    <View style={styles.durationListOverlay}>
+                        <View style={styles.durationList}>
+                            {
+                                duration?.map((item, index) => renderDurationItem(item, index))
+                            }
+                        </View>
                     </View>
-                </View>
-            </Modal>
-            <Modal
-                transparent={true}
-                visible={priceModalVisible}>
-                <View style={styles.priceModal}>
-                    <View style={styles.popUp}>
-                        <TextInputComponent
-                            value={price}
-                            onChangeText={handlePriceChange}
-                            placeholder={'Enter Your Price Here($)'} />
-                        <Text style={styles.warningText}>Price is not valid</Text>
-                        <CustomButton
-                            onPressButton={handleSetPriceButton}
-                            title={'Set Price'} />
+                </Modal>
+                <Modal
+                    transparent={true}
+                    visible={priceModalVisible}>
+                    <View style={styles.priceModal}>
+                        <View style={styles.popUp}>
+                            <TextInputComponent
+                                value={price}
+                                onChangeText={handlePriceChange}
+                                placeholder={'Enter Your Price Here($)'} />
+                            <Text style={styles.warningText}>Price is not valid</Text>
+                            <CustomButton
+                                onPressButton={handleSetPriceButton}
+                                title={'Set Price'} />
+                        </View>
                     </View>
-                </View>
-            </Modal >
-            <Text style={styles.heading}>Choose Address :</Text>
+                </Modal >
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={defaultAdressModalVisible}
+                    onRequestClose={onClose}
+                >
+                    <View style={styles.modal}>
+                        <View style={styles.modalContainer}>
+                            <Text style={styles.modalHeading}>Choose Address</Text>
+                            <FlatList
+                                data={addresses}
+                                renderItem={renderAddressItem}
+                                keyExtractor={(item, index) => `${index}`}
+                            />
+                            {/* <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                                        <Text style={styles.closeText}>Close</Text>
+                                    </TouchableOpacity> */}
+                        </View>
+                    </View>
+                </Modal>
+                {/* <Text style={styles.heading}>Choose Address :</Text>
             {
                 addressdata?.data?.map((item, index) => renderAddressItem(item, index))
-            }
-            <Text style={styles.heading}>Choose Service :</Text>
-            <FlatList
-                //columnWrapperStyle={styles.columnWrapperStyle}
-                horizontal={true}
-                data={services?.services}
-                renderItem={renderServices}
-                keyExtractor={(item, index) => `${index}`}
-            />
-            <Text style={styles.warningText}>
-                Service Starts Immediately Within Next 1 Hr
-            </Text>
-            <View style={styles.horizontal}>
-                <Text style={styles.heading}>Duration : </Text>
-                <Button
-                    style={styles.button}
-                    onPress={handleDurationButtonPress}>{selectedDuration || 'Choose Duration'}</Button>
-            </View>
-            <View style={styles.horizontal}>
-                <Text style={styles.heading}>Price : </Text>
-                <Button
-                    style={styles.button}
-                    onPress={handlePriceButtonPress}>{price == '' ? 'Enter Price' : `$ ${price}`}</Button>
-            </View>
-            <View style={styles.horizontal}>
-                <Text style={styles.heading}>Comments : </Text>
-                <TextInputComponent
-                    multiline={true}
-                    numberOflines={3}
-                    style={styles.inputText} />
-            </View>
-            <TouchableOpacity
-                style={styles.goButtonStyle}
-                onPress={() => handleGoButton()}>
-                <AntDesign name={'arrowright'} size={15} color={Colors.Secondary} />
-            </TouchableOpacity>
-            <Text style={styles.goText}>Request Sitters Now</Text>
-        </KeyboardAwareScrollView  >
+            } */}
+                <Text style={styles.heading}>Choose Service :</Text>
+                <FlatList
+                    //columnWrapperStyle={styles.columnWrapperStyle}
+                    removeClippedSubviews={false}
+                    contentContainerStyle={styles.flatlist}
+                    showsHorizontalScrollIndicator={true}
+                    alwaysBounceHorizontal
+                    persistentScrollbar={true}
+                    horizontal={true}
+                    data={services?.services}
+                    renderItem={renderServices}
+                    keyExtractor={(item, index) => `${index}`}
+                />
+                <Text style={styles.warningText}>
+                    Service Starts Immediately Within Next 1 Hr
+                </Text>
+                <View style={styles.horizontal}>
+                    <Text style={styles.heading}>Duration : </Text>
+                    <Button
+                        style={styles.button}
+                        onPress={handleDurationButtonPress}>{selectedDuration || 'Choose Duration'}</Button>
+                </View>
+                <View style={styles.horizontal}>
+                    <Text style={styles.heading}>Price : </Text>
+                    <Button
+                        style={styles.button}
+                        onPress={handlePriceButtonPress}>{price == '' ? 'Enter Price' : `$ ${price}`}</Button>
+                </View>
+                <View style={styles.horizontal}>
+                    <Text style={styles.heading}>Comments : </Text>
+                    <TextInputComponent
+                        multiline={true}
+                        numberOflines={3}
+                        style={styles.inputText} />
+                </View>
+                <TouchableOpacity
+                    style={styles.goButtonStyle}
+                    onPress={() => handleGoButton()}>
+                    <AntDesign name={'arrowright'} size={15} color={Colors.Secondary} />
+                </TouchableOpacity>
+                <Text style={styles.goText}>Request Sitters Now</Text>
+            </KeyboardAwareScrollView  >
+        </ImageBackground>
     )
 }
 
@@ -256,11 +348,16 @@ const makeStyles = (H, W) => StyleSheet.create({
         borderWidth: 2,
         borderRadius: 8,
         //backgroundColor: Colors.DEEP_GRAY,
-        width: W * 0.3,
+        width: W * 0.28,
         justifyContent: 'center',
         alignItems: 'center',
         paddingVertical: H * 0.02,
-        margin: W * 0.01
+        margin: W * 0.01,
+        height: H * 0.1,
+    },
+    selectedServiceListItem: {
+        borderColor: Colors.DEEP_GRAY,
+        backgroundColor: Colors.PRIMARY,
     },
     itemText:
     {
@@ -355,6 +452,10 @@ const makeStyles = (H, W) => StyleSheet.create({
         paddingHorizontal: Spaces.med,
         paddingVertical: Spaces.lg,
     },
+    primaryContainer:
+    {
+        flex: 1
+    },
     // Add styles for clearer address items
     addressItem: {
         flexDirection: 'row',
@@ -367,11 +468,41 @@ const makeStyles = (H, W) => StyleSheet.create({
         color: Colors.black,
     },
     // Update service list item styles for better selection indication
-    selectedServiceListItem: {
-        borderColor: Colors.DEEP_GRAY,
-        backgroundColor: Colors.PRIMARY,
-    },
     selectedItemText: {
         color: Colors.DEEP_GRAY,
     },
+    modal: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.4)'
+    },
+    modalContainer: {
+        backgroundColor: Colors.white,
+        width: W * 0.8,
+        borderRadius: 8,
+        padding: Spaces.med
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // padding: 20,
+    },
+    modalHeading:
+    {
+        ...Fonts.medBold,
+        textAlign: 'center',
+        textDecorationLine: 'underline'
+    },
+    checkIconBox:
+    {
+        position: 'absolute',
+        right: 1,
+        top: 1,
+    },
+    flatlist:
+    {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: Spaces.med
+    }
+
 })

@@ -22,6 +22,9 @@ const AddAddress = ({ navigation }) => {
   const [predictions, setPredictions] = useState([]);
   const [showPredictions, setShowPredictions] = useState(false)
   const [activeButton, setActiveButton] = useState(false)
+  const [lat, setLat] = useState('')
+  const [long, setLong] = useState('')
+  const [city, setCity] = useState('')
 
 
   const addAddress = async () => {
@@ -35,6 +38,9 @@ const AddAddress = ({ navigation }) => {
       var formdata = new FormData()
       formdata.append("title", addressType);
       formdata.append("address", `${streetNo}, ${completeAddress}`);
+      formdata.append("latitude", `${lat}`);
+      formdata.append("longitude", `${long}`);
+      formdata.append("city", city);
 
       const result = await handlePostRequest('address_add', formdata)
 
@@ -58,7 +64,7 @@ const AddAddress = ({ navigation }) => {
       try {
         const response = await fetch(url);
         const result = await response.json();
-        console.log("predictions ==>", result)
+        console.log("predictions ==>", result?.predictions)
         if (result.status === 'OK') {
           setPredictions(result?.predictions);
         } else {
@@ -72,7 +78,33 @@ const AddAddress = ({ navigation }) => {
     }
   };
 
+  const handlePlaceSelection = async (placeId) => {
+    const placeDetailsUrl = `${Constants.PLACE_DETAILS_URL}place_id=${placeId}&key=${Constants.GOOGLE_API_KEY}`;
+
+    try {
+      const response = await fetch(placeDetailsUrl);
+      const result = await response.json();
+
+      if (result.status === 'OK') {
+        const { lat, lng } = result.result.geometry.location;
+        console.log("result.result", result.result.address_components[1].long_name)
+        console.log('Selected place - Latitude:', lat, 'Longitude:', lng);
+        setCity(result?.result?.address_components[1]?.long_name)
+        setLat(lat)
+        setLong(lng)
+        // Do something with the latitude and longitude (e.g., store in state)
+      } else {
+        Alert.alert('Error fetching place details');
+      }
+    } catch (error) {
+      Alert.alert('Error fetching place details: ', error);
+    }
+  };
+
   const onPressSuggestion = (t) => {
+    console.log("t?.description", t?.description)
+    console.log("t", t)
+    handlePlaceSelection(t?.place_id)
     setPredictions([])
     setActiveButton(true)
     setCompleteAddress(t?.description)
@@ -165,7 +197,7 @@ const AddAddress = ({ navigation }) => {
 
         <CustomButton
           disabled={!activeButton}
-          btnColor={!activeButton ? Colors.gray : Colors.PRIMARY }
+          btnColor={!activeButton ? Colors.gray : Colors.PRIMARY}
           loader={loader}
           onPressButton={addAddress}
           title={'Save address'}
