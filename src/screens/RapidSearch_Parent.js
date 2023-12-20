@@ -1,4 +1,4 @@
-import { FlatList, Image, ImageBackground, Modal, ScrollView, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Alert, FlatList, Image, ImageBackground, Modal, ScrollView, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Button, Checkbox, Text } from 'react-native-paper'
 import { Regexes, handleGetRequest, handlePostRequest } from '../helper/Utils'
@@ -13,43 +13,40 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useDispatch, useSelector } from 'react-redux'
 import { setDefaultAdress, setDefaultAdressModalVisible } from '../redux/GlobalSlice'
 import RenderOptions from '../components/RenderOptions'
+import Loader from '../components/Loader'
+import { useIsFocused } from '@react-navigation/native'
+
+const duration = [
+    // {
+    //     hours: '1 Hr',
+    // },
+    // {
+    //     hours: '2 Hrs',
+    // },
+    // {
+    //     hours: '3 Hrs',
+    // },
+    {
+        hours: '4 Hrs',
+    },
+    {
+        hours: '5 Hrs',
+    },
+    {
+        hours: '6 Hrs',
+    },
+    {
+        hours: '7 Hrs',
+    },
+    {
+        hours: '8 Hrs',
+    },
+    {
+        hours: '9 Hrs',
+    },
+]
 
 const RapidSearch_Parent = ({ navigation }) => {
-
-    const H = useWindowDimensions().height
-    const W = useWindowDimensions().width
-    const styles = makeStyles(H, W)
-
-    const duration = [
-        // {
-        //     hours: '1 Hr',
-        // },
-        // {
-        //     hours: '2 Hrs',
-        // },
-        // {
-        //     hours: '3 Hrs',
-        // },
-        {
-            hours: '4 Hrs',
-        },
-        {
-            hours: '5 Hrs',
-        },
-        {
-            hours: '6 Hrs',
-        },
-        {
-            hours: '7 Hrs',
-        },
-        {
-            hours: '8 Hrs',
-        },
-        {
-            hours: '9 Hrs',
-        },
-    ]
-
     const [addressdata, setAddressdata] = useState(null)
     const [loader, setLoader] = useState(true)
     const [selectedAddress, setSelectedAddress] = useState(null);
@@ -63,14 +60,25 @@ const RapidSearch_Parent = ({ navigation }) => {
     const [durationModalVisible, setDurationModalVisible] = useState(false)
     const [addresses, setAddresses] = useState([])
     const [showWarning, setShowWarning] = useState(true)
+    const [comments, setComments] = useState('')
+    const isFocused = useIsFocused()
+    const H = useWindowDimensions().height
+    const W = useWindowDimensions().width
+    const dispatch = useDispatch()
+    const defaultAdressModalVisible = useSelector((state) => state.global.defaultAdressModalVisible)
 
     useEffect(() => {
         getAddress()
         getServices()
+        // get status of active requests
     }, [])
+    useEffect(() => {
+        if (isFocused) {
+            getStatusForActiveRequest()
+        }
+    }, [isFocused])
 
-    const dispatch = useDispatch()
-    const defaultAdressModalVisible = useSelector((state) => state.global.defaultAdressModalVisible)
+    const styles = makeStyles(H, W)
 
     const getServices = async () => {
         setLoader(true)
@@ -88,6 +96,26 @@ const RapidSearch_Parent = ({ navigation }) => {
         setSelectedAddress(result?.data[0])
         dispatch(setDefaultAdress(result?.data[0]))
         setLoader(false)
+    }
+
+    const getStatusForActiveRequest = async () => {
+        // *** if there is an active request navigation.navigate('Radar_Parent') else do nothing
+        // setLoader(true)
+        // var formdata = new FormData()
+        // formdata.append('service', selectedService?.id)
+        // formdata.append('price', price)
+        // formdata.append('duration', Number.parseInt(selectedDuration, 10))
+        // formdata.append('comment', comments)
+        // const result = await handlePostRequest('rapid_request', formdata)
+        // if (result?.status == '200') {
+        //     navigation.navigate('Radar_Parent')
+        // }
+        // else {
+        //     Alert.alert('Info', result?.message)
+        // }
+        // setLoader(false)
+        Alert.alert("Check whether there is an active request that already exists")
+
     }
 
     const handleAddressSelection = (address) => {
@@ -182,8 +210,22 @@ const RapidSearch_Parent = ({ navigation }) => {
         setSelectedService(service)
     }
 
-    const handleGoButton = () => {
-        navigation.navigate('Radar_Parent')
+    const handleGoButton = async () => {
+        //Hit API for generating Request and after 200 response navigate
+        setLoader(true)
+        var formdata = new FormData()
+        formdata.append('service', selectedService?.id)
+        formdata.append('price', price)
+        formdata.append('duration', Number.parseInt(selectedDuration, 10))
+        formdata.append('comment', comments)
+        const result = await handlePostRequest('rapid_request', formdata)
+        if (result?.status == '200') {
+            navigation.navigate('Radar_Parent')
+        }
+        else {
+            Alert.alert('Info', result?.message)
+        }
+        setLoader(false)
     }
 
     const renderServices = ({ item, index }) => {
@@ -240,15 +282,19 @@ const RapidSearch_Parent = ({ navigation }) => {
     }
 
     return (
-        <ImageBackground
-            style={styles.primaryContainer}
-            source={require('../assets/images/background.png')}>
+        loader
+            ?
+            <Loader />
+            :
+            <ImageBackground
+                style={styles.primaryContainer}
+                source={require('../assets/images/background.png')}>
 
 
-            <KeyboardAwareScrollView
-                contentContainerStyle={styles.container}
-            >
-                {/* <Modal
+                <KeyboardAwareScrollView
+                    contentContainerStyle={styles.container}
+                >
+                    {/* <Modal
                     transparent={true}
                     visible={durationModalVisible}>
                     <View style={styles.durationListOverlay}>
@@ -259,104 +305,107 @@ const RapidSearch_Parent = ({ navigation }) => {
                         </View>
                     </View>
                 </Modal> */}
-                <RenderOptions
-                    renderItem={renderDurationItem}
-                    data={duration}
-                    visible={durationModalVisible}
-                    onClose={onCloseDurationModal}
-                    onValueChange={handleDurationSelection}
-                />
-                <Modal
-                    transparent={true}
-                    visible={priceModalVisible}>
-                    <View style={styles.priceModal}>
-                        <View style={styles.popUp}>
-                            <TextInputComponent
-                                value={price}
-                                onChangeText={handlePriceChange}
-                                placeholder={'Enter Your Price Here($)'} />
-                            {
-                                showWarning
-                                &&
-                                <Text style={styles.warningText}>Price is not valid</Text>
-                            }
+                    <RenderOptions
+                        renderItem={renderDurationItem}
+                        data={duration}
+                        visible={durationModalVisible}
+                        onClose={onCloseDurationModal}
+                        onValueChange={handleDurationSelection}
+                    />
+                    <Modal
+                        transparent={true}
+                        visible={priceModalVisible}>
+                        <View style={styles.priceModal}>
+                            <View style={styles.popUp}>
+                                <TextInputComponent
+                                    value={price}
+                                    onChangeText={handlePriceChange}
+                                    placeholder={'Enter Your Price Here($)'} />
+                                {
+                                    showWarning
+                                    &&
+                                    <Text style={styles.warningText}>Price is not valid</Text>
+                                }
 
-                            <CustomButton
-                                disabled={showWarning}
-                                //btnColor={showWarning ? 'gray' : null}
-                                onPressButton={handleSetPriceButton}
-                                title={'Set Price'} />
+                                <CustomButton
+                                    disabled={showWarning}
+                                    //btnColor={showWarning ? 'gray' : null}
+                                    onPressButton={handleSetPriceButton}
+                                    title={'Set Price'} />
+                            </View>
                         </View>
-                    </View>
-                </Modal >
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={defaultAdressModalVisible}
-                    onRequestClose={onClose}
-                >
-                    <View style={styles.modal}>
-                        <View style={styles.modalContainer}>
-                            <Text style={styles.modalHeading}>Choose Address</Text>
-                            <FlatList
-                                data={addresses}
-                                renderItem={renderAddressItem}
-                                keyExtractor={(item, index) => `${index}`}
-                            />
-                            {/* <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                    </Modal >
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={defaultAdressModalVisible}
+                        onRequestClose={onClose}
+                    >
+                        <View style={styles.modal}>
+                            <View style={styles.modalContainer}>
+                                <Text style={styles.modalHeading}>Choose Address</Text>
+                                <FlatList
+                                    data={addresses}
+                                    renderItem={renderAddressItem}
+                                    keyExtractor={(item, index) => `${index}`}
+                                />
+                                {/* <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                                         <Text style={styles.closeText}>Close</Text>
                                     </TouchableOpacity> */}
+                            </View>
                         </View>
-                    </View>
-                </Modal>
-                {/* <Text style={styles.heading}>Choose Address :</Text>
+                    </Modal>
+                    {/* <Text style={styles.heading}>Choose Address :</Text>
             {
                 addressdata?.data?.map((item, index) => renderAddressItem(item, index))
             } */}
-                <Text style={styles.heading}>Choose Service :</Text>
-                <FlatList
-                    //columnWrapperStyle={styles.columnWrapperStyle}
-                    removeClippedSubviews={false}
-                    contentContainerStyle={styles.flatlist}
-                    showsHorizontalScrollIndicator={true}
-                    alwaysBounceHorizontal
-                    persistentScrollbar={true}
-                    horizontal={true}
-                    data={services?.services}
-                    renderItem={renderServices}
-                    keyExtractor={(item, index) => `${index}`}
-                />
-                <Text style={styles.warningText}>
-                    Service Starts Immediately Within Next 1 Hr
-                </Text>
-                <View style={styles.horizontal}>
-                    <Text style={styles.heading}>Duration : </Text>
-                    <Button
-                        style={styles.button}
-                        onPress={handleDurationButtonPress}>{selectedDuration || 'Choose Duration'}</Button>
-                </View>
-                <View style={styles.horizontal}>
-                    <Text style={styles.heading}>Price : </Text>
-                    <Button
-                        style={styles.button}
-                        onPress={handlePriceButtonPress}>{price == '' ? 'Enter Price' : `$ ${price}`}</Button>
-                </View>
-                <View style={styles.horizontal}>
-                    <Text style={styles.heading}>Comments : </Text>
-                    <TextInputComponent
-                        multiline={true}
-                        numberOflines={3}
-                        maxlength={400}
-                        style={styles.inputText} />
-                </View>
-                <TouchableOpacity
-                    style={styles.goButtonStyle}
-                    onPress={() => handleGoButton()}>
-                    <AntDesign name={'arrowright'} size={15} color={Colors.Secondary} />
-                </TouchableOpacity>
-                <Text style={styles.goText}>Request Sitters Now</Text>
-            </KeyboardAwareScrollView  >
-        </ImageBackground>
+                    <Text style={styles.heading}>Choose Service :</Text>
+                    <FlatList
+                        //columnWrapperStyle={styles.columnWrapperStyle}
+                        removeClippedSubviews={false}
+                        contentContainerStyle={styles.flatlist}
+                        showsHorizontalScrollIndicator={true}
+                        alwaysBounceHorizontal
+                        persistentScrollbar={true}
+                        horizontal={true}
+                        data={services?.services}
+                        renderItem={renderServices}
+                        keyExtractor={(item, index) => `${index}`}
+                    />
+                    <Text style={styles.warningText}>
+                        Service Starts Immediately Within Next 1 Hr
+                    </Text>
+                    <View style={styles.horizontal}>
+                        <Text style={styles.heading}>Duration : </Text>
+                        <Button
+                            style={styles.button}
+                            onPress={handleDurationButtonPress}>{selectedDuration || 'Choose Duration'}</Button>
+                    </View>
+                    <View style={styles.horizontal}>
+                        <Text style={styles.heading}>Price : </Text>
+                        <Button
+                            style={styles.button}
+                            onPress={handlePriceButtonPress}>{price == '' ? 'Enter Price' : `$ ${price}`}</Button>
+                    </View>
+                    <View style={styles.horizontal}>
+                        <Text style={styles.heading}>Comments : </Text>
+                        <TextInputComponent
+                            value={comments}
+                            onChangeText={setComments}
+                            multiline={true}
+                            numberOflines={3}
+                            maxlength={400}
+                            style={styles.inputText} />
+                            <Text style={styles.guidingText}>Feel free to include specific requests for sitters in the comments. You can mention the number of children, your pet's breed, or provide directions to your location if needed.</Text>
+                    </View>
+                    <TouchableOpacity
+                        style={styles.goButtonStyle}
+                        onPress={() => handleGoButton()}>
+                        <AntDesign name={'arrowright'} size={15} color={Colors.Secondary} />
+                    </TouchableOpacity>
+                    <Text style={styles.goText}>Request Sitters Now</Text>
+                </KeyboardAwareScrollView  >
+            </ImageBackground>
     )
 }
 
@@ -531,6 +580,12 @@ const makeStyles = (H, W) => StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: Spaces.med
+    },
+    guidingText: {
+        ...Fonts.sm,
+        color: Colors.gray,
+        margin: Spaces.sm,
+        marginTop: 0,
     },
 
 })
