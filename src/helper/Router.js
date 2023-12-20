@@ -1,4 +1,4 @@
-import { Platform } from 'react-native'
+import { Alert, Modal, Platform, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -43,23 +43,57 @@ import NotificationCenter_Parent from '../screens/NotificationCenter_Parent';
 import CancelledBookings_Parent from '../screens/CancelledBookings_Parent';
 import FindReplacements from '../screens/FindReplacements';
 import CreateReplacementBooking_Parent from '../screens/CreateReplacementBooking_Parent';
-import { Constants, handlePostRequest } from './Utils';
+import { Constants, handleGetRequest, handlePostRequest } from './Utils';
 import AppUpdateMessageScreen from '../screens/AppUpdateMessageScreen';
 import AutoCompleteScreen from '../screens/AutoCompleteScreen';
 import Radar_Parent from '../screens/Radar_Parent';
 import BlitzCareListingSuccess_Sitter from '../screens/BlitzCareListingSuccess_Sitter';
+import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import Spaces from './Spaces';
+import Colors from './Colors';
+import { ActivityIndicator, Text } from 'react-native-paper';
+import Fonts from './Fonts';
+
+const ACTIVE_REQUEST_DETAILS = {
+    request_details: {
+        time: "01:00 PM - 04:00 PM",
+        price: "$ 13",
+        service: "Baby Sitter",
+        address: "Dallas",
+        comments: "Hey this is a comment"
+    }
+}
 
 const Router = () => {
 
     const [isAppUpdate, setIsAppUpdate] = useState(true)
+    const [activeRequestDetails, setActiveRequestDetails] = useState(null)
+    const [showActiveRequestModal, setShowActiveRequestModal] = useState(false)
+    const [modalLoader, setModalLoader] = useState(true)
+
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
+    const usertype = useSelector(state => state.global.usertype)
+    const Stack = createNativeStackNavigator();
 
     useEffect(() => {
         checkVersion()
     }, [])
 
-    const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
-    const usertype = useSelector(state => state.global.usertype)
-    const Stack = createNativeStackNavigator();
+    const getActiveRequestDetails = async () => {
+        setShowActiveRequestModal(true)
+        //const result = await handleGetRequest('active_request_details')
+        //if(result?.status == '200')
+        // {
+        setActiveRequestDetails(ACTIVE_REQUEST_DETAILS)
+        setModalLoader(false)
+        // ** if result.status !== 200 ===> setShowActiveRequestModal(false)
+        // }
+
+    }
+
+    const onClose = () => {
+        setShowActiveRequestModal(false)
+    }
 
     const checkVersion = async () => {
         var formdata = new FormData()
@@ -80,37 +114,103 @@ const Router = () => {
                 if (usertype == "3") {//Parent
                     console.log('------------Parent is Logged In--------------')
                     return (
-                        <Stack.Navigator screenOptions={{
-                            headerBackTitleVisible: false,
-                            headerShown: Platform.OS == "android" ? true : true
-                        }}>
-                            <Stack.Screen name="BottomTabsParent" component={BottomTabsParent} options={{ headerShown: false }} />
-                            <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
-                            <Stack.Screen name="ProfileOfSitterDuringBooking_Parent" component={ProfileOfSitterDuringBooking_Parent} options={{ headerShown: true, headerTitle: 'Profile Details' }} />
-                            <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
-                            <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
-                            <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
-                            <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerTitle: 'Transaction History' }} />
-                            <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
-                            <Stack.Screen name="MyProfile_Parent" component={MyProfile_Parent} options={{ headerTitle: 'My Profile' }} />
-                            <Stack.Screen name="SwitchServices" component={SwitchServices} options={{ headerTitle: 'Services' }} />
-                            <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Role' }} />
-                            <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
-                            <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
-                            <Stack.Screen name="BookingConfirmation_Parent" component={BookingConfirmation_Parent} options={{ headerShown: true, headerTitle: 'Confirm Booking' }} />
-                            <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{ headerTitle: 'PayPal' }} />
-                            <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{headerTitle: 'Creating Booking'}} />
-                            <Stack.Screen name="FAQs_Parent" component={FAQs_Parent} options={{ headerTitle: 'FAQs' }} />
-                            <Stack.Screen name="Help" component={Help} options={{ headerShown: true, headerTitle: 'Help and Support' }} />
-                            <Stack.Screen name="ViewPicture" component={ViewPicture} options={{ headerShown: true, headerTitle: '' }} />
-                            <Stack.Screen name="NotificationCenter_Parent" component={NotificationCenter_Parent} options={{ headerShown: true, headerTitle: 'Notification Center' }} />
-                            <Stack.Screen name="CancelledBookings_Parent" component={CancelledBookings_Parent} options={{ headerShown: true, headerTitle: 'Cancelled Bookings' }} />
-                            <Stack.Screen name="FindReplacements" component={FindReplacements} options={{ headerShown: true, headerTitle: 'Choose New Booking' }} />
-                            <Stack.Screen name="CreateReplacementBooking_Parent" component={CreateReplacementBooking_Parent} options={{ headerShown: true, headerTitle: 'Create Replacement Booking' }} />
-                            <Stack.Screen name="AutoCompleteScreen" component={AutoCompleteScreen} options={{ headerShown: true, headerTitle: 'AutoCompleteScreen' }} />
-                            <Stack.Screen name="Radar_Parent" component={Radar_Parent} options={{ headerShown: true, headerTitle: 'Searching..' }} />
+                        <>
+                            <Modal visible={showActiveRequestModal}
+                                transparent={true}
+                            >
+                                <TouchableWithoutFeedback onPress={onClose}>
+                                    <View style={styles.overlay}>
+                                        <TouchableWithoutFeedback>
+                                            <View style={styles.popUp}>
+                                                {
+                                                    modalLoader
+                                                        ?
+                                                        <ActivityIndicator size={'small'}
+                                                            color={Colors.Secondary}
+                                                        />
+                                                        :
+                                                        <>
+                                                            <TouchableOpacity
+                                                                style={styles.closeButton}
+                                                            >
+                                                                <AntDesign name="close" color={"red"} size={Spaces.xl} onPress={onClose} />
+                                                            </TouchableOpacity>
+                                                            <View>
+                                                                <Text>
+                                                                    <Text style={{
+                                                                        ...Fonts.medBold,
+                                                                        //textDecorationLine: 'underline'
+                                                                    }}>Time:</Text>
+                                                                    <Text > {activeRequestDetails?.request_details?.time}</Text>
+                                                                </Text>
+                                                                <Text>
+                                                                    <Text style={{
+                                                                        ...Fonts.medBold,
+                                                                        //textDecorationLine: 'underline'
+                                                                    }}>Service:</Text>
+                                                                    <Text> {activeRequestDetails?.request_details?.service}</Text>
+                                                                </Text>
+                                                                <Text>
+                                                                    <Text style={{
+                                                                        ...Fonts.medBold,
+                                                                        //textDecorationLine: 'underline'
+                                                                    }}>Address:</Text>
+                                                                    <Text> {activeRequestDetails?.request_details?.address}</Text>
+                                                                </Text>
+                                                                <Text>
+                                                                    <Text style={{
+                                                                        ...Fonts.medBold,
+                                                                        //textDecorationLine: 'underline'
+                                                                    }}>Price:</Text>
+                                                                    <Text> {activeRequestDetails?.request_details?.price}</Text>
+                                                                </Text>
+                                                                <Text>
+                                                                    <Text style={{
+                                                                        ...Fonts.medBold,
+                                                                        //textDecorationLine: 'underline'
+                                                                    }}>Comments:</Text>
+                                                                    <Text> {activeRequestDetails?.request_details?.comments}</Text>
+                                                                </Text>
+                                                            </View>
+                                                        </>
+                                                }
+                                            </View>
+                                        </TouchableWithoutFeedback>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </Modal>
+                            <Stack.Navigator screenOptions={{
+                                headerBackTitleVisible: false,
+                                headerShown: Platform.OS == "android" ? true : true
+                            }}>
+                                <Stack.Screen name="BottomTabsParent" component={BottomTabsParent} options={{ headerShown: false }} />
+                                <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
+                                <Stack.Screen name="ProfileOfSitterDuringBooking_Parent" component={ProfileOfSitterDuringBooking_Parent} options={{ headerShown: true, headerTitle: 'Profile Details' }} />
+                                <Stack.Screen name="BookingDetailsPage" component={BookingDetailsPage} options={{ headerTitle: 'Parent Profile' }} />
+                                <Stack.Screen name="ViewBookings" component={ViewBookings} options={{ headerTitle: 'Booking' }} />
+                                <Stack.Screen name="Filters" component={Filters} options={{ headerTitle: 'Filter' }} />
+                                <Stack.Screen name="TransactionHistory" component={TransactionHistory} options={{ headerTitle: 'Transaction History' }} />
+                                <Stack.Screen name="TimeSlotScreen" component={TimeSlotScreen} options={{ headerTitle: 'Book Slot' }} />
+                                <Stack.Screen name="MyProfile_Parent" component={MyProfile_Parent} options={{ headerTitle: 'My Profile' }} />
+                                <Stack.Screen name="SwitchServices" component={SwitchServices} options={{ headerTitle: 'Services' }} />
+                                <Stack.Screen name="SwitchUserType" component={SwitchUserType} options={{ headerTitle: 'Role' }} />
+                                <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
+                                <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
+                                <Stack.Screen name="BookingConfirmation_Parent" component={BookingConfirmation_Parent} options={{ headerShown: true, headerTitle: 'Confirm Booking' }} />
+                                <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{ headerTitle: 'PayPal' }} />
+                                <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{ headerTitle: 'Creating Booking' }} />
+                                <Stack.Screen name="FAQs_Parent" component={FAQs_Parent} options={{ headerTitle: 'FAQs' }} />
+                                <Stack.Screen name="Help" component={Help} options={{ headerShown: true, headerTitle: 'Help and Support' }} />
+                                <Stack.Screen name="ViewPicture" component={ViewPicture} options={{ headerShown: true, headerTitle: '' }} />
+                                <Stack.Screen name="NotificationCenter_Parent" component={NotificationCenter_Parent} options={{ headerShown: true, headerTitle: 'Notification Center' }} />
+                                <Stack.Screen name="CancelledBookings_Parent" component={CancelledBookings_Parent} options={{ headerShown: true, headerTitle: 'Cancelled Bookings' }} />
+                                <Stack.Screen name="FindReplacements" component={FindReplacements} options={{ headerShown: true, headerTitle: 'Choose New Booking' }} />
+                                <Stack.Screen name="CreateReplacementBooking_Parent" component={CreateReplacementBooking_Parent} options={{ headerShown: true, headerTitle: 'Create Replacement Booking' }} />
+                                <Stack.Screen name="AutoCompleteScreen" component={AutoCompleteScreen} options={{ headerShown: true, headerTitle: 'AutoCompleteScreen' }} />
+                                <Stack.Screen name="Radar_Parent" component={Radar_Parent} options={{ headerShown: true, headerTitle: 'Searching..', headerRight: () => <AntDesign name="infocirlce" size={Spaces.xxl} color={Colors.Secondary} onPress={getActiveRequestDetails} /> }} />
 
-                        </Stack.Navigator>
+                            </Stack.Navigator>
+                        </>
                     )
                 }
                 else if (usertype == "2") {//Sitter
@@ -182,5 +282,32 @@ const Router = () => {
         </NavigationContainer>
     )
 }
+
+const styles = StyleSheet.create({
+    overlay:
+    {
+        backgroundColor: 'rgba(0,0,0,0.4)',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    popUp:
+    {
+        padding: 10,
+        backgroundColor: Colors.white,
+        borderRadius: 8,
+        width: '80%',
+        justifyContent: 'center',
+        //alignItems: 'center'
+    },
+    closeButton:
+    {
+        // position: 'absolute',
+        // //backgroundColor: 'red',
+        alignSelf: 'flex-end',
+        // right: 4,
+        // top: 4
+    }
+})
 
 export default Router

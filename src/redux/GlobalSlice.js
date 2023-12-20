@@ -7,7 +7,7 @@ const initialState = {
   selectedService: null,
   isProfileCompleted: true,
   defaultAdressModalVisible: false,
-  defaultAddress: null
+  defaultAddress: null,
 }
 
 const globalSlice = createSlice({
