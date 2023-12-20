@@ -1,7 +1,7 @@
 import { Alert, Modal, Platform, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import Login from '../screens/Login';
 import SelectCountry from '../screens/SelectCountry';
 import Password from '../screens/Password';
@@ -53,6 +53,7 @@ import Spaces from './Spaces';
 import Colors from './Colors';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import Fonts from './Fonts';
+import JobPostings_Sitter from '../screens/JobPostings_Sitter';
 
 const ACTIVE_REQUEST_DETAILS = {
     request_details: {
@@ -239,7 +240,11 @@ const Router = () => {
                             <Stack.Screen name="ViewPicture" component={ViewPicture} options={{ headerShown: true, headerTitle: '' }} />
                             <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
                             <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
-                            <Stack.Screen name="BlitzCareListingSuccess_Sitter" component={BlitzCareListingSuccess_Sitter} options={{ headerShown: true, headerTitle: 'Success' }} />
+                            <Stack.Screen name="JobPostings_Sitter" component={JobPostings_Sitter} options={{ headerShown: true, headerTitle: 'New Jobs For You' }} />
+                            <Stack.Screen name="BlitzCareListingSuccess_Sitter" component={BlitzCareListingSuccess_Sitter} options={{
+                                headerShown: false,
+                                headerTitle: 'BlitzCare',
+                            }} />
                         </Stack.Navigator>
                     )
                 }
