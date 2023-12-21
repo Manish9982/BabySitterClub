@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Image, TouchableOpacity, StyleSheet, Linking, Alert } from 'react-native';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import Spaces from '../helper/Spaces';

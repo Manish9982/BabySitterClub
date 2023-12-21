@@ -1,5 +1,5 @@
 import { FlatList, ImageBackground, StyleSheet, View, useWindowDimensions, Modal, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, Text } from 'react-native-paper'
 import Colors from '../helper/Colors'
 import LottieView from 'lottie-react-native'
@@ -7,69 +7,73 @@ import AcceptSitterCard from '../components/AcceptSitterCard'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import AcceptSitterCardDetailsOnly from '../components/AcceptSitterCardDetailsOnly'
 import CustomButton from '../components/Button'
-import { handlePostRequest } from '../helper/Utils'
+import { handleGetRequest, handlePostRequest } from '../helper/Utils'
 import Loader from '../components/Loader'
+import { useIsFocused, useFocusEffect } from '@react-navigation/native'
+import { setIsRequestActive } from '../redux/GlobalSlice'
+import { useDispatch } from 'react-redux'
 
-const OFFER_API_RESPONSE = {
-  available_sitters: [
-    {
-      id: '1',
-      name: 'Cassandra Morgan',
-      price_offered: '23',
-      rating: '3.5',
-      profile_picture: `https://thebabysitterclubs.com/babysitter/public/uploads/profile/1701254250.`,
-      service_ids: "1,2,3",
-      description: "As a professional babysitter, pet sitter, and home sitter, I'm dedicated to creating a safe and nurturing environment for your little ones, furry friends, and your cherished home. With years of experience in childcare, a passion for animals, and a keen eye for household management, I ensure peace of mind while you're away."
-    },
-  ],
-  request_details: {
-    time: "01:00 PM - 04:00 PM",
-    price: "$ 13",
-    services: "Baby Sitter"
-  }
-}
-
-const Radar_Parent = () => {
+const Radar_Parent = ({ navigation }) => {
   const [loader, setLoader] = useState(true)
   const [selectedProfile, setSelectedProfile] = useState(null)
   const [showSitterDetails, setShowSitterDetails] = useState(false)
   const [offerApiResponse, setOfferApiResponse] = useState(null)
   const [baseUrl, setBaseUrl] = useState('')
 
+  const dispatch = useDispatch()
+
   const H = useWindowDimensions().height
   const W = useWindowDimensions().width
 
   useEffect(() => {
     getOffers()
+    getStatusForActiveRequest()
   }, [])
-  useEffect(() => {
-    const getOffersRepeatedly = setInterval(() => {
-      getOffers()
-    }, 10000);
 
-    return () => clearInterval(getOffersRepeatedly)
+  useFocusEffect(
+    useCallback(() => {
+      const getOffersRepeatedly = setInterval(() => {
+        getOffers();
+      }, 10000);
 
-  }, [])
+      return () => {
+        clearInterval(getOffersRepeatedly);
+      };
+    }, [])
+  );
 
 
   const styles = makeStyles(H, W)
 
-  const getOffers = () => {
+  const getOffers = async () => {
     // *** get offers from API after every 10 seconds
-    // var formdata = new FormData()
-    // formdata.append('service', selectedService?.id)
-    // formdata.append('price', price)
-    // formdata.append('duration', Number.parseInt(selectedDuration, 10))
-    // formdata.append('comment', comments)
-    // const result = await handlePostRequest('rapid_request', formdata)
-    // if (result?.status == '200') {
-    //     navigation.navigate('Radar_Parent')
-    // }
-    // else {
-    //     Alert.alert('Info', result?.message)
-    // }
-    setOfferApiResponse(OFFER_API_RESPONSE)
-    Alert.alert("We fetch results after every 10 seconds on this page")
+    const result = await handleGetRequest('get_parent_rapid_request')
+    if (result?.status == '200') {
+      setOfferApiResponse(result)
+    }
+    else {
+      Alert.alert('Info', result?.message)
+    }
+
+    setLoader(false)
+  }
+
+  const getStatusForActiveRequest = async () => {
+    // *** if there is an active request navigation.navigate('Radar_Parent') else do nothing
+    setLoader(true)
+    const result = await handleGetRequest('check_activity')
+    console.log("check_activity", result)
+    if (result?.status == '200') {
+      if (result?.activity == 1) {
+        dispatch(setIsRequestActive(true))
+      }
+      else {
+        dispatch(setIsRequestActive(false))
+      }
+    }
+    else {
+      Alert.alert('Info', result?.message)
+    }
     setLoader(false)
   }
 
@@ -77,38 +81,32 @@ const Radar_Parent = () => {
     setShowSitterDetails(prev => !prev)
   }
 
-  const handleAccept = () => {
+  const handleAccept = async (Id) => {
     // *** get offers from API after every 10 seconds
-    // var formdata = new FormData()
-    // formdata.append('service', selectedService?.id)
-    // formdata.append('price', price)
-    // formdata.append('duration', Number.parseInt(selectedDuration, 10))
-    // formdata.append('comment', comments)
-    // const result = await handlePostRequest('rapid_request', formdata)
-    // if (result?.status == '200') {
-    //     navigation.navigate('Radar_Parent')
-    // }
-    // else {
-    //     Alert.alert('Info', result?.message)
-    // }
-    Alert.alert("Create booking and navigate to payment gateway API")
+    var formdata = new FormData()
+    formdata.append('id', Id)
+
+    const result = await handlePostRequest('rapid_booking', formdata)
+    console.log('rapid_booking ============>', result)
+    if (result?.status == '200') {
+      navigation.navigate('PaymentWebview_Parent', { 'bookingId': `${result?.booking_id}` })
+    }
+    else {
+      Alert.alert("Error", result?.message)
+    }
   }
 
-  const handleReject = () => {
-    // *** get offers from API after every 10 seconds
-    // var formdata = new FormData()
-    // formdata.append('service', selectedService?.id)
-    // formdata.append('price', price)
-    // formdata.append('duration', Number.parseInt(selectedDuration, 10))
-    // formdata.append('comment', comments)
-    // const result = await handlePostRequest('rapid_request', formdata)
-    // if (result?.status == '200') {
-    //     navigation.navigate('Radar_Parent')
-    // }
-    // else {
-    //     Alert.alert('Info', result?.message)
-    // }
-    Alert.alert('Reject Offer API')
+  const handleReject = async (Id) => {
+    var formdata = new FormData()
+    formdata.append('id', Id)
+
+    const result = await handlePostRequest('reject_rapid_request', formdata)
+    if (result?.status == '200') {
+      Alert.alert("Success")
+    }
+    else {
+      Alert.alert("Error", result?.message)
+    }
   }
 
   const renderSittersAvailable = ({ item, index }) => {
@@ -118,32 +116,23 @@ const Radar_Parent = () => {
         profilePicture={item?.profile_picture}
         name={item?.name}
         description={item?.description}
-        priceOffered={item?.price_offered}
+        priceOffered={item?.hourlyPrice}
         //isFavourite={}
         //onPressFavourite={() => handleFavourite(item?.Id)}
         onPressItemSelected={() => handleSitterCardPress(item)}
-        serviceIds={item?.service_ids}
-        onAccept={handleAccept}
-        onReject={handleReject}
+        serviceIds={item?.service_id}
+        onAccept={() => handleAccept(item?.rapid_id)}
+        onReject={() => handleReject(item?.rapid_id)}
       />
     )
   }
 
   const onPressCancel = async () => {
     setLoader(true)
-    // var formdata = new FormData()
-    // formdata.append('service', selectedService?.id)
-    // formdata.append('price', price)
-    // formdata.append('duration', Number.parseInt(selectedDuration, 10))
-    // formdata.append('comment', comments)
-    // const result = await handlePostRequest('rapid_request', formdata)
-    // if (result?.status == '200') {
-    //     navigation.navigate('Radar_Parent')
-    // }
-    // else {
-    //     Alert.alert('Info', result?.message)
-    // }
-    Alert.alert('Cancellation API Pending')
+    const result = await handleGetRequest('cancel_rapid_request')
+    if (result?.status == '200') {
+      dispatch(setIsRequestActive(false))
+    }
     setLoader(false)
   }
 
@@ -173,8 +162,8 @@ const Radar_Parent = () => {
               profilePicture={selectedProfile?.profile_picture}
               name={selectedProfile?.name}
               description={selectedProfile?.description}
-              priceOffered={selectedProfile?.price_offered}
-              serviceIds={selectedProfile?.service_ids}
+              priceOffered={selectedProfile?.hourlyPrice}
+              serviceIds={selectedProfile?.service_id}
             />
           </View>
         </Modal>

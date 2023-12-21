@@ -55,22 +55,9 @@ import { ActivityIndicator, Text } from 'react-native-paper';
 import Fonts from './Fonts';
 import JobPostings_Sitter from '../screens/JobPostings_Sitter';
 
-const ACTIVE_REQUEST_DETAILS = {
-    request_details: {
-        time: "01:00 PM - 04:00 PM",
-        price: "$ 13",
-        service: "Baby Sitter",
-        address: "Dallas",
-        comments: "Hey this is a comment"
-    }
-}
-
 const Router = () => {
 
     const [isAppUpdate, setIsAppUpdate] = useState(true)
-    const [activeRequestDetails, setActiveRequestDetails] = useState(null)
-    const [showActiveRequestModal, setShowActiveRequestModal] = useState(false)
-    const [modalLoader, setModalLoader] = useState(true)
 
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
     const usertype = useSelector(state => state.global.usertype)
@@ -80,21 +67,7 @@ const Router = () => {
         checkVersion()
     }, [])
 
-    const getActiveRequestDetails = async () => {
-        setShowActiveRequestModal(true)
-        //const result = await handleGetRequest('active_request_details')
-        //if(result?.status == '200')
-        // {
-        setActiveRequestDetails(ACTIVE_REQUEST_DETAILS)
-        setModalLoader(false)
-        // ** if result.status !== 200 ===> setShowActiveRequestModal(false)
-        // }
-
-    }
-
-    const onClose = () => {
-        setShowActiveRequestModal(false)
-    }
+    
 
     const checkVersion = async () => {
         var formdata = new FormData()
@@ -115,71 +88,6 @@ const Router = () => {
                 if (usertype == "3") {//Parent
                     console.log('------------Parent is Logged In--------------')
                     return (
-                        <>
-                            <Modal visible={showActiveRequestModal}
-                                transparent={true}
-                            >
-                                <TouchableWithoutFeedback onPress={onClose}>
-                                    <View style={styles.overlay}>
-                                        <TouchableWithoutFeedback>
-                                            <View style={styles.popUp}>
-                                                {
-                                                    modalLoader
-                                                        ?
-                                                        <ActivityIndicator size={'small'}
-                                                            color={Colors.Secondary}
-                                                        />
-                                                        :
-                                                        <>
-                                                            <TouchableOpacity
-                                                                style={styles.closeButton}
-                                                            >
-                                                                <AntDesign name="close" color={"red"} size={Spaces.xl} onPress={onClose} />
-                                                            </TouchableOpacity>
-                                                            <View>
-                                                                <Text>
-                                                                    <Text style={{
-                                                                        ...Fonts.medBold,
-                                                                        //textDecorationLine: 'underline'
-                                                                    }}>Time:</Text>
-                                                                    <Text > {activeRequestDetails?.request_details?.time}</Text>
-                                                                </Text>
-                                                                <Text>
-                                                                    <Text style={{
-                                                                        ...Fonts.medBold,
-                                                                        //textDecorationLine: 'underline'
-                                                                    }}>Service:</Text>
-                                                                    <Text> {activeRequestDetails?.request_details?.service}</Text>
-                                                                </Text>
-                                                                <Text>
-                                                                    <Text style={{
-                                                                        ...Fonts.medBold,
-                                                                        //textDecorationLine: 'underline'
-                                                                    }}>Address:</Text>
-                                                                    <Text> {activeRequestDetails?.request_details?.address}</Text>
-                                                                </Text>
-                                                                <Text>
-                                                                    <Text style={{
-                                                                        ...Fonts.medBold,
-                                                                        //textDecorationLine: 'underline'
-                                                                    }}>Price:</Text>
-                                                                    <Text> {activeRequestDetails?.request_details?.price}</Text>
-                                                                </Text>
-                                                                <Text>
-                                                                    <Text style={{
-                                                                        ...Fonts.medBold,
-                                                                        //textDecorationLine: 'underline'
-                                                                    }}>Comments:</Text>
-                                                                    <Text> {activeRequestDetails?.request_details?.comments}</Text>
-                                                                </Text>
-                                                            </View>
-                                                        </>
-                                                }
-                                            </View>
-                                        </TouchableWithoutFeedback>
-                                    </View>
-                                </TouchableWithoutFeedback>
-                            </Modal>
                             <Stack.Navigator screenOptions={{
                                 headerBackTitleVisible: false,
                                 headerShown: Platform.OS == "android" ? true : true
@@ -208,10 +116,7 @@ const Router = () => {
                                 <Stack.Screen name="FindReplacements" component={FindReplacements} options={{ headerShown: true, headerTitle: 'Choose New Booking' }} />
                                 <Stack.Screen name="CreateReplacementBooking_Parent" component={CreateReplacementBooking_Parent} options={{ headerShown: true, headerTitle: 'Create Replacement Booking' }} />
                                 <Stack.Screen name="AutoCompleteScreen" component={AutoCompleteScreen} options={{ headerShown: true, headerTitle: 'AutoCompleteScreen' }} />
-                                <Stack.Screen name="Radar_Parent" component={Radar_Parent} options={{ headerShown: true, headerTitle: 'Searching..', headerRight: () => <AntDesign name="infocirlce" size={Spaces.xxl} color={Colors.Secondary} onPress={getActiveRequestDetails} /> }} />
-
                             </Stack.Navigator>
-                        </>
                     )
                 }
                 else if (usertype == "2") {//Sitter
