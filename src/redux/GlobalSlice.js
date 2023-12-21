@@ -8,6 +8,7 @@ const initialState = {
   isProfileCompleted: true,
   defaultAdressModalVisible: false,
   defaultAddress: null,
+  isRequestActive: false
 }
 
 const globalSlice = createSlice({
@@ -30,9 +31,12 @@ const globalSlice = createSlice({
     },
     setDefaultAdress: (state, action) => {
       state.defaultAddress = action.payload
+    },
+    setIsRequestActive: (state, action) => {
+      state.isRequestActive = action.payload
     }
   }
 })
 
-export const { setUsertype, setSelectedServices, setIsProfileCompleted, setDefaultAdressModalVisible, setDefaultAdress } = globalSlice.actions;
+export const { setUsertype, setSelectedServices, setIsProfileCompleted, setDefaultAdressModalVisible, setDefaultAdress, setIsRequestActive } = globalSlice.actions;
 export default globalSlice.reducer;

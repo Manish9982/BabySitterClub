@@ -11,7 +11,7 @@ import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import CustomButton from '../components/Button'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useDispatch, useSelector } from 'react-redux'
-import { setDefaultAdress, setDefaultAdressModalVisible } from '../redux/GlobalSlice'
+import { setDefaultAdress, setDefaultAdressModalVisible, setIsRequestActive } from '../redux/GlobalSlice'
 import RenderOptions from '../components/RenderOptions'
 import Loader from '../components/Loader'
 import { useIsFocused } from '@react-navigation/native'
@@ -70,7 +70,6 @@ const RapidSearch_Parent = ({ navigation }) => {
     useEffect(() => {
         getAddress()
         getServices()
-        // get status of active requests
     }, [])
     useEffect(() => {
         if (isFocused) {
@@ -100,22 +99,18 @@ const RapidSearch_Parent = ({ navigation }) => {
 
     const getStatusForActiveRequest = async () => {
         // *** if there is an active request navigation.navigate('Radar_Parent') else do nothing
-        // setLoader(true)
-        // var formdata = new FormData()
-        // formdata.append('service', selectedService?.id)
-        // formdata.append('price', price)
-        // formdata.append('duration', Number.parseInt(selectedDuration, 10))
-        // formdata.append('comment', comments)
-        // const result = await handlePostRequest('rapid_request', formdata)
-        // if (result?.status == '200') {
-        //     navigation.navigate('Radar_Parent')
-        // }
-        // else {
-        //     Alert.alert('Info', result?.message)
-        // }
-        // setLoader(false)
-        Alert.alert("Check whether there is an active request that already exists")
-
+        setLoader(true)
+        const result = await handleGetRequest('check_activity')
+        console.log("check_activity", result)
+        if (result?.status == '200') {
+            if (result?.activity == 1) {
+                dispatch(setIsRequestActive(true))
+            }
+        }
+        else {
+            Alert.alert('Info', result?.message)
+        }
+        setLoader(false)
     }
 
     const handleAddressSelection = (address) => {
@@ -220,7 +215,7 @@ const RapidSearch_Parent = ({ navigation }) => {
         formdata.append('comment', comments)
         const result = await handlePostRequest('rapid_request', formdata)
         if (result?.status == '200') {
-            navigation.navigate('Radar_Parent')
+            dispatch(setIsRequestActive(true))
         }
         else {
             Alert.alert('Info', result?.message)
@@ -396,7 +391,7 @@ const RapidSearch_Parent = ({ navigation }) => {
                             numberOflines={3}
                             maxlength={400}
                             style={styles.inputText} />
-                            <Text style={styles.guidingText}>Feel free to include specific requests for sitters in the comments. You can mention the number of children, your pet's breed, or provide directions to your location if needed.</Text>
+                        <Text style={styles.guidingText}>Feel free to include specific requests for sitters in the comments. You can mention the number of children, your pet's breed, or provide directions to your location if needed.</Text>
                     </View>
                     <TouchableOpacity
                         style={styles.goButtonStyle}
