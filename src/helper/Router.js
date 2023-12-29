@@ -54,6 +54,7 @@ import Colors from './Colors';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import Fonts from './Fonts';
 import JobPostings_Sitter from '../screens/JobPostings_Sitter';
+import Reviews_Parent from '../screens/Reviews_Parent';
 
 const Router = () => {
 
@@ -116,6 +117,7 @@ const Router = () => {
                                 <Stack.Screen name="FindReplacements" component={FindReplacements} options={{ headerShown: true, headerTitle: 'Choose New Booking' }} />
                                 <Stack.Screen name="CreateReplacementBooking_Parent" component={CreateReplacementBooking_Parent} options={{ headerShown: true, headerTitle: 'Create Replacement Booking' }} />
                                 <Stack.Screen name="AutoCompleteScreen" component={AutoCompleteScreen} options={{ headerShown: true, headerTitle: 'AutoCompleteScreen' }} />
+                                <Stack.Screen name="Reviews_Parent" component={Reviews_Parent} options={{ headerShown: true, headerTitle: 'Reviews' }} />
                             </Stack.Navigator>
                     )
                 }

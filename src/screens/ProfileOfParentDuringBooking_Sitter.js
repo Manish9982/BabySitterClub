@@ -146,7 +146,7 @@ const ProfileOfParentDuringBooking_Sitter = ({ navigation, route }) => {
 
                         { ...Fonts.larBold }]}>{`$${profiledetailsdata?.userDetails?.hour_price}/Hr`}</Text>
 
-                        <Text style={[styles.subheading, styles.floatText]}>Total Price</Text>
+                        <Text style={[styles.subheading, styles.floatText]}>Total Price</Text>/
                     </View>
                     <View style={styles.secondaryFloatingView}>
                         <SmallWhiteButton title={`${"Contact"} ${profiledetailsdata?.userDetails?.first_name}`} />
