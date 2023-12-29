@@ -124,7 +124,8 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
         const formdata = new FormData()
         formdata.append('userId', userID)
         {
-            JSON.parse(bookingDate)?.startDate ?
+            JSON.parse(bookingDate)?.startDate
+                ?
                 formdata.append('date', formatDate(slotsDate, true))
                 :
                 formdata.append('date', formatDate(slotsDate, true))
@@ -204,6 +205,10 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
         }
     }
 
+    const onPressReviews = () => {
+        navigation.navigate("Reviews_Parent")
+    }
+
     console.log("new Date(bookingDate)====>", new Date(JSON.parse(bookingDate)))
     const styles = makeStyles(H, W)
     return (
@@ -241,10 +246,13 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                             <Text style={styles.subheading}>Favorited: </Text>
                             <Text style={[styles.text, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.no_of_favourite} times</Text>
                         </Text>
-                        {/* <Text>
-                            <Text style={styles.subheading}>Age of children: </Text>
-                            <Text style={styles.text}>Baby</Text>
-                        </Text> */}
+                        <Text>
+                            <Text style={styles.subheading}>Rating: </Text>
+                            <Text style={[styles.text, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.rating}/5 <AntDesign name="star" size={16} color={Colors.golden} /></Text>
+                        </Text>
+                        <TouchableOpacity onPress={onPressReviews}>
+                            <Text style={[styles.subheading, { textDecorationLine: "underline", color: Colors.gray }]}>Reviews({profiledetailsdata?.userDetails?.reviews}) </Text>
+                        </TouchableOpacity>
                         <Text style={styles.warningtitle}>Warning: </Text>
                         <Text style={[styles.warning, Fonts.smMedium]}>
                             For your own safety and protection, only communicate through this app.
@@ -253,51 +261,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         {/* <Text style={styles.textneedbabysittertitle}>Availability</Text> */}
                         <Divider style={styles.divider} />
                         <Text style={styles.mainHeading}>Booking Summary :</Text>
-                        {/* <CustomDateTimePicker
-                            minimumDate={new Date()}
-                            alignSelf='flex-end'
-                            style={styles.datePicker}
-                            value={slotsDate}
-                            onChangeAndroid={onChangeAndroidPicker}
-                            onChangeIos={onChangeIosPicker}
-                        /> */}
-                        {/* {profiledetailsdata?.userSlots?.length == 0
-                            ?
-                            <Text style={styles.errorText}>No slots are available for this date</Text>
-                            :
-                            <SegmentedButtons
-                                style={styles.segment}
-                                value={serviceFilterId}
-                                onValueChange={(t) => setServiceFilterId(prev => prev == t ? null : t)}
-                                buttons={[
-                                    {
-                                        value: '1',
-                                        icon: () => <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} />,
-                                    },
-                                    {
-                                        value: '3',
-                                        icon: () => <TagIcon name="home" label="Homesit" style={styles.tag} />,
-                                    },
-                                    {
-                                        value: '2',
-                                        icon: () => <TagIcon name="paw" label="Petsit" style={styles.tag} />,
-                                    },
-                                ]}
-                            />
-                        } */}
-                        {/* {profiledetailsdata?.userSlots?.map((section, index) => {
-                            if (section?.service?.includes(Number.parseInt(serviceFilterId, 10)) || serviceFilterId == null) {
-                                return (
-                                    <View key={index}>
-                                        <DateSection section={section} />
-                                        {section?.times?.map((time) => {
-                                            if (time?.service_id == serviceFilterId || serviceFilterId == null) {
-                                                return (<SlotItem key={time.id} item={time} />)
-                                            }
-                                        })}
-                                    </View>)
-                            }
-                        })} */}
+
                         <Text style={styles.detailRow}>
                             <Text style={styles.label}>
                                 Date(s) : </Text>
@@ -342,7 +306,11 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         {
                             addressdata?.data?.map((item, index) => renderAddressItem(item, index))
                         }
-                        {error && <Text style={{ color: 'red' }}>Please select an address</Text>}
+                        {
+                            error
+                            &&
+                            <Text style={{ color: 'red' }}>Please select an address</Text>
+                        }
                     </View>
                     <CustomButton
                         onPressButton={onPressProceed}
@@ -412,15 +380,6 @@ const makeStyles = (H, W) => StyleSheet.create({
         alignItems: 'center',
         marginBottom: Spaces.sm
     },
-    profilePic:
-    {
-        width: 100,
-        height: 100,
-        borderRadius: 100 / 3,
-        marginRight: Spaces.sm,
-        borderWidth: 0.6,
-        borderColor: Colors.black
-    },
     lowerContainer:
     {
         padding: Spaces.sm
@@ -434,7 +393,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         ...Fonts.larMedium,
         color: 'red',
-        marginTop: H * 0.025
+        marginTop: H * 0.01
     },
     floatingView:
     {

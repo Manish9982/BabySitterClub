@@ -37,9 +37,6 @@ const BabySitterCard = ({ profilePicture, name, description, hourlyPrice, isFavo
                         &&
                         <TagIcon name="home" label="Homesit" style={styles.tag} color={Colors.Secondary} />
                     }
-
-
-
                 </View>
                 <Text
                     ellipsizeMode='tail'
