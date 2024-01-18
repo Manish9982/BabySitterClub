@@ -48,6 +48,7 @@ const Radar_Parent = ({ navigation }) => {
   const getOffers = async () => {
     // *** get offers from API after every 10 seconds
     const result = await handleGetRequest('get_parent_rapid_request')
+    console.log(result)
     if (result?.status == '200') {
       setOfferApiResponse(result)
     }

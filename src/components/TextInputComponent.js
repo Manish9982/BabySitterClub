@@ -7,6 +7,7 @@ import Colors from '../helper/Colors'
 const TextInputComponent = ({ value, onChangeText, placeholder, editable = true, multiline = false, keyboardType = 'default', maxlength = null, secureTextEntry = false, onPressIcon, isRightIconNeeded = false, iconName, style = null, numberOfLines = 1 }) => {
   return (
     <TextInput
+      autoCapitalize='none'
       numberOfLines={numberOfLines}
       editable={editable}
       style={styles.input}

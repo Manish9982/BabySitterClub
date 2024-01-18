@@ -29,6 +29,7 @@ const RapidSearch_Sitter = ({ navigation }) => {
   const checkStatusOfBlitzCare = async () => {
     setLoader(true)
     const result = await handleGetRequest('check_rapid_feature')
+    console.log(result)
     if (result?.status == '200') {
       if (result?.feature == 1) {
         navigation.navigate('BlitzCareListingSuccess_Sitter')
@@ -87,7 +88,7 @@ const RapidSearch_Sitter = ({ navigation }) => {
             onChangeText={handlePriceChange}
             keyboardType="numeric"
           />
-          <Text style={[styles.greeting2, { marginVertical: Spaces.med }]}>Address : 123 Main Street, Dallas, TX 75201</Text>
+          {/* <Text style={[styles.greeting2, { marginVertical: Spaces.med }]}>Address : 123 Main Street, Dallas, TX 75201</Text> */}
           {
             showWarning
             &&

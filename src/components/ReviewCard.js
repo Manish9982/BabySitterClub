@@ -3,7 +3,7 @@ import { View, Image, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome'; // Assuming FontAwesome is used for stars
 
-const ReviewCard = ({ profilePicture, date, fullName, rating, review }) => {
+const ReviewCard = ({ profilePicture, date, fullName, rating, review, baseUrl }) => {
     // Function to generate star icons based on rating
     const renderStars = (rating) => {
         const starIcons = [];
@@ -31,7 +31,7 @@ const ReviewCard = ({ profilePicture, date, fullName, rating, review }) => {
     return (
         <View style={styles.container}>
             <View style={styles.ratingsContainer}>
-                <Image source={{ uri: profilePicture }} style={styles.image} />
+                <Image source={{ uri: `${baseUrl}${profilePicture}` }} style={styles.image} />
                 <View>
                     <Text style={styles.name}>{fullName}</Text>
                     <Text>{date}</Text>
@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
         borderWidth: 1,
-        borderRadius:8,
+        borderRadius: 8,
+        marginTop:10
     },
     ratingsContainer:
     {

@@ -51,6 +51,34 @@ const MyProfile_Parent = ({ navigation }) => {
         }
     }, [isFocused])
 
+    const onPressClick = (id) => {
+
+        Alert.alert('Delete Address', "Are you sure, you want to delete this address?", [
+            {
+                text: 'Cancel',
+                onPress: () => { },
+                style: 'cancel',
+            },
+            { text: 'OK', onPress: () => deleteAddress(id) },
+        ]);
+    }
+
+    const deleteAddress = async (id) => {
+        setLoader(true)
+        var formdata = new FormData()
+        formdata.append("address_id", id);
+        const result = await handlePostRequest('address_delete', formdata)
+
+        if (result.status == "200") {
+            getAddress()
+        } else if (result.status == "201") {
+            Alert.alert("Error", result.message)
+        } else {
+            Alert.alert("Info", result.message)
+        }
+        setLoader(false)
+
+    }
 
     const onPressButton = () => {
         if (price?.length == '0') {

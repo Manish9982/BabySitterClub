@@ -16,32 +16,6 @@ import { AirbnbRating, Rating } from 'react-native-ratings'
 import DisplayRating from '../components/DisplayRating'
 import ReviewCard from '../components/ReviewCard'
 
-const APIDATA = {
-    'status': 200,
-    'base_url': '',
-    'data': {
-        'profile': {
-            name: 'Thomas Lacier',
-            address: 'Dallas, Texas',
-            description: 'I am a Sitter',
-            price: '20',
-            image: 'https://images.pexels.com/photos/18897882/pexels-photo-18897882/free-photo-of-man-standing-on-a-boat.jpeg',
-            rating: 3.4,
-            number_of_reviews: 24
-        },
-        'reviews': [
-            {
-                name: 'Jason Todd',
-                image: 'https://images.pexels.com/photos/18897882/pexels-photo-18897882/free-photo-of-man-standing-on-a-boat.jpeg',
-                review: 'Nice Sitter',
-                date: 'Dec 22nd, 2023',
-                rating: 3.5
-            }
-        ]
-    }
-}
-
-
 const Reviews_Parent = ({ navigation, route }) => {
     // const { userID, bookingDate, startTime, endTime, service } = route?.params
     const [loader, setLoader] = useState(true)
@@ -49,7 +23,7 @@ const Reviews_Parent = ({ navigation, route }) => {
     // const [slotsDate, setSlotsDate] = useState(JSON.parse(bookingDate)?.startDate ? new Date(JSON.parse(bookingDate)?.startDate) : new Date(JSON.parse(bookingDate)))
     // const dateParse = JSON.parse(bookingDate)
     // const usedDate = dateParse.map(item => formatDate(item, true))
-
+    const { userId } = route?.params
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
@@ -66,21 +40,22 @@ const Reviews_Parent = ({ navigation, route }) => {
     }, [isFocused])
 
     const getReviewsForSitter = async () => {
-        // var formdata = new FormData()
-        // formdata.append('', '')
-        // const result = await handlePostRequest('', formdata)
-        // if (result?.status == '200') {
-        setReviewsData(APIDATA)
-        // }
-        // else {
-        //     Alert.alert(result?.message)
-        // }
+        var formdata = new FormData()
+        formdata.append('user_id', userId)
+        const result = await handlePostRequest('get_reviews', formdata)
+        if (result?.status == '200') {
+            setReviewsData(result)
+        }
+        else {
+            Alert.alert(result?.message)
+        }
         setLoader(false)
     }
 
     const renderReviews = ({ item, index }) => {
         return (
             <ReviewCard
+                baseUrl={reviewsData?.base_url}
                 profilePicture={item?.image}
                 fullName={item?.name}
                 date={item?.date}
@@ -128,11 +103,20 @@ const Reviews_Parent = ({ navigation, route }) => {
 
                         <Text style={styles.subheading}>Reviews:</Text>
                         <View style={styles.flatlist}>
-                            <FlatList
-                                data={reviewsData?.data?.reviews}
-                                renderItem={renderReviews}
-                                keyExtractor={(item, index) => `${index}`}
-                            />
+                            {
+                                reviewsData?.data?.reviews?.length == 0
+                                    ?
+                                    <View style={styles.errorContainer}>
+                                        <Text>No Reviews Yet..</Text>
+                                    </View>
+                                    :
+                                    <FlatList
+                                        data={reviewsData?.data?.reviews}
+                                        renderItem={renderReviews}
+                                        keyExtractor={(item, index) => `${index}`}
+                                    />
+                            }
+
                         </View>
                     </View>
                 </View>
@@ -391,5 +375,11 @@ const makeStyles = (H, W) => StyleSheet.create({
     ratingText:
     {
         ...Fonts.larBold
+    },
+    errorContainer:
+    {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
     }
 }) 

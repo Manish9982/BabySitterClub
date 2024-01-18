@@ -433,7 +433,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                                 style={styles.modal}>
                                 <View style={styles.modalContent}>
                                     <Text style={styles.heading}>Select a service:</Text>
-                                    {services.map((option, index) => (
+                                    {services?.map((option, index) => (
                                         <TouchableOpacity
                                             key={index}
                                             style={styles.optionButton}
