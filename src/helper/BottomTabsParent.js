@@ -69,6 +69,7 @@ const BottomTabsParent = ({ navigation }) => {
 
     const getActiveRequestDetails = async () => {
         const result = await handleGetRequest('get_rapidReq_detail')
+        //console.log('get_rapidReq_detail', result)
         if (result?.status == '200') {
             setShowActiveRequestModal(true)
             setActiveRequestDetails(result)

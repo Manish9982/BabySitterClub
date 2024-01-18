@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, useWindowDimensions, Modal, Alert, Touchable, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, useWindowDimensions, Modal, Alert, Touchable, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { Divider, Text } from 'react-native-paper';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
@@ -9,12 +9,14 @@ import Fonts from '../helper/Fonts';
 import SmallButtonSecondary from './SmallButtonSecondary';
 import { Rating } from 'react-native-ratings';
 import { useNavigation } from '@react-navigation/native';
+import TextInputComponent from './TextInputComponent';
 
 const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
 
     const [isModalVisible, setModalVisible] = useState(false);
     const [rating, setRating] = useState(0)
     const [submitLoader, setSubmitLoader] = useState(false)
+    const [comment, setComment] = useState('')
 
     const W = useWindowDimensions().width
     const navigation = useNavigation()
@@ -35,6 +37,7 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
         formdata.append('rating', rating)
         formdata.append('booking_id', booking?.booking_id)
         formdata.append('user_id', booking?.book_userId)
+        formdata.append('comment', comment)
         const result = await handlePostRequest('rating', formdata)
         if (result?.status == '200') {
             Alert.alert('Success', `${result?.message}`)
@@ -53,22 +56,33 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
             <Modal
                 visible={isModalVisible}
                 transparent={true} >
-                <View style={styles.modalContainer}>
-                    <View style={styles.ratingBox}>
-                        <Text style={styles.rateTextName}>Tell us how was your experience with {booking?.first_name}?</Text>
-                        <Rating
-                            showRating
-                            onFinishRating={(t) => setRating(t)}
-                            style={{ paddingVertical: 10 }}
-                        />
-                        <SmallButtonSecondary
-                            onPressSmallButton={onPressSubmit}
-                            loader={submitLoader}
-                            title={'Submit'}
-                            style={styles.ratingButton}
-                        />
+                <TouchableWithoutFeedback onPress={() => setModalVisible(prev => !prev)}>
+                    <View style={styles.modalContainer}>
+                        <TouchableWithoutFeedback>
+                            <View style={styles.ratingBox}>
+                                <Text style={styles.rateTextName}>Tell us how was your experience with {booking?.first_name}?</Text>
+                                <Rating
+                                    showRating
+                                    onFinishRating={(t) => setRating(t)}
+                                    style={{ paddingVertical: 10 }}
+                                />
+                                <TextInputComponent
+                                    multiline={true}
+                                    numberOfLines={4}
+                                    placeholder={'Comments'}
+                                    value={comment}
+                                    onChangeText={setComment}
+                                />
+                                <SmallButtonSecondary
+                                    onPressSmallButton={onPressSubmit}
+                                    loader={submitLoader}
+                                    title={'Submit'}
+                                    style={styles.ratingButton}
+                                />
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
-                </View>
+                </TouchableWithoutFeedback>
             </Modal>
             {
                 booking?.is_replace == '1'
@@ -281,7 +295,7 @@ const makeStyles = (W) => StyleSheet.create({
     {
         height: 20,
         width: 20,
-        marginLeft:2
+        marginLeft: 2
     },
     replaceContainer:
     {
@@ -290,8 +304,8 @@ const makeStyles = (W) => StyleSheet.create({
         opacity: 0.3,
         bottom: 5,
         right: 5,
-        flexDirection:'row',
-        alignItems:'center'
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     replaceText:
     {

@@ -24,7 +24,7 @@ export default Fonts = {
     },
     medSemiBold: {
         fontSize: 14,
-        // fontWeight:'700',
+        //fontWeight:'700',
         fontFamily: "Poppins-SemiBold"
     },
     larSemiBold: {

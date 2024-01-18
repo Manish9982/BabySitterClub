@@ -263,8 +263,6 @@ const MyProfile_Sitter = ({ navigation }) => {
                         source={require('../assets/images/delete.png')}
                         style={styles.rightIconaddresslist} />
                 </TouchableOpacity>
-
-
             </View>
             <Text style={[styles.addressText, Fonts.medMedium]}>{item.address}</Text>
 

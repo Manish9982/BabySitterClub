@@ -90,7 +90,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
 
     const handleAddressSelection = (address) => {
         setSelectedAddress(address?.address);
-        setError(false);
+        // setError(false);
     };
 
     const handleAddAddress = () => {
@@ -100,21 +100,26 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
         console.log('Add new address functionality here');
     };
 
-    const renderAddressItem = (item, index) => (
-        <TouchableOpacity
-            key={index}
-            onPress={() => handleAddressSelection(item)}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <RadioButton.Android
-                    theme={{ colors: { accent: Colors.Secondary } }}
-                    value={item}
-                    status={selectedAddress && selectedAddress === item?.address ? 'checked' : 'unchecked'}
-                    onPress={() => handleAddressSelection(item)}
-                />
-                <Text>{item?.address}</Text>
-            </View>
-        </TouchableOpacity>
-    );
+    const renderAddressItem = (item, index) => {
+        if (index == 0) {
+            return (
+                <TouchableOpacity
+                    key={index}
+                    onPress={() => handleAddressSelection(item)}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        {/* <RadioButton.Android
+                        theme={{ colors: { accent: Colors.Secondary } }}
+                        value={item}
+                        status={selectedAddress && selectedAddress === item?.address ? 'checked' : 'unchecked'}
+                        onPress={() => handleAddressSelection(item)}
+                    /> */}
+                        <Text>{item?.address}</Text>
+                    </View>
+                </TouchableOpacity>
+            )
+        }
+
+    }
 
     const handleProceed = () => {
 
@@ -206,7 +211,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
     }
 
     const onPressReviews = () => {
-        navigation.navigate("Reviews_Parent")
+        navigation.navigate("Reviews_Parent", { 'userId': userID })
     }
 
     console.log("new Date(bookingDate)====>", new Date(JSON.parse(bookingDate)))
@@ -296,11 +301,11 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                                     Address :
                                 </Text>
                             </Text>
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 onPress={() => navigation.navigate('AddAddress')}
                                 style={styles.smallButton}>
                                 <Text style={styles.whiteText}><AntDesign name="pluscircle" /> Add</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
 
                         {

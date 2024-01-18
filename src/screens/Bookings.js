@@ -96,7 +96,6 @@ const Bookings = ({ navigation }) => {
               <Text style={styles.warning}>*All bookings are non-refundable.</Text>
             </View>
         }
-
       </ImageBackground>
   )
 }
