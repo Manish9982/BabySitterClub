@@ -7,7 +7,6 @@ import { en, registerTranslation } from 'react-native-paper-dates'
 import App from './App';
 import { name as appName } from './app.json';
 import messaging, { firebase } from '@react-native-firebase/messaging';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification, { Importance } from "react-native-push-notification";
 
 let config = {

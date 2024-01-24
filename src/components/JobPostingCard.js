@@ -57,7 +57,7 @@ const JobPostingCard = ({ id, profilePicture, name, time, location, priceOffered
                     <Image source={{ uri: `${baseUrl}${profilePicture}` }} style={styles.profilePicture} />
                     <View style={styles.headerText}>
                         <Text style={styles.name}>{name}</Text>
-                        <Text style={styles.details}>Time: {time}</Text>
+                        <Text style={styles.details}>Time: {time} Hrs</Text>
                         <Text style={styles.details}>Address: {location}</Text>
                     </View>
                 </View>
@@ -71,7 +71,12 @@ const JobPostingCard = ({ id, profilePicture, name, time, location, priceOffered
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.price}>{`Offered: $${priceOffered}`}</Text>
-                <Text style={styles.comments}>Comments: "{comments}"</Text>
+                {
+                    comments
+                    &&
+                    <Text style={styles.comments}>Comments: "{comments}"</Text>
+                }
+
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity style={[styles.button, styles.acceptButton]} onPress={onAccept}>
                         <Text style={styles.buttonText}>Accept</Text>
@@ -124,7 +129,7 @@ const styles = StyleSheet.create({
     },
     price: {
         // fontSize: 16,
-        //marginBottom: Spaces.med,
+        marginBottom: Spaces.med,
     },
     comments: {
         marginBottom: Spaces.med,
