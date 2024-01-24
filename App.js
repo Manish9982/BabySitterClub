@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Router from './src/helper/Router'
 import { configureFonts, PaperProvider, MD2LightTheme, Text } from 'react-native-paper';
 import Fonts from './src/helper/Fonts';
@@ -8,12 +8,66 @@ import { LOCAL_STORE } from './src/helper/Utils';
 import { getLocalValue } from './src/helper/LocalStore';
 import { Platform } from 'react-native';
 import Colors from './src/helper/Colors';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import messaging from '@react-native-firebase/messaging';
 
 const App = () => {
+
+  const [loading, setLoading] = useState(true);
+  const [initialRoute, setInitialRoute] = useState('BottomTabsSitter');
 
   useEffect(() => {
     getToken()
   }, [])
+
+  useEffect(() => {
+    if (Platform.OS == "android") {
+      messaging()
+        .getInitialNotification()
+        .then(remoteMessage => {
+          console.log("remoteMessage", remoteMessage);
+          if (remoteMessage?.data?.onClick !== 'default') {
+            setInitialRoute(remoteMessage?._data?.onClick);
+          }
+          setLoading(false);
+        });
+    } else {
+      messaging().onNotificationOpenedApp(remoteMessage => {
+        console.log(
+          'Notification caused app to open from background state:',
+          remoteMessage
+        );
+        navigation.navigate(remoteMessage?.data?.onClick);
+      });
+
+      PushNotificationIOS.getInitialNotification().then(remoteMessage => {
+        //console.log("remoteMessage at PushNotificationIOS get initial", remoteMessage)
+
+        //setInitialRoute("CallingScreen"); // e.g. "Settings"
+        console.log("remoteMessage", remoteMessage);
+        if (remoteMessage?._data?.onClick !== 'default') {
+          setInitialRoute(remoteMessage?._data?.onClick);
+        }
+        setLoading(false);
+      });
+    }
+  }, []);
+  // useEffect(() => {
+  //   messaging()
+  //     .onNotificationOpenedApp()
+  //     .then(remoteMessage => {
+  //       console.log("remoteMessage", remoteMessage);
+  //       if (remoteMessage?.data?.onClick !== 'default') {
+  //         if (Platform.OS == "android") {
+  //           setInitialRoute(remoteMessage?.data?.onClick);
+  //         }
+  //         else {
+  //           setInitialRoute(remoteMessage?._data?.onClick);
+  //         }
+  //       }
+  //       setLoading(false);
+  //     });
+  // }, []);
 
 
   const fontConfig = {
@@ -38,7 +92,7 @@ const App = () => {
   return (
     <Provider store={Store}>
       <PaperProvider theme={theme}>
-        <Router />
+        <Router initialRouteName={initialRoute} />
       </PaperProvider>
     </Provider>
   )

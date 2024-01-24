@@ -1,36 +1,16 @@
-import { Alert, FlatList, ImageBackground, StyleSheet, View } from 'react-native'
+import { Alert, FlatList, ImageBackground, StyleSheet, TouchableOpacity, View, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { Text } from 'react-native-paper'
+import {  Text } from 'react-native-paper'
 import { handleGetRequest, handlePostRequest } from '../helper/Utils'
 import JobPostingCard from '../components/JobPostingCard'
 import Spaces from '../helper/Spaces'
-
-const JOBSDATA = {
-    "status": 200,
-    "message": "Jobs get successfully",
-    "alert": "No jobs have been posted yet, we wil notify you when a new job is posted.",
-    "url": "https://thebabysitterclubs.com/babysitter/public/",
-    "data": [
-        {
-            "rapid_id": 3,
-            "price": 10,
-            "duration": "09:00 AM - 01:00 PM",
-            "comment": "Need a Sitter for my 6 year old who can also look after my pet dog, Breed: German Shepherd",
-            "profile": "uploads/profile/1701417340.",
-            "name": "Cassandra Morgan",
-            "address": "88, 8800 South Polk Street, Dallas, TX, USA",
-            "latitude": "32.640803",
-            "longitude": "-96.83924549999999",
-            "sitter_latitude": "32.640803",
-            "sitter_longitude": "-96.83924549999999",
-            "distance": 0
-        }
-    ]
-}
+import AcceptSitterCardDetailsOnly from '../components/AcceptSitterCardDetailsOnly'
 
 const JobPostings_Sitter = ({ navigation }) => {
     const [jobsData, setJobsData] = useState(null)
     const [loader, setLoader] = useState(true)
+    const [showSitterDetails, setShowSitterDetails] = useState(false)
+    const [selectedProfile, setSelectedProfile] = useState(null)
 
     useEffect(() => {
         getJobs()
@@ -46,6 +26,9 @@ const JobPostings_Sitter = ({ navigation }) => {
         }
     }, [])
 
+    const onCloseDetails = () => {
+        setShowSitterDetails(prev => !prev)
+    }
 
     const getJobs = async () => {
         const result = await handleGetRequest('get_sitter_rapid_request')
@@ -58,24 +41,32 @@ const JobPostings_Sitter = ({ navigation }) => {
         setLoader(false)
     }
 
+    const onPressCard = (profile) => {
+        setSelectedProfile(profile)
+        setShowSitterDetails(true)
+    }
+
     const renderJobs = ({ item }) => {
         return (
-            <JobPostingCard
-                id={item?.rapid_id}
-                profilePicture={item?.profile}
-                name={item?.name}
-                time={item?.duration}
-                location={item?.address}
-                priceOffered={item?.price}
-                comments={item?.comment}
-                distance={item?.distance}
-                lat1={item?.latitude}
-                long1={item?.longitude}
-                lat2={item?.sitter_latitude}
-                long2={item?.sitter_longitude}
-                baseUrl={jobsData?.url}
-                callbackMain={getJobs}
-            />
+            <TouchableOpacity onPress={() => onPressCard(item)}>
+                <JobPostingCard
+                    id={item?.rapid_id}
+                    profilePicture={item?.profile}
+                    name={item?.name}
+                    time={item?.duration}
+                    location={item?.address}
+                    priceOffered={item?.price}
+                    comments={item?.comment}
+                    distance={item?.distance}
+                    lat1={item?.latitude}
+                    long1={item?.longitude}
+                    lat2={item?.sitter_latitude}
+                    long2={item?.sitter_longitude}
+                    baseUrl={jobsData?.url}
+                    callbackMain={getJobs}
+                />
+            </TouchableOpacity>
+
         )
     }
 
@@ -84,6 +75,23 @@ const JobPostings_Sitter = ({ navigation }) => {
             source={require('../assets/images/background.png')}
             style={styles.container}
         >
+            <Modal
+                visible={showSitterDetails}
+                //visible={true}
+                transparent={true}
+            >
+                <View style={styles.overlay}>
+                    <AcceptSitterCardDetailsOnly
+                        onClose={onCloseDetails}
+                        rating={selectedProfile?.rating}
+                        profilePicture={selectedProfile?.profile_picture}
+                        name={selectedProfile?.name}
+                        description={selectedProfile?.description}
+                        priceOffered={selectedProfile?.price}
+                        serviceIds={selectedProfile?.service_id}
+                    />
+                </View>
+            </Modal>
             {
                 jobsData?.data?.length == 0
                     ?
@@ -91,14 +99,16 @@ const JobPostings_Sitter = ({ navigation }) => {
                         <Text>{jobsData?.alert}</Text>
                     </View>
                     :
-                    <FlatList
-                        data={jobsData?.data}
-                        renderItem={renderJobs}
-                        keyExtractor={(item, index) => `${index}`}
-                    />
-
+                    <View style={{
+                        
+                    }}>
+                        <FlatList
+                            data={jobsData?.data}
+                            renderItem={renderJobs}
+                            keyExtractor={(item, index) => `${index}`}
+                        />
+                    </View>
             }
-
         </ImageBackground>
     )
 }
@@ -116,6 +126,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: Spaces.med
-    }
+    },
+    overlay:
+    {
+        zIndex:2,
+        backgroundColor: "rgba(0,0,0,0.4)",
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
 
 })
