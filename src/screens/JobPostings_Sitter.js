@@ -1,6 +1,6 @@
 import { Alert, FlatList, ImageBackground, StyleSheet, TouchableOpacity, View, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import {  Text } from 'react-native-paper'
+import { Text } from 'react-native-paper'
 import { handleGetRequest, handlePostRequest } from '../helper/Utils'
 import JobPostingCard from '../components/JobPostingCard'
 import Spaces from '../helper/Spaces'
@@ -82,9 +82,11 @@ const JobPostings_Sitter = ({ navigation }) => {
             >
                 <View style={styles.overlay}>
                     <AcceptSitterCardDetailsOnly
+                        baseUrl={jobsData?.url}
+                        flag={1}
                         onClose={onCloseDetails}
                         rating={selectedProfile?.rating}
-                        profilePicture={selectedProfile?.profile_picture}
+                        profilePicture={selectedProfile?.profile}
                         name={selectedProfile?.name}
                         description={selectedProfile?.description}
                         priceOffered={selectedProfile?.price}
@@ -100,7 +102,7 @@ const JobPostings_Sitter = ({ navigation }) => {
                     </View>
                     :
                     <View style={{
-                        
+
                     }}>
                         <FlatList
                             data={jobsData?.data}
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
     },
     overlay:
     {
-        zIndex:2,
+        zIndex: 2,
         backgroundColor: "rgba(0,0,0,0.4)",
         flex: 1,
         justifyContent: 'center',

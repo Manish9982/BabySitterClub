@@ -20,11 +20,18 @@ import Geolocation from '@react-native-community/geolocation';
 import messaging from '@react-native-firebase/messaging';
 import RapidSearch_Sitter from '../screens/RapidSearch_Sitter';
 import Colors from './Colors';
+import PushNotification from "react-native-push-notification";
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import notifee, { EventType } from '@notifee/react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
 const BottomTabsSitter = () => {
-
+    const isProfileCompleted = useSelector((state) => state.global.isProfileCompleted)
+    const navigation = useNavigation()
+    const dispatch = useDispatch();
     useEffect(() => {
+        //notificationServices()
         requestUserPermission()
         checkProfileStatus()
         // {
@@ -35,8 +42,23 @@ const BottomTabsSitter = () => {
         updateFcmToken()
     }, [])
 
-    const isProfileCompleted = useSelector((state) => state.global.isProfileCompleted)
-    const dispatch = useDispatch();
+    useEffect(() => {
+        return notifee.onForegroundEvent(({ type, detail }) => {
+            switch (type) {
+                case EventType.DISMISSED:
+                    console.log('User dismissed notification', detail.notification);
+                    break;
+                case EventType.PRESS:
+                    console.log('User pressed notification', detail?.notification?.data?.onClick);
+                    if (detail?.notification?.data?.onClick) {
+                        if (detail?.notification?.data?.onClick !== 'default') {
+                            navigation.navigate(detail?.notification?.data?.onClick)
+                        }
+                    }
+                    break;
+            }
+        });
+    }, []);
 
     // const [isProfileCompleted, setIsProfileCompleted] = useState(true)
 
@@ -51,7 +73,6 @@ const BottomTabsSitter = () => {
                 dispatch(setIsProfileCompleted(false))
             }
         }
-
     }
 
     const updateFcmToken = async () => {

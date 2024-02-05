@@ -87,6 +87,22 @@ const MyProfile_Sitter = ({ navigation }) => {
         //setLoader(false)
     }
 
+    const updateAddress = async (ID) => {
+        setLoader(true)
+        var formdata = new FormData()
+        formdata.append('address_id', ID)
+        const result = await handlePostRequest('make_address_default', formdata)
+        console.log("result", result)
+        if (result?.status == '200') {
+            getAddress()
+            Alert.alert('Success', result?.message)
+        }
+        else {
+            Alert.alert("Info", result?.message)
+        }
+        setLoader(false)
+    }
+
     const onPressClick = (id) => {
 
         Alert.alert('Delete Address', "Are you sure, you want to delete this address?", [
@@ -95,7 +111,10 @@ const MyProfile_Sitter = ({ navigation }) => {
                 onPress: () => { },
                 style: 'cancel',
             },
-            { text: 'OK', onPress: () => deleteAddress(id) },
+            {
+                text: 'OK',
+                onPress: () => deleteAddress(id)
+            },
         ]);
     }
 
@@ -104,7 +123,6 @@ const MyProfile_Sitter = ({ navigation }) => {
         var formdata = new FormData()
         formdata.append("address_id", id);
         const result = await handlePostRequest('address_delete', formdata)
-
         if (result.status == "200") {
             getAddress()
         } else if (result.status == "201") {
@@ -113,7 +131,6 @@ const MyProfile_Sitter = ({ navigation }) => {
             Alert.alert("Info", result.message)
         }
         setLoader(false)
-
     }
 
 
@@ -251,12 +268,13 @@ const MyProfile_Sitter = ({ navigation }) => {
     }
 
     const renderAddressItem = (item, index) => (
-        <View
+        <TouchableOpacity
+            onPress={() => updateAddress(item?.id)}
             key={index}
             style={[styles.addressCard, { marginTop: index == 0 ? Spaces.sm : null }]}>
 
             <View style={styles.addaddressCard}>
-                <Text style={[styles.addressTitle, Fonts.larMedium]}>{item.title}</Text>
+                <Text style={[styles.addressTitle, Fonts.larMedium]}>{item.title}{item?.default == 1 && ' (Default)'}</Text>
                 <TouchableOpacity
                     onPress={() => onPressClick(item?.id)}>
                     <Image
@@ -265,8 +283,7 @@ const MyProfile_Sitter = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
             <Text style={[styles.addressText, Fonts.medMedium]}>{item.address}</Text>
-
-        </View>
+        </TouchableOpacity>
     );
 
     const returnButtonsArray = () => {
