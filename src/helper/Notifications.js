@@ -21,7 +21,7 @@ export async function requestUserPermission() {
     }
 }
 
-async function onDisplayNotification(title, body) {
+async function onDisplayNotification(title, body, onClick) {
     // Request permissions (required for iOS)
     await notifee.requestPermission()
 
@@ -36,14 +36,27 @@ async function onDisplayNotification(title, body) {
 
     // Display a notification
     await notifee.displayNotification({
+        id: onClick,
+        data: {
+            'onClick': onClick
+        },
         title: title,
         body: body,
+        pressAction: {
+            id: 'biscuit',
+        },
+        ios: {
+            channelId,
+            pressAction: {
+                id: 'biscuit',
+            },
+        },
         android: {
             channelId,
             // optional, defaults to 'ic_launcher'.
             // pressAction is needed if you want the notification to open the app when pressed
             pressAction: {
-                id: 'default',
+                id: 'biscuit',
             },
         },
     });
@@ -53,7 +66,7 @@ export function onNotificationReceiver() {
 
     const unsubscribe = messaging().onMessage(async remoteMessage => {
         console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-        onDisplayNotification(remoteMessage?.notification?.title, remoteMessage?.notification?.body)
+        onDisplayNotification(remoteMessage?.notification?.title, remoteMessage?.notification?.body, remoteMessage?.data?.onClick)
     });
 
     return unsubscribe;

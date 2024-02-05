@@ -7,12 +7,12 @@ import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 import TagIcon from './TagIcon';
 
-const AcceptSitterCardDetailsOnly = ({ profilePicture, name, description, priceOffered, isFavourite, onPressFavourite, onPressItemSelected, rating = 0, serviceIds, onAccept, onReject, onClose }) => {
+const AcceptSitterCardDetailsOnly = ({ profilePicture, name, description, priceOffered, isFavourite, onPressFavourite, onPressItemSelected, rating = 0, serviceIds, onAccept, onReject, onClose, flag = 0, baseUrl }) => {
 
     const W = useWindowDimensions().width
     const styles = makeStyles(W)
 
-    const services = serviceIds?.split(",").map(Number)
+    const services = flag == 0 ? serviceIds?.split(",").map(Number) : [1, 2, 3]
     const handleAccept = () => {
         onAccept(name); // Pass the name of the babysitter to the parent component on accept
     };
@@ -36,34 +36,32 @@ const AcceptSitterCardDetailsOnly = ({ profilePicture, name, description, priceO
             </TouchableOpacity>
             <Image
                 defaultSource={require('../assets/images/mother.png')}
-                source={{ uri: profilePicture }}
+                source={{ uri: `${baseUrl}${profilePicture}` }}
                 style={styles.profilePic} />
             <View
                 style={styles.card}>
                 <Text style={[styles.name, Fonts.larSemiBold]}>{name}</Text>
                 <View style={styles.profileBadgesContainer}>
                     {
-                        services?.includes(1)
+                        (services?.includes(1) && flag == 0)
                         &&
                         <TagIcon name="baby-carriage" label="Babysit" fontawesome={true} style={styles.tag} color={Colors.Secondary} />
                     }
                     {
-                        services?.includes(2)
+                        (services?.includes(2) && flag == 0)
                         &&
                         <TagIcon name="paw" label="Petsit" style={styles.tag} color={Colors.Secondary} />
                     }
                     {
-                        services?.includes(3)
+                        (services?.includes(3) && flag == 0)
                         &&
                         <TagIcon name="home" label="Homesit" style={styles.tag} color={Colors.Secondary} />
                     }
-
                 </View>
                 <Text
                     //ellipsizeMode='tail'
                     //numberOfLines={3}
                     style={[styles.description, Fonts.smMedium]}>{description}
-
                 </Text>
                 <Text>Rating: {rating}/5.0 <AntDesign name="star" size={16} color={Colors.golden} /></Text>
                 <Text style={[styles.price, Fonts.medMedium]}>Price offered: ${priceOffered}</Text>
@@ -102,7 +100,7 @@ const makeStyles = (W) => StyleSheet.create({
     name:
     {
         alignSelf: 'center',
-        marginVertical:Spaces.sm
+        marginVertical: Spaces.sm
     },
     price:
     {
