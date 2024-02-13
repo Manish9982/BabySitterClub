@@ -5,7 +5,6 @@ import SearchBabySitter_Parent from '../screens/SearchBabySitter_Parent';
 import Bookings from '../screens/Bookings';
 import Account from '../screens/Account';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
-import Favourite_Parent from '../screens/Favourite_Parent';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsProfileCompleted, setDefaultAdressModalVisible } from '../redux/GlobalSlice';
 import { LOCAL_STORE, handleGetRequest, handlePostRequest } from './Utils';
@@ -18,11 +17,13 @@ import { check, request, PERMISSIONS, RESULTS, openSettings } from 'react-native
 import messaging from '@react-native-firebase/messaging';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons'
+import FontAwesome from 'react-native-vector-icons/dist/FontAwesome'
 import RapidSearch_Parent from '../screens/RapidSearch_Parent';
 import Spaces from './Spaces';
 import Colors from './Colors';
 import Radar_Parent from '../screens/Radar_Parent';
 import Fonts from './Fonts';
+import Community from '../screens/Community';
 
 const ACTIVE_REQUEST_DETAILS = {
     data: {
@@ -301,6 +302,8 @@ const BottomTabsParent = ({ navigation }) => {
                     headerShadowVisible: true
                 }}>
                     <Tab.Screen name="Search" component={SearchBabySitter_Parent} options={{
+                        tabBarLabel:"Home",
+                        headerTitle: 'Home',
                         headerStyle: {
                             height: H * 0.14,
                             backgroundColor: Colors.PRIMARY
@@ -317,11 +320,14 @@ const BottomTabsParent = ({ navigation }) => {
                                 </TouchableOpacity>
                             )
                         },
-                        tabBarIcon: ({ color, size }) => <AntDesign name="search1" size={size} color={color} />
+                        tabBarIcon: ({ color, size }) => <AntDesign name="home" size={size} color={color} />
                     }} />
-                    <Tab.Screen name="Favourites" component={Favourite_Parent} options={{
+                    <Tab.Screen name="Community" component={Community} options={{
+                        tabBarIcon: ({ color, size }) => <FontAwesome name="users" size={size} color={color} />
+                    }} />
+                    {/* <Tab.Screen name="Favourites" component={Favourite_Parent} options={{
                         tabBarIcon: ({ color, size }) => <AntDesign name="staro" size={size} color={color} />
-                    }} />
+                    }} /> */}
                     <Tab.Screen name="Bookings" component={Bookings} options={{
                         tabBarIcon: ({ color, size }) => <AntDesign name="calendar" size={size} color={color} />
                     }} />

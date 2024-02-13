@@ -32,5 +32,9 @@ export default Colors = {
     'MUTED_GREEN': '#78a890',
     'MESSAGE_GREEN': '#DCF8C6',
     'LIGHT_SILVER': '#e1e1e1',
-    'BlackTransparent': 'rgba(0,0,0,0.5)'
+    'BlackTransparent': 'rgba(0,0,0,0.5)',
+    'verificationBlue': '#49ADF4',
+    'acceptedGreen': '#3DA13B',
+    'rejectedRed': '#CE3C3C',
+    'messageGray': '#D9D9D9'
 }

@@ -35,7 +35,7 @@ const Account = ({ navigation }) => {
 
     const DATA = [
         {
-            title: 'Account',
+            title: 'My Profile',
             action: () => {
                 if (usertype == '2') {
                     navigation.navigate('MyProfile_Sitter')
@@ -44,6 +44,16 @@ const Account = ({ navigation }) => {
                     navigation.navigate('MyProfile_Parent')
                 }
             }
+        },
+        {
+            title: 'Friend Requests',
+            action: () => navigation.navigate('FriendRequests_Parent')
+            //action: () => navigation.navigate('AutoCompleteScreen')
+        },
+        {
+            title: 'Messages',
+            action: () => navigation.navigate('MyMessages_Parent')
+            //action: () => navigation.navigate('AutoCompleteScreen')
         },
         {
             title: 'Notification Center',
