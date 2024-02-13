@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Replace with the appropriate icon library
 
-const DisplayRating = ({ value }) => {
+const DisplayRating = ({ value, size = 30 }) => {
     const renderStars = () => {
         const stars = [];
         const wholeStars = Math.floor(value); // Extract the whole number part
@@ -17,8 +17,8 @@ const DisplayRating = ({ value }) => {
                 iconName = 'star-half-o'; // Name of the half-filled star icon
             }
 
-            stars.push(<Icon key={i} name={iconName} size={30} color="#FFD700" style={{
-                width: 30
+            stars.push(<Icon key={i} name={iconName} size={size} color="#FFD700" style={{
+                width: size
             }} />);
         }
 

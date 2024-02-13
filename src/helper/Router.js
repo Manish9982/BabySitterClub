@@ -1,4 +1,4 @@
-import { Alert, Modal, Platform, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { Alert, Modal, Platform, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View, useWindowDimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -18,7 +18,7 @@ import ProfileOfSitterDuringBooking_Parent from '../screens/ProfileOfSitterDurin
 import BookingDetailsPage from '../screens/BookingDetailsPage';
 import ViewBookings from '../screens/ViewBookings';
 import Filters from '../screens/Filters';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import TransactionHistory from '../screens/TransactionHistory';
 import TimeSlotScreen from '../screens/TimeSlotScreen';
 import BottomTabsParent from './BottomTabsParent';
@@ -55,6 +55,17 @@ import { ActivityIndicator, Text } from 'react-native-paper';
 import Fonts from './Fonts';
 import JobPostings_Sitter from '../screens/JobPostings_Sitter';
 import Reviews_Parent from '../screens/Reviews_Parent';
+import SittersNearYouList_Parent from '../screens/SittersNearYouList_Parent';
+import FriendRequests_Parent from '../screens/FriendRequests_Parent';
+import MyMessages_Parent from '../screens/MyMessages_Parent';
+import ChatScreen_Parent from '../screens/ChatScreen_Parent';
+import SearchScreen_Parent from '../screens/SearchScreen_Parent';
+import Favourite_Parent from '../screens/Favourite_Parent';
+import MyFriends_Parent from '../screens/MyFriends_Parent';
+import FriendsProfile_Parent from '../screens/FriendsProfile_Parent';
+import RequestSitter_Parent from '../screens/RequestSitter_Parent';
+import { setDefaultAdressModalVisible } from '../redux/GlobalSlice';
+import FriendsSittersListing_Parent from '../screens/FriendsSittersListing_Parent';
 
 const Router = ({ initialRouteName }) => {
 
@@ -62,12 +73,15 @@ const Router = ({ initialRouteName }) => {
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
     const usertype = useSelector(state => state.global.usertype)
     const Stack = createNativeStackNavigator();
+    const dispatch = useDispatch();
+    const defaultAddress = useSelector((state) => state.global.defaultAddress)
+    const H = useWindowDimensions().height
+    const W = useWindowDimensions().width
+    const styles = makeStyles(H, W)
 
     useEffect(() => {
         checkVersion()
     }, [])
-
-
 
     const checkVersion = async () => {
         var formdata = new FormData()
@@ -81,6 +95,10 @@ const Router = ({ initialRouteName }) => {
         console.log("checkVersion result===>", result)
     }
 
+    const onPressLocation = () => {
+        dispatch(setDefaultAdressModalVisible(true))
+    }
+
     console.log("USERTYPE at Router(parent = 3; babysitter = 2 ) ========>", usertype)
     const returnStack = () => {
         if (isAppUpdate) {
@@ -90,7 +108,9 @@ const Router = ({ initialRouteName }) => {
                     return (
                         <Stack.Navigator screenOptions={{
                             headerBackTitleVisible: false,
-                            headerShown: Platform.OS == "android" ? true : true
+                            headerStyle: {
+                                backgroundColor: Colors.PRIMARY,
+                            },
                         }}>
                             <Stack.Screen name="BottomTabsParent" component={BottomTabsParent} options={{ headerShown: false }} />
                             <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
@@ -117,6 +137,37 @@ const Router = ({ initialRouteName }) => {
                             <Stack.Screen name="CreateReplacementBooking_Parent" component={CreateReplacementBooking_Parent} options={{ headerShown: true, headerTitle: 'Create Replacement Booking' }} />
                             <Stack.Screen name="AutoCompleteScreen" component={AutoCompleteScreen} options={{ headerShown: true, headerTitle: 'AutoCompleteScreen' }} />
                             <Stack.Screen name="Reviews_Parent" component={Reviews_Parent} options={{ headerShown: true, headerTitle: 'Reviews' }} />
+                            <Stack.Screen name="SittersNearYouList_Parent" component={SittersNearYouList_Parent} options={{ headerShown: true, headerTitle: 'Sitters Near You' }} />
+                            <Stack.Screen name="FriendRequests_Parent" component={FriendRequests_Parent} options={{ headerShown: true, headerTitle: 'Connection Requests' }} />
+                            <Stack.Screen name="MyMessages_Parent" component={MyMessages_Parent} options={{ headerShown: true, headerTitle: 'Messages' }} />
+                            <Stack.Screen name="ChatScreen_Parent" component={ChatScreen_Parent} options={{ headerShown: true, headerTitle: 'Chat' }} />
+                            <Stack.Screen name="SearchScreen_Parent" component={SearchScreen_Parent} options={{ headerShown: true, headerTitle: 'Search' }} />
+                            <Stack.Screen name="Favourite_Parent" component={Favourite_Parent} options={{ headerShown: true, headerTitle: 'Favourite Sitters' }} />
+                            <Stack.Screen name="MyFriends_Parent" component={MyFriends_Parent} options={{ headerShown: true, headerTitle: 'My Friends' }} />
+                            <Stack.Screen name="FriendsProfile_Parent" component={FriendsProfile_Parent} options={{ headerShown: true, headerTitle: 'Profile' }} />
+                            <Stack.Screen name="FriendsSittersListing_Parent" component={FriendsSittersListing_Parent} options={{ headerShown: true, headerTitle: `Friends' Sitters` }} />
+                            <Stack.Screen name="RequestSitter_Parent" component={RequestSitter_Parent}
+                                options={{
+                                    headerShown: true,
+                                    headerTitle: 'Request Sitter',
+                                    headerRight: ({ color, size }) => {
+                                        return (
+                                            <TouchableOpacity
+                                                onPress={onPressLocation}
+                                                style={styles.locationBox}>
+                                                <AntDesign name="enviromento" size={Spaces.xxxl} color={Colors.DEEP_GRAY} style={styles.search} />
+                                                <Text
+                                                    style={styles.locationText}
+                                                    numberOfLines={1}>{defaultAddress?.city || "No address selected"}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                    },
+                                    headerStyle: {
+                                        height: 150,
+                                        backgroundColor: Colors.PRIMARY
+                                    },
+                                }}
+                            />
                         </Stack.Navigator>
                     )
                 }
@@ -196,7 +247,7 @@ const Router = ({ initialRouteName }) => {
     )
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (H, W) => StyleSheet.create({
     overlay:
     {
         backgroundColor: 'rgba(0,0,0,0.4)',
@@ -220,7 +271,20 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         // right: 4,
         // top: 4
-    }
+    },
+    locationBox:
+    {
+        borderWidth: 1,
+        borderRadius: 8,
+        padding: Spaces.sm,
+        margin: Spaces.sm,
+        justifyContent: 'center',
+        //alignItems:'center'
+    },
+    locationText:
+    {
+        maxWidth: W * 0.35,
+    },
 })
 
 export default Router

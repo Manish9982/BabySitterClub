@@ -188,7 +188,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
     );
 
     const onPressProceed = () => {
-        if (!selectedAddress) {
+        if (false) {
             setError(true);
             // Show an error message or perform any other action
             return;
@@ -311,11 +311,11 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         {
                             addressdata?.data?.map((item, index) => renderAddressItem(item, index))
                         }
-                        {
+                        {/* {
                             error
                             &&
                             <Text style={{ color: 'red' }}>Please select an address</Text>
-                        }
+                        } */}
                     </View>
                     <CustomButton
                         onPressButton={onPressProceed}
