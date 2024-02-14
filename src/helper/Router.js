@@ -1,4 +1,4 @@
-import { Alert, Modal, Platform, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View, useWindowDimensions } from 'react-native'
+import { Alert, Modal, Platform, SafeAreaView, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View, useWindowDimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -66,6 +66,7 @@ import FriendsProfile_Parent from '../screens/FriendsProfile_Parent';
 import RequestSitter_Parent from '../screens/RequestSitter_Parent';
 import { setDefaultAdressModalVisible } from '../redux/GlobalSlice';
 import FriendsSittersListing_Parent from '../screens/FriendsSittersListing_Parent';
+import CustomHeader from '../components/CustomHeader';
 
 const Router = ({ initialRouteName }) => {
 
@@ -149,23 +150,23 @@ const Router = ({ initialRouteName }) => {
                             <Stack.Screen name="RequestSitter_Parent" component={RequestSitter_Parent}
                                 options={{
                                     headerShown: true,
-                                    headerTitle: 'Request Sitter',
-                                    headerRight: ({ color, size }) => {
-                                        return (
-                                            <TouchableOpacity
-                                                onPress={onPressLocation}
-                                                style={styles.locationBox}>
-                                                <AntDesign name="enviromento" size={Spaces.xxxl} color={Colors.DEEP_GRAY} style={styles.search} />
-                                                <Text
-                                                    style={styles.locationText}
-                                                    numberOfLines={1}>{defaultAddress?.city || "No address selected"}</Text>
-                                            </TouchableOpacity>
-                                        )
-                                    },
-                                    headerStyle: {
-                                        height: 150,
-                                        backgroundColor: Colors.PRIMARY
-                                    },
+                                    header: () => <CustomHeader title={'Request Sitters'} />,
+                                    // headerRight: ({ color, size }) => {
+                                    //     return (
+                                    //         <TouchableOpacity
+                                    //             onPress={onPressLocation}
+                                    //             style={styles.locationBox}>
+                                    //             <AntDesign name="enviromento" size={Spaces.xxxl} color={Colors.DEEP_GRAY} style={styles.search} />
+                                    //             <Text
+                                    //                 style={styles.locationText}
+                                    //                 numberOfLines={1}>{defaultAddress?.city || "No address selected"}</Text>
+                                    //         </TouchableOpacity>
+                                    //     )
+                                    // },
+                                    // headerStyle: {
+                                    //     height: 150,
+                                    //     backgroundColor: Colors.PRIMARY
+                                    // },
                                 }}
                             />
                         </Stack.Navigator>
@@ -241,9 +242,9 @@ const Router = ({ initialRouteName }) => {
     }
 
     return (
-        <NavigationContainer>
-            {returnStack()}
-        </NavigationContainer>
+            <NavigationContainer >
+                {returnStack()}
+            </NavigationContainer>
     )
 }
 

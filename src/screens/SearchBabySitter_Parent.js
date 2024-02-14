@@ -82,14 +82,23 @@ const SearchBabySitter_Parent = ({ navigation }) => {
 
     useEffect(() => {
         if (isFocused) {
-            //getServices()
-            setDashboardApiData(DATA)
+            getDashboardData()
             getAddress()
         }
     }, [isFocused])
 
     const defaultAdressModalVisible = useSelector((state) => state.global.defaultAdressModalVisible)
     const defaultAddress = useSelector((state) => state.global.defaultAddress)
+
+    const getDashboardData = async () => {
+        const result = await handleGetRequest('new_dashboard')
+        if (result?.status == '200') {
+            setDashboardApiData(result)
+        }
+        else {
+            Alert.alert(result?.msg_title, result?.msg_body)
+        }
+    }
 
     const handleOptionSelect = (option) => {
         setSelectedOption(option);
@@ -168,19 +177,23 @@ const SearchBabySitter_Parent = ({ navigation }) => {
     };
 
     const renderItem1 = ({ item }) => (
-        <View style={{}}>
-            <Image source={{ uri: item?.profile_image }}
+        <TouchableOpacity
+        onPress={onPressFriendsFavSitter}
+        style={{}}>
+            <Image source={{ uri: item?.profile }}
                 style={styles.profilePic}
             />
-        </View>
+        </TouchableOpacity>
     );
 
     const renderItem2 = ({ item }) => (
-        <View style={{}}>
-            <Image source={{ uri: item?.profile_image }}
+        <TouchableOpacity 
+        onPress={onPressFavSitters}
+        style={{}}>
+            <Image source={{ uri: item?.profile }}
                 style={styles.profilePic}
             />
-        </View>
+        </TouchableOpacity>
     );
 
     const renderSectionHeader = ({ section: { title } }) => (
@@ -223,12 +236,19 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         return false;
     }
 
-    const onPressFriendsFavSitter = () => {
+    const onPressFriendsFavSitterAll = () => {
+        navigation.navigate('ProfileOfSitterDuringBooking_Parent')
+    }
 
+    const onPressFavSittersAll = () => {
+        navigation.navigate('ProfileOfSitterDuringBooking_Parent')
+    }
+    const onPressFriendsFavSitter = () => {
+        navigation.navigate('ProfileOfSitterDuringBooking_Parent')
     }
 
     const onPressFavSitters = () => {
-
+        navigation.navigate('ProfileOfSitterDuringBooking_Parent')
     }
     const onFocusSearch = () => {
         navigation.navigate('SearchScreen_Parent')
@@ -261,14 +281,13 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                             &&
                             <Text> (Primary)  <AntDesign name='checkcircle' size={Spaces.xl} color={Colors.MUTED_GREEN} /></Text>
                         }
-
                     </Text>
                     <Text>{item.address}</Text>
                 </View>
             </TouchableOpacity>
         )
     }
-
+    console.log('dashboardApiData?.data?.favorite?.data?.length', dashboardApiData?.data?.favorite?.data)
     return (
         loader
             ?
@@ -313,30 +332,47 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                             <Text>Friends' Sitters</Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.viewAllContainer}>
-                        <Text>{dashboardApiData?.data?.friends_favorite?.title}</Text>
-                        <Text
-                            onPress={onPressFriendsFavSitter}
-                            style={styles.viewAllText}>View All</Text>
-                    </View>
-                    <FlatList
-                        horizontal
-                        data={dashboardApiData?.data?.friends_favorite?.data}
-                        keyExtractor={(item, index) => `${index}`}
-                        renderItem={renderItem1}
-                    />
-                    <View style={styles.viewAllContainer}>
-                        <Text>{dashboardApiData?.data?.favorite?.title}</Text>
-                        <Text
-                            onPress={onPressFavSitters}
-                            style={styles.viewAllText}>View All</Text>
-                    </View>
-                    <FlatList
-                        horizontal
-                        data={dashboardApiData?.data?.favorite?.data}
-                        keyExtractor={(item, index) => `${index}`}
-                        renderItem={renderItem2}
-                    />
+                    {
+                        dashboardApiData?.data?.friends_favorite?.data?.length == 0
+                            ?
+                            null
+                            :
+                            <View>
+                                <View style={styles.viewAllContainer}>
+                                    <Text>{dashboardApiData?.data?.friends_favorite?.title}</Text>
+                                    <Text
+                                        onPress={onPressFriendsFavSitterAll}
+                                        style={styles.viewAllText}>View All</Text>
+                                </View>
+                                <FlatList
+                                    horizontal
+                                    data={dashboardApiData?.data?.friends_favorite?.data}
+                                    keyExtractor={(item, index) => `${index}`}
+                                    renderItem={renderItem1}
+                                />
+                            </View>
+                    }
+
+                    {
+                        dashboardApiData?.data?.favorite?.data?.length == 0
+                            ?
+                            null
+                            :
+                            <View>
+                                <View style={styles.viewAllContainer}>
+                                    <Text>{dashboardApiData?.data?.favorite?.title}</Text>
+                                    <Text
+                                        onPress={onPressFavSittersAll}
+                                        style={styles.viewAllText}>View All</Text>
+                                </View>
+                                <FlatList
+                                    horizontal
+                                    data={dashboardApiData?.data?.favorite?.data}
+                                    keyExtractor={(item, index) => `${index}`}
+                                    renderItem={renderItem2}
+                                />
+                            </View>
+                    }
                 </View>
                 <CustomButton
                     title={"Request Sitter"}

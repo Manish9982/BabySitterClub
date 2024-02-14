@@ -302,7 +302,7 @@ const BottomTabsParent = ({ navigation }) => {
                     headerShadowVisible: true
                 }}>
                     <Tab.Screen name="Search" component={SearchBabySitter_Parent} options={{
-                        tabBarLabel:"Home",
+                        tabBarLabel: "Home",
                         headerTitle: 'Home',
                         headerStyle: {
                             height: H * 0.14,
@@ -313,7 +313,7 @@ const BottomTabsParent = ({ navigation }) => {
                                 <TouchableOpacity
                                     onPress={onPressLocation}
                                     style={styles.locationBox}>
-                                    <AntDesign name="enviromento" size={Spaces.xxxl} color={Colors.DEEP_GRAY} style={styles.search} />
+                                    <AntDesign name="enviromento" size={Spaces.xxl} color={Colors.DEEP_GRAY} style={styles.search} />
                                     <Text
                                         style={styles.locationText}
                                         numberOfLines={1}>{defaultAddress?.city || "No address selected"}</Text>
@@ -393,12 +393,13 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     locationBox:
     {
+        flexDirection: 'row',
         borderWidth: 1,
         borderRadius: 8,
-        padding: Spaces.sm,
-        margin: Spaces.sm,
+        padding: 2,
+        marginHorizontal: Spaces.sm,
         justifyContent: 'center',
-        //alignItems:'center'
+        alignItems: 'center'
     },
     locationText:
     {
