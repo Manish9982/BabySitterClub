@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import Store from './src/redux/Store';
 import { LOCAL_STORE } from './src/helper/Utils';
 import { getLocalValue } from './src/helper/LocalStore';
-import { Platform } from 'react-native';
+import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import Colors from './src/helper/Colors';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
@@ -90,11 +90,14 @@ const App = () => {
   }
 
   return (
-    <Provider store={Store}>
-      <PaperProvider theme={theme}>
-        <Router initialRouteName={initialRoute} />
-      </PaperProvider>
-    </Provider>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: Colors.PRIMARY }}>
+      <Provider store={Store}>
+        <PaperProvider theme={theme}>
+          <Router initialRouteName={initialRoute} />
+        </PaperProvider>
+      </Provider>
+    </SafeAreaView>
   )
 }
 

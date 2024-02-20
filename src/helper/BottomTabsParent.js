@@ -296,6 +296,7 @@ const BottomTabsParent = ({ navigation }) => {
                     </TouchableWithoutFeedback>
                 </Modal>
                 <Tab.Navigator screenOptions={{
+
                     headerStyle: {
                         backgroundColor: Colors.PRIMARY,
                     },
@@ -305,7 +306,7 @@ const BottomTabsParent = ({ navigation }) => {
                         tabBarLabel: "Home",
                         headerTitle: 'Home',
                         headerStyle: {
-                            height: H * 0.14,
+                             //height: H * 0.06,
                             backgroundColor: Colors.PRIMARY
                         },
                         headerLeft: ({ color, size }) => {

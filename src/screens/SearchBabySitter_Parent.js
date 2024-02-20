@@ -178,8 +178,8 @@ const SearchBabySitter_Parent = ({ navigation }) => {
 
     const renderItem1 = ({ item }) => (
         <TouchableOpacity
-        onPress={onPressFriendsFavSitter}
-        style={{}}>
+            onPress={onPressFriendsFavSitter}
+            style={{}}>
             <Image source={{ uri: item?.profile }}
                 style={styles.profilePic}
             />
@@ -187,9 +187,9 @@ const SearchBabySitter_Parent = ({ navigation }) => {
     );
 
     const renderItem2 = ({ item }) => (
-        <TouchableOpacity 
-        onPress={onPressFavSitters}
-        style={{}}>
+        <TouchableOpacity
+            onPress={onPressFavSitters}
+            style={{}}>
             <Image source={{ uri: item?.profile }}
                 style={styles.profilePic}
             />
@@ -237,18 +237,18 @@ const SearchBabySitter_Parent = ({ navigation }) => {
     }
 
     const onPressFriendsFavSitterAll = () => {
-        navigation.navigate('ProfileOfSitterDuringBooking_Parent')
+        //navigation.navigate('ProfileOfSitterDuringBooking_Parent')
     }
 
     const onPressFavSittersAll = () => {
-        navigation.navigate('ProfileOfSitterDuringBooking_Parent')
+        //navigation.navigate('ProfileOfSitterDuringBooking_Parent')
     }
     const onPressFriendsFavSitter = () => {
-        navigation.navigate('ProfileOfSitterDuringBooking_Parent')
+        navigation.navigate('ProfileOfSitterForViewing_Parent')
     }
 
     const onPressFavSitters = () => {
-        navigation.navigate('ProfileOfSitterDuringBooking_Parent')
+        navigation.navigate('ProfileOfSitterForViewing_Parent')
     }
     const onFocusSearch = () => {
         navigation.navigate('SearchScreen_Parent')
@@ -339,7 +339,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                             :
                             <View>
                                 <View style={styles.viewAllContainer}>
-                                    <Text>{dashboardApiData?.data?.friends_favorite?.title}</Text>
+                                    <Text style={{ ...Fonts.medSemiBold }}>{dashboardApiData?.data?.friends_favorite?.title}</Text>
                                     <Text
                                         onPress={onPressFriendsFavSitterAll}
                                         style={styles.viewAllText}>View All</Text>
@@ -360,7 +360,7 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                             :
                             <View>
                                 <View style={styles.viewAllContainer}>
-                                    <Text>{dashboardApiData?.data?.favorite?.title}</Text>
+                                    <Text style={{ ...Fonts.medSemiBold }}>{dashboardApiData?.data?.favorite?.title}</Text>
                                     <Text
                                         onPress={onPressFavSittersAll}
                                         style={styles.viewAllText}>View All</Text>
