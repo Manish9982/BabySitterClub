@@ -67,6 +67,7 @@ import RequestSitter_Parent from '../screens/RequestSitter_Parent';
 import { setDefaultAdressModalVisible } from '../redux/GlobalSlice';
 import FriendsSittersListing_Parent from '../screens/FriendsSittersListing_Parent';
 import CustomHeader from '../components/CustomHeader';
+import ProfileOfSitterForViewing_Parent from '../screens/ProfileOfSitterForViewing_Parent';
 
 const Router = ({ initialRouteName }) => {
 
@@ -108,6 +109,7 @@ const Router = ({ initialRouteName }) => {
                     console.log('------------Parent is Logged In--------------')
                     return (
                         <Stack.Navigator screenOptions={{
+                            statusBarColor: Colors.PRIMARY,
                             headerBackTitleVisible: false,
                             headerStyle: {
                                 backgroundColor: Colors.PRIMARY,
@@ -147,26 +149,11 @@ const Router = ({ initialRouteName }) => {
                             <Stack.Screen name="MyFriends_Parent" component={MyFriends_Parent} options={{ headerShown: true, headerTitle: 'My Friends' }} />
                             <Stack.Screen name="FriendsProfile_Parent" component={FriendsProfile_Parent} options={{ headerShown: true, headerTitle: 'Profile' }} />
                             <Stack.Screen name="FriendsSittersListing_Parent" component={FriendsSittersListing_Parent} options={{ headerShown: true, headerTitle: `Friends' Sitters` }} />
+                            <Stack.Screen name="ProfileOfSitterForViewing_Parent" component={ProfileOfSitterForViewing_Parent} options={{ headerShown: true, headerTitle: `My Profile` }} />
                             <Stack.Screen name="RequestSitter_Parent" component={RequestSitter_Parent}
                                 options={{
                                     headerShown: true,
                                     header: () => <CustomHeader title={'Request Sitters'} />,
-                                    // headerRight: ({ color, size }) => {
-                                    //     return (
-                                    //         <TouchableOpacity
-                                    //             onPress={onPressLocation}
-                                    //             style={styles.locationBox}>
-                                    //             <AntDesign name="enviromento" size={Spaces.xxxl} color={Colors.DEEP_GRAY} style={styles.search} />
-                                    //             <Text
-                                    //                 style={styles.locationText}
-                                    //                 numberOfLines={1}>{defaultAddress?.city || "No address selected"}</Text>
-                                    //         </TouchableOpacity>
-                                    //     )
-                                    // },
-                                    // headerStyle: {
-                                    //     height: 150,
-                                    //     backgroundColor: Colors.PRIMARY
-                                    // },
                                 }}
                             />
                         </Stack.Navigator>
@@ -178,6 +165,7 @@ const Router = ({ initialRouteName }) => {
                         <Stack.Navigator
                             initialRouteName={initialRouteName}
                             screenOptions={{
+                                statusBarColor: Colors.PRIMARY,
                                 headerBackTitleVisible: false,
                                 headerShown: Platform.OS == "android" ? true : true
                             }}>
@@ -212,6 +200,7 @@ const Router = ({ initialRouteName }) => {
             else {
                 return (
                     <Stack.Navigator screenOptions={{
+                        statusBarColor: Colors.PRIMARY,
                         headerBackTitleVisible: false,
                         headerShown: Platform.OS == "android" ? true : true
                     }}>
@@ -231,6 +220,7 @@ const Router = ({ initialRouteName }) => {
         else {
             return (
                 <Stack.Navigator screenOptions={{
+                    statusBarColor: Colors.PRIMARY,
                     headerBackTitleVisible: false,
                     headerShown: Platform.OS == "android" ? true : true
                 }}>
@@ -242,9 +232,9 @@ const Router = ({ initialRouteName }) => {
     }
 
     return (
-            <NavigationContainer >
-                {returnStack()}
-            </NavigationContainer>
+        <NavigationContainer>
+            {returnStack()}
+        </NavigationContainer>
     )
 }
 

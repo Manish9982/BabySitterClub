@@ -1,7 +1,7 @@
 
-import { Alert, Modal, FlatList, ImageBackground, StyleSheet, TouchableOpacity, View, useWindowDimensions, Image } from 'react-native'
+import { Alert, Modal, FlatList, ImageBackground, StyleSheet, TouchableOpacity, View, useWindowDimensions, Image, SafeAreaView, TouchableWithoutFeedback } from 'react-native'
 import React, { useState, useEffect, useCallback } from 'react'
-import { Button, Text } from 'react-native-paper'
+import { Button, RadioButton, Text } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
@@ -42,6 +42,7 @@ const RequestSitter_Parent = ({ navigation }) => {
     const [baseUrl, setBaseUrl] = useState('')
     const [selectedAddress, setSelectedAddress] = useState('')
     const [addresses, setAddresses] = useState([])
+    const [repeatOption, setRepeatOption] = useState(null)
 
 
     const dispatch = useDispatch()
@@ -269,7 +270,7 @@ const RequestSitter_Parent = ({ navigation }) => {
         }
     }
 
-    console.log("defaultAddress", defaultAddress)
+    console.log("dates", dates)
 
     return (
         loader
@@ -279,144 +280,162 @@ const RequestSitter_Parent = ({ navigation }) => {
             <ImageBackground
                 source={require('../assets/images/background.png')}
                 style={{ flex: 1 }}>
-                <View style={styles.upperconatiner}>
+                <TouchableOpacity
+                    onPress={() => setSearchFormVisible(prev => !prev)}
+                    style={styles.upperconatiner}>
                     <View style={styles.horizontal}>
-                        <Text style={[styles.textQuery, Fonts.medMedium]}>Discover Your Perfect Sitter Today!</Text>
                         {
+                            searchFormVisible
+                                ?
+                                <Text style={[styles.textQuery, Fonts.medMedium]}>Discover your perfect sitter today!</Text>
+                                :
+                                <Text style={[styles.textQuery, Fonts.medMedium]}>Click here to discover your perfect sitter today!</Text>
+                        }
+                        {/* {
                             searchFormVisible
                                 ?
                                 <TouchableOpacity
                                     style={styles.findButtonStyle}
                                     onPress={() => setSearchFormVisible(prev => !prev)}>
-                                    <AntDesign name={'caretup'} size={15} color={Colors.Secondary} />
+                                    <AntDesign name={'caretup'} size={Spaces.xxl} color={Colors.Secondary} />
                                 </TouchableOpacity>
                                 :
                                 <TouchableOpacity
                                     style={styles.findButtonStyle}
                                     onPress={() => setSearchFormVisible(prev => !prev)}>
-                                    <AntDesign name={'caretdown'} size={15} color={Colors.Secondary} />
+                                    <AntDesign name={'caretdown'} size={Spaces.xxl} color={Colors.Secondary} />
                                 </TouchableOpacity>
-                        }
+                        } */}
 
                     </View>
                     {/* <Text >Hello, James</Text> */}
                     {
                         searchFormVisible
                         &&
-                        <View>
-                            <Button style={styles.button} onPress={() => setOpen(true)} uppercase={false} mode="outlined">
-                                {
-                                    returnTextForButton()
-                                }
-                                {/* {(range?.startDate && range?.endDate) ? `${formatDate_mmddyyyy(range.startDate, true)} - ${formatDate_mmddyyyy(range.endDate)}` : 'Pick Start and End Date'} */}
-                            </Button>
-
-
-                            <DatePickerModal
-                                validRange={{ startDate: new Date() }}
-                                locale="en"
-                                mode="multiple"
-                                visible={open}
-                                onDismiss={onDismiss}
-                                dates={dates}
-                                onConfirm={onConfirm}
-                            />
-
-                            <View style={styles.durationContainer}>
-                                <View style={styles.durationPicker}>
-                                    <Text style={[styles.headingText, { marginBottom: Spaces.vsm }]}>Start Time</Text>
-
+                        <TouchableWithoutFeedback style={{ width: '100%', }}>
+                            <View>
+                                <Button style={styles.button} onPress={() => setOpen(true)} uppercase={false} mode="outlined">
                                     {
-                                        Platform.OS == "android"
-                                        &&
-                                        <TouchableOpacity
-                                            style={styles.timetext}
-
-                                            onPress={() => setShowStartTimePicker(prev => !prev)}>
-                                            <Text
-                                                numberOfLines={1}
-                                                style={[Fonts.lar]}>{convertTo12HourFormat(convertTo24HourFormat(startTime))}</Text>
-                                        </TouchableOpacity>
+                                        returnTextForButton()
                                     }
+                                    {/* {(range?.startDate && range?.endDate) ? `${formatDate_mmddyyyy(range.startDate, true)} - ${formatDate_mmddyyyy(range.endDate)}` : 'Pick Start and End Date'} */}
+                                </Button>
 
-                                    {
-                                        Platform.OS == 'android'
-                                            ?
-                                            showStartTimePicker
+
+                                <DatePickerModal
+                                    presentationStyle='pageSheet'
+                                    validRange={{ startDate: new Date() }}
+                                    locale="en"
+                                    mode="multiple"
+                                    visible={open}
+                                    onDismiss={onDismiss}
+                                    dates={dates}
+                                    onConfirm={onConfirm}
+                                />
+
+                                <View style={styles.durationContainer}>
+                                    <View style={styles.durationPicker}>
+                                        <Text style={[styles.headingText, { marginBottom: Spaces.vsm }]}>Start Time</Text>
+
+                                        {
+                                            Platform.OS == "android"
                                             &&
-                                            <DateTimePicker
-                                                themeVariant='light'
-                                                style={styles.timePicker}
-                                                value={startTime}
-                                                mode="time"
-                                                onChange={(event, selectedTime) => handleStartTimeChange(selectedTime)}
-                                            />
-                                            :
-                                            <DateTimePicker
-                                                themeVariant='light'
-                                                style={styles.timePicker}
-                                                value={startTime}
-                                                mode="time"
-                                                onChange={(event, selectedTime) => handleStartTimeChange(selectedTime)}
-                                            />
-                                    }
+                                            <TouchableOpacity
+                                                style={styles.timetext}
 
-                                </View>
-                                <View style={styles.dashContainer}>
-                                    <Text style={{ ...Fonts.larBold, alignSelf: 'center' }}>-</Text>
-                                </View>
-                                <View style={styles.durationPicker}>
-                                    <Text style={[styles.headingText, { marginBottom: Spaces.vsm }]}>End Time</Text>
+                                                onPress={() => setShowStartTimePicker(prev => !prev)}>
+                                                <Text
+                                                    numberOfLines={1}
+                                                    style={[Fonts.lar]}>{convertTo12HourFormat(convertTo24HourFormat(startTime))}</Text>
+                                            </TouchableOpacity>
+                                        }
 
-                                    {
-                                        Platform.OS == "android"
-                                        &&
-                                        <TouchableOpacity
-                                            style={[styles.timetext]}
-                                            onPress={() => setShowEndTimePicker(prev => !prev)}>
-                                            <Text
-                                                numberOfLines={1}
-                                                style={[Fonts.lar]}>{convertTo12HourFormat(convertTo24HourFormat(endTime))}</Text>
-                                        </TouchableOpacity>
-                                    }
+                                        {
+                                            Platform.OS == 'android'
+                                                ?
+                                                showStartTimePicker
+                                                &&
+                                                <DateTimePicker
+                                                    themeVariant='light'
+                                                    style={styles.timePicker}
+                                                    value={startTime}
+                                                    mode="time"
+                                                    onChange={(event, selectedTime) => handleStartTimeChange(selectedTime)}
+                                                />
+                                                :
+                                                <DateTimePicker
+                                                    themeVariant='light'
+                                                    style={styles.timePicker}
+                                                    value={startTime}
+                                                    mode="time"
+                                                    onChange={(event, selectedTime) => handleStartTimeChange(selectedTime)}
+                                                />
+                                        }
 
-                                    {
-                                        Platform.OS == 'android'
-                                            ?
-                                            showEndTimePicker
+                                    </View>
+                                    <View style={styles.dashContainer}>
+                                        <Text style={{ ...Fonts.larBold, alignSelf: 'center' }}>-</Text>
+                                    </View>
+                                    <View style={styles.durationPicker}>
+                                        <Text style={[styles.headingText, { marginBottom: Spaces.vsm }]}>End Time</Text>
+
+                                        {
+                                            Platform.OS == "android"
                                             &&
-                                            <DateTimePicker
-                                                minimumDate={new Date(startTime)}
-                                                themeVariant='light'
-                                                style={styles.timePicker}
-                                                value={endTime}
-                                                mode="time"
-                                                onChange={(event, selectedTime) => handleEndTimeChange(selectedTime)}
-                                            />
-                                            :
-                                            <DateTimePicker
-                                                minimumDate={new Date(startTime)}
-                                                themeVariant='light'
-                                                style={styles.timePicker}
-                                                value={endTime}
-                                                mode="time"
-                                                onChange={(event, selectedTime) => handleEndTimeChange(selectedTime)}
-                                            />
-                                    }
+                                            <TouchableOpacity
+                                                style={[styles.timetext]}
+                                                onPress={() => setShowEndTimePicker(prev => !prev)}>
+                                                <Text
+                                                    numberOfLines={1}
+                                                    style={[Fonts.lar]}>{convertTo12HourFormat(convertTo24HourFormat(endTime))}</Text>
+                                            </TouchableOpacity>
+                                        }
+
+                                        {
+                                            Platform.OS == 'android'
+                                                ?
+                                                showEndTimePicker
+                                                &&
+                                                <DateTimePicker
+                                                    minimumDate={new Date(startTime)}
+                                                    themeVariant='light'
+                                                    style={styles.timePicker}
+                                                    value={endTime}
+                                                    mode="time"
+                                                    onChange={(event, selectedTime) => handleEndTimeChange(selectedTime)}
+                                                />
+                                                :
+                                                <DateTimePicker
+                                                    minimumDate={new Date(startTime)}
+                                                    themeVariant='light'
+                                                    style={styles.timePicker}
+                                                    value={endTime}
+                                                    mode="time"
+                                                    onChange={(event, selectedTime) => handleEndTimeChange(selectedTime)}
+                                                />
+                                        }
+                                    </View>
                                 </View>
+                                <Text style={[styles.services, Fonts.medMedium]}>Choose Service</Text>
+                                <Button style={styles.button} onPress={() => setModalVisible(true)} uppercase={false} mode="outlined">
+                                    {selectedOption?.service_name || "Pick a service"}
+                                    {/* {(range?.startDate && range?.endDate) ? `${formatDate_mmddyyyy(range.startDate, true)} - ${formatDate_mmddyyyy(range.endDate)}` : 'Pick Start and End Date'} */}
+                                </Button>
+                                <Text style={[styles.services, Fonts.medMedium, { marginVertical: 12, }]}>Choose Frequency</Text>
+                                <RadioButton.Group onValueChange={(value) => setRepeatOption(prev => prev == value ? null : value)} value={repeatOption}>
+                                    <RadioButton.Item mode='android' label="Everyday" value="everyday" />
+                                    <RadioButton.Item mode='android' label="Every Week" value="everyweek" />
+                                    <RadioButton.Item mode='android' label="Every Month" value="everymonth" />
+                                    {/* <RadioButton.Item label="Custom" value="custom" /> */}
+                                </RadioButton.Group>
+                                <TouchableOpacity
+                                    style={styles.goButtonStyle}
+                                    onPress={() => handleGoButton()}>
+                                    <AntDesign name={'arrowright'} size={15} color={Colors.Secondary} />
+                                </TouchableOpacity>
+                                <Text style={styles.goText}>Let's Go!</Text>
                             </View>
-                            <Text style={[styles.services, Fonts.medMedium]}>Choose Service</Text>
-                            <Button style={styles.button} onPress={() => setModalVisible(true)} uppercase={false} mode="outlined">
-                                {selectedOption?.service_name || "Pick a service"}
-                                {/* {(range?.startDate && range?.endDate) ? `${formatDate_mmddyyyy(range.startDate, true)} - ${formatDate_mmddyyyy(range.endDate)}` : 'Pick Start and End Date'} */}
-                            </Button>
-                            <TouchableOpacity
-                                style={styles.goButtonStyle}
-                                onPress={() => handleGoButton()}>
-                                <AntDesign name={'arrowright'} size={15} color={Colors.Secondary} />
-                            </TouchableOpacity>
-                            <Text style={styles.goText}>Let's Go!</Text>
-                        </View>
+                        </TouchableWithoutFeedback>
                     }
 
                     {/* modal container */}
@@ -478,7 +497,7 @@ const RequestSitter_Parent = ({ navigation }) => {
                         />
                     </View>
 
-                </View>
+                </TouchableOpacity>
                 {
                     babySittersData
                         ?
@@ -511,10 +530,12 @@ export default RequestSitter_Parent
 const makeStyles = (H, W) => StyleSheet.create({
 
     upperconatiner: {
+        borderWidth: 1,
         justifyContent: 'center',
         backgroundColor: Colors.PRIMARY,
+        //backgroundColor: Colors.Secondary,
         alignItems: 'center',
-        padding: Spaces.vsm,
+        padding: Spaces.xl,
         borderBottomLeftRadius: 25,
         borderBottomRightRadius: 25,
         paddingBottom: Spaces.med,
@@ -572,7 +593,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     button:
     {
-        backgroundColor: Colors.white
+        backgroundColor: Colors.white,
+        marginVertical: Spaces.med
     },
     durationContainer: {
         flexDirection: 'row',
@@ -645,9 +667,9 @@ const makeStyles = (H, W) => StyleSheet.create({
     findButtonStyle:
     {
         backgroundColor: Colors.DEEP_GRAY,
-        borderRadius: 20 / 2,
-        height: 20,
-        width: 20,
+        borderRadius: 30 / 2,
+        height: 30,
+        width: 30,
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: W * 0.02

@@ -1,9 +1,10 @@
-import { StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Platform, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
 import React from 'react'
 import Colors from '../helper/Colors'
 import Spaces from '../helper/Spaces'
 import { useDispatch, useSelector } from 'react-redux'
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons'
 import { setDefaultAdressModalVisible } from '../redux/GlobalSlice'
 import { Text } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
@@ -28,9 +29,15 @@ const CustomHeader = ({ title }) => {
     return (
         <View style={styles.container}>
             <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                <AntDesign name='left' size={Spaces.xxl} onPress={onPressLeft} color={"#007AFF"} />
+                {
+                    Platform.OS == "ios"
+                        ?
+                        <MaterialIcons name="arrow-back-ios" size={Spaces.xxl} onPress={onPressLeft} color={"#007AFF"} />
+                        :
+                        <Ionicons name="arrow-back" size={Spaces.xxl} onPress={onPressLeft} />
+                }
             </View>
-            <View style={{ flex: 1, alignItems: 'center' }}>
+            <View style={{ flex: 1.5, alignItems: 'center' }}>
                 <Text style={styles.titleText}>{title}</Text>
             </View>
             <View style={{ flex: 1, alignItems: 'flex-end' }}>
@@ -52,14 +59,14 @@ export default CustomHeader
 const makeStyles = (H, W) => StyleSheet.create({
     container:
     {
-        borderBottomWidth: StyleSheet.hairlineWidth,
+        //borderBottomWidth: StyleSheet.hairlineWidth,
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
         width: '100%',
         backgroundColor: Colors.PRIMARY,
-        padding:8,
-        paddingTop:20,
+        padding: 8,
+        //paddingTop:20,
         //backgroundColor: 'red',
     },
     locationBox:
@@ -77,6 +84,7 @@ const makeStyles = (H, W) => StyleSheet.create({
         maxWidth: W * 0.35,
     },
     titleText: {
-        ...Fonts.medMedium
+        ...Fonts.larMedium,
+        textAlign: 'center'
     }
 })
