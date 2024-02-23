@@ -5,6 +5,7 @@ import { handleGetRequest, handlePostRequest } from '../helper/Utils'
 import JobPostingCard from '../components/JobPostingCard'
 import Spaces from '../helper/Spaces'
 import AcceptSitterCardDetailsOnly from '../components/AcceptSitterCardDetailsOnly'
+import CustomButton from '../components/Button'
 
 const JobPostings_Sitter = ({ navigation }) => {
     const [jobsData, setJobsData] = useState(null)
@@ -46,6 +47,10 @@ const JobPostings_Sitter = ({ navigation }) => {
         setShowSitterDetails(true)
     }
 
+    const onPressReturn = () => {
+        navigation.navigate('BottomTabsSitter')
+    }
+
     const renderJobs = ({ item }) => {
         return (
             <TouchableOpacity onPress={() => onPressCard(item)}>
@@ -69,6 +74,7 @@ const JobPostings_Sitter = ({ navigation }) => {
 
         )
     }
+
 
     return (
         <ImageBackground
@@ -111,6 +117,10 @@ const JobPostings_Sitter = ({ navigation }) => {
                         />
                     </View>
             }
+            <CustomButton title={"Return to Dashboard"}
+                style={styles.button}
+                onPressButton={onPressReturn}
+            />
         </ImageBackground>
     )
 }
@@ -118,6 +128,10 @@ const JobPostings_Sitter = ({ navigation }) => {
 export default JobPostings_Sitter
 
 const styles = StyleSheet.create({
+    button: {
+        position:'absolute',
+        bottom: 0
+    },
     container:
     {
         flex: 1

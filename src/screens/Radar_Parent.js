@@ -90,6 +90,7 @@ const Radar_Parent = ({ navigation }) => {
     const result = await handlePostRequest('rapid_booking', formdata)
     console.log('rapid_booking ============>', result)
     if (result?.status == '200') {
+      await getOffers()
       navigation.navigate('PaymentWebview_Parent', { 'bookingId': `${result?.booking_id}` })
     }
     else {
@@ -103,7 +104,7 @@ const Radar_Parent = ({ navigation }) => {
 
     const result = await handlePostRequest('reject_rapid_request', formdata)
     if (result?.status == '200') {
-      Alert.alert("Success")
+      await getOffers()
     }
     else {
       Alert.alert("Error", result?.message)

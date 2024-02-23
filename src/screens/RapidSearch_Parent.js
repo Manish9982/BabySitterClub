@@ -1,4 +1,4 @@
-import { Alert, FlatList, Image, ImageBackground, Modal, ScrollView, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import { Alert, FlatList, Image, ImageBackground, Modal, ScrollView, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View, useWindowDimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Button, Checkbox, Text } from 'react-native-paper'
 import { Regexes, handleGetRequest, handlePostRequest } from '../helper/Utils'
@@ -276,6 +276,10 @@ const RapidSearch_Parent = ({ navigation }) => {
         updateAddress(address?.id)
     }
 
+    const onClosePrice = () => {
+        setPriceModalVisible(prev => !prev)
+    }
+
     return (
         loader
             ?
@@ -310,25 +314,32 @@ const RapidSearch_Parent = ({ navigation }) => {
                     <Modal
                         transparent={true}
                         visible={priceModalVisible}>
-                        <View style={styles.priceModal}>
-                            <View style={styles.popUp}>
-                                <TextInputComponent
-                                    value={price}
-                                    onChangeText={handlePriceChange}
-                                    placeholder={'Enter Your Price Here($)'} />
-                                {
-                                    showWarning
-                                    &&
-                                    <Text style={styles.warningText}>Price is not valid</Text>
-                                }
+                        <TouchableWithoutFeedback onPress={onClosePrice}>
+                            <View style={styles.priceModal}>
+                                <TouchableWithoutFeedback>
+                                    <View style={styles.popUp}>
+                                        <TouchableOpacity onPress={onClosePrice} style={styles.closeButton}>
+                                            <Text style={styles.closeButtonText}><AntDesign name={"close"} size={18} color="red" /></Text>
+                                        </TouchableOpacity>
+                                        <TextInputComponent
+                                            value={price}
+                                            onChangeText={handlePriceChange}
+                                            placeholder={'Enter Your Price Here($)'} />
+                                        {
+                                            showWarning
+                                            &&
+                                            <Text style={styles.warningText}>Price is not valid</Text>
+                                        }
 
-                                <CustomButton
-                                    disabled={showWarning}
-                                    //btnColor={showWarning ? 'gray' : null}
-                                    onPressButton={handleSetPriceButton}
-                                    title={'Set Price'} />
+                                        <CustomButton
+                                            disabled={showWarning}
+                                            //btnColor={showWarning ? 'gray' : null}
+                                            onPressButton={handleSetPriceButton}
+                                            title={'Set Price'} />
+                                    </View>
+                                </TouchableWithoutFeedback>
                             </View>
-                        </View>
+                        </TouchableWithoutFeedback>
                     </Modal >
                     <Modal
                         animationType="slide"
@@ -581,6 +592,12 @@ const makeStyles = (H, W) => StyleSheet.create({
         color: Colors.gray,
         margin: Spaces.sm,
         marginTop: 0,
+    },
+    closeButton: {
+        alignSelf: 'flex-end',
+        borderWidth: 1,
+        borderRadius: 4,
+        borderColor: 'red'
     },
 
 })

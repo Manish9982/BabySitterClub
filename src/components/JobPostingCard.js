@@ -23,6 +23,8 @@ const JobPostingCard = ({ id, profilePicture, name, time, location, priceOffered
         formdata.append("id", id);
         const result = await handlePostRequest('approve_rapid_request', formdata)
         if (result?.status == "200") {
+            //Alert.alert(result?.msg_title, result?.msg_body)
+            Alert.alert("Success", "We have sent your interest, we will notify you as soon as booking is confirmed.")
             callbackMain()
         } else {
             Alert.alert("Error", result?.message)

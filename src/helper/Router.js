@@ -129,7 +129,7 @@ const Router = ({ initialRouteName }) => {
                             <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
                             <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
                             <Stack.Screen name="BookingConfirmation_Parent" component={BookingConfirmation_Parent} options={{ headerShown: true, headerTitle: 'Confirm Booking' }} />
-                            <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{ headerTitle: 'PayPal' }} />
+                            <Stack.Screen name="PaymentWebview_Parent" component={PaymentWebview_Parent} options={{ headerTitle: 'Payment' }} />
                             <Stack.Screen name="CreateBooking_Parent" component={CreateBooking_Parent} options={{ headerTitle: 'Creating Booking' }} />
                             <Stack.Screen name="FAQs_Parent" component={FAQs_Parent} options={{ headerTitle: 'FAQs' }} />
                             <Stack.Screen name="Help" component={Help} options={{ headerShown: true, headerTitle: 'Help and Support' }} />

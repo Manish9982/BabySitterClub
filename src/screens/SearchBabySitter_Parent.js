@@ -1,7 +1,7 @@
 
-import { Alert, Modal, FlatList, ImageBackground, StyleSheet, TouchableOpacity, View, useWindowDimensions, Image } from 'react-native'
+import { Alert, Modal, FlatList, ImageBackground, StyleSheet, TouchableOpacity, View, useWindowDimensions, Image, SafeAreaView, TouchableWithoutFeedback } from 'react-native'
 import React, { useState, useEffect, useCallback } from 'react'
-import { Button, Searchbar, Text, TextInput } from 'react-native-paper'
+import { Button, RadioButton, Text } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
@@ -16,41 +16,8 @@ import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import { useDispatch, useSelector } from 'react-redux';
 import { setDefaultAdress, setDefaultAdressModalVisible } from '../redux/GlobalSlice';
 import RenderOptions from '../components/RenderOptions';
-import CustomButton from '../components/Button';
 
-//Home
-const DATA = {
-    'status': '200',
-    'data':
-    {
-        user_stats:
-        {
-            my_sitters: "8",
-            my_friends: "3",
-            friends_sitters: "51",
-        },
-        friends_favorite: {
-            title: `Your Friends' Favorite Sitters`,
-            data: [
-                { id: '1', name: 'Item 1', profile_image: 'https://images.pexels.com/photos/19947356/pexels-photo-19947356/free-photo-of-man-holding-baby-boy-and-vintage-camera.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-                { id: '2', name: 'Item 2', profile_image: 'https://images.pexels.com/photos/8910045/pexels-photo-8910045.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-                // Add more items as needed
-            ],
-        },
-        favorite: {
-            title: `Your Favorite Sitters`,
-            data: [
-                { id: '1', name: 'Item 1', profile_image: 'https://images.pexels.com/photos/19947356/pexels-photo-19947356/free-photo-of-man-holding-baby-boy-and-vintage-camera.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-                { id: '2', name: 'Item 2', profile_image: 'https://images.pexels.com/photos/8910045/pexels-photo-8910045.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' },
-                // Add more items as needed
-            ],
-        },
-    }
-
-
-}
-
-const SearchBabySitter_Parent = ({ navigation }) => {
+const RequestSitter_Parent = ({ navigation }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
@@ -75,30 +42,13 @@ const SearchBabySitter_Parent = ({ navigation }) => {
     const [baseUrl, setBaseUrl] = useState('')
     const [selectedAddress, setSelectedAddress] = useState('')
     const [addresses, setAddresses] = useState([])
-    const [dashboardApiData, setDashboardApiData] = useState(null)
+    const [repeatOption, setRepeatOption] = useState(null)
+
 
     const dispatch = useDispatch()
-    const isFocused = useIsFocused()
-
-    useEffect(() => {
-        if (isFocused) {
-            getDashboardData()
-            getAddress()
-        }
-    }, [isFocused])
 
     const defaultAdressModalVisible = useSelector((state) => state.global.defaultAdressModalVisible)
     const defaultAddress = useSelector((state) => state.global.defaultAddress)
-
-    const getDashboardData = async () => {
-        const result = await handleGetRequest('new_dashboard')
-        if (result?.status == '200') {
-            setDashboardApiData(result)
-        }
-        else {
-            Alert.alert(result?.msg_title, result?.msg_body)
-        }
-    }
 
     const handleOptionSelect = (option) => {
         setSelectedOption(option);
@@ -106,10 +56,6 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         // Do something with the selected option
         // For example, you can trigger an action or update state
     };
-
-    const onClose = () => {
-        dispatch(setDefaultAdressModalVisible(false))
-    }
 
     const getServices = async () => {
         setLoader(true)
@@ -136,6 +82,55 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         }
         setLoader(false)
     }
+
+
+    const isFocused = useIsFocused()
+
+    useEffect(() => {
+        if (isFocused) {
+            getServices()
+            getAddress()
+        }
+    }, [isFocused])
+
+    const onDismiss = useCallback(() => {
+        setOpen(false);
+    }, [setOpen]);
+
+    const onClose = () => {
+        dispatch(setDefaultAdressModalVisible(false))
+    }
+
+    const onConfirm = useCallback((params) => {
+        console.log("Params", params)
+        setOpen(false);
+        setDates(params.dates);
+        //getUsers(params.dates)
+        console.log("params.dates", params.dates)
+        console.log('[on-change-multi]', params);
+    }, []);
+
+    const handleStartTimeChange = (selectedTime) => {
+        setShowStartTimePicker(false)
+        setStartTime(selectedTime);
+        //Ensure end time is always greater than start time
+        if (endTime <= selectedTime) {
+            const newEndTime = new Date(selectedTime);
+            newEndTime.setHours(selectedTime.getHours() + 1); // Ensuring at least a minute difference
+            setEndTime(newEndTime);
+        }
+    };
+
+    const handleEndTimeChange = (selectedTime) => {
+        setShowEndTimePicker(false)
+        // Ensure end time is always greater than start time
+        if (selectedTime <= startTime) {
+            const newStartTime = new Date(selectedTime);
+            newStartTime.setHours(selectedTime.getHours() - 1); // Ensuring at least a minute difference
+            setStartTime(newStartTime);
+        }
+        setEndTime(selectedTime);
+    };
 
     const getUsers = async (multiDate) => {
         if (true) {
@@ -165,6 +160,11 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         }
     }
 
+    const handleGoButton = () => {
+        setSearchFormVisible(prev => !prev)
+        getUsers()
+    }
+
     const handleFavourite = async (Id) => {
         const formdata = new FormData()
         formdata.append('userId', Id)
@@ -176,34 +176,15 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         }
     };
 
-    const renderItem1 = ({ item }) => (
-        <TouchableOpacity
-            onPress={onPressFriendsFavSitter}
-            style={{}}>
-            <Image source={{ uri: item?.profile }}
-                style={styles.profilePic}
-            />
-        </TouchableOpacity>
-    );
+    const handleNavigation = (userid, roleid) => {
+        navigation.navigate("ProfileOfSitterDuringBooking_Parent", { 'userID': userid, 'bookingDate': JSON.stringify(dates), 'startTime': JSON.stringify(startTime), 'endTime': JSON.stringify(endTime), 'service': selectedOption })
+    }
 
-    const renderItem2 = ({ item }) => (
-        <TouchableOpacity
-            onPress={onPressFavSitters}
-            style={{}}>
-            <Image source={{ uri: item?.profile }}
-                style={styles.profilePic}
-            />
-        </TouchableOpacity>
-    );
-
-    const renderSectionHeader = ({ section: { title } }) => (
-        <View style={styles.sectionHeader}>
-            <Text style={styles.sectionHeaderText}>{title}</Text>
-            <TouchableOpacity>
-                <Text style={styles.viewAllButton}>View All</Text>
-            </TouchableOpacity>
-        </View>
-    );
+    const throwChipSelection = (name) => {
+        if (filterdata?.includes(name)) {
+            return true
+        }
+    }
 
     const updateAddress = async (ID) => {
         setLoader(true)
@@ -236,37 +217,24 @@ const SearchBabySitter_Parent = ({ navigation }) => {
         return false;
     }
 
-    const onPressFriendsFavSitterAll = () => {
-        //navigation.navigate('ProfileOfSitterDuringBooking_Parent')
+    const renderBabysitterCard = ({ item }) => {
+        if ((haveCommonElements(filterdata, item?.service) || filterdata?.length == 0) && (item?.name?.toLowerCase()?.includes(searchText?.toLowerCase()))) {
+            return (
+                <BabySitterCard
+                    rating={item?.rating}
+                    profilePicture={`${babySittersData?.url}${item?.profilePicture}`}
+                    name={item?.name}
+                    description={item?.description}
+                    hourlyPrice={item?.hourlyPrice}
+                    isFavourite={item?.isFavourite}
+                    onPressFavourite={() => handleFavourite(item?.Id)}
+                    onPressItemSelected={() => handleNavigation(item?.Id)}
+                    serviceIds={item?.service_id}
+                />
+            )
+        }
     }
 
-    const onPressFavSittersAll = () => {
-        //navigation.navigate('ProfileOfSitterDuringBooking_Parent')
-    }
-    const onPressFriendsFavSitter = () => {
-        navigation.navigate('ProfileOfSitterForViewing_Parent')
-    }
-
-    const onPressFavSitters = () => {
-        navigation.navigate('ProfileOfSitterForViewing_Parent')
-    }
-    const onFocusSearch = () => {
-        navigation.navigate('SearchScreen_Parent')
-    }
-
-    const onPressMySitters = () => {
-        navigation.navigate('Favourite_Parent')
-    }
-
-    const onPressMyFriends = () => {
-        navigation.navigate('MyFriends_Parent')
-    }
-    const onPressRequestSitter = () => {
-        navigation.navigate('RequestSitter_Parent')
-    }
-    const onPressFriendsSitter = () => {
-        navigation.navigate('FriendsSittersListing_Parent')
-    }
     const renderAddressItem = ({ item }) => {
         return (
             <TouchableOpacity
@@ -281,13 +249,29 @@ const SearchBabySitter_Parent = ({ navigation }) => {
                             &&
                             <Text> (Primary)  <AntDesign name='checkcircle' size={Spaces.xl} color={Colors.MUTED_GREEN} /></Text>
                         }
+
                     </Text>
                     <Text>{item.address}</Text>
                 </View>
             </TouchableOpacity>
         )
     }
-    console.log('dashboardApiData?.data?.favorite?.data?.length', dashboardApiData?.data?.favorite?.data)
+
+
+    const returnTextForButton = () => {
+        if (dates?.length == 1) {
+            return `${formatDate_mmddyyyy(dates[0], true)}`
+        }
+        else if (dates?.length > 1) {
+            return `${formatDate_mmddyyyy(dates[0], true)} (+ ${dates?.length - 1} more)`
+        }
+        else {
+            return "Pick Dates"
+        }
+    }
+
+    console.log("dates", dates)
+
     return (
         loader
             ?
@@ -295,103 +279,263 @@ const SearchBabySitter_Parent = ({ navigation }) => {
             :
             <ImageBackground
                 source={require('../assets/images/background.png')}
-                style={{ flex: 1, }}>
-                <View style={{}}>
-                    <Searchbar
-                        onFocus={onFocusSearch}
-                        onPressIn={onFocusSearch}
-                        style={styles.searchBar}
-                        placeholder='Search for friends or sitters.. '
-                        value={searchText}
-                        onChangeText={setSearchText}
-                    />
-                    <RenderOptions
-                        renderItem={renderAddressItem}
-                        data={addresses}
-                        visible={defaultAdressModalVisible}
-                        onClose={onClose}
-                        onValueChange={onPressAddressItem}
-                    />
-                    <View style={styles.statsTableContainer}>
-                        <TouchableOpacity
-                            onPress={onPressMySitters}
-                            style={styles.statsTableBlock}>
-                            <Text style={styles.infoText}>{dashboardApiData?.data?.user_stats?.my_sitters}</Text>
-                            <Text>My Sitters</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={onPressMyFriends}
-                            style={styles.statsTableBlock}>
-                            <Text style={styles.infoText}>{dashboardApiData?.data?.user_stats?.my_friends}</Text>
-                            <Text>My Friends</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={onPressFriendsSitter}
-                            style={styles.statsTableBlock}>
-                            <Text style={styles.infoText}>{dashboardApiData?.data?.user_stats?.friends_sitters}</Text>
-                            <Text>Friends' Sitters</Text>
-                        </TouchableOpacity>
+                style={{ flex: 1 }}>
+                <TouchableOpacity
+                    onPress={() => setSearchFormVisible(prev => !prev)}
+                    style={styles.upperconatiner}>
+                    <View style={styles.horizontal}>
+                        {
+                            searchFormVisible
+                                ?
+                                <Text style={[styles.textQuery, Fonts.medMedium]}>Discover your perfect sitter today!</Text>
+                                :
+                                <Text style={[styles.textQuery, Fonts.medMedium]}>Click here to discover your perfect sitter today!</Text>
+                        }
+                        {/* {
+                            searchFormVisible
+                                ?
+                                <TouchableOpacity
+                                    style={styles.findButtonStyle}
+                                    onPress={() => setSearchFormVisible(prev => !prev)}>
+                                    <AntDesign name={'caretup'} size={Spaces.xxl} color={Colors.Secondary} />
+                                </TouchableOpacity>
+                                :
+                                <TouchableOpacity
+                                    style={styles.findButtonStyle}
+                                    onPress={() => setSearchFormVisible(prev => !prev)}>
+                                    <AntDesign name={'caretdown'} size={Spaces.xxl} color={Colors.Secondary} />
+                                </TouchableOpacity>
+                        } */}
+
                     </View>
+                    {/* <Text >Hello, James</Text> */}
                     {
-                        dashboardApiData?.data?.friends_favorite?.data?.length == 0
-                            ?
-                            null
-                            :
+                        searchFormVisible
+                        &&
+                        <TouchableWithoutFeedback style={{ width: '100%', }}>
                             <View>
-                                <View style={styles.viewAllContainer}>
-                                    <Text style={{ ...Fonts.medSemiBold }}>{dashboardApiData?.data?.friends_favorite?.title}</Text>
-                                    <Text
-                                        onPress={onPressFriendsFavSitterAll}
-                                        style={styles.viewAllText}>View All</Text>
-                                </View>
-                                <FlatList
-                                    horizontal
-                                    data={dashboardApiData?.data?.friends_favorite?.data}
-                                    keyExtractor={(item, index) => `${index}`}
-                                    renderItem={renderItem1}
+                                <Button style={styles.button} onPress={() => setOpen(true)} uppercase={false} mode="outlined">
+                                    {
+                                        returnTextForButton()
+                                    }
+                                    {/* {(range?.startDate && range?.endDate) ? `${formatDate_mmddyyyy(range.startDate, true)} - ${formatDate_mmddyyyy(range.endDate)}` : 'Pick Start and End Date'} */}
+                                </Button>
+
+
+                                <DatePickerModal
+                                    presentationStyle='pageSheet'
+                                    validRange={{ startDate: new Date() }}
+                                    locale="en"
+                                    mode="multiple"
+                                    visible={open}
+                                    onDismiss={onDismiss}
+                                    dates={dates}
+                                    onConfirm={onConfirm}
                                 />
+
+                                <View style={styles.durationContainer}>
+                                    <View style={styles.durationPicker}>
+                                        <Text style={[styles.headingText, { marginBottom: Spaces.vsm }]}>Start Time</Text>
+
+                                        {
+                                            Platform.OS == "android"
+                                            &&
+                                            <TouchableOpacity
+                                                style={styles.timetext}
+
+                                                onPress={() => setShowStartTimePicker(prev => !prev)}>
+                                                <Text
+                                                    numberOfLines={1}
+                                                    style={[Fonts.lar]}>{convertTo12HourFormat(convertTo24HourFormat(startTime))}</Text>
+                                            </TouchableOpacity>
+                                        }
+
+                                        {
+                                            Platform.OS == 'android'
+                                                ?
+                                                showStartTimePicker
+                                                &&
+                                                <DateTimePicker
+                                                    themeVariant='light'
+                                                    style={styles.timePicker}
+                                                    value={startTime}
+                                                    mode="time"
+                                                    onChange={(event, selectedTime) => handleStartTimeChange(selectedTime)}
+                                                />
+                                                :
+                                                <DateTimePicker
+                                                    themeVariant='light'
+                                                    style={styles.timePicker}
+                                                    value={startTime}
+                                                    mode="time"
+                                                    onChange={(event, selectedTime) => handleStartTimeChange(selectedTime)}
+                                                />
+                                        }
+
+                                    </View>
+                                    <View style={styles.dashContainer}>
+                                        <Text style={{ ...Fonts.larBold, alignSelf: 'center' }}>-</Text>
+                                    </View>
+                                    <View style={styles.durationPicker}>
+                                        <Text style={[styles.headingText, { marginBottom: Spaces.vsm }]}>End Time</Text>
+
+                                        {
+                                            Platform.OS == "android"
+                                            &&
+                                            <TouchableOpacity
+                                                style={[styles.timetext]}
+                                                onPress={() => setShowEndTimePicker(prev => !prev)}>
+                                                <Text
+                                                    numberOfLines={1}
+                                                    style={[Fonts.lar]}>{convertTo12HourFormat(convertTo24HourFormat(endTime))}</Text>
+                                            </TouchableOpacity>
+                                        }
+
+                                        {
+                                            Platform.OS == 'android'
+                                                ?
+                                                showEndTimePicker
+                                                &&
+                                                <DateTimePicker
+                                                    minimumDate={new Date(startTime)}
+                                                    themeVariant='light'
+                                                    style={styles.timePicker}
+                                                    value={endTime}
+                                                    mode="time"
+                                                    onChange={(event, selectedTime) => handleEndTimeChange(selectedTime)}
+                                                />
+                                                :
+                                                <DateTimePicker
+                                                    minimumDate={new Date(startTime)}
+                                                    themeVariant='light'
+                                                    style={styles.timePicker}
+                                                    value={endTime}
+                                                    mode="time"
+                                                    onChange={(event, selectedTime) => handleEndTimeChange(selectedTime)}
+                                                />
+                                        }
+                                    </View>
+                                </View>
+                                <Text style={[styles.services, Fonts.medMedium]}>Choose Service</Text>
+                                <Button style={styles.button} onPress={() => setModalVisible(true)} uppercase={false} mode="outlined">
+                                    {selectedOption?.service_name || "Pick a service"}
+                                    {/* {(range?.startDate && range?.endDate) ? `${formatDate_mmddyyyy(range.startDate, true)} - ${formatDate_mmddyyyy(range.endDate)}` : 'Pick Start and End Date'} */}
+                                </Button>
+                                <Text style={[styles.services, Fonts.medMedium, { marginVertical: 12, }]}>Choose Frequency</Text>
+                                <RadioButton.Group onValueChange={(value) => setRepeatOption(prev => prev == value ? null : value)} value={repeatOption}>
+                                    <RadioButton.Item mode='android' label="Everyday" value="everyday" />
+                                    <RadioButton.Item mode='android' label="Every Week" value="everyweek" />
+                                    <RadioButton.Item mode='android' label="Every Month" value="everymonth" />
+                                    {/* <RadioButton.Item label="Custom" value="custom" /> */}
+                                </RadioButton.Group>
+                                <TouchableOpacity
+                                    style={styles.goButtonStyle}
+                                    onPress={() => handleGoButton()}>
+                                    <AntDesign name={'arrowright'} size={15} color={Colors.Secondary} />
+                                </TouchableOpacity>
+                                <Text style={styles.goText}>Let's Go!</Text>
                             </View>
+                        </TouchableWithoutFeedback>
                     }
 
-                    {
-                        dashboardApiData?.data?.favorite?.data?.length == 0
-                            ?
-                            null
-                            :
-                            <View>
-                                <View style={styles.viewAllContainer}>
-                                    <Text style={{ ...Fonts.medSemiBold }}>{dashboardApiData?.data?.favorite?.title}</Text>
-                                    <Text
-                                        onPress={onPressFavSittersAll}
-                                        style={styles.viewAllText}>View All</Text>
+                    {/* modal container */}
+                    <View style={styles.container}>
+                        <TouchableOpacity onPress={() => setModalVisible(true)}>
+                            <Text style={styles.selectButton}>Select an Option</Text>
+                        </TouchableOpacity>
+                        <Modal
+                            transparent={true}
+                            visible={modalVisible}
+                            onDismiss={() => setModalVisible(false)}
+                        >
+                            <TouchableOpacity
+                                onPress={() => setModalVisible(false)}
+                                style={styles.modal}>
+                                <View style={styles.modalContent}>
+                                    <Text style={styles.heading}>Select a service:</Text>
+                                    {services?.map((option, index) => (
+                                        <TouchableOpacity
+                                            key={index}
+                                            style={styles.optionButton}
+                                            onPress={() => handleOptionSelect(option)}
+                                        >
+                                            <Text style={{}}>{option?.service_name}</Text>
+                                            <Image
+                                                style={styles.imageOptions}
+                                                source={{ uri: `${baseUrl}${option?.picture}` }}
+                                            />
+                                        </TouchableOpacity>
+                                    ))}
                                 </View>
-                                <FlatList
-                                    horizontal
-                                    data={dashboardApiData?.data?.favorite?.data}
-                                    keyExtractor={(item, index) => `${index}`}
-                                    renderItem={renderItem2}
-                                />
+                            </TouchableOpacity>
+
+                        </Modal>
+                        {/* <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={defaultAdressModalVisible}
+                            onRequestClose={onClose}
+                        >
+                            <View style={styles.modal}>
+                                <View style={styles.modalContainer}>
+                                    <Text style={styles.modalHeading}>Choose Address</Text>
+                                    <FlatList
+                                        data={addresses}
+                                        renderItem={renderAddressItem}
+                                        keyExtractor={(item, index) => `${index}`}
+                                    />
+                                    
+                                </View>
                             </View>
-                    }
-                </View>
-                <CustomButton
-                    title={"Request Sitter"}
-                    onPressButton={onPressRequestSitter}
-                    style={styles.customButton}
-                />
+                        </Modal> */}
+                        <RenderOptions
+                            renderItem={renderAddressItem}
+                            data={addresses}
+                            visible={defaultAdressModalVisible}
+                            onClose={onClose}
+                            onValueChange={onPressAddressItem}
+                        />
+                    </View>
+
+                </TouchableOpacity>
+                {
+                    babySittersData
+                        ?
+                        (
+                            babySittersData?.users?.length == 0
+                                ?
+                                <Text style={[styles.nothingToShow, { marginTop: searchFormVisible ? H * 0.2 : H * 0.33 }]}>
+                                    <Text style={styles.nothingToShow}>{babySittersData?.alert} </Text>
+                                    <Text onPress={() => setSearchFormVisible(prev => !prev)} style={styles.hyperlink}>{babySittersData?.hyperlink}</Text>
+                                    <Text style={styles.nothingToShow}> {babySittersData?.alert2}</Text>
+                                </Text>
+                                :
+                                <FlatList
+                                    data={users}
+                                    renderItem={renderBabysitterCard}
+                                    keyExtractor={(item) => item.Id}
+                                />
+                        )
+                        :
+                        <Text style={[styles.nothingToShow, { marginTop: searchFormVisible ? H * 0.2 : H * 0.33 }]}>Explore Top Sitters Here!</Text>
+
+                }
+
             </ImageBackground>
     );
 };
 
-export default SearchBabySitter_Parent
+export default RequestSitter_Parent
 
 const makeStyles = (H, W) => StyleSheet.create({
 
     upperconatiner: {
+        borderWidth: 1,
         justifyContent: 'center',
         backgroundColor: Colors.PRIMARY,
+        //backgroundColor: Colors.Secondary,
         alignItems: 'center',
-        padding: Spaces.vsm,
+        padding: Spaces.xl,
         borderBottomLeftRadius: 25,
         borderBottomRightRadius: 25,
         paddingBottom: Spaces.med,
@@ -400,6 +544,13 @@ const makeStyles = (H, W) => StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         margin: Spaces.sm,
+
+    },
+    searchBar:
+    {
+        width: W * 0.9,
+        height: H * 0.07,
+        marginVertical: Spaces.sm
     },
     filterBox:
     {
@@ -442,7 +593,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     button:
     {
-        backgroundColor: Colors.white
+        backgroundColor: Colors.white,
+        marginVertical: Spaces.med
     },
     durationContainer: {
         flexDirection: 'row',
@@ -515,9 +667,9 @@ const makeStyles = (H, W) => StyleSheet.create({
     findButtonStyle:
     {
         backgroundColor: Colors.DEEP_GRAY,
-        borderRadius: 20 / 2,
-        height: 20,
-        width: 20,
+        borderRadius: 30 / 2,
+        height: 30,
+        width: 30,
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: W * 0.02
@@ -598,87 +750,5 @@ const makeStyles = (H, W) => StyleSheet.create({
         ...Fonts.medBold,
         textAlign: 'center',
         textDecorationLine: 'underline'
-    },
-    searchBar: {
-        margin: Spaces.med
-    },
-    headerText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8,
-    },
-    listHeader: {
-        marginBottom: 16,
-    },
-    sectionHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 8,
-    },
-    sectionHeaderText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    viewAllButton: {
-        color: 'blue',
-    },
-    itemContainer: {
-
-    },
-    profilePic:
-    {
-        height: 70,
-        aspectRatio: 1,
-        borderRadius: 70 / 2,
-        margin: Spaces.sm
-    },
-    viewAllContainer:
-    {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: Spaces.med
-    },
-    viewAllText:
-    {
-        color: Colors.Secondary,
-        textDecorationLine: 'underline',
-    },
-    customButton:
-    {
-        bottom: 0,
-        position: 'absolute'
-    },
-    statsTableContainer:
-    {
-        flexDirection: 'row',
-        width: W,
-    },
-    statsTableBlock:
-    {
-        height: 66,
-        width: W / 3,
-        borderWidth: 0.5,
-        borderColor: Colors.gray,
-        justifyContent: 'space-evenly',
-        alignItems: 'center'
-    },
-    infoText:
-    {
-        color: Colors.Secondary,
-        ...Fonts.xlSemiBold
-    },
-    locationBox:
-    {
-        borderWidth: 1,
-        borderRadius: 8,
-        padding: Spaces.sm,
-        margin: Spaces.sm,
-        justifyContent: 'center',
-        //alignItems:'center'
-    },
-    locationText:
-    {
-        maxWidth: W * 0.35,
-    },
+    }
 })
