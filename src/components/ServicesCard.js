@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, useWindowDimensions, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, useWindowDimensions, TouchableOpacity, Alert } from 'react-native';
 import Spaces from '../helper/Spaces';
 import Colors from '../helper/Colors';
 import Fonts from '../helper/Fonts';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import { Text } from 'react-native-paper';
 
-const ServiceCard = ({ picture, name, isSelected, onPressServices }) => {
+const ServiceCard = ({ status, picture, name, isSelected, onPressServices }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
+    const onPressDisabled = () => {
+        Alert.alert('Coming Soon..')
+    }
     return (
         <TouchableOpacity
-            onPress={onPressServices}
+            onPress={status == '1' ? onPressServices : onPressDisabled}
             // style={[styles.container, { backgroundColor: Colors.buttoncolor }]}
             style={[styles.container, { backgroundColor: isSelected ? Colors.selectedcolor : Colors.white }]}>
 
@@ -25,17 +28,17 @@ const ServiceCard = ({ picture, name, isSelected, onPressServices }) => {
                 source={{ uri: picture }}
                 // style={[styles.picture]} 
 
-                style={[styles.picture, { tintColor: isSelected ? Colors.white : Colors.black }]} />
+                style={[styles.picture, { tintColor: isSelected ? Colors.white : Colors.black }, { opacity: status == '1' ? 1 : 0.2 }]} />
 
 
             <View style={styles.card}>
                 {/* <Text style={[styles.name, Fonts.larSemiBold]}>{name}</Text> */}
 
-                <Text style={[styles.name, Fonts.xlSemiBold, 
-                    { color: isSelected ? Colors.white : Colors.black }]}>{name}</Text>
+                <Text style={[styles.name, Fonts.xlSemiBold,
+                { color: isSelected ? Colors.white : Colors.black }, { opacity: status == '1' ? 1 : 0.2 }]}>{name}</Text>
             </View>
 
-            
+
         </TouchableOpacity>
     );
 };
@@ -60,8 +63,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     picture:
     {
-        width: H*0.08,
-        height: H*0.08,
+        width: H * 0.08,
+        height: H * 0.08,
         tintColor: Colors.white,
     },
     card:
@@ -70,8 +73,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     name:
     {
-        color: Colors.white, 
-        marginTop:H*0.015,
+        color: Colors.white,
+        marginTop: H * 0.015,
     },
 
     description:

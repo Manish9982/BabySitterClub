@@ -5,6 +5,7 @@ import SearchBabySitter_Parent from '../screens/SearchBabySitter_Parent';
 import Bookings from '../screens/Bookings';
 import Account from '../screens/Account';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import Favourite_Parent from '../screens/Favourite_Parent';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsProfileCompleted, setDefaultAdressModalVisible } from '../redux/GlobalSlice';
 import { LOCAL_STORE, handleGetRequest, handlePostRequest } from './Utils';
@@ -17,13 +18,11 @@ import { check, request, PERMISSIONS, RESULTS, openSettings } from 'react-native
 import messaging from '@react-native-firebase/messaging';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons'
-import FontAwesome from 'react-native-vector-icons/dist/FontAwesome'
 import RapidSearch_Parent from '../screens/RapidSearch_Parent';
 import Spaces from './Spaces';
 import Colors from './Colors';
 import Radar_Parent from '../screens/Radar_Parent';
 import Fonts from './Fonts';
-import Community from '../screens/Community';
 
 const ACTIVE_REQUEST_DETAILS = {
     data: {
@@ -296,17 +295,14 @@ const BottomTabsParent = ({ navigation }) => {
                     </TouchableWithoutFeedback>
                 </Modal>
                 <Tab.Navigator screenOptions={{
-
                     headerStyle: {
                         backgroundColor: Colors.PRIMARY,
                     },
                     headerShadowVisible: true
                 }}>
                     <Tab.Screen name="Search" component={SearchBabySitter_Parent} options={{
-                        tabBarLabel: "Home",
-                        headerTitle: 'Home',
                         headerStyle: {
-                             //height: H * 0.06,
+                            height: H * 0.14,
                             backgroundColor: Colors.PRIMARY
                         },
                         headerLeft: ({ color, size }) => {
@@ -314,21 +310,18 @@ const BottomTabsParent = ({ navigation }) => {
                                 <TouchableOpacity
                                     onPress={onPressLocation}
                                     style={styles.locationBox}>
-                                    <AntDesign name="enviromento" size={Spaces.xxl} color={Colors.DEEP_GRAY} style={styles.search} />
+                                    <AntDesign name="enviromento" size={Spaces.xxxl} color={Colors.DEEP_GRAY} style={styles.search} />
                                     <Text
                                         style={styles.locationText}
                                         numberOfLines={1}>{defaultAddress?.city || "No address selected"}</Text>
                                 </TouchableOpacity>
                             )
                         },
-                        tabBarIcon: ({ color, size }) => <AntDesign name="home" size={size} color={color} />
+                        tabBarIcon: ({ color, size }) => <AntDesign name="search1" size={size} color={color} />
                     }} />
-                    <Tab.Screen name="Community" component={Community} options={{
-                        tabBarIcon: ({ color, size }) => <FontAwesome name="users" size={size} color={color} />
-                    }} />
-                    {/* <Tab.Screen name="Favourites" component={Favourite_Parent} options={{
+                    <Tab.Screen name="Favourites" component={Favourite_Parent} options={{
                         tabBarIcon: ({ color, size }) => <AntDesign name="staro" size={size} color={color} />
-                    }} /> */}
+                    }} />
                     <Tab.Screen name="Bookings" component={Bookings} options={{
                         tabBarIcon: ({ color, size }) => <AntDesign name="calendar" size={size} color={color} />
                     }} />
@@ -394,13 +387,12 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     locationBox:
     {
-        flexDirection: 'row',
         borderWidth: 1,
         borderRadius: 8,
-        padding: 2,
-        marginHorizontal: Spaces.sm,
+        padding: Spaces.sm,
+        margin: Spaces.sm,
         justifyContent: 'center',
-        alignItems: 'center'
+        //alignItems:'center'
     },
     locationText:
     {

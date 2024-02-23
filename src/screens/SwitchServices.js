@@ -94,6 +94,7 @@ const SwitchServices = ({ navigation, route }) => {
 
     const renderServices = ({ item }) => (
         <ServicesCard
+            status={item?.status}
             isSelected={item?.isSelected}
             picture={`${baseUrl}${item?.picture}`}
             name={item?.service_name}
@@ -149,6 +150,6 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     button:
     {
-       
+
     }
 })

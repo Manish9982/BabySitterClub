@@ -64,6 +64,7 @@ const Services = ({ navigation }) => {
 
     const renderServices = ({ item }) => (
         <ServicesCard
+            status={item?.status}
             isSelected={item?.isSelected}
             picture={`${baseUrl}${item?.picture}`}
             name={item?.service_name}
