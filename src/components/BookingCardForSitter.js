@@ -8,7 +8,7 @@ import Colors from '../helper/Colors';
 import { Shadows, handlePostRequest } from '../helper/Utils';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 
-const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status, callBack, price, bookingNumberId }) => {
+const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status, callBack, price, bookingNumberId, isRapid }) => {
 
   const W = useWindowDimensions().width
   const H = useWindowDimensions().height
@@ -54,7 +54,6 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
           else {
             Alert.alert(result?.message)
           }
-
         },
       },
       {
@@ -96,7 +95,7 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
       )
     }
   }
-
+  console.log('isRapid=======>', isRapid)
   return (
     <View style={styles.cardContainer}>
       <View style={styles.profileContainer}>
@@ -107,6 +106,16 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
       </View>
       <Divider style={styles.divider} />
       <Text style={[styles.dateText, { ...Fonts.larBold }]}>Name: {name}</Text>
+      {
+        isRapid == '1'
+        &&
+        <View style={styles.blitzcareFlag}>
+          <Image source={require('../assets/images/lightning.png')}
+            style={styles.light}
+          />
+          <Text style={{ color: '#fff' }}>BlitzCare</Text>
+        </View>
+      }
       <Text style={styles.dateText}>Date: {date}</Text>
       <Text style={styles.slotText}>Booking ID: {bookingNumberId}</Text>
       <Text style={styles.slotText}>Slot: {slot}</Text>
@@ -193,7 +202,21 @@ const makeStyles = (H, W) => StyleSheet.create({
   {
     justifyContent: 'center',
     alignItems: 'center'
-  }
+  },
+  light: {
+    height: 30,
+    width: 30,
+},
+blitzcareFlag:
+{
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    justifyContent: 'center',
+    backgroundColor: Colors.selectedcolor,
+    borderRadius: 8,
+    padding: 1
+}
 });
 
 export default BookingCardForSitter;

@@ -38,6 +38,7 @@ const Bookings_Sitter = () => {
         if (((value == 'pending') && (item?.booking_status == 0)) || ((value == 'completed') && (item?.booking_status == 1)) || (value == 'all')) {
             return (
                 <BookingCardForSitter
+                    isRapid={item?.is_rapid}
                     bookingNumberId={item?.b_id}
                     callBack={getBookings}
                     status={item?.booking_status}

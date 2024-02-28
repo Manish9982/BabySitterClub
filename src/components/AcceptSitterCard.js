@@ -56,7 +56,7 @@ const AcceptSitterCard = ({ profilePicture, name, description, priceOffered, isF
 
                 </Text>
                 <Text>Rating: {rating}/5.0 <AntDesign name="star" size={16} color={Colors.golden} /></Text>
-                <Text style={[styles.price, Fonts.medMedium]}>Price offered: ${priceOffered}</Text>
+                <Text style={[styles.price, Fonts.medMedium]}>Price offered: ${priceOffered}/Hr</Text>
                 <Text>Accept: </Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
                     <TouchableOpacity onPress={handleAccept} style={{ backgroundColor: 'green', height: 40, width: 40, borderRadius: 40 / 2, justifyContent: 'center', alignItems: 'center' }}>

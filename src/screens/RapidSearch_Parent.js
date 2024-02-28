@@ -15,6 +15,7 @@ import { setDefaultAdress, setDefaultAdressModalVisible, setIsRequestActive } fr
 import RenderOptions from '../components/RenderOptions'
 import Loader from '../components/Loader'
 import { useIsFocused } from '@react-navigation/native'
+import { addEvent } from '../helper/CalendarEvent'
 
 const duration = [
     // {
@@ -70,6 +71,7 @@ const RapidSearch_Parent = ({ navigation }) => {
     useEffect(() => {
         getAddress()
         getServices()
+        addEvent()
     }, [])
     useEffect(() => {
         if (isFocused) {
@@ -388,10 +390,10 @@ const RapidSearch_Parent = ({ navigation }) => {
                             onPress={handleDurationButtonPress}>{selectedDuration || 'Choose Duration'}</Button>
                     </View>
                     <View style={styles.horizontal}>
-                        <Text style={styles.heading}>Price : </Text>
+                        <Text style={styles.heading}>Hourly Price : </Text>
                         <Button
                             style={styles.button}
-                            onPress={handlePriceButtonPress}>{price == '' ? 'Enter Price' : `$ ${price}`}</Button>
+                            onPress={handlePriceButtonPress}>{price == '' ? 'Enter Hourly Price' : `$ ${price}`}</Button>
                     </View>
                     <View style={styles.horizontal}>
                         <Text style={styles.heading}>Comments : </Text>

@@ -68,6 +68,7 @@ import { setDefaultAdressModalVisible } from '../redux/GlobalSlice';
 import FriendsSittersListing_Parent from '../screens/FriendsSittersListing_Parent';
 import CustomHeader from '../components/CustomHeader';
 import ProfileOfSitterForViewing_Parent from '../screens/ProfileOfSitterForViewing_Parent';
+import WelcomeScreen from '../screens/WelcomeScreen';
 
 const Router = ({ initialRouteName }) => {
 
@@ -213,6 +214,7 @@ const Router = ({ initialRouteName }) => {
                         <Stack.Screen name="ChooseUserType" component={ChooseUserType} options={{ headerTitle: '' }} />
                         <Stack.Screen name="CountryList" component={CountryList} options={{ headerTitle: 'Choose Country' }} />
                         <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{}} />
+                        <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false,  }} />
                     </Stack.Navigator>
                 )
             }

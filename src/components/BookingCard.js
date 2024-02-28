@@ -17,15 +17,23 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
     const [rating, setRating] = useState(0)
     const [submitLoader, setSubmitLoader] = useState(false)
     const [comment, setComment] = useState('')
+    const [tipModal, setTipModal] = useState(false)
+    const [tipAmount, setTipAmount] = useState('')
+
 
     const W = useWindowDimensions().width
     const navigation = useNavigation()
 
+    console.log('booking?.is_rate', booking?.is_rate)
 
     const handleRatingSubmit = (data) => {
         // Handle the submission of rating and review data here
         console.log(data);
     };
+
+    const onPressTipSubmit = () =>{
+        navigation.navigate()
+    }
 
     const onPressSubmitFeedback = () => {
         setModalVisible(prev => !prev);
@@ -42,6 +50,7 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
         if (result?.status == '200') {
             Alert.alert('Success', `${result?.message}`)
             setModalVisible(prev => !prev)
+            setTipModal(prev=>!prev)
         }
         else {
             Alert.alert(`${result?.message}`)
@@ -67,6 +76,11 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
                                     style={{ paddingVertical: 10 }}
                                 />
                                 <TextInputComponent
+                                style={{
+                                    alignSelf:'center',
+                                    marginBottom:15,
+                                    width:200
+                                }}
                                     multiline={true}
                                     numberOfLines={4}
                                     placeholder={'Comments'}
@@ -77,6 +91,37 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
                                     onPressSmallButton={onPressSubmit}
                                     loader={submitLoader}
                                     title={'Submit'}
+                                    style={styles.ratingButton}
+                                />
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
+            <Modal
+                visible={tipModal}
+                transparent={true} >
+                <TouchableWithoutFeedback onPress={() => setTipModal(prev => !prev)}>
+                    <View style={styles.modalContainer}>
+                        <TouchableWithoutFeedback>
+                            <View style={styles.ratingBox}>
+                                <Text style={styles.rateTextName}>Do you want to add a tip for {booking?.first_name}?</Text>
+                                
+                                <TextInputComponent
+                                style={{
+                                    alignSelf:'center',
+                                    marginBottom:15,
+                                    width:200
+                                }}
+                                    multiline={true}
+                                    placeholder={'Comments'}
+                                    value={tip}
+                                    onChangeText={setComment}
+                                />
+                                <SmallButtonSecondary
+                                    onPressSmallButton={onPressTipSubmit}
+                                    loader={submitLoader}
+                                    title={'Yes'}
                                     style={styles.ratingButton}
                                 />
                             </View>
@@ -113,6 +158,17 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
                 {/* <AntDesign name={booking?.icon} color={booking?.b_color} /> */}
                 <AntDesign name={booking?.b_icon} color={booking?.b_color} size={Spaces.lar} style={{ marginTop: Spaces.sm }} />
                 <Text style={styles.bookingValue2}>{booking?.booking_status}</Text>
+                {
+                    booking?.is_rapid == '1'
+                    &&
+                    <View style={styles.blitzcareFlag}>
+                        <Image source={require('../assets/images/lightning.png')}
+                            style={styles.light}
+                        />
+                        <Text style={{ color: '#fff' }}>BlitzCare</Text>
+                    </View>
+                }
+
                 <Text style={styles.createdAt}>{formatDateWithTime(booking?.created_at)}</Text>
             </View>
             <Divider style={styles.divider} />
@@ -155,7 +211,6 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
                     <Text style={styles.label}>Address:  </Text>
                     <Text style={styles.value}>{booking?.address}</Text>
                 </View>
-
                 {
                     booking?.is_rate == '0'
                     &&
@@ -267,7 +322,7 @@ const makeStyles = (W) => StyleSheet.create({
         marginBottom: Spaces.sm
     },
     createdAt: {
-        position: 'absolute',
+        //position: 'absolute',
         bottom: -6,
         left: -5,
         color: Colors.gray,
@@ -282,9 +337,8 @@ const makeStyles = (W) => StyleSheet.create({
     },
     ratingBox:
     {
-        width: W * 0.7,
         backgroundColor: Colors.white,
-        padding: Spaces.sm,
+        padding: Spaces.lar,
         borderRadius: 8,
     },
     rateTextName:
@@ -310,6 +364,20 @@ const makeStyles = (W) => StyleSheet.create({
     replaceText:
     {
         ...Fonts.vsm
+    },
+    light: {
+        height: 30,
+        width: 30,
+    },
+    blitzcareFlag:
+    {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        backgroundColor: Colors.selectedcolor,
+        borderRadius: 8,
+        padding: 1
     }
 });
 

@@ -277,7 +277,7 @@ const BottomTabsParent = ({ navigation }) => {
                                                             ...Fonts.medBold,
                                                             //textDecorationLine: 'underline'
                                                         }}>Price:</Text>
-                                                        <Text> {activeRequestDetails?.data?.price}</Text>
+                                                        <Text> ${activeRequestDetails?.data?.price}/Hr</Text>
                                                     </Text>
                                                     <Text>
                                                         <Text style={{
