@@ -410,6 +410,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     input: {
         marginBottom: Spaces.sm,
+        width:'90%',
+        alignSelf:'center'
     },
     guidingText: {
         ...Fonts.sm,

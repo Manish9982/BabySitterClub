@@ -69,6 +69,7 @@ import FriendsSittersListing_Parent from '../screens/FriendsSittersListing_Paren
 import CustomHeader from '../components/CustomHeader';
 import ProfileOfSitterForViewing_Parent from '../screens/ProfileOfSitterForViewing_Parent';
 import WelcomeScreen from '../screens/WelcomeScreen';
+import TipPaymentWebview from '../screens/TipPaymentWebview';
 
 const Router = ({ initialRouteName }) => {
 
@@ -157,6 +158,13 @@ const Router = ({ initialRouteName }) => {
                                     header: () => <CustomHeader title={'Request Sitters'} />,
                                 }}
                             />
+                            <Stack.Screen name="TipPaymentWebview" component={TipPaymentWebview}
+options={{
+headerShown: true,
+headerTitle:"Payment",
+}}
+/>
+
                         </Stack.Navigator>
                     )
                 }
