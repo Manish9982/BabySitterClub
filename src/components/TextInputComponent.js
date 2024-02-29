@@ -10,7 +10,7 @@ const TextInputComponent = ({ value, onChangeText, placeholder, editable = true,
       autoCapitalize='none'
       numberOfLines={numberOfLines}
       editable={editable}
-      style={styles.input}
+      style={style ? style : styles.input}
       placeholder={placeholder}
       value={value}
       onChangeText={onChangeText}

@@ -36,7 +36,7 @@ const AcceptSitterCardDetailsOnly = ({ profilePicture, name, description, priceO
             </TouchableOpacity>
             <Image
                 defaultSource={require('../assets/images/mother.png')}
-                source={{ uri: `${baseUrl}${profilePicture}` }}
+                source={{ uri: `${profilePicture}` }}
                 style={styles.profilePic} />
             <View
                 style={styles.card}>
@@ -64,7 +64,7 @@ const AcceptSitterCardDetailsOnly = ({ profilePicture, name, description, priceO
                     style={[styles.description, Fonts.smMedium]}>{description}
                 </Text>
                 <Text>Rating: {rating}/5.0 <AntDesign name="star" size={16} color={Colors.golden} /></Text>
-                <Text style={[styles.price, Fonts.medMedium]}>Price offered: ${priceOffered}</Text>
+                <Text style={[styles.price, Fonts.medMedium]}>Price offered: ${priceOffered}/Hr</Text>
             </View>
         </View>
     );

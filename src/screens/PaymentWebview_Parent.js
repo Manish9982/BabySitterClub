@@ -18,7 +18,7 @@ const PaymentWebview_Parent = ({ navigation, route }) => {
 
   const handleStateChange = (state) => {
     if (state?.url == 'https://thebabysitterclubs.com/babysitter/payment-redirect') {
-      navigation.navigate('BottomTabsParent')
+      navigation.navigate('Bookings')
     }
   }
 

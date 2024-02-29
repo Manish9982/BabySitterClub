@@ -31,7 +31,7 @@ const Splash = ({ navigation }) => {
         }
         else {
             dispatch(logout());
-            navigation.replace("SelectCountry")
+            navigation.replace("WelcomeScreen")
         }
     }
 

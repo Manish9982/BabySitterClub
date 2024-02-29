@@ -45,6 +45,7 @@ const CancelledBookings_Parent = ({ navigation, route }) => {
                 createdAt={formatDateWithTime(item?.created_at)}
                 bookingId={item?.id}
                 refundStatus={item?.refund_status}
+                isRapid={item?.is_rapid}
             />
         )
     }

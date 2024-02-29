@@ -47,6 +47,7 @@ const BottomTabsParent = ({ navigation }) => {
         checkCancelledBookings()
         checkProfileStatus()
         updateFcmToken()
+        fetchLocation()
         // if (Platform.OS == 'android') {
         requestUserPermission()
         onNotificationReceiver()
@@ -194,7 +195,24 @@ const BottomTabsParent = ({ navigation }) => {
                     }
                 }
             },
-            (error) => {
+            async (error) => {
+                const authStatus = await messaging().requestPermission();
+                if (authStatus === 1) {
+                    // //console.log("Trying To Get Token ======================>")
+                    let fcmToken = await messaging().getToken();
+                    if (fcmToken) {
+                        const fcmToken = await messaging().getToken();
+                        storeLocalValue(LOCAL_STORE.FCM_TOKEN, fcmToken)
+                        var formdata = new FormData()
+                        formdata.append('fcm_token', fcmToken)
+                        formdata.append('device_type', Platform.OS)
+                        formdata.append('lat', null)
+                        formdata.append('long', null)
+                        const result = await handlePostRequest('update_fcm', formdata)
+                        console.log('result', result)
+                        console.log('formdata', formdata)
+                    }
+                }
                 console.error('Error getting location:', error);
                 Alert.alert('Error', 'Failed to fetch location.');
             },
@@ -277,7 +295,7 @@ const BottomTabsParent = ({ navigation }) => {
                                                             ...Fonts.medBold,
                                                             //textDecorationLine: 'underline'
                                                         }}>Price:</Text>
-                                                        <Text> {activeRequestDetails?.data?.price}</Text>
+                                                        <Text> ${activeRequestDetails?.data?.price}/Hr</Text>
                                                     </Text>
                                                     <Text>
                                                         <Text style={{

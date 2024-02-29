@@ -118,7 +118,7 @@ const Radar_Parent = ({ navigation }) => {
         profilePicture={item?.profile_picture}
         name={item?.name}
         description={item?.description}
-        priceOffered={item?.hourlyPrice}
+        priceOffered={item?.price_offered}
         //isFavourite={}
         //onPressFavourite={() => handleFavourite(item?.Id)}
         onPressItemSelected={() => handleSitterCardPress(item)}
@@ -164,7 +164,7 @@ const Radar_Parent = ({ navigation }) => {
               profilePicture={selectedProfile?.profile_picture}
               name={selectedProfile?.name}
               description={selectedProfile?.description}
-              priceOffered={selectedProfile?.hourlyPrice}
+              priceOffered={selectedProfile?.price_offered}
               serviceIds={selectedProfile?.service_id}
             />
           </View>
