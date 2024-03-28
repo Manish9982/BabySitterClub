@@ -12,7 +12,9 @@ import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import SmallButtonSecondary from '../components/SmallButtonSecondary'
 import CustomButton from '../components/Button'
 import { useIsFocused } from '@react-navigation/native'
-
+import TextInputComponent from '../components/TextInputComponent'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import LinearGradient from 'react-native-linear-gradient'
 
 const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
 
@@ -26,6 +28,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
 
     const [addressdata, setAddressdata] = useState()
     const [profiledetailsdata, setProfiledetailsdata] = useState()
+    const [finalpriceresult, setsetFinalPriceResult] = useState()
     const [loader, setLoader] = useState(true)
     const [slotsDate, setSlotsDate] = useState(JSON.parse(bookingDate)?.startDate ? new Date(JSON.parse(bookingDate)?.startDate) : new Date(JSON.parse(bookingDate)))
     const [serviceFilterId, setServiceFilterId] = useState(null);
@@ -33,8 +36,61 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
     const [selectedAddress, setSelectedAddress] = useState(null);
     const [error, setError] = useState(false);
     const [price, setPrice] = useState('')
-
+    const [modalVisible, setModalVisible] = useState(false);
+    const [pricemodalVisible, setPriceModalVisible] = useState(false);
     const isFocused = useIsFocused()
+    const [children, setChildren] = useState('')
+    const [finalPrice, setFinalPrice] = useState(null); // State to store the final price from API
+
+    const handleIconPress = () => {
+        setPriceModalVisible(true)
+    };
+    const handleOutSidePress = () => {
+        setPriceModalVisible(false)
+    };
+
+    // const handleInputChange = (text) => {
+    //     if (text == '') {
+    //         setChildren("");
+    //         setsetFinalPriceResult("")
+    //     } else if (text == NaN || text == '0') {
+    //         setChildren("");
+    //         setsetFinalPriceResult("")
+    //         Alert.alert("Error", "Input a valid no")
+
+    //     } else {
+    //         if (text < 5) {
+    //             getFinalPrice()
+    //             setChildren(text);
+
+    //             const newValue = defaultValue + parseInt(text);
+    //             setsetFinalPriceResult(finalpriceresult?.final_price);
+    //         }
+    //         else {
+    //             Alert.alert("Error", "You can not add more than 4 children")
+    //         }
+    //     }
+    // }
+
+    const handleInputChange = (text) => {
+        if (text === '') {
+            setChildren('');
+            setFinalPrice(null);
+        } else if (isNaN(text) || parseInt(text) === 0) {
+            setChildren('');
+            setFinalPrice(null);
+            Alert.alert('Error', 'Input a valid number');
+        } else {
+            if (parseInt(text) <= 4) {
+                setChildren(text);
+                getFinalPrice(text)
+            }
+        }
+    };
+
+    const onPressCancelButton = () => {
+        setModalVisible(false)
+    }
 
     useEffect(() => {
         getUsersProfileDetails()
@@ -50,6 +106,14 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
         setAddressdata(result)
         console.log(result)
     }
+
+    const onPressCloseModal = () => {
+        console.log("State", modalVisible)
+        setModalVisible(false);
+    };
+
+
+
 
     const calculatePrice = async () => {
         console.log('usedDate', usedDate)
@@ -137,12 +201,31 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
         }
         const result = await handlePostRequest('user_details', formdata)
 
+        console.log("OAERANS", formdata)
+
         if (result?.status == '200') {
             setProfiledetailsdata(result)
             console.log(result)
         } else if (result?.status == '201') {
             Alert.alert("Error", result?.message)
             navigation.goBack()
+        }
+        setLoader(false)
+    }
+    const getFinalPrice = async (childrencount) => {
+        const formdata = new FormData()
+        formdata.append('userId', userID)
+        formdata.append('children', childrencount)
+
+        const result = await handlePostRequest('childrenwise_price', formdata)
+
+        if (result?.status == '200') {
+            setsetFinalPriceResult(result)
+            setFinalPrice(result?.final_price)
+            console.log(result)
+        } else if (result?.status == '201') {
+            Alert.alert("Error", result?.message)
+            //navigation.goBack()
         }
         setLoader(false)
     }
@@ -194,22 +277,54 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
             return;
         }
         else {
+            setModalVisible(true)
             console.log('Proceed with address:', selectedAddress);
+            //     navigation.navigate('CreateBooking_Parent', {
+            //         createBooking: JSON.stringify({
+            //             name: `${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`,
+            //             date: usedDate,
+            //             start_time: startTime,
+            //             end_time: endTime,
+            //             price: price,
+            //             user_id: userID,
+            //             booking_address: selectedAddress,
+            //             service: service
+            //         })
+            //     })
+            // }
+        }
+    }
+
+
+    const onPressButton = () => {
+        if (children == '') {
+            Alert.alert("Error", "Field can not be empty")
+        } else {
+            setModalVisible(false)
+            console.log('PARAMS==============:', usedDate,);
+            console.log('Proceed with PARAMS==============:', startTime,);
+            console.log('Proceed with PARAMS==============:', endTime,);
+            console.log('Proceed with PARAMS==============:', finalPrice,);
+            console.log('Proceed with PARAMS==============:', userID,);
+            console.log('Proceed with PARAMS==============:', selectedAddress,);
+            console.log('Proceed with PARAMS==============:', service,);
             navigation.navigate('CreateBooking_Parent', {
                 createBooking: JSON.stringify({
                     name: `${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`,
                     date: usedDate,
                     start_time: startTime,
                     end_time: endTime,
-                    price: price,
+                    price: finalPrice,
                     user_id: userID,
                     booking_address: selectedAddress,
                     service: service
                 })
             })
-        }
-    }
 
+        }
+
+        // getFinalPrice()
+    }
     const onPressReviews = () => {
         navigation.navigate("Reviews_Parent", { 'userId': userID })
     }
@@ -227,7 +342,9 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                 <ScrollView
                     contentContainerStyle={styles.contentContainerStyle}
                     style={styles.container}>
+
                     <View style={styles.upperContainer}>
+
                         <TouchableOpacity onPress={() => navigation.navigate('ViewPicture', { imageUrl: `${profiledetailsdata?.url}${profiledetailsdata?.userDetails?.picture}` })}>
                             <Image
                                 source={{ uri: `${profiledetailsdata?.url}${profiledetailsdata?.userDetails?.picture}` }}
@@ -239,7 +356,8 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                             <Text style={[styles.heading, { marginBottom: 0 }]}>{`${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`}</Text>
                             <Text style={[styles.textSecondary, { marginBottom: 0 }, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.address}</Text>
                             <View style={styles.whiteBox}>
-                                <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.hour_price}/Hr`}</Text>
+                                {/* <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.hour_price}/Hr`}</Text> */}
+                                <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.price1}/Hr`}</Text>
                             </View>
                         </View>
                     </View>
@@ -284,9 +402,14 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         <Text style={styles.detailRow}>
                             <Text style={styles.label}>
                                 Price : </Text>
-                            <Text style={styles.bookingSpecs}>
-                                $ {price}
-                            </Text>
+                            <Text style={styles.bookingSpecs}>$ {price}   </Text>
+
+                            <TouchableOpacity onPress={handleIconPress}>
+                                <AntDesign
+                                    name="infocirlce" size={16} color={'red'}>
+                                </AntDesign>
+                            </TouchableOpacity>
+
                         </Text>
                         <Text style={styles.detailRow}>
                             <Text style={styles.label}>
@@ -319,8 +442,113 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                     </View>
                     <CustomButton
                         onPressButton={onPressProceed}
-                        title={"Proceed to Payment"} />
+                        // title={"Proceed to Payment"} />
+                        title={"Proceed"} />
                 </ScrollView>
+
+                {/* final price modal */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(false);
+                    }}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.sectionHeader}>Enter Children To Proceed</Text>
+                            <TextInputComponent
+                                keyboardType='numeric'
+                                value={children}
+                                onChangeText={text => handleInputChange(text)}
+                                placeholder={"No of children"}
+                                style={styles.input} />
+
+
+                            <Text style={styles.sectionHeader}>
+                                Final Price ($) : {finalPrice}</Text>
+
+
+                            {/* <CustomButton
+                                style={styles.updateButton}
+                                loader={loaderButton}
+                                onPressButton={onPressButton}
+                                title={'Proceed to payment'}
+                            /> */}
+
+
+                            <TouchableOpacity
+                                style={[styles.button]}
+                                //disabled={disabled || loader}
+                                onPress={onPressButton}>
+                                <LinearGradient
+                                    start={{ x: 0, y: 0 }}
+                                    end={{ x: 1, y: 1 }}
+                                    style={styles.linearGradientButton}
+                                    colors={[Colors.PRIMARY, Colors.golden]}>
+                                    {
+                                        loader ?
+                                            <ActivityIndicator size={"small"}
+                                                color={Colors.white}
+                                            />
+                                            :
+                                            <Text style={styles.text}>Proceed to Payment</Text>
+                                    }
+                                </LinearGradient>
+                            </TouchableOpacity>
+
+                            <View style={styles.tipButtons} >
+                                <Text
+                                    onPress={onPressCancelButton}
+                                    style={styles.buttonNo}>Cancel</Text>
+
+
+                            </View>
+
+                        </View>
+                    </View>
+                </Modal>
+
+                {/* children and price detail modal */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={pricemodalVisible}
+                    onRequestClose={() => {
+                        setPriceModalVisible(false);
+                    }}
+                >
+                    <TouchableOpacity
+                        onPress={handleOutSidePress}
+                        style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            {/* Content */}
+                            <View style={styles.rowItemsLayout}>
+                                <Text style={styles.text}>Children</Text>
+                                <Text style={styles.text}>Price ($)</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.textcontent}>{profiledetailsdata?.userDetails?.children1}</Text>
+                                <Text style={styles.textcontent}>{profiledetailsdata?.userDetails?.price1}/Hr</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.textcontent}>{profiledetailsdata?.userDetails?.children2}</Text>
+                                <Text style={styles.textcontent}>{profiledetailsdata?.userDetails?.price2}/Hr</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.textcontent}>{profiledetailsdata?.userDetails?.children3}</Text>
+                                <Text style={styles.textcontent}>{profiledetailsdata?.userDetails?.price3}/Hr</Text>
+                            </View>
+                            <View style={styles.row}>
+                                <Text style={styles.textcontent}>{profiledetailsdata?.userDetails?.children4}+</Text>
+                                <Text style={styles.textcontent}>{profiledetailsdata?.userDetails?.price4}/Hr</Text>
+                            </View>
+                            {/* End of Content */}
+                        </View>
+                    </TouchableOpacity>
+                </Modal>
+
             </ImageBackground >
     )
 }
@@ -504,13 +732,13 @@ const makeStyles = (H, W) => StyleSheet.create({
         flexDirection: 'row',
         paddingRight: Spaces.lar
     },
-    modalContainer:
-    {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: Colors.grayTransparent
-    },
+    // modalContainer:
+    // {
+    //     flex: 1,
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     backgroundColor: Colors.grayTransparent
+    // },
     smallButtonSecondary:
     {
         width: W * 0.2,
@@ -539,11 +767,12 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     mainHeading:
     {
-        ...Fonts.larBold
+        ...Fonts.larBold,
     },
     bookingSpecs:
     {
-        textDecorationLine: 'underline'
+        textDecorationLine: 'underline',
+
     },
     horizontal:
     {
@@ -560,4 +789,131 @@ const makeStyles = (H, W) => StyleSheet.create({
         alignSelf: 'center',
         borderRadius: 8,
     },
+    modalstyling:
+    {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    },
+    modalstyling2:
+    {
+        width: W * 0.9,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    },
+
+
+
+    input: {
+        marginBottom: Spaces.sm,
+        width: W * 0.5,
+        marginTop: Spaces.lar
+    },
+    sectionHeader: {
+        ...Fonts.larBold,
+        marginTop: Spaces.med,
+        marginBottom: Spaces.sm,
+
+    },
+    sectionHeader2: {
+        ...Fonts.xlSemiBold,
+        marginTop: Spaces.med,
+        marginBottom: Spaces.sm,
+
+
+    },
+    updateButton:
+    {
+        marginBottom: Spaces.sm,
+
+        marginTop: Spaces.lar
+
+
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        padding: Spaces.med,
+        borderRadius: 8,
+        width: '80%',
+        alignItems: 'center',
+    },
+    rowItemsLayout: {
+        width: W,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    row: {
+        width: W * 0.46,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+
+    },
+    text: {
+        marginRight: 10,
+        ...Fonts.medSemiBold,
+
+    },
+    textcontent: {
+        marginRight: 0,
+        ...Fonts.med,
+
+    },
+
+    buttonYes:
+    {
+        ...Fonts.medSemiBold,
+        height: W * 0.08,
+        marginEnd: W * 0.03,
+        width: W * 0.11,
+        color: Colors.acceptedGreen,
+
+
+    },
+    buttonNo:
+    {
+        ...Fonts.medSemiBold,
+        textAlign: 'center',
+        width: W * 0.2,
+        color: Colors.rejectedRed
+    },
+    tipButtons:
+    {
+        height: W * 0.08,
+        marginTop: 10,
+        marginBottom: 5,
+        justifyContent: 'space-between',
+        //alignSelf:'flex-start',
+    },
+
+    button:
+    {
+        width: W * 0.55,
+        alignSelf: 'center',
+        marginVertical: Spaces.sm,
+    },
+    text:
+    {
+        textAlign: 'center',
+        ...Fonts.medBold
+    },
+    linearGradientButton:
+    {
+        borderWidth: 0.6,
+        height: 50,
+        width: W * 0.55,
+        borderRadius: 10,
+        justifyContent: 'center',
+    }
 }) 

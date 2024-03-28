@@ -390,7 +390,7 @@ const RapidSearch_Parent = ({ navigation }) => {
                             onPress={handleDurationButtonPress}>{selectedDuration || 'Choose Duration'}</Button>
                     </View>
                     <View style={styles.horizontal}>
-                        <Text style={styles.heading}>Hourly Price : </Text>
+                        <Text style={styles.heading}>Hourly Price($) : </Text>
                         <Button
                             style={styles.button}
                             onPress={handlePriceButtonPress}>{price == '' ? 'Enter Hourly Price' : `$ ${price}`}</Button>

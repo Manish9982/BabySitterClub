@@ -16,13 +16,13 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../redux/AuthSlice';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import { useIsFocused } from '@react-navigation/native';
+import { el } from 'react-native-paper-dates';
 
 const MyProfile_Parent = ({ navigation }) => {
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
-
     const [userdata, setUserdata] = useState(null)
     const [loader, setLoader] = useState(true)
     const [name, setName] = useState('')
@@ -31,19 +31,23 @@ const MyProfile_Parent = ({ navigation }) => {
     const [address, setAddress] = useState('')
     const [price, setPrice] = useState('')
     const [dob, setDob] = useState('')
-    const [children, setChildren] = useState('')
     const [image, setImage] = useState(null)
     const [loaderButton, setLoaderButton] = useState(false)
     const [showSlots, setShowSlots] = useState(false)
     const [slots, setSlots] = useState(null)
     const [addressdata, setAddressdata] = useState('')
+    const [children, setChildren] = useState('')
 
     const dispatch = useDispatch()
     const isFocused = useIsFocused()
 
+   
+
     useEffect(() => {
         getUserProfileData()
     }, [])
+
+
 
     useEffect(() => {
         if (isFocused) {
@@ -231,6 +235,9 @@ const MyProfile_Parent = ({ navigation }) => {
         setAddress(result?.userDetails?.address)
         setChildren(JSON.stringify(result?.userDetails?.no_of_children))
         setPrice(JSON.stringify(result?.userDetails?.hour_price))
+
+        // setDefaultValue(result?.userDetails?.hour_price);
+        // setValue(result?.userDetails?.hour_price); // Set the initial value
         //setImage({ uri: `${result?.url}${result?.userDetails?.picture}` })
         setUserdata(result)
         console.log("RESULT==========>", result)
@@ -364,6 +371,8 @@ const MyProfile_Parent = ({ navigation }) => {
                         placeholder={"No of children"}
                         style={styles.input} />
 
+
+
                     <CustomButton
                         style={styles.updateButton}
                         loader={loaderButton}
@@ -410,8 +419,8 @@ const makeStyles = (H, W) => StyleSheet.create({
     },
     input: {
         marginBottom: Spaces.sm,
-        width:'90%',
-        alignSelf:'center'
+        width: '90%',
+        alignSelf: 'center'
     },
     guidingText: {
         ...Fonts.sm,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Platform, Alert, StyleSheet, View, TouchableOpacity, Modal, useWindowDimensions, TouchableWithoutFeedback, ScrollView, FlatList } from 'react-native';
-import { Text, SegmentedButtons } from 'react-native-paper';
+import { Image, Platform, Alert, StyleSheet, View, Switch, TouchableOpacity, Modal, useWindowDimensions, TouchableWithoutFeedback, ScrollView, FlatList } from 'react-native';
+import { Text, SegmentedButtons, ToggleButton } from 'react-native-paper';
 import TextInputComponent from '../components/TextInputComponent';
 import Colors from '../helper/Colors';
 import Spaces from '../helper/Spaces';
@@ -21,6 +21,7 @@ import CustomDateTimePicker from '../components/CustomDateTimePicker';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { logout } from '../redux/AuthSlice';
 import Slider from '@react-native-community/slider';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 
 const MyProfile_Sitter = ({ navigation }) => {
@@ -28,12 +29,15 @@ const MyProfile_Sitter = ({ navigation }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
+    const [open, setOpen] = useState(false);
+    const [value, setValue] = useState("yes");
 
     const [userdata, setUserdata] = useState(null)
     const [loader, setLoader] = useState(true)
     const [name, setName] = useState('')
     const [lastname, setLastName] = useState('')
     const [about, setAbout] = useState('')
+    const [infants, setInfants] = useState('')
     const [address, setAddress] = useState('')
     const [dob, setDob] = useState('')
     const [children, setChildren] = useState('')
@@ -47,6 +51,39 @@ const MyProfile_Sitter = ({ navigation }) => {
 
     const isFocused = useIsFocused()
     const dispatch = useDispatch()
+    const [selectedValue, setSelectedValue] = useState(null);
+    const [isEnabled, setIsEnabled] = useState(false);
+    const [yesNOValue, setYESNOValue] = useState('');
+
+    const toggleSwitch = () => 
+    setIsEnabled(previousState => !previousState);
+    const [defaultValue, setDefaultValue] = useState(0); // State to store default value
+
+    const [infantvalue, setInfantValue] = useState(defaultValue);
+
+
+    const handleInputChange = (text) => {
+        console.log("value", text)
+        if (text == '') {
+            setChildren("");
+            setInfantValue("")
+        } else if (text == NaN || text == '0') {
+            setChildren("");
+            setInfantValue("")
+            Alert.alert("Error", "Input a valid no")
+
+        } else {
+            if (text < 5) {
+                setChildren(text);
+                const newValue = defaultValue + parseInt(text);
+                setInfantValue(newValue);
+            }
+            else {
+                Alert.alert("Error", "You can not add more than 4")
+            }
+        }
+
+    }
 
     useEffect(() => {
         if (isFocused) {
@@ -59,6 +96,33 @@ const MyProfile_Sitter = ({ navigation }) => {
     useEffect(() => {
         getUserProfileData()
     }, [])
+
+
+    const handleConfirmation = () => {
+        Alert.alert(
+            'Confirmation',
+            'Are you comfortable with infants?',
+            [
+                {
+                    text: 'No',
+                    style: 'cancel',
+                    onPress: () => {
+                        setInfants("No")
+                    },
+                },
+                {
+                    text: 'Yes',
+                    onPress: () => {
+                        // Handle confirmation logic here
+                        console.log('You are comfortable with infants');
+                        setInfants("Yes")
+
+                    },
+                },
+            ],
+            { cancelable: false }
+        );
+    };
 
     const applyFilterToSegment = async () => {
         const result = await handleGetRequest('filters')
@@ -197,6 +261,7 @@ const MyProfile_Sitter = ({ navigation }) => {
         formdata.append('dob', "2000-01-10");
         formdata.append('description', about);
         formdata.append('miles', distance);
+        formdata.append('infants_sitting', isEnabled ? 'YES' : 'NO');
         {
             image &&
                 formdata.append('picture', image);
@@ -220,8 +285,12 @@ const MyProfile_Sitter = ({ navigation }) => {
             setAddress(result?.userDetails?.address)
             setChildren(JSON.stringify(result?.userDetails?.no_of_children))
             setDistance(result?.userDetails?.miles)
+            setIsEnabled(result?.userDetails?.infants_sitting =="YES")
             //setPrice(JSON.stringify(result?.userDetails?.hour_price))
             //setImage({ uri: `${result?.url}${result?.userDetails?.picture}` })
+
+            setDefaultValue(result?.userDetails?.hour_price);
+            setValue(result?.userDetails?.hour_price); // Set the initial value
             setUserdata(result)
         }
 
@@ -374,9 +443,61 @@ const MyProfile_Sitter = ({ navigation }) => {
                     placeholder={"About Me"}
                     style={styles.input} />
 
-                <Text style={styles.guidingText}>
+
+
+                {/* <Text style={styles.guidingText}>
                     Only communicate through the App, do not include contact details. Minimum 200 characters.
                 </Text>
+                <Text
+                    style={styles.description}>
+                    Infants Sitting (0 - 12 yrs) ?
+                </Text> */}
+
+
+                {/* <View >
+                    <DropDownPicker
+                        open={open}
+                        value={value}
+                        items={items}
+                        dropDownDirection="TOP"
+                        setOpen={setOpen}
+                        setValue={setValue}
+                        setItems={setItems}
+                        dropDownContainerStyle={{
+                            backgroundColor: '#FFFFFF',
+                            borderColor: '#a2a2a2',
+                            borderWidth: 1,
+                            
+                        }}
+                        dropDownStyle={styles.dropdownStyle}
+
+                    />
+                </View>
+                 */}
+                {/* added by gaurav 05/03/24 */}
+
+
+
+
+                <View style={styles.horizontalContainerSwitch}>
+                    <Text style={[styles.infantsittingtext]}>Infants Sitting (0 - 12 yrs)?</Text>
+                    <View style={{ flexDirection: 'row', 
+                    alignItems: 'center' }}>
+                        <Switch
+                            style={{ transform: [{ scaleX: 1 }, { scaleY:1 }] }} // Adjust width and height here
+                            trackColor={{ false: "#767577", true: Colors.DARK_BLUE }}
+                            thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch}
+                            value={isEnabled}
+                        />
+                        <Text style={[styles.yesnoToggle, 
+                            { color: isEnabled ? Colors.DARK_BLUE : '#767577' }]}>
+                            {isEnabled ? 'YES' : 'NO'}
+                        </Text>
+                    </View>
+                </View>
+
                 <View style={styles.horizontalContainer}>
                     <Text style={styles.sectionHeader}>Address</Text>
                     <TouchableOpacity
@@ -385,6 +506,14 @@ const MyProfile_Sitter = ({ navigation }) => {
                         <Text style={styles.whiteText}><AntDesign name="pluscircle" /> Add</Text>
                     </TouchableOpacity>
                 </View>
+
+                {/* added by gaurav 05/03/24 */}
+
+
+
+
+
+
                 {addressdata?.data?.map((item, index) => renderAddressItem(item, index))}
 
                 {/* <TextInputComponent
@@ -402,11 +531,17 @@ const MyProfile_Sitter = ({ navigation }) => {
                 <TextInputComponent
                     keyboardType='numeric'
                     value={children}
-                    onChangeText={(text) => {
-                        setChildren(text)
-                    }}
+                    // onChangeText={(text) => {
+                    //     setChildren(text)
+                    // }}
+
+                    onChangeText={text => handleInputChange(text)}
+
                     placeholder={"No of children"}
-                    style={styles.input} /> */}
+                    style={styles.input} />
+
+<Text style={styles.sectionHeader}>Final Price($) : {infantvalue}</Text> */}
+
                 {/* <Text style={styles.sectionHeader}>Date of birth</Text> */}
                 {/* {
                     Platform.OS == "ios"
@@ -539,6 +674,14 @@ const makeStyles = (H, W) => StyleSheet.create({
         marginTop: Spaces.sm,
         marginBottom: Spaces.sm,
     },
+    infantsittingtext: {
+        ...Fonts.medBold,
+        marginTop: 4
+    },
+    yesnoToggle: {
+        ...Fonts.medBold,
+        marginStart: 10, marginEnd: 3
+    },
     description: {
         marginBottom: Spaces.sm,
     },
@@ -548,7 +691,7 @@ const makeStyles = (H, W) => StyleSheet.create({
     guidingText: {
         ...Fonts.sm,
         color: Colors.gray,
-        marginBottom: Spaces.sm,
+        marginBottom: Spaces.med,
     },
     chipContainer: {
         flexDirection: 'row',
@@ -654,7 +797,14 @@ const makeStyles = (H, W) => StyleSheet.create({
     horizontalContainer:
     {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginTop: 15
+    },
+    horizontalContainerSwitch:
+    {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 15
     },
     smallButton:
     {
@@ -806,7 +956,14 @@ const makeStyles = (H, W) => StyleSheet.create({
     {
         alignSelf: 'center',
         marginVertical: H * 0.33
-    }
+    },
+    dropdownStyle: {
+        ...Fonts.sm,
+        backgroundColor: '#FFFFFF', elevation: 1000,
+    },
+    dropdownItemStyle: {
+        fontFamily: Fonts.larSemiBold
+    },
 
 });
 
