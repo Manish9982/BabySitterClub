@@ -72,7 +72,8 @@ const JobPostingCard = ({ id, profilePicture, name, time, location, priceOffered
                         <Text style={[styles.viewOnMapText, { textDecorationLine: 'none' }]}> <AntDesign name="enviromento" size={Spaces.xl} /></Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.price}>{`Offered: $${priceOffered}`}</Text>
+                {/* <Text style={styles.price}>{`Offered: $${priceOffered}`}</Text> */}
+                <Text style={styles.price}>{`My Biltz Price: $${priceOffered}`}</Text>
                 {
                     comments
                     &&

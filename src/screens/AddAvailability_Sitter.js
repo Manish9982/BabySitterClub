@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform, useWindowDimensions } from 'react-native';
+import { View, StyleSheet, TextInput, ScrollView, TouchableOpacity, Alert, Platform, useWindowDimensions } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ActivityIndicator, RadioButton, Text } from 'react-native-paper';
 import Fonts from '../helper/Fonts';
@@ -28,10 +28,58 @@ const AddAvailability_Sitter = ({ navigation, route }) => {
     const [loaderForStartEndTime, setLoaderForStartEndTime] = useState(false)
     const [slotCheckData, setSlotCheckData] = useState(null)
     const [price, setPrice] = useState('')
-
+    const [children, setChildren] = useState('1')
+    const [children2, setChildren2] = useState('1')
+    const [children3, setChildren3] = useState('1')
+    const [children4, setChildren4] = useState('1')
+    const [price1, setPrice1] = useState('1')
+    const [price2, setPrice2] = useState('1')
+    const [price3, setPrice3] = useState('1')
+    const [price4, setPrice4] = useState('1')
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
+    const [visibleView, setVisibleView] = useState(null);
+    const [inputs, setInputs] = useState([]);
+
+    const [childrenValues, setChildrenValues] = useState(['1', '2', '3', '4']);
+    const [priceValues, setPriceValues] = useState(['', '', '', '']);
+
+    const handleToggleView = () => {
+        setVisibleView(prevVisibleView => prevVisibleView + 1);
+        setInputs([...inputs, { children: '', price: '' }]);
+    };
+
+
+    // Function to handle input change for children
+    const handleChildrenChange = (text, index) => {
+        let newChildrenValues = [...childrenValues];
+        newChildrenValues[index] = text;
+        setChildrenValues(newChildrenValues);
+    };
+
+    // Function to handle input change for price
+    const handlePriceChange = (text, index) => {
+        let newPriceValues = [...priceValues];
+        newPriceValues[index] = text;
+        setPriceValues(newPriceValues);
+    };
+
+
+    const handleMinusButton = (index) => {
+        // Update visibleView to hide the last view
+        setVisibleView(visibleView - 1);
+
+        // Clear the input values for the specified index if the view is not visible
+        if (index >= visibleView) {
+            const newInputs = [...inputs];
+            newInputs[index] = ''; // Clear the input values for the specified index
+            setInputs(newInputs);
+        }
+    };
+
+
+
 
     useEffect(() => {
         applyFilterToServices()
@@ -72,7 +120,7 @@ const AddAvailability_Sitter = ({ navigation, route }) => {
                 //homesitter
                 setChosenService({ "id": 3, "service_name": "Home Sitter" })
             }
-            else{
+            else {
                 setChosenService(result?.filters[0])
             }
             setLoader(false)
@@ -108,14 +156,14 @@ const AddAvailability_Sitter = ({ navigation, route }) => {
         setShowPicker(prev => !prev)
     }
 
-    const handlePriceChange = (t) => {
-        if (t?.length < 4 && (!isNaN(t)) && (!(t?.charAt(0) == '0'))) {
-            setPrice(t)
-        }
-        else if (t?.charAt(0) == '0') {
-            setPrice('')
-        }
-    }
+    // const handlePriceChange = (t) => {
+    //     if (t?.length < 4 && (!isNaN(t)) && (!(t?.charAt(0) == '0'))) {
+    //         setPrice(t)
+    //     }
+    //     else if (t?.charAt(0) == '0') {
+    //         setPrice('')
+    //     }
+    // }
 
     const onSelectService = (t) => {
         console.log("picker==>", t)
@@ -124,31 +172,57 @@ const AddAvailability_Sitter = ({ navigation, route }) => {
         })
     }
     const onPressAddAvailability = async () => {
-        if (price == '') {
-            Alert.alert('Price Missing', 'Kindly add your hourly price to add your slot')
+
+        // if (price == '') {
+        //     Alert.alert('Price Missing', 'Kindly add your hourly price to add your slot')
+        // }
+        // else {
+        //     setLoaderButton(true)
+        //     var formdata = new FormData()
+        //     formdata.append("date", formatDate(date));
+        //     formdata.append("start_time", convertTo24HourFormat(startTime));
+        //     formdata.append("end_time", convertTo24HourFormat(endTime));
+        //     formdata.append("repeat", repeatOption);
+        //     // formdata.append("hour_price", price);
+        //     formdata.append("children", childrenValues);
+        //     formdata.append("hour_price", priceValues);
+        //     formdata.append("service_id", JSON.stringify(chosenService?.id));
+        //     const result = await handlePostRequest('slot_availability', formdata)
+        //     if (result?.status == '200') {
+        //         Alert.alert('Availability added', result?.message)
+        //         navigation.goBack()
+        //     }
+        //     else {
+        //         Alert.alert('Error', result?.message)
+        //     }
+        //     setLoaderButton(false)
+        // }
+
+        setLoaderButton(true)
+        var formdata = new FormData()
+        formdata.append("date", formatDate(date));
+        formdata.append("start_time", convertTo24HourFormat(startTime));
+        formdata.append("end_time", convertTo24HourFormat(endTime));
+        formdata.append("repeat", repeatOption);
+        // formdata.append("hour_price", price);
+        formdata.append("children", JSON.stringify(childrenValues)); // Serialize the array to a string
+        formdata.append("hour_price", JSON.stringify(priceValues));
+        formdata.append("service_id", JSON.stringify(chosenService?.id));
+        const result = await handlePostRequest('slot_availability', formdata)
+        console.log("CHILDREN VALUES", childrenValues)
+        console.log("PRICE VALUES", priceValues)
+        if (result?.status == '200') {
+            Alert.alert('Availability added', result?.message)
+            navigation.goBack()
         }
         else {
-            setLoaderButton(true)
-            var formdata = new FormData()
-            formdata.append("date", formatDate(date));
-            formdata.append("start_time", convertTo24HourFormat(startTime));
-            formdata.append("end_time", convertTo24HourFormat(endTime));
-            formdata.append("repeat", repeatOption);
-            formdata.append("hour_price", price);
-            formdata.append("service_id", JSON.stringify(chosenService?.id));
-            const result = await handlePostRequest('slot_availability', formdata)
-            if (result?.status == '200') {
-                Alert.alert('Availability added', result?.message)
-                navigation.goBack()
-            }
-            else {
-                Alert.alert('Error', result?.message)
-            }
-            setLoaderButton(false)
+            Alert.alert('Error', result?.message)
         }
+        setLoaderButton(false)
+
     }
-console.log("route?.params?.service ====>", route?.params?.service)
-console.log("chosenService ====>", chosenService)
+    console.log("route?.params?.service ====>", route?.params?.service)
+    console.log("chosenService ====>", chosenService)
     return (
         loader
             ?
@@ -300,16 +374,242 @@ console.log("chosenService ====>", chosenService)
                     </View>
                 </View>
 
-                <Text style={styles.sectionHeader}>Hourly Rate (Per Hour)</Text>
+
+                <View style={styles.horizontalContainer}>
+
+                </View>
+
+
+                <Text style={styles.sectionHeader}>No of children and Price</Text>
+
+                {/* 1st view */}
+                {/* <View style={styles.horizontalContainer}>
+                <TextInputComponent
+                    keyboardType='numeric'
+                    placeholder={"Children 1"}
+                    style={styles.input}
+                    onChangeText={text => handleInputChange(text, 0, 'children')} />
+
+                <TextInputComponent
+                    keyboardType='numeric'
+                    placeholder={"Price ($)"}
+                    style={styles.input} 
+                    onChangeText={text => handleInputChange(text, 0, 'price')}/>
+
+                <TouchableOpacity style={styles.textBackground} onPress={handleToggleView}>
+                    <Text style={styles.sectionHeader}>+</Text>
+                </TouchableOpacity>
+
+                {visibleView > 1 && (
+                    <TouchableOpacity style={styles.textBackgroundMinus} onPress={handleMinusButton}>
+                        <Text style={styles.sectionHeader}>-</Text>
+                    </TouchableOpacity>
+                )}
+            </View> */}
+
+                {/* 2nd view */}
+                {/* {visibleView >= 2 && (
+                <View style={styles.horizontalContainer}>
+                    <TextInputComponent
+                        keyboardType='numeric'
+                        placeholder={"Children 2"}
+                        style={styles.input} 
+                        onChangeText={text => handleInputChange(text, index + 1, 'children')}/>
+
+                    <TextInputComponent
+                        keyboardType='numeric'
+                        placeholder={"Price ($)"}
+                        style={styles.input} 
+                        onChangeText={text => handleInputChange(text, index + 1, 'price')}/>
+
+                    <TouchableOpacity style={styles.textBackground} onPress={handleToggleView}>
+                        <Text style={styles.sectionHeader}>+</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.textBackgroundMinus} onPress={handleMinusButton}>
+                        <Text style={styles.sectionHeader}>-</Text>
+                    </TouchableOpacity>
+                </View>
+            )} */}
+
+                {/* 3rd view */}
+                {/* {visibleView >= 3 && (
+                <View style={styles.horizontalContainer}>
+                    <TextInputComponent
+                        keyboardType='numeric'
+                        placeholder={"Children 3"}
+                        style={styles.input} 
+                        onChangeText={text => handleInputChange(text, index + 1, 'children')}/>
+
+                    <TextInputComponent
+                        keyboardType='numeric'
+                        placeholder={"Price ($)"}
+                        style={styles.input}
+                        onChangeText={text => handleInputChange(text, index + 1, 'price')}/>
+
+                    <TouchableOpacity style={styles.textBackground} onPress={handleToggleView}>
+                        <Text style={styles.sectionHeader}>+</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.textBackgroundMinus} onPress={handleMinusButton}>
+                        <Text style={styles.sectionHeader}>-</Text>
+                    </TouchableOpacity>
+                </View>
+            )
+            } */}
+                {/* 4th */}
+                {/* {visibleView >= 4 && (
+                <View style={styles.horizontalContainer}>
+                    <TextInputComponent
+                        keyboardType='numeric'
+                        placeholder={"Children 4"}
+                        style={styles.input} 
+                        onChangeText={text => handleInputChange(text, index + 1, 'children')}/>
+
+                    <TextInputComponent
+                        keyboardType='numeric'
+                        placeholder={"Price ($)"}
+                        style={styles.input}
+                        onChangeText={text => handleInputChange(text, index + 1, 'price')} />
+
+                    <TouchableOpacity style={styles.textBackground} onPress={handleToggleView}>
+                        <Text style={styles.sectionHeader}>+</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.textBackgroundMinus} onPress={handleMinusButton}>
+                        <Text style={styles.sectionHeader}>-</Text>
+                    </TouchableOpacity>
+                </View>
+            )
+            } */}
+
+
+
+                <View>
+                    <View style={styles.horizontalContainer1}>
+                        <TextInputComponent
+                            editable={false}
+                            keyboardType='numeric'
+                            placeholder={"Children 1"}
+                            style={styles.input}
+                            onChangeText={text => handleChildrenChange(text, 0)}
+                            value={childrenValues[0]} />
+
+                        <TextInputComponent
+                            keyboardType='numeric'
+                            placeholder={"Price ($)"}
+                            style={styles.input}
+                            onChangeText={text => handlePriceChange(text, 0)}
+                            value={priceValues[0]} />
+
+                        <TouchableOpacity style={styles.textBackground} onPress={handleToggleView}>
+                            <Text
+                                onPress={handleToggleView}
+                                style={styles.sectionHeader}>+</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    {visibleView >= 2 && (
+                        <View style={styles.horizontalContainer}>
+                            <TextInputComponent
+                                editable={false}
+                                keyboardType='numeric'
+                                placeholder={"Children 2"}
+                                style={styles.input}
+                                onChangeText={text => handleChildrenChange(text, 1)}
+                                value={childrenValues[1]} />
+
+                            <TextInputComponent
+                                keyboardType='numeric'
+                                placeholder={"Price ($)"}
+                                style={styles.input}
+                                onChangeText={text => handlePriceChange(text, 1)}
+                                value={priceValues[1]} />
+
+                            <TouchableOpacity style={styles.textBackground} onPress={handleToggleView}>
+                                <Text
+                                    onPress={handleToggleView}
+                                    style={styles.sectionHeader}>+</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.textBackgroundMinus} onPress={handleMinusButton}>
+                                <Text onPress={handleMinusButton}
+                                    style={styles.sectionHeader}>-</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
+
+                    {visibleView >= 3 && (
+                        <View style={styles.horizontalContainer}>
+                            <TextInputComponent
+                                editable={false}
+                                keyboardType='numeric'
+                                placeholder={"Children 3"}
+                                style={styles.input}
+                                onChangeText={text => handleChildrenChange(text, 2)}
+                                value={childrenValues[2]} />
+
+                            <TextInputComponent
+                                keyboardType='numeric'
+                                placeholder={"Price ($)"}
+                                style={styles.input}
+                                onChangeText={text => handlePriceChange(text, 2)}
+                                value={priceValues[2]} />
+
+                            <TouchableOpacity style={styles.textBackground} onPress={handleToggleView}>
+                                <Text
+                                    onPress={handleToggleView}
+                                    style={styles.sectionHeader}>+</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.textBackgroundMinus} onPress={handleMinusButton}>
+                                <Text onPress={handleMinusButton}
+                                    style={styles.sectionHeader}>-</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
+
+                    {visibleView >= 4 && (
+                        <View style={styles.horizontalContainer1}>
+                            <TextInputComponent
+                                editable={false}
+                                keyboardType='numeric'
+                                placeholder={"Children 4+"}
+                                style={styles.input}
+                                onChangeText={text => handleChildrenChange(text, 3)}
+                                value={childrenValues[3]} />
+
+                            <TextInputComponent
+                                keyboardType='numeric'
+                                placeholder={"Price ($)"}
+                                style={styles.input}
+                                onChangeText={text => handlePriceChange(text, 3)}
+                                value={priceValues[3]} />
+
+
+
+                            <TouchableOpacity style={styles.textBackgroundMinus} onPress={handleMinusButton}>
+                                <Text
+                                    onPress={handleMinusButton}
+                                    style={styles.sectionHeader}>-</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                </View>
+
+
+
+
+                {/* <Text style={styles.sectionHeader}>Hourly Rate (Per Hour)</Text>
                 <TextInputComponent
                     keyboardType='numeric'
                     value={price}
                     maxlength={3}
                     onChangeText={(text) => {
-                        handlePriceChange(text)
+                          handlePriceChange(text)
                     }}
                     placeholder={"USD ($)"}
-                    style={styles.input} />
+                    style={styles.input} /> */}
 
                 <Text style={styles.headingText}>Repeat:</Text>
                 <RadioButton.Group onValueChange={(value) => setRepeatOption(prev => prev == value ? null : value)} value={repeatOption}>
@@ -454,7 +754,49 @@ const makeStyles = (H, W) => StyleSheet.create({
         marginBottom: Spaces.sm,
         margin: Spaces.sm,
     },
+    textBackground: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 40,
+        height: 40,
+        borderRadius: 20, // half of width and height to make it a circle
+        backgroundColor: 'green',
+    },
+    textBackgroundMinus: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 40,
+        height: 40,
+        borderRadius: 20, // half of width and height to make it a circle
+        backgroundColor: 'red',
+    },
+    addText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 24,
+    },
+
+    horizontalContainer:
+    {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginTop: 15,
+        alignItems: 'center'
+    },
+    horizontalContainer1:
+    {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginTop: 15,
+        marginEnd: 55,
+        alignItems: 'center'
+    },
+    input: {
+        marginBottom: Spaces.sm,
+        width: W * 0.3
+    },
 
 });
+
 
 export default AddAvailability_Sitter;
