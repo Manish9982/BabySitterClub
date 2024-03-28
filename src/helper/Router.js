@@ -70,6 +70,7 @@ import CustomHeader from '../components/CustomHeader';
 import ProfileOfSitterForViewing_Parent from '../screens/ProfileOfSitterForViewing_Parent';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import TipPaymentWebview from '../screens/TipPaymentWebview';
+import ChatScreen_Sitter from '../screens/ChatScreen_Sitter';
 
 const Router = ({ initialRouteName }) => {
 
@@ -198,6 +199,7 @@ headerTitle:"Payment",
                             <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
                             <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
                             <Stack.Screen name="JobPostings_Sitter" component={JobPostings_Sitter} options={{ headerShown: true, headerTitle: 'New Jobs For You' }} />
+                            <Stack.Screen name="ChatScreen_Sitter" component={ChatScreen_Sitter} options={{ headerShown: true, headerTitle: 'Chat' }} />
                             <Stack.Screen name="BlitzCareListingSuccess_Sitter" component={BlitzCareListingSuccess_Sitter} options={{
                                 headerShown: false,
                                 headerTitle: 'BlitzCare',

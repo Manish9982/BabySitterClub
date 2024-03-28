@@ -7,13 +7,17 @@ import Fonts from '../helper/Fonts';
 import Colors from '../helper/Colors';
 import { Shadows, handlePostRequest } from '../helper/Utils';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
+import { useNavigation } from '@react-navigation/native';
 
-const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status, callBack, price, bookingNumberId, isRapid }) => {
+const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status, callBack, price, bookingNumberId, isRapid , userID }) => {
 
+  console.log("ID==SitterGAURAV" , userID)
   const W = useWindowDimensions().width
   const H = useWindowDimensions().height
 
   const styles = makeStyles(H, W)
+  const navigation = useNavigation()
+
 
   const onPressMarkAsComplete = async () => {
     Alert.alert('Confirm Completion', 'Are you sure you want to mark this booking as complete ? This action is irreversible', [
@@ -61,6 +65,10 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
       }
     ])
   }
+  const onPressChat = async () => {
+       navigation.navigate('ChatScreen_Sitter', { user_id: `${userID}`, name: `${name}` })
+
+  }
 
   const returnContainer = (t) => {
     if (t == '0') {
@@ -74,6 +82,11 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
           onPressSmallButton={onPressCancel}
           style={styles.secondarySmallButton}
           title={'Cancel booking'}
+        />
+        <SmallButtonSecondary
+          onPressSmallButton={onPressChat}
+          style={styles.secondarySmallButton}
+          title={'Chat'}
         />
       </View>)
     }

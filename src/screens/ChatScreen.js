@@ -9,7 +9,7 @@ const ChatScreen = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([
         { id: '1', text: 'Hello!', fromMe: false, user: 'User A', profileImage: 'https://img.freepik.com/free-photo/man-looking-his-phone-while-wearing-brown-jacket_188544-20349.jpg?t=st=1691647567~exp=1691651167~hmac=5de8a4321f48d5903b28e42fa2272b60e137af38f8b853d91ec4c0461fb247d8&w=1800' },
-        { id: '2', text: 'Hi there!', fromMe: true, user: 'You', profileImage: 'https://img.freepik.com/free-photo/young-woman-illuminated-night-texting-phone-generated-by-ai_188544-26190.jpg?t=st=1691647660~exp=1691651260~hmac=5503fa38c59e219f68b3e7d7cbf115d08d35179633643aa0dcdb16e3a1a5b9a8&w=1800' },
+        { id: '2', text: 'H there!', fromMe: true, user: 'You', profileImage: 'https://img.freepik.com/free-photo/young-woman-illuminated-night-texting-phone-generated-by-ai_188544-26190.jpg?t=st=1691647660~exp=1691651260~hmac=5503fa38c59e219f68b3e7d7cbf115d08d35179633643aa0dcdb16e3a1a5b9a8&w=1800' },
         // Add more messages as needed
     ]);
 

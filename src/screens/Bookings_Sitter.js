@@ -52,6 +52,7 @@ const Bookings_Sitter = () => {
                     address={item?.address}
                     createdAt={formatDateWithTime(item?.created_at)}
                     bookingId={item?.id}
+                    userID={item?.user_id}
                     //price={item?.price}
                     price={12}
                 />

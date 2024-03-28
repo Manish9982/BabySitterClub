@@ -26,6 +26,7 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
     const W = useWindowDimensions().width
     const navigation = useNavigation()
 
+    console.log("Bokking id =++++++ SAURAV ", booking?.book_userId)
 
 
 
@@ -35,7 +36,7 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
     };
 
     const onPressMessage = () => {
-        navigation.navigate('ChatScreen', { user_id: `${booking?.book_userId}` })
+        navigation.navigate('ChatScreen_Parent', { user_id: `${booking?.book_userId}` })
     }
 
     const onPressSubmitFeedback = () => {

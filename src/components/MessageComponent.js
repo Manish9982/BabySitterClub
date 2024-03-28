@@ -5,6 +5,7 @@ import { Text } from 'react-native-paper'
 import Fonts from '../helper/Fonts'
 
 const MessageComponent = ({ name, profilePicture, message, firstPerson, time, read }) => {
+    console.log("Profile==>> " , profilePicture)
     return (
         <View style={[styles.messageStyle, {}]}>
             {
@@ -19,7 +20,7 @@ const MessageComponent = ({ name, profilePicture, message, firstPerson, time, re
                     :
                     <View style={styles.horizontalContainer}>
                         <Image
-                            source={{ uri: profilePicture }}
+                            source={{ uri : profilePicture }}
                             style={styles.profilePic}
                         />
                         <View>

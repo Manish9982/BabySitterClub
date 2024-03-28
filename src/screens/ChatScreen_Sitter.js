@@ -58,9 +58,9 @@ const DATA = {
         ]
 }
 
-export default function ChatScreen_Parent({ navigation, route }) {
+export default function ChatScreen_Sitter({ navigation, route }) {
 
-    console.log("ID " , route?.params?.user_id)
+    console.log("ID WITH NAME " , route?.params?.name)
 
     const [messages, setMessages] = useState([])
     const [apiResult, setApiResult] = useState(null)
@@ -108,6 +108,7 @@ export default function ChatScreen_Parent({ navigation, route }) {
         var formdata = new FormData()
         formdata.append('user_id', route?.params.user_id)
         const result = await handlePostRequest('get_message', formdata)
+        console.log("Result Provider " , result)
         if (result?.status == '200') {
             //Alert.alert("Update Staus in API")
             setApiResult(result)
@@ -274,8 +275,8 @@ export default function ChatScreen_Parent({ navigation, route }) {
                     style={styles.textInput}
                     value={msg}
                     onChangeText={setMsg}
-                    placeholder='Write something here..'
                     right={<TextInput.Icon onPress={onPressSend} icon={'send'} />}
+                    placeholder='Write something here..'
                     // left={<TextInput.Icon onPress={onPressGallery} icon={'image'} />}
                 />
             </View>
@@ -285,16 +286,13 @@ export default function ChatScreen_Parent({ navigation, route }) {
 
 const styles = StyleSheet.create({
     contentContainerStyle: {
-        flexGrow: 1,
-       
+        flexGrow: 1
     },
     keyboardAvoidingContainer: {
         position: 'absolute',
-        width: '95%',
+        width: '100%',
         bottom: 0,
         flex: 1,
-        margin:10
-       
     },
     textInput: {
         // Your text input styles here
