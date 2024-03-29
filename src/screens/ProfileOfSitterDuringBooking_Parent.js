@@ -13,8 +13,8 @@ import SmallButtonSecondary from '../components/SmallButtonSecondary'
 import CustomButton from '../components/Button'
 import { useIsFocused } from '@react-navigation/native'
 import TextInputComponent from '../components/TextInputComponent'
-import Icon from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient'
+import ReviewCard from '../components/ReviewCard'
 
 const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
 
@@ -49,28 +49,6 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
         setPriceModalVisible(false)
     };
 
-    // const handleInputChange = (text) => {
-    //     if (text == '') {
-    //         setChildren("");
-    //         setsetFinalPriceResult("")
-    //     } else if (text == NaN || text == '0') {
-    //         setChildren("");
-    //         setsetFinalPriceResult("")
-    //         Alert.alert("Error", "Input a valid no")
-
-    //     } else {
-    //         if (text < 5) {
-    //             getFinalPrice()
-    //             setChildren(text);
-
-    //             const newValue = defaultValue + parseInt(text);
-    //             setsetFinalPriceResult(finalpriceresult?.final_price);
-    //         }
-    //         else {
-    //             Alert.alert("Error", "You can not add more than 4 children")
-    //         }
-    //     }
-    // }
 
     const handleInputChange = (text) => {
         if (text === '') {
@@ -131,7 +109,6 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
             Alert.alert("Info", result?.message)
             navigation.goBack()
         }
-        console.log("formdata", result)
     }
 
     const toggleModal = () => {
@@ -201,11 +178,9 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
         }
         const result = await handlePostRequest('user_details', formdata)
 
-        console.log("OAERANS", formdata)
-
         if (result?.status == '200') {
             setProfiledetailsdata(result)
-            console.log(result)
+            console.log("profiledetailsdata?.data?.reviews_data?.length", result?.userDetails)
         } else if (result?.status == '201') {
             Alert.alert("Error", result?.message)
             navigation.goBack()
@@ -216,6 +191,8 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
         const formdata = new FormData()
         formdata.append('userId', userID)
         formdata.append('children', childrencount)
+        formdata?.append('start_time', convertTo24HourFormat(JSON.parse(startTime)))
+        formdata?.append('end_time', convertTo24HourFormat(JSON.parse(endTime)))
 
         const result = await handlePostRequest('childrenwise_price', formdata)
 
@@ -225,6 +202,8 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
             console.log(result)
         } else if (result?.status == '201') {
             Alert.alert("Error", result?.message)
+            setChildren('')
+
             //navigation.goBack()
         }
         setLoader(false)
@@ -331,6 +310,24 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
 
     console.log("new Date(bookingDate)====>", new Date(JSON.parse(bookingDate)))
     const styles = makeStyles(H, W)
+
+
+
+    const renderReviews = ({ item, index }) => {
+        return (
+            <ReviewCard
+                baseUrl={profiledetailsdata?.url}
+                profilePicture={item?.image}
+                fullName={item?.name}
+                date={item?.date}
+                rating={item?.rating}
+                review={item?.review}
+            />
+        )
+    }
+
+
+
     return (
         loader
             ?
@@ -362,7 +359,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         </View>
                     </View>
                     <View style={styles.lowerContainer}>
-                        <Text style={styles.text}>
+                        <Text style={styles.description}>
                             {profiledetailsdata?.userDetails?.description}
                         </Text>
                         <Text>
@@ -373,9 +370,50 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                             <Text style={styles.subheading}>Rating: </Text>
                             <Text style={[styles.text, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.rating}/5 <AntDesign name="star" size={16} color={Colors.golden} /></Text>
                         </Text>
-                        <TouchableOpacity onPress={onPressReviews}>
+
+
+
+                        <View
+                            style={{
+                                flexDirection: 'row'
+                            }}>
                             <Text style={[styles.subheading, { textDecorationLine: "underline", color: Colors.gray }]}>Reviews({profiledetailsdata?.userDetails?.reviews}) </Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={onPressReviews}
+                                style={{
+                                    marginStart: 20
+                                }}
+                            >
+                                <Text style={[styles.seemore, { textDecorationLine: "underline", color: "red" }]}>See More </Text>
+                            </TouchableOpacity>
+                        </View>
+
+
+                        {/* 
+                        <TouchableOpacity
+                            onPress={onPressReviews}>
+                            <Text style={[styles.subheading, { textDecorationLine: "underline", color: Colors.gray }]}>Reviews({profiledetailsdata?.userDetails?.reviews}) </Text>
+                        </TouchableOpacity> */}
+
+
+
+                        <View style={styles.flatlist}>
+                            {
+                                profiledetailsdata?.userDetails?.reviews_data?.length == 0
+                                    ?
+                                    <View style={styles.errorContainer}>
+                                        <Text>No Reviews Yet..</Text>
+                                    </View>
+                                    :
+                                    <FlatList
+                                        data={profiledetailsdata?.userDetails?.reviews_data}
+                                        renderItem={renderReviews}
+                                        keyExtractor={(item, index) => `${index}`}
+                                    />
+                            }
+                        </View>
+
+
                         <Text style={styles.warningtitle}>Warning: </Text>
                         <Text style={[styles.warning, Fonts.smMedium]}>
                             For your own safety and protection, only communicate through this app.
@@ -468,15 +506,6 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
 
                             <Text style={styles.sectionHeader}>
                                 Final Price ($) : {finalPrice}</Text>
-
-
-                            {/* <CustomButton
-                                style={styles.updateButton}
-                                loader={loaderButton}
-                                onPressButton={onPressButton}
-                                title={'Proceed to payment'}
-                            /> */}
-
 
                             <TouchableOpacity
                                 style={[styles.button]}
@@ -577,8 +606,16 @@ const makeStyles = (H, W) => StyleSheet.create({
         ...Fonts.medBold,
         marginBottom: Spaces.sm,
     },
+    seemore: {
+        ...Fonts.medBold,
+        marginBottom: Spaces.sm,
+    },
     text: {
         marginBottom: Spaces.sm,
+    },
+    description: {
+        ...Fonts.medBold,
+        color: "black",
     },
     divider: {
         borderBottomColor: 'black',
@@ -915,5 +952,12 @@ const makeStyles = (H, W) => StyleSheet.create({
         width: W * 0.55,
         borderRadius: 10,
         justifyContent: 'center',
-    }
+    },
+    flatlist:
+    {
+        padding: Spaces.med,
+        // height: H * 0.54,
+        borderWidth: 1,
+        borderRadius: 8,
+    },
 }) 

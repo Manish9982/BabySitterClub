@@ -191,7 +191,7 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
                 {/* <AntDesign name={booking?.icon} color={booking?.b_color} /> */}
                 <AntDesign name={booking?.b_icon} color={booking?.b_color} size={Spaces.lar} style={{ marginTop: Spaces.sm }} />
                 <Text style={styles.bookingValue2}>{booking?.booking_status}</Text>
-                <AntDesign name={'message1'} color={Colors.Secondary} size={Spaces.lar} style={{ marginTop: Spaces.sm }} onPress={onPressMessage} />
+                <AntDesign name={'message1'} color={Colors.Secondary} size={Spaces.xxl} style={{  }} onPress={onPressMessage} />
                 <Text style={styles.createdAt}>{formatDateWithTime(booking?.created_at)}</Text>
             </View>
             <Divider style={styles.divider} />

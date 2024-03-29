@@ -27,7 +27,6 @@ const Reviews_Parent = ({ navigation, route }) => {
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const styles = makeStyles(H, W)
-
     const isFocused = useIsFocused()
 
     useEffect(() => {
