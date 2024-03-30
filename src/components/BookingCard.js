@@ -26,10 +26,6 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
     const W = useWindowDimensions().width
     const navigation = useNavigation()
 
-    console.log("Bokking id =++++++ SAURAV ", booking?.book_userId)
-
-
-
     const handleRatingSubmit = (data) => {
         // Handle the submission of rating and review data here
         console.log(data);
