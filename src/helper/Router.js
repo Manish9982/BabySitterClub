@@ -71,6 +71,7 @@ import ProfileOfSitterForViewing_Parent from '../screens/ProfileOfSitterForViewi
 import WelcomeScreen from '../screens/WelcomeScreen';
 import TipPaymentWebview from '../screens/TipPaymentWebview';
 import ChatScreen_Sitter from '../screens/ChatScreen_Sitter';
+import SupportChat_ParentAndAdmin from '../screens/SupportChat_ParentAndAdmin';
 
 const Router = ({ initialRouteName }) => {
 
@@ -152,6 +153,7 @@ const Router = ({ initialRouteName }) => {
                             <Stack.Screen name="MyFriends_Parent" component={MyFriends_Parent} options={{ headerShown: true, headerTitle: 'My Friends' }} />
                             <Stack.Screen name="FriendsProfile_Parent" component={FriendsProfile_Parent} options={{ headerShown: true, headerTitle: 'Profile' }} />
                             <Stack.Screen name="FriendsSittersListing_Parent" component={FriendsSittersListing_Parent} options={{ headerShown: true, headerTitle: `Friends' Sitters` }} />
+                            <Stack.Screen name="SupportChat_ParentAndAdmin" component={SupportChat_ParentAndAdmin} options={{ headerShown: true, headerTitle: 'Support' }} />
                             <Stack.Screen name="ProfileOfSitterForViewing_Parent" component={ProfileOfSitterForViewing_Parent} options={{ headerShown: true, headerTitle: `My Profile` }} />
                             <Stack.Screen name="RequestSitter_Parent" component={RequestSitter_Parent}
                                 options={{
@@ -199,6 +201,8 @@ headerTitle:"Payment",
                             <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
                             <Stack.Screen name="ManageAddress" component={ManageAddress} options={{ headerShown: true, headerTitle: 'Manage Address' }} />
                             <Stack.Screen name="JobPostings_Sitter" component={JobPostings_Sitter} options={{ headerShown: true, headerTitle: 'New Jobs For You' }} />
+                            <Stack.Screen name="SupportChat_ParentAndAdmin" component={SupportChat_ParentAndAdmin} options={{ headerShown: true, headerTitle: 'Support' }} />
+
                             <Stack.Screen name="ChatScreen_Sitter" component={ChatScreen_Sitter} options={{ headerShown: true, headerTitle: 'Chat' }} />
                             <Stack.Screen name="BlitzCareListingSuccess_Sitter" component={BlitzCareListingSuccess_Sitter} options={{
                                 headerShown: false,

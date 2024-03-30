@@ -52,6 +52,11 @@ const Help = ({ navigation }) => {
         Linking.openURL('tel:123-456-7890');
     };
 
+    const handleChatSupport = () => {
+       //Alert.alert("Feature Coming Soon..")
+       navigation.navigate('SupportChat_ParentAndAdmin', { user_id: "1" })
+    };
+
     return (
         <View style={styles.uppercontainer}>
             <TextInputComponent
@@ -79,6 +84,13 @@ const Help = ({ navigation }) => {
                 //loader={loader}
                 title={'Call Support'}
                 onPressButton={handleCallSupport}
+            />
+            <Text style={[styles.text1, Fonts.medSemiBold]}>Or</Text>
+
+            <CustomButton
+                //loader={loader}
+                title={'Chat with Support'}
+                onPressButton={handleChatSupport}
             />
         </View>
     );
