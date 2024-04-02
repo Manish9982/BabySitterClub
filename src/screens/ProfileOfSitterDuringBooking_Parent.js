@@ -352,10 +352,23 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                         <View>
                             <Text style={[styles.heading, { marginBottom: 0 }]}>{`${profiledetailsdata?.userDetails?.first_name} ${profiledetailsdata?.userDetails?.last_name}`}</Text>
                             <Text style={[styles.textSecondary, { marginBottom: 0 }, Fonts.medMedium]}>{profiledetailsdata?.userDetails?.address}</Text>
-                            <View style={styles.whiteBox}>
-                                {/* <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.hour_price}/Hr`}</Text> */}
-                                <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.price1}/Hr`}</Text>
+
+                            <View style={styles.priceBox}>
+                                <View style={styles.whiteBox}>
+                                    {/* <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.hour_price}/Hr`}</Text> */}
+                                    <Text style={[styles.text, { marginBottom: 0, ...Fonts.larMedium }]}> {`$ ${profiledetailsdata?.userDetails?.price1}/Hr`}</Text>
+
+                                </View>
+                                <TouchableOpacity
+                                    style={{ justifyContent: 'center', marginLeft: 10 }}
+                                    onPress={handleIconPress}>
+                                    <AntDesign
+                                        name="infocirlce" size={22} color={'red'}>
+                                    </AntDesign>
+                                </TouchableOpacity>
                             </View>
+
+
                         </View>
                     </View>
                     <View style={styles.lowerContainer}>
@@ -442,11 +455,7 @@ const ProfileOfSitterDuringBooking_Parent = ({ navigation, route }) => {
                                 Price : </Text>
                             <Text style={styles.bookingSpecs}>$ {price}   </Text>
 
-                            <TouchableOpacity onPress={handleIconPress}>
-                                <AntDesign
-                                    name="infocirlce" size={16} color={'red'}>
-                                </AntDesign>
-                            </TouchableOpacity>
+
 
                         </Text>
                         <Text style={styles.detailRow}>
@@ -640,7 +649,13 @@ const makeStyles = (H, W) => StyleSheet.create({
         backgroundColor: Colors.white,
         alignSelf: 'flex-start',
         padding: Spaces.sm,
-        marginVertical: Spaces.sm
+        marginVertical: Spaces.sm,
+    },
+    priceBox:
+    {
+        borderRadius: 8,
+        alignSelf: 'flex-start',
+        flexDirection: 'row',
     },
     upperContainer:
     {

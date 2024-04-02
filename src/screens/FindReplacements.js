@@ -21,7 +21,25 @@ const FindReplacements = ({ navigation, route }) => {
             setReplacementData(result)
         }
         else {
-            Alert.alert(result?.message)
+            // Alert.alert(result?.message)
+            Alert.alert(
+                "Alert",
+                result?.message,
+                [
+                  {
+                    text: 'Okay',
+                    onPress: () => navigation.goBack(),
+                    style: 'cancel',
+                  },
+                ],
+                {
+                  cancelable: true,
+                  onDismiss: () =>
+                    Alert.alert(
+                      'This alert was dismissed by tapping outside of the alert dialog.',
+                    ),
+                },
+              );
         }
     }
     const renderReplacementBookings = ({ item, index }) => {

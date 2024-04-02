@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import Store from './src/redux/Store';
 import { LOCAL_STORE } from './src/helper/Utils';
 import { getLocalValue } from './src/helper/LocalStore';
-import { Platform, SafeAreaView, StatusBar } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, AppState } from 'react-native';
 import Colors from './src/helper/Colors';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
@@ -15,6 +15,8 @@ const App = () => {
 
   const [loading, setLoading] = useState(true);
   const [initialRoute, setInitialRoute] = useState('BottomTabsSitter');
+  const [appState, setAppState] = useState(AppState.currentState);
+
 
   useEffect(() => {
     getToken()
@@ -44,7 +46,7 @@ const App = () => {
         //console.log("remoteMessage at PushNotificationIOS get initial", remoteMessage)
 
         //setInitialRoute("CallingScreen"); // e.g. "Settings"
-        console.log("remoteMessage", remoteMessage);
+        console.log("remoteMessage=====>", remoteMessage);
         if (remoteMessage?._data?.onClick !== 'default') {
           setInitialRoute(remoteMessage?._data?.onClick);
         }
