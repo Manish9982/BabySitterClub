@@ -21,7 +21,7 @@ export async function requestUserPermission() {
     }
 }
 
-async function onDisplayNotification(title, body, onClick) {
+export async function onDisplayNotification(title, body, onClick) {
     // Request permissions (required for iOS)
     await notifee.requestPermission()
 
@@ -66,6 +66,7 @@ export function onNotificationReceiver() {
 
     const unsubscribe = messaging().onMessage(async remoteMessage => {
         console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+        
         onDisplayNotification(remoteMessage?.notification?.title, remoteMessage?.notification?.body, remoteMessage?.data?.onClick)
     });
 

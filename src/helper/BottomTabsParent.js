@@ -11,7 +11,7 @@ import { setIsProfileCompleted, setDefaultAdressModalVisible } from '../redux/Gl
 import { LOCAL_STORE, handleGetRequest, handlePostRequest } from './Utils';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MyProfile_Parent from '../screens/MyProfile_Parent';
-import { onNotificationReceiver, requestUserPermission } from './Notifications';
+import { onDisplayNotification, onNotificationReceiver, requestUserPermission } from './Notifications';
 import { getLocalValue, storeLocalValue } from './LocalStore';
 import Geolocation from '@react-native-community/geolocation';
 import { check, request, PERMISSIONS, RESULTS, openSettings } from 'react-native-permissions';
@@ -50,7 +50,7 @@ const BottomTabsParent = ({ navigation }) => {
         fetchLocation()
         // if (Platform.OS == 'android') {
         requestUserPermission()
-        onNotificationReceiver()
+       notificationConfig()
         //}
     }, [])
 
@@ -90,6 +90,19 @@ const BottomTabsParent = ({ navigation }) => {
         }
     }
 
+    const notificationConfig= async ()=>{
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+            console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+            //
+            if(remoteMessage?.data?.type== "cancel"){
+                navigation.navigate('CancelledBookings_Parent', { cancelled_bookings: {} })
+            }
+            onDisplayNotification(remoteMessage?.notification?.title, remoteMessage?.notification?.body, remoteMessage?.data?.onClick)
+        });
+    
+        return unsubscribe;
+    }
+    
     const updateFcmToken = async () => {
         const permissionRequest = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
         console.log('permissionRequest', permissionRequest)
