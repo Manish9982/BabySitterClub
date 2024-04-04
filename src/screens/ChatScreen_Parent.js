@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, ImageBackground, ScrollView, KeyboardAvoidingView, Keyboard, useWindowDimensions, FlatList, Modal, TouchableOpacity, Alert, Platform } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { Text, TextInput } from 'react-native-paper'
+import { ActivityIndicator, Text, TextInput } from 'react-native-paper'
 import MessageComponent from '../components/MessageComponent'
 import Colors from '../helper/Colors'
 import { useIsFocused } from '@react-navigation/native'
@@ -8,6 +8,7 @@ import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import ImageCropPicker from 'react-native-image-crop-picker'
 import { PERMISSIONS, RESULTS, check, request } from 'react-native-permissions'
 import { handlePostRequest } from '../helper/Utils'
+import { tr } from 'react-native-paper-dates'
 
 const DATA = {
     status: "200",
@@ -67,6 +68,7 @@ export default function ChatScreen_Parent({ navigation, route }) {
     const [keyboardHeight, setKeyboardHeight] = useState(0)
     const [camVisible, setCamVisible] = useState(false)
     const [galleryPermission, setGalleryPermission] = useState(null);
+    const [loader, setLoader] = useState('')
     const [msg, setMsg] = useState('')
     const isFocused = useIsFocused()
 
@@ -105,6 +107,7 @@ export default function ChatScreen_Parent({ navigation, route }) {
     }, []);
 
     const getMessages = async () => {
+        setLoader(true)
         var formdata = new FormData()
         formdata.append('user_id', route?.params.user_id)
         const result = await handlePostRequest('get_message', formdata)
@@ -117,6 +120,7 @@ export default function ChatScreen_Parent({ navigation, route }) {
         else {
             Alert.alert('Error', result?.message)
         }
+        setLoader(false)
     }
 
     
@@ -167,6 +171,7 @@ export default function ChatScreen_Parent({ navigation, route }) {
 
     const onPressSend = async() => {
         console.log("Send")
+        setLoader(true)
         var formdata = new FormData()
         formdata.append('user_id', route?.params.user_id)
         formdata.append('message', msg)
@@ -178,6 +183,8 @@ export default function ChatScreen_Parent({ navigation, route }) {
         else {
             Alert.alert('Error', result?.message)
         }
+
+        setLoader(false)
     }
     const requestGalleryPermission = async () => {
         const permission = Platform.select({
@@ -254,6 +261,18 @@ export default function ChatScreen_Parent({ navigation, route }) {
     }
 
     return (
+        loader ?
+        <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center'
+        }}>
+            <ActivityIndicator size={"small"}
+                color={"blue"}
+            />
+            
+            </View>:
+
         <ImageBackground
             style={{ flex: 1, paddingBottom: keyboardHeight + 80 }}
             source={require('../assets/images/background.png')}

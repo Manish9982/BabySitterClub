@@ -83,7 +83,7 @@ const RapidSearch_Sitter = ({ navigation }) => {
           <TextInputComponent
             maxlength={3}
             style={styles.input}
-            placeholder="Enter hourly price"
+            placeholder="Enter hourly price ($)"
             value={hourlyPrice}
             onChangeText={handlePriceChange}
             keyboardType="numeric"
