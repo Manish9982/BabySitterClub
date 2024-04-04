@@ -55,8 +55,8 @@ const MyProfile_Sitter = ({ navigation }) => {
     const [isEnabled, setIsEnabled] = useState(false);
     const [yesNOValue, setYESNOValue] = useState('');
 
-    const toggleSwitch = () => 
-    setIsEnabled(previousState => !previousState);
+    const toggleSwitch = () =>
+        setIsEnabled(previousState => !previousState);
     const [defaultValue, setDefaultValue] = useState(0); // State to store default value
 
     const [infantvalue, setInfantValue] = useState(defaultValue);
@@ -232,13 +232,6 @@ const MyProfile_Sitter = ({ navigation }) => {
         } catch (error) {
             Alert.alert(error?.message)
         }
-        // ImagePicker.openCropper({
-        //     width: 300,
-        //     height: 400,
-        //     cropping: true,
-        //   }).then(image => {
-        //     console.log(image);
-        //   });
     }
 
     const toggleModal = (slots) => {
@@ -285,7 +278,7 @@ const MyProfile_Sitter = ({ navigation }) => {
             setAddress(result?.userDetails?.address)
             setChildren(JSON.stringify(result?.userDetails?.no_of_children))
             setDistance(result?.userDetails?.miles)
-            setIsEnabled(result?.userDetails?.infants_sitting =="YES")
+            setIsEnabled(result?.userDetails?.infants_sitting == "YES")
             //setPrice(JSON.stringify(result?.userDetails?.hour_price))
             //setImage({ uri: `${result?.url}${result?.userDetails?.picture}` })
 
@@ -443,56 +436,23 @@ const MyProfile_Sitter = ({ navigation }) => {
                     placeholder={"About Me"}
                     style={styles.input} />
 
-
-
-                {/* <Text style={styles.guidingText}>
-                    Only communicate through the App, do not include contact details. Minimum 200 characters.
-                </Text>
-                <Text
-                    style={styles.description}>
-                    Infants Sitting (0 - 12 yrs) ?
-                </Text> */}
-
-
-                {/* <View >
-                    <DropDownPicker
-                        open={open}
-                        value={value}
-                        items={items}
-                        dropDownDirection="TOP"
-                        setOpen={setOpen}
-                        setValue={setValue}
-                        setItems={setItems}
-                        dropDownContainerStyle={{
-                            backgroundColor: '#FFFFFF',
-                            borderColor: '#a2a2a2',
-                            borderWidth: 1,
-                            
-                        }}
-                        dropDownStyle={styles.dropdownStyle}
-
-                    />
-                </View>
-                 */}
                 {/* added by gaurav 05/03/24 */}
-
-
-
 
                 <View style={styles.horizontalContainerSwitch}>
                     <Text style={[styles.infantsittingtext]}>Infants Sitting (0 - 12 yrs)?</Text>
-                    <View style={{ flexDirection: 'row', 
-                    alignItems: 'center' }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'center'
+                    }}>
                         <Switch
-                            style={{ transform: [{ scaleX: 1 }, { scaleY:1 }] }} // Adjust width and height here
+                            style={{ transform: [{ scaleX: 1 }, { scaleY: 1 }] }} // Adjust width and height here
                             trackColor={{ false: "#767577", true: Colors.DARK_BLUE }}
                             thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={toggleSwitch}
-                            value={isEnabled}
-                        />
-                        <Text style={[styles.yesnoToggle, 
-                            { color: isEnabled ? Colors.DARK_BLUE : '#767577' }]}>
+                            value={isEnabled} />
+                        <Text style={[styles.yesnoToggle,
+                        { color: isEnabled ? Colors.DARK_BLUE : '#767577' }]}>
                             {isEnabled ? 'YES' : 'NO'}
                         </Text>
                     </View>
@@ -508,11 +468,6 @@ const MyProfile_Sitter = ({ navigation }) => {
                 </View>
 
                 {/* added by gaurav 05/03/24 */}
-
-
-
-
-
 
                 {addressdata?.data?.map((item, index) => renderAddressItem(item, index))}
 
