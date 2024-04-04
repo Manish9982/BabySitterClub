@@ -67,8 +67,13 @@ const AddAddress = ({ navigation }) => {
         console.log("predictions ==>", result?.predictions)
         if (result.status === 'OK') {
           setPredictions(result?.predictions);
+
+        }else if(result?.predictions==''){
+          Alert.alert('Error', "No Results Found")
+          setPredictions([]);
         } else {
           Alert.alert('Error', result?.error_message)
+          console.log("predictions ERror ==>", result?.predictions)
           setPredictions([]);
         }
       } catch (error) {

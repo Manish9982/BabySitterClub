@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, ImageBackground, ScrollView, KeyboardAvoidingView, Keyboard, useWindowDimensions, FlatList, Modal, TouchableOpacity, Alert, Platform } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { Text, TextInput } from 'react-native-paper'
+import { ActivityIndicator, Text, TextInput } from 'react-native-paper'
 import MessageComponent from '../components/MessageComponent'
 import Colors from '../helper/Colors'
 import { useIsFocused } from '@react-navigation/native'
@@ -60,13 +60,14 @@ const DATA = {
 
 export default function ChatScreen_Sitter({ navigation, route }) {
 
-    console.log("ID WITH NAME " , route?.params?.name)
+    console.log("ID WITH NAME ", route?.params?.name)
 
     const [messages, setMessages] = useState([])
     const [apiResult, setApiResult] = useState(null)
     const [keyboardHeight, setKeyboardHeight] = useState(0)
     const [camVisible, setCamVisible] = useState(false)
     const [galleryPermission, setGalleryPermission] = useState(null);
+    const [loader, setLoader] = useState('')
     const [msg, setMsg] = useState('')
     const isFocused = useIsFocused()
 
@@ -105,22 +106,23 @@ export default function ChatScreen_Sitter({ navigation, route }) {
     }, []);
 
     const getMessages = async () => {
+        setLoader(true)
         var formdata = new FormData()
         formdata.append('user_id', route?.params.user_id)
         const result = await handlePostRequest('get_message', formdata)
-        console.log("Result Provider " , result)
+        console.log("Result Provider ", result)
         if (result?.status == '200') {
             //Alert.alert("Update Staus in API")
             setApiResult(result)
             setMessages(result?.data)
-
         }
         else {
             Alert.alert('Error', result?.message)
         }
+        setLoader(false)
     }
 
-    
+
 
     const checkPermission = async () => {
         const permission = Platform.select({
@@ -166,8 +168,9 @@ export default function ChatScreen_Sitter({ navigation, route }) {
         )
     }
 
-    const onPressSend = async() => {
+    const onPressSend = async () => {
         console.log("Send")
+        setLoader(true)
         var formdata = new FormData()
         formdata.append('user_id', route?.params.user_id)
         formdata.append('message', msg)
@@ -179,6 +182,7 @@ export default function ChatScreen_Sitter({ navigation, route }) {
         else {
             Alert.alert('Error', result?.message)
         }
+        setLoader(false)
     }
     const requestGalleryPermission = async () => {
         const permission = Platform.select({
@@ -255,32 +259,45 @@ export default function ChatScreen_Sitter({ navigation, route }) {
     }
 
     return (
-        <ImageBackground
-            style={{ flex: 1, paddingBottom: keyboardHeight + 80 }}
-            source={require('../assets/images/background.png')}
-        >
-            <FlatList
-                data={messages}
-                renderItem={renderMessages}
-                keyExtractor={(item, index) => `${index}`}
-                inverted
-            />
-            <View
-                style={[styles.keyboardAvoidingContainer, { bottom: keyboardHeight }]}
-            >
-                <TextInput
-                    mode='outlined'
-                    outlineColor={Colors.Secondary}
-                    activeOutlineColor={Colors.Secondary}
-                    style={styles.textInput}
-                    value={msg}
-                    onChangeText={setMsg}
-                    right={<TextInput.Icon onPress={onPressSend} icon={'send'} />}
-                    placeholder='Write something here..'
-                    // left={<TextInput.Icon onPress={onPressGallery} icon={'image'} />}
+
+        loader ?
+            <View style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <ActivityIndicator size={"small"}
+                    color={"blue"}
                 />
             </View>
-        </ImageBackground >
+
+            :
+            <ImageBackground
+                style={{ flex: 1, paddingBottom: keyboardHeight + 80 }}
+                source={require('../assets/images/background.png')}
+            >
+                <FlatList
+                    data={messages}
+                    renderItem={renderMessages}
+                    keyExtractor={(item, index) => `${index}`}
+                    inverted
+                />
+                <View
+                    style={[styles.keyboardAvoidingContainer, { bottom: keyboardHeight }]}
+                >
+                    <TextInput
+                        mode='outlined'
+                        outlineColor={Colors.Secondary}
+                        activeOutlineColor={Colors.Secondary}
+                        style={styles.textInput}
+                        value={msg}
+                        onChangeText={setMsg}
+                        right={<TextInput.Icon onPress={onPressSend} icon={'send'} />}
+                        placeholder='Write something here..'
+                    // left={<TextInput.Icon onPress={onPressGallery} icon={'image'} />}
+                    />
+                </View>
+            </ImageBackground >
     )
 }
 

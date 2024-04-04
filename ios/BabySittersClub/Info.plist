@@ -35,18 +35,18 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>This app requires access to the calendar</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app requires access to the calendar</string>
+	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+	<string>This app requires access to the calendar</string>
 	<key>NSCameraUsageDescription</key>
 	<string></string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string></string>
-  <key>NSCalendarsFullAccessUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSCalendarsWriteOnlyAccessUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSCalendarsUsageDescription</key>
-  <string>This app requires access to the calendar</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Black.ttf</string>

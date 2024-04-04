@@ -34,39 +34,84 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
     };
 
 
-    const handleCreateEvent = () => {
-        // Event details
-        const eventConfig = {
-            title: 'Baby Sitting Appointment',
-            // startDate: '2024-05-01T10:00:00.000Z', 
-            startDate: `${booking?.slot_date}T10:${'00:00.000Z'}`,
-            // endDate: '2024-05-01T12:00:00.000Z',
-            location: 'India',
-            notes: 'My Appointment',
-            // You can add more options as needed, check documentation for more details
-        };
+    // const handleCreateEvent = () => {
+    //     // Event details
+    //     const eventConfig = {
+    //         title: 'Baby Sitting Appointment',
+    //         // startDate: '2024-05-01T10:00:00.000Z', 
+    //         startDate: `${booking?.slot_date}T10:${'00:00.000Z'}`,
+    //         // endDate: '2024-05-01T12:00:00.000Z',
+    //         location: 'India',
+    //         notes: 'My Appointment',
+    //         // You can add more options as needed, check documentation for more details
+    //     };
 
-        Permissions.request(
-            Platform.select({
-                ios: Permissions.PERMISSIONS.IOS.CALENDARS_WRITE_ONLY,
-                android: Permissions.PERMISSIONS.ANDROID.WRITE_CALENDAR,
-            })
-        )
-            .then(result => {
-                if (result !== Permissions.RESULTS.GRANTED) {
-                    throw new Error(`No permission: ${result}`);
-                }
-                return AddCalendarEvent.presentEventCreatingDialog(eventConfig)
-            })
-            .then(eventInfo => {
-                // handle success
-                console.warn(JSON.stringify(eventInfo));
-            })
-            .catch(error => {
-                // handle error
-                console.warn(error);
-            });
+    //     Permissions.request(
+    //         Platform.select({
+    //             ios: Permissions.PERMISSIONS.IOS.CALENDARS_WRITE_ONLY,
+    //             android: Permissions.PERMISSIONS.ANDROID.WRITE_CALENDAR,
+    //         })
+    //     )
+    //         .then(result => {
+    //             if (result !== Permissions.RESULTS.GRANTED) {
+    //                 throw new Error(`No permission: ${result}`);
+    //             }
+    //             return AddCalendarEvent.presentEventCreatingDialog(eventConfig)
+    //         })
+    //         .then(eventInfo => {
+    //             // handle success
+    //             console.warn(JSON.stringify(eventInfo));
+    //         })
+    //         .catch(error => {
+    //             // handle error
+    //             console.warn(error);
+    //         });
+    // };
+
+
+
+    const handleCreateEvent = () => {
+    // Event details
+    const eventConfig = {
+        title: 'Baby Sitting Appointment',
+        // startDate: '2024-05-01T10:00:00.000Z', 
+        startDate: `${booking?.slot_date}T10:${'00:00.000Z'}`,
+        // endDate: '2024-05-01T12:00:00.000Z',
+        location: 'India',
+        notes: 'My Appointment',
+        // You can add more options as needed, check documentation for more details
     };
+
+    const requestCalendarPermission = () => {
+        return new Promise((resolve, reject) => {
+            Permissions.request(
+                Platform.select({
+                    ios: Permissions.PERMISSIONS.IOS.CALENDAR,
+                    android: Permissions.PERMISSIONS.ANDROID.WRITE_CALENDAR,
+                })
+            ).then(result => {
+                if (result === Permissions.RESULTS.GRANTED) {
+                    resolve();
+                } else {
+                    reject(new Error(`No permission: ${result}`));
+                }
+            }).catch(error => reject(error));
+        });
+    };
+
+    requestCalendarPermission()
+        .then(() => {
+            return AddCalendarEvent.presentEventCreatingDialog(eventConfig);
+        })
+        .then(eventInfo => {
+            // handle success
+            console.warn(JSON.stringify(eventInfo));
+        })
+        .catch(error => {
+            // handle error
+            console.warn(error);
+        });
+};
 
 
     const onPressMessage = () => {
@@ -234,21 +279,21 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
                 <Text style={styles.bookingValue2}>{booking?.booking_status}</Text>
 
                 <AntDesign name={'message1'}
-                    color={Colors.Secondary} size={Spaces.xxl}
+                    color={"blue"} size={Spaces.xxl}
                     style={{}} onPress={onPressMessage} />
 
 
                 <Text style={styles.createdAt}>{formatDateWithTime(booking?.created_at)}</Text>
 
-                
+            
 
-                <View style={styles.detail2}>
+                {/* <View style={styles.detail2}>
                     <Text style={styles.label}>Add To:</Text>
 
                     <AntDesign name={'calendar'}
                         color={Colors.Secondary} size={Spaces.lar}
                         style={{}} onPress={onPressCalender} />
-                </View>
+                </View> */}
 
             </View>
             <Divider style={styles.divider} />
