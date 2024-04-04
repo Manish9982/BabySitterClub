@@ -10,6 +10,8 @@ import SmallButtonSecondary from './SmallButtonSecondary';
 import { Rating } from 'react-native-ratings';
 import { useNavigation } from '@react-navigation/native';
 import TextInputComponent from './TextInputComponent';
+import * as AddCalendarEvent from 'react-native-add-calendar-event';
+import * as Permissions from 'react-native-permissions';
 
 
 const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
@@ -31,8 +33,51 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
         console.log(data);
     };
 
+
+    const handleCreateEvent = () => {
+        // Event details
+        const eventConfig = {
+            title: 'Baby Sitting Appointment',
+            // startDate: '2024-05-01T10:00:00.000Z', 
+            startDate: `${booking?.slot_date}T10:${'00:00.000Z'}`,
+            // endDate: '2024-05-01T12:00:00.000Z',
+            location: 'India',
+            notes: 'My Appointment',
+            // You can add more options as needed, check documentation for more details
+        };
+
+        Permissions.request(
+            Platform.select({
+                ios: Permissions.PERMISSIONS.IOS.CALENDARS_WRITE_ONLY,
+                android: Permissions.PERMISSIONS.ANDROID.WRITE_CALENDAR,
+            })
+        )
+            .then(result => {
+                if (result !== Permissions.RESULTS.GRANTED) {
+                    throw new Error(`No permission: ${result}`);
+                }
+                return AddCalendarEvent.presentEventCreatingDialog(eventConfig)
+            })
+            .then(eventInfo => {
+                // handle success
+                console.warn(JSON.stringify(eventInfo));
+            })
+            .catch(error => {
+                // handle error
+                console.warn(error);
+            });
+    };
+
+
     const onPressMessage = () => {
-        navigation.navigate('ChatScreen_Parent', { user_id: `${booking?.book_userId}` })
+        navigation.navigate('ChatScreen_Parent', 
+        { user_id: `${booking?.book_userId}` })
+       
+
+    }
+    const onPressCalender = () => {
+       handleCreateEvent()
+
     }
 
     const onPressSubmitFeedback = () => {
@@ -187,8 +232,24 @@ const BookingCard = ({ booking, profileURL, getDataForRefresh }) => {
                 {/* <AntDesign name={booking?.icon} color={booking?.b_color} /> */}
                 <AntDesign name={booking?.b_icon} color={booking?.b_color} size={Spaces.lar} style={{ marginTop: Spaces.sm }} />
                 <Text style={styles.bookingValue2}>{booking?.booking_status}</Text>
-                <AntDesign name={'message1'} color={Colors.Secondary} size={Spaces.xxl} style={{  }} onPress={onPressMessage} />
+
+                <AntDesign name={'message1'}
+                    color={Colors.Secondary} size={Spaces.xxl}
+                    style={{}} onPress={onPressMessage} />
+
+
                 <Text style={styles.createdAt}>{formatDateWithTime(booking?.created_at)}</Text>
+
+                
+
+                <View style={styles.detail2}>
+                    <Text style={styles.label}>Add To:</Text>
+
+                    <AntDesign name={'calendar'}
+                        color={Colors.Secondary} size={Spaces.lar}
+                        style={{}} onPress={onPressCalender} />
+                </View>
+
             </View>
             <Divider style={styles.divider} />
             <View style={styles.detailsContainer}>
@@ -284,6 +345,12 @@ const makeStyles = (W) => StyleSheet.create({
         flexWrap: 'wrap',
         //justifyContent: 'space-between',
         marginBottom: Spaces.sm,
+    },
+    detail2: {
+        flexDirection: 'row',
+        marginBottom: Spaces.med,
+        marginTop:Spaces.sm,
+
     },
     label: {
         ...Fonts.sm,

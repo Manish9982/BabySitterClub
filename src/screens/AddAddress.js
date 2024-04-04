@@ -114,7 +114,9 @@ const AddAddress = ({ navigation }) => {
 
   return (
     <KeyboardAwareScrollView>
-      <View style={styles.container}>
+      <View
+        style={styles.container}
+      >
         <Text style={[styles.title, Fonts.larMedium]}>Save Address As</Text>
 
         <View style={{
@@ -169,7 +171,7 @@ const AddAddress = ({ navigation }) => {
         />
 
         <TextInputComponent
-          style={[styles.input2, Fonts.medMedium]}
+          style={[styles.input, Fonts.medMedium]}
           placeholder="Complete Address"
           value={completeAddress}
           onChangeText={handleSearch}
@@ -197,6 +199,12 @@ const AddAddress = ({ navigation }) => {
         }
 
         <CustomButton
+          style={{
+
+            alignSelf: 'center',
+            width: W * 0.86,
+            marginTop: H * 0.05
+          }}
           disabled={!activeButton}
           btnColor={!activeButton ? Colors.gray : Colors.PRIMARY}
           loader={loader}
@@ -218,10 +226,7 @@ const makeStyles = (H, W) => StyleSheet.create({
   },
   input: {
     marginTop: H * 0.04,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    padding: Spaces.sm,
+    width: W * 0.91,
   },
   input2: {
     borderWidth: 1,

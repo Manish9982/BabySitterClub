@@ -6,23 +6,78 @@ import { login, logout } from '../redux/AuthSlice'
 import { clearStorage } from '../helper/LocalStore'
 import { handleGetRequest } from '../helper/Utils'
 import Loader from '../components/Loader'
+import { Platform, PermissionsAndroid, Linking } from 'react-native';
 
+import * as AddCalendarEvent from 'react-native-add-calendar-event';
+import * as Permissions from 'react-native-permissions';
+
+import RNCalendarEvents from 'react-native-add-calendar-event';
 
 const Account = ({ navigation }) => {
-
 
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
     const [loader, setLoader] = useState(false)
 
-
     const styles = makeStyles(H, W)
-
 
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const usertype = useSelector((state) => state.global.usertype);
     const dispatch = useDispatch();
 
+    // const handleCreateEvent = () => {
+    //     // Event details
+    //     const eventConfig = {
+    //       title: 'Your Event Title',
+    //       startDate: '2024-05-01T10:00:00.000Z', // Example start date and time
+    //       endDate: '2024-05-01T12:00:00.000Z', // Example end date and time
+    //       location: 'India',
+    //       notes: 'Event Notes',
+    //       // You can add more options as needed, check documentation for more details
+    //     };
+
+    //     Permissions.request(
+    //       Platform.select({
+    //         ios: Permissions.PERMISSIONS.IOS.CALENDARS_WRITE_ONLY,
+    //         android: Permissions.PERMISSIONS.ANDROID.WRITE_CALENDAR,
+    //       })
+    //     )
+    //       .then(result => {
+    //         if (result !== Permissions.RESULTS.GRANTED) {
+    //           throw new Error(`No permission: ${result}`);
+    //         }
+    //         return AddCalendarEvent.presentEventCreatingDialog(eventConfig)
+    //       })
+    //       .then(eventInfo => {
+    //         // handle success
+    //         console.warn(JSON.stringify(eventInfo));
+    //       })
+    //       .catch(error => {
+    //         // handle error
+    //         console.warn(error);
+    //       });
+    //   };
+
+
+    // const handleCreateEvent = () => {
+    //     // Event details
+    //     const eventConfig = {
+    //         title: 'Your Event Title',
+    //         startDate: '2024-05-01T10:00:00.000Z', // Example start date and time
+    //         endDate: '2024-05-01T12:00:00.000Z', // Example end date and time
+    //         location: 'India',
+    //         notes: 'Event Notes',
+    //         // You can add more options as needed, check documentation for more details
+    //     };
+
+    //     AddCalendarEvent.presentEventCreatingDialog(eventConfig)
+    //         .then(eventInfo => {
+    //             console.warn('Event saved successfully:', eventInfo);
+    //         })
+    //         .catch(error => {
+    //             console.warn('Error saving event:', error);
+    //         });
+    // };
 
     const handleLogin = () => {
         dispatch(login());
@@ -30,17 +85,18 @@ const Account = ({ navigation }) => {
 
 
     const handleLogout = async () => {
-        setLoader(true)
-        const result = await handleGetRequest('logout')
-        if (result?.status == '200') {
-            dispatch(logout());
-        } else {
-            Alert.alert("Alert", result?.message)
-        }
-        setLoader(false)
-    };
+       // handleCreateEvent();
+            setLoader(true)
+            const result = await handleGetRequest('logout')
+            if (result?.status == '200') {
+                dispatch(logout());
+            } else {
+                Alert.alert("Alert", result?.message)
+            }
+            setLoader(false)
+        };
 
-
+   // }
     const pressFAQs = () => {
         if (usertype == '2') {
             navigation.navigate('FAQs_Sitter')
