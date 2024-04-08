@@ -23,6 +23,7 @@ import Spaces from './Spaces';
 import Colors from './Colors';
 import Radar_Parent from '../screens/Radar_Parent';
 import Fonts from './Fonts';
+import notifee, { EventType } from '@notifee/react-native';
 
 const ACTIVE_REQUEST_DETAILS = {
     data: {
@@ -50,7 +51,7 @@ const BottomTabsParent = ({ navigation }) => {
         fetchLocation()
         // if (Platform.OS == 'android') {
         requestUserPermission()
-       notificationConfig()
+        notificationConfig()
         //}
     }, [])
 
@@ -58,8 +59,6 @@ const BottomTabsParent = ({ navigation }) => {
     const [activeRequestDetails, setActiveRequestDetails] = useState(null)
     const [showActiveRequestModal, setShowActiveRequestModal] = useState(false)
     const [modalLoader, setModalLoader] = useState(true)
-
-
     const isProfileCompleted = useSelector((state) => state.global.isProfileCompleted)
     const isRequestActive = useSelector((state) => state.global.isRequestActive)
     const defaultAdressModalVisible = useSelector((state) => state.global.defaultAdressModalVisible)
@@ -67,6 +66,35 @@ const BottomTabsParent = ({ navigation }) => {
     const dispatch = useDispatch();
 
     // const [isProfileCompleted, setIsProfileCompleted] = useState(true)
+
+
+    useEffect(() => {
+        return notifee.onForegroundEvent(({ type, detail }) => {
+            switch (type) {
+                case EventType.DISMISSED:
+                    console.log('User dismissed notification', detail.notification);
+                    break;
+                case EventType.PRESS:
+                    console.log('User pressed notification', detail);
+                    if (detail?.notification?.data?.onClick) {
+
+                        navigation.navigate(detail?.notification?.data?.onClick, 
+                            { "user_id": `34` })
+
+                        // if (detail?.notification?.data?.onClick !== 'default') {
+                        //     navigation.navigate(detail?.notification?.data?.onClick)
+                        // } else if (detail?.notification?.data?.onClick == "chat") {
+                        //     //navigation.navigate(detail?.notification?.data?.onClick, { "user_id": 14 });
+                        //     navigation.navigate('ChatScreen_Parent',
+                        //         { user_id: `14` })
+
+
+                        // }
+                    }
+                    break;
+            }
+        });
+    }, []);
 
     const getActiveRequestDetails = async () => {
         const result = await handleGetRequest('get_rapidReq_detail')
@@ -90,19 +118,24 @@ const BottomTabsParent = ({ navigation }) => {
         }
     }
 
-    const notificationConfig= async ()=>{
+    const notificationConfig = async () => {
         const unsubscribe = messaging().onMessage(async remoteMessage => {
             console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
             //
-            if(remoteMessage?.data?.type== "cancel"){
+            if (remoteMessage?.data?.type == "cancel") {
                 navigation.navigate('CancelledBookings_Parent', { cancelled_bookings: {} })
             }
-            onDisplayNotification(remoteMessage?.notification?.title, remoteMessage?.notification?.body, remoteMessage?.data?.onClick)
+
+
+            onDisplayNotification(remoteMessage?.notification?.title,
+                remoteMessage?.notification?.body, remoteMessage?.data?.onClick)
         });
-    
+
         return unsubscribe;
     }
-    
+
+
+
     const updateFcmToken = async () => {
         const permissionRequest = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
         console.log('permissionRequest', permissionRequest)

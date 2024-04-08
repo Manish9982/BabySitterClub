@@ -5,7 +5,6 @@ import { Text } from 'react-native-paper'
 import Fonts from '../helper/Fonts'
 
 const MessageComponent = ({ name, profilePicture, message, firstPerson, time, read }) => {
-    console.log("Profile==>> " , profilePicture)
     return (
         <View style={[styles.messageStyle, {}]}>
             {

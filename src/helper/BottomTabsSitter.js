@@ -49,11 +49,12 @@ const BottomTabsSitter = () => {
                     console.log('User dismissed notification', detail.notification);
                     break;
                 case EventType.PRESS:
-                    console.log('User pressed notification', detail?.notification?.data?.onClick);
+                    console.log('User pressed notification', detail);
                     if (detail?.notification?.data?.onClick) {
-                        if (detail?.notification?.data?.onClick !== 'default') {
-                            navigation.navigate(detail?.notification?.data?.onClick)
-                        }
+
+                        navigation.navigate(detail?.notification?.data?.onClick, 
+                            { "user_id": `14` })
+
                     }
                     break;
             }

@@ -63,12 +63,10 @@ export async function onDisplayNotification(title, body, onClick) {
 }
 
 export function onNotificationReceiver() {
-
     const unsubscribe = messaging().onMessage(async remoteMessage => {
         console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-        
-        onDisplayNotification(remoteMessage?.notification?.title, remoteMessage?.notification?.body, remoteMessage?.data?.onClick)
+        onDisplayNotification(remoteMessage?.notification?.title,
+            remoteMessage?.notification?.body, remoteMessage?.data?.onClick)
     });
-
     return unsubscribe;
 }

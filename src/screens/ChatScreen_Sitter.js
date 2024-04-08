@@ -272,47 +272,91 @@ export default function ChatScreen_Sitter({ navigation, route }) {
             </View>
 
             :
-            <ImageBackground
-                style={{ flex: 1, paddingBottom: keyboardHeight + 80 }}
-                source={require('../assets/images/background.png')}
-            >
-                <FlatList
-                    data={messages}
-                    renderItem={renderMessages}
-                    keyExtractor={(item, index) => `${index}`}
-                    inverted
-                />
-                <View
-                    style={[styles.keyboardAvoidingContainer, { bottom: keyboardHeight }]}
-                >
-                    <TextInput
-                        mode='outlined'
-                        outlineColor={Colors.Secondary}
-                        activeOutlineColor={Colors.Secondary}
-                        style={styles.textInput}
-                        value={msg}
-                        onChangeText={setMsg}
-                        right={<TextInput.Icon onPress={onPressSend} icon={'send'} />}
-                        placeholder='Write something here..'
-                    // left={<TextInput.Icon onPress={onPressGallery} icon={'image'} />}
+            Platform.OS == "ios" ?
+
+                <ImageBackground
+                    style={{ flex: 1, paddingBottom: keyboardHeight + 80 }}
+                    source={require('../assets/images/background.png')}>
+
+                    <FlatList
+                        data={messages}
+                        renderItem={renderMessages}
+                        keyExtractor={(item, index) => `${index}`}
+                        inverted
                     />
-                </View>
-            </ImageBackground >
-    )
-}
+                    <View
+                        style={[styles.keyboardAvoidingContainer, { bottom: keyboardHeight }]}
+                    >
+                        <TextInput
+                            mode='outlined'
+                            outlineColor={Colors.Secondary}
+                            activeOutlineColor={Colors.Secondary}
+                            style={styles.textInput}
+                            value={msg}
+                            onChangeText={setMsg}
+                            right={<TextInput.Icon onPress={onPressSend} icon={'send'} />}
+                            placeholder='Write something here..'
+                        // left={<TextInput.Icon onPress={onPressGallery} icon={'image'} />}
+                        />
+                    </View>
+
+
+
+                </ImageBackground >
+
+
+
+                :
+
+
+
+                <ImageBackground
+                    style={{ flex: 1, paddingBottom: 80 }}
+                    source={require('../assets/images/background.png')}
+                >
+                    <FlatList
+                        data={messages}
+                        renderItem={renderMessages}
+                        keyExtractor={(item, index) => `${index}`}
+                        inverted
+                    />
+                    <KeyboardAvoidingView
+                        behavior={Platform.OS === "ios" ? "padding" : null}
+                        style={styles.keyboardAvoidingContainer}
+                    >
+                        <TextInput
+                            mode='outlined'
+                            outlineColor={Colors.Secondary}
+                            activeOutlineColor={Colors.Secondary}
+                            style={styles.textInput}
+                            value={msg}
+                            onChangeText={setMsg}
+                            right={<TextInput.Icon onPress={onPressSend} icon={'send'} />}
+                            placeholder='Write something here..'
+                        />
+                    </KeyboardAvoidingView>
+                </ImageBackground>
+
+
+
+
+    );
+};
+
+
+
+
 
 const styles = StyleSheet.create({
-    contentContainerStyle: {
-        flexGrow: 1
-    },
     keyboardAvoidingContainer: {
         position: 'absolute',
         width: '100%',
         bottom: 0,
-        flex: 1,
+        paddingHorizontal: 16, // Adjust as needed
+        paddingBottom: 16, // Adjust as needed
     },
     textInput: {
         // Your text input styles here
         backgroundColor: '#fff',
     }
-})
+});
