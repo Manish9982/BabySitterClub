@@ -9,9 +9,8 @@ import { Shadows, handlePostRequest } from '../helper/Utils';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import { useNavigation } from '@react-navigation/native';
 
-const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status, callBack, price, bookingNumberId, isRapid , userID }) => {
+const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration, address, url, createdAt, bookingId, status, callBack, price, bookingNumberId, isRapid, userID }) => {
 
-  console.log("ID==SitterGAURAV" , userID)
   const W = useWindowDimensions().width
   const H = useWindowDimensions().height
 
@@ -66,7 +65,7 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
     ])
   }
   const onPressChat = async () => {
-       navigation.navigate('ChatScreen_Sitter', { user_id: `${userID}`, name: `${name}` })
+    navigation.navigate('ChatScreen_Sitter', { user_id: `${userID}`, name: `${name}` })
 
   }
 
@@ -108,7 +107,6 @@ const BookingCardForSitter = ({ name, profilePic, date, service, slot, duration,
       )
     }
   }
-  console.log('isRapid=======>', isRapid)
   return (
     <View style={styles.cardContainer}>
       <View style={styles.profileContainer}>
@@ -219,9 +217,9 @@ const makeStyles = (H, W) => StyleSheet.create({
   light: {
     height: 30,
     width: 30,
-},
-blitzcareFlag:
-{
+  },
+  blitzcareFlag:
+  {
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
@@ -229,7 +227,7 @@ blitzcareFlag:
     backgroundColor: Colors.selectedcolor,
     borderRadius: 8,
     padding: 1
-}
+  }
 });
 
 export default BookingCardForSitter;

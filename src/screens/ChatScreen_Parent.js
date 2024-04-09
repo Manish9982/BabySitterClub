@@ -123,7 +123,6 @@ export default function ChatScreen_Parent({ navigation, route }) {
         setLoader(false)
     }
 
-    
 
     const checkPermission = async () => {
         const permission = Platform.select({
@@ -260,46 +259,134 @@ export default function ChatScreen_Parent({ navigation, route }) {
         Alert.alert('Image Upload API')
     }
 
-    return (
-        loader ?
-        <View style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center'
-        }}>
-            <ActivityIndicator size={"small"}
-                color={"blue"}
-            />
+    // return (
+    //     loader ?
+    //     <View style={{
+    //         flex: 1,
+    //         justifyContent: 'center',
+    //         alignItems: 'center'
+    //     }}>
+    //         <ActivityIndicator size={"small"}
+    //             color={"blue"}
+    //         />
             
-            </View>:
+    //         </View>:
 
-        <ImageBackground
-            style={{ flex: 1, paddingBottom: keyboardHeight + 80 }}
-            source={require('../assets/images/background.png')}
-        >
-            <FlatList
-                data={messages}
-                renderItem={renderMessages}
-                keyExtractor={(item, index) => `${index}`}
-                inverted
-            />
-            <View
-                style={[styles.keyboardAvoidingContainer, { bottom: keyboardHeight }]}
-            >
-                <TextInput
-                    mode='outlined'
-                    outlineColor={Colors.Secondary}
-                    activeOutlineColor={Colors.Secondary}
-                    style={styles.textInput}
-                    value={msg}
-                    onChangeText={setMsg}
-                    placeholder='Write something here..'
-                    right={<TextInput.Icon onPress={onPressSend} icon={'send'} />}
-                    // left={<TextInput.Icon onPress={onPressGallery} icon={'image'} />}
+    //     <ImageBackground
+    //         style={{ flex: 1, paddingBottom: keyboardHeight + 80 }}
+    //         source={require('../assets/images/background.png')}
+    //     >
+    //         <FlatList
+    //             data={messages}
+    //             renderItem={renderMessages}
+    //             keyExtractor={(item, index) => `${index}`}
+    //             inverted
+    //         />
+    //         <View
+    //             style={[styles.keyboardAvoidingContainer, { bottom: keyboardHeight }]}
+    //         >
+    //             <TextInput
+    //                 mode='outlined'
+    //                 outlineColor={Colors.Secondary}
+    //                 activeOutlineColor={Colors.Secondary}
+    //                 style={styles.textInput}
+    //                 value={msg}
+    //                 onChangeText={setMsg}
+    //                 placeholder='Write something here..'
+    //                 right={<TextInput.Icon onPress={onPressSend} icon={'send'} />}
+    //                 // left={<TextInput.Icon onPress={onPressGallery} icon={'image'} />}
+    //             />
+    //         </View>
+    //     </ImageBackground >
+    // )
+
+    return (
+
+        loader ?
+            <View style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <ActivityIndicator size={"small"}
+                    color={"blue"}
                 />
             </View>
-        </ImageBackground >
-    )
+
+            :
+
+        Platform.OS == "ios" ? 
+
+    
+            <ImageBackground
+                style={{ flex: 1, paddingBottom: keyboardHeight + 80 }}
+                source={require('../assets/images/background.png')}
+
+            >
+
+                <FlatList
+                    data={messages}
+                    renderItem={renderMessages}
+                    keyExtractor={(item, index) => `${index}`}
+                    inverted
+                />
+                <View
+                    style={[styles.keyboardAvoidingContainer, { bottom: keyboardHeight }]}
+                >
+                    <TextInput
+                        mode='outlined'
+                        outlineColor={Colors.Secondary}
+                        activeOutlineColor={Colors.Secondary}
+                        style={styles.textInput}
+                        value={msg}
+                        onChangeText={setMsg}
+                        right={<TextInput.Icon onPress={onPressSend} icon={'send'} />}
+                        placeholder='Write something here..'
+                    // left={<TextInput.Icon onPress={onPressGallery} icon={'image'} />}
+                    />
+                </View>
+
+
+
+            </ImageBackground >
+
+
+
+            :
+
+
+
+            <ImageBackground
+                style={{ flex: 1, paddingBottom: 80 }}
+                source={require('../assets/images/background.png')}
+            >
+                <FlatList
+                    data={messages}
+                    renderItem={renderMessages}
+                    keyExtractor={(item, index) => `${index}`}
+                    inverted
+                />
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === "ios" ? "padding" : null}
+                    style={styles.keyboardAvoidingContainer}
+                >
+                    <TextInput
+                        mode='outlined'
+                        outlineColor={Colors.Secondary}
+                        activeOutlineColor={Colors.Secondary}
+                        style={styles.textInput}
+                        value={msg}
+                        onChangeText={setMsg}
+                        right={<TextInput.Icon onPress={onPressSend} icon={'send'} />}
+                        placeholder='Write something here..'
+                    />
+                </KeyboardAvoidingView>
+            </ImageBackground>
+
+
+
+
+    );
 }
 
 const styles = StyleSheet.create({

@@ -147,7 +147,9 @@ const Router = ({ initialRouteName }) => {
                             <Stack.Screen name="SittersNearYouList_Parent" component={SittersNearYouList_Parent} options={{ headerShown: true, headerTitle: 'Sitters Near You' }} />
                             <Stack.Screen name="FriendRequests_Parent" component={FriendRequests_Parent} options={{ headerShown: true, headerTitle: 'Connection Requests' }} />
                             <Stack.Screen name="MyMessages_Parent" component={MyMessages_Parent} options={{ headerShown: true, headerTitle: 'Messages' }} />
-                            <Stack.Screen name="ChatScreen_Parent" component={ChatScreen_Parent} options={{ headerShown: true, headerTitle: 'Chat' }} />
+                            <Stack.Screen name="ChatScreen_Parent" component={ChatScreen_Parent} options={{ headerShown: true, headerTitle: 'Chat' }} initialParams={{
+                                user_id2:"Ajbba"
+                            }} />
                             <Stack.Screen name="SearchScreen_Parent" component={SearchScreen_Parent} options={{ headerShown: true, headerTitle: 'Search' }} />
                             <Stack.Screen name="Favourite_Parent" component={Favourite_Parent} options={{ headerShown: true, headerTitle: 'Favourite Sitters' }} />
                             <Stack.Screen name="MyFriends_Parent" component={MyFriends_Parent} options={{ headerShown: true, headerTitle: 'My Friends' }} />
