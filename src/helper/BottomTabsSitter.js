@@ -156,11 +156,10 @@ const BottomTabsSitter = () => {
                     headerShown: Platform.OS == "android" ? true : true
                 }}
             >
-                <Stack.Screen name='Complete Your Profile' component={MyProfile_Sitter} options={{ headerShown: true }} />
+                <Stack.Screen name="Complete Your Profile" component={MyProfile_Sitter} options={{ headerShown: true }} />
                 <Stack.Screen name="AddAvailability_Sitter" component={AddAvailability_Sitter} options={{ headerShown: true, headerTitle: 'Add Availabiltity' }} />
                 <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
             </Stack.Navigator>
-
     )
 }
 export default BottomTabsSitter
