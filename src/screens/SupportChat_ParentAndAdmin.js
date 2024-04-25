@@ -287,7 +287,6 @@ export default function SupportChat_ParentAndAdmin({ navigation, route }) {
 const styles = StyleSheet.create({
     contentContainerStyle: {
         flexGrow: 1,
-       
     },
     keyboardAvoidingContainer: {
         position: 'absolute',
