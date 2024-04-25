@@ -1,5 +1,5 @@
 
-import { Alert, Modal, FlatList, ImageBackground, StyleSheet, TouchableOpacity, View, useWindowDimensions, Image, SafeAreaView, TouchableWithoutFeedback } from 'react-native'
+import { Alert, Modal, FlatList, ImageBackground, StyleSheet, TouchableOpacity, View, useWindowDimensions, Image, SafeAreaView, TouchableWithoutFeedback, ScrollView } from 'react-native'
 import React, { useState, useEffect, useCallback } from 'react'
 import { Button, RadioButton, Text } from 'react-native-paper'
 import BabySitterCard from '../components/BabySitterCard';
@@ -151,7 +151,11 @@ const RequestSitter_Parent = ({ navigation }) => {
             }
             else {
                 setUsers([])
-                Alert.alert("Info", result?.message)
+                {
+                    result?.message
+                        &&
+                        Alert.alert("Info", result?.message)
+                }
             }
             setLoader(false)
         }
@@ -423,9 +427,22 @@ const RequestSitter_Parent = ({ navigation }) => {
                                 </Button>
                                 <Text style={[styles.services, Fonts.medMedium, { marginVertical: 12, }]}>Choose Frequency</Text>
                                 <RadioButton.Group onValueChange={(value) => setRepeatOption(prev => prev == value ? null : value)} value={repeatOption}>
-                                    <RadioButton.Item mode='android' label="Everyday" value="everyday" />
-                                    <RadioButton.Item mode='android' label="Every Week" value="everyweek" />
-                                    <RadioButton.Item mode='android' label="Every Month" value="everymonth" />
+                                    <View style={{ height: 50, }}>
+                                        <ScrollView
+                                            contentContainerStyle={styles.frequencyContainer}
+                                            horizontal
+                                            showsHorizontalScrollIndicator={false}>
+                                            <View style={styles.frequencyButton}>
+                                                <RadioButton.Item mode='android' label="Every Day" value="everyday" />
+                                            </View>
+                                            <View style={styles.frequencyButton}>
+                                                <RadioButton.Item mode='android' label="Every Week" value="everyweek" />
+                                            </View>
+                                            <View style={styles.frequencyButton}>
+                                                <RadioButton.Item mode='android' label="Every Month" value="everymonth" />
+                                            </View>
+                                        </ScrollView>
+                                    </View>
                                     {/* <RadioButton.Item label="Custom" value="custom" /> */}
                                 </RadioButton.Group>
                                 <TouchableOpacity
@@ -518,9 +535,7 @@ const RequestSitter_Parent = ({ navigation }) => {
                         )
                         :
                         <Text style={[styles.nothingToShow, { marginTop: searchFormVisible ? H * 0.2 : H * 0.33 }]}>Explore Top Sitters Here!</Text>
-
                 }
-
             </ImageBackground>
     );
 };
@@ -750,5 +765,16 @@ const makeStyles = (H, W) => StyleSheet.create({
         ...Fonts.medBold,
         textAlign: 'center',
         textDecorationLine: 'underline'
+    },
+    frequencyButton:
+    {
+        width: '33%',
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        marginRight: 8,
+    },
+    frequencyContainer:
+    {
+
     }
 })

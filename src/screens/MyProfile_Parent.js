@@ -41,7 +41,7 @@ const MyProfile_Parent = ({ navigation }) => {
     const dispatch = useDispatch()
     const isFocused = useIsFocused()
 
-   
+
 
     useEffect(() => {
         getUserProfileData()
@@ -54,6 +54,22 @@ const MyProfile_Parent = ({ navigation }) => {
             getAddress()
         }
     }, [isFocused])
+
+    const updateAddress = async (ID) => {
+        setLoader(true)
+        var formdata = new FormData()
+        formdata.append('address_id', ID)
+        const result = await handlePostRequest('make_address_default', formdata)
+        console.log("result", result)
+        if (result?.status == '200') {
+            getAddress()
+            Alert.alert('Success', result?.message)
+        }
+        else {
+            Alert.alert("Info", result?.message)
+        }
+        setLoader(false)
+    }
 
     const onPressClick = (id) => {
 
@@ -93,25 +109,44 @@ const MyProfile_Parent = ({ navigation }) => {
         }
     }
 
+    // const renderAddressItem = (item, index) => (
+    //     <View
+    //         key={index}
+    //         style={[styles.addressCard, { marginTop: index == 0 ? Spaces.sm : null }]}>
+
+    //         <View style={styles.addaddressCard}>
+    //             <Text style={[styles.addressTitle, Fonts.larMedium]}>{item.title}</Text>
+    //             <TouchableOpacity
+    //                 onPress={() => onPressClick(item?.id)}>
+    //                 <Image
+    //                     source={require('../assets/images/delete.png')}
+    //                     style={styles.rightIconaddresslist} />
+    //             </TouchableOpacity>
+
+
+    //         </View>
+    //         <Text style={[styles.addressText, Fonts.medMedium]}>{item.address}</Text>
+
+    //     </View>
+    // );
+
     const renderAddressItem = (item, index) => (
-        <View
+        <TouchableOpacity
+            onPress={() => updateAddress(item?.id)}
             key={index}
             style={[styles.addressCard, { marginTop: index == 0 ? Spaces.sm : null }]}>
 
             <View style={styles.addaddressCard}>
-                <Text style={[styles.addressTitle, Fonts.larMedium]}>{item.title}</Text>
+                <Text style={[styles.addressTitle, Fonts.larMedium]}>{item.title}{item?.default == 1 && ' (Default)'}</Text>
                 <TouchableOpacity
                     onPress={() => onPressClick(item?.id)}>
                     <Image
                         source={require('../assets/images/delete.png')}
                         style={styles.rightIconaddresslist} />
                 </TouchableOpacity>
-
-
             </View>
             <Text style={[styles.addressText, Fonts.medMedium]}>{item.address}</Text>
-
-        </View>
+        </TouchableOpacity>
     );
 
     const getAddress = async () => {

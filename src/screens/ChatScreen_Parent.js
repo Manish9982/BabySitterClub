@@ -9,61 +9,11 @@ import ImageCropPicker from 'react-native-image-crop-picker'
 import { PERMISSIONS, RESULTS, check, request } from 'react-native-permissions'
 import { handlePostRequest } from '../helper/Utils'
 import { tr } from 'react-native-paper-dates'
-
-const DATA = {
-    status: "200",
-    msg_title: "Success",
-    msg_body: "Messages Fetched Successfully",
-    data:
-        [
-            {
-                "first_person": false,
-                "message": "Yeah! same here.",
-                "name": "Monique Wells",
-                "profile_pic": "https://images.pexels.com/photos/7282818/pexels-photo-7282818.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-                "read": false,
-                "time": "15:34"
-            },
-            {
-                "first_person": true,
-                "message": "I am liking this app.",
-                "name": "Monique Wells",
-                "profile_pic": "https://images.pexels.com/photos/6414654/pexels-photo-6414654.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-                "read": true,
-                "time": "14:24"
-            },
-            {
-                "first_person": false,
-                "message": "Okay. Let me know if you liked the offer.",
-                "name": "Monique Wells",
-                "profile_pic": "https://images.pexels.com/photos/7282818/pexels-photo-7282818.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-                "read": false,
-                "time": "13:28"
-            },
-            {
-                "first_person": true,
-                "message": "Not Right now but I will let you know.",
-                "name": "Monique Wells",
-                "profile_pic": "https://images.pexels.com/photos/6414654/pexels-photo-6414654.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-                "read": true,
-                "time": "13:26"
-            },
-            {
-                "first_person": false,
-                "message": "Hi! Are you Free?",
-                "name": "Monique Wells",
-                "profile_pic": "https://images.pexels.com/photos/7282818/pexels-photo-7282818.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-                "read": false,
-                "time": "13:24"
-            }
-        ]
-}
+import { useDispatch, useSelector } from 'react-redux'
+import { setMessages } from '../redux/GlobalSlice'
 
 export default function ChatScreen_Parent({ navigation, route }) {
 
-    console.log("ID " , route?.params?.user_id)
-
-    const [messages, setMessages] = useState([])
     const [apiResult, setApiResult] = useState(null)
     const [keyboardHeight, setKeyboardHeight] = useState(0)
     const [camVisible, setCamVisible] = useState(false)
@@ -71,6 +21,8 @@ export default function ChatScreen_Parent({ navigation, route }) {
     const [loader, setLoader] = useState('')
     const [msg, setMsg] = useState('')
     const isFocused = useIsFocused()
+    const dispatch = useDispatch()
+    const messages = useSelector(state => state.global.messages) 
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
@@ -114,7 +66,7 @@ export default function ChatScreen_Parent({ navigation, route }) {
         if (result?.status == '200') {
             //Alert.alert("Update Staus in API")
             setApiResult(result)
-            setMessages(result?.data)
+            dispatch(setMessages(result?.data))
 
         }
         else {

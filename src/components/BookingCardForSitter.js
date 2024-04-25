@@ -151,9 +151,9 @@ const makeStyles = (H, W) => StyleSheet.create({
     paddingBottom: Spaces.vsm
   },
   profilePic: {
-    width: 100,
-    height: 100,
-    borderRadius: 100 / 3,
+    width: 150,
+    height: 150,
+    borderRadius: 150 / 3,
     marginRight: Spaces.sm,
     borderWidth: 0.6,
     borderColor: Colors.black

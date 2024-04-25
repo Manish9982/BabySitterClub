@@ -2,6 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { clearStorage, storeLocalValue } from '../helper/LocalStore';
 import { LOCAL_STORE } from '../helper/Utils';
+import messaging from '@react-native-firebase/messaging';
 
 const AuthSlice = createSlice({
     name: 'auth',
@@ -14,6 +15,7 @@ const AuthSlice = createSlice({
             state.isLoggedIn = true;
         },
         logout: (state) => {
+            messaging().deleteToken()
             clearStorage()
             state.isLoggedIn = false;
         },

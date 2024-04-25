@@ -34,7 +34,6 @@ const Bookings_Sitter = () => {
 
     const renderBooking = ({ item, index }) => {
         //console.log("item?.booking_status====>", item?.booking_status)
-        console.log("value ====>", item)
         if (((value == 'pending') && (item?.booking_status == 0)) || ((value == 'completed') && (item?.booking_status == 1)) || (value == 'all')) {
             return (
                 <BookingCardForSitter
@@ -53,14 +52,13 @@ const Bookings_Sitter = () => {
                     createdAt={formatDateWithTime(item?.created_at)}
                     bookingId={item?.id}
                     userID={item?.user_id}
-                    //price={item?.price}
-                    price={12}
+                    price={item?.amount}
                 />
             )
         }
     }
 
-
+    console.log('screenName', 'Bookings_Sitter')
     return (
         loader
             ?

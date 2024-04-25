@@ -71,7 +71,7 @@ const Bookings = ({ navigation }) => {
       </>
     );
   }
-
+  console.log('screenName', 'Bookings')
   return (
     loader
       ?

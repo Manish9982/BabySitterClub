@@ -7,7 +7,7 @@ import Account from '../screens/Account';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign'
 import Favourite_Parent from '../screens/Favourite_Parent';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsProfileCompleted, setDefaultAdressModalVisible } from '../redux/GlobalSlice';
+import { setIsProfileCompleted, setDefaultAdressModalVisible, setMessages } from '../redux/GlobalSlice';
 import { LOCAL_STORE, handleGetRequest, handlePostRequest } from './Utils';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MyProfile_Parent from '../screens/MyProfile_Parent';
@@ -78,7 +78,34 @@ const BottomTabsParent = ({ navigation }) => {
                     console.log('User pressed notification', detail);
                     if (detail?.notification?.data?.onClick) {
 
-                        navigation.navigate(detail?.notification?.data?.onClick, 
+                        navigation.navigate(detail?.notification?.data?.onClick,
+                            { "user_id": `34` })
+
+                        // if (detail?.notification?.data?.onClick !== 'default') {
+                        //     navigation.navigate(detail?.notification?.data?.onClick)
+                        // } else if (detail?.notification?.data?.onClick == "chat") {
+                        //     //navigation.navigate(detail?.notification?.data?.onClick, { "user_id": 14 });
+                        //     navigation.navigate('ChatScreen_Parent',
+                        //         { user_id: `14` })
+
+
+                        // }
+                    }
+                    break;
+            }
+        });
+    }, []);
+    useEffect(() => {
+        return notifee.onBackgroundEvent(({ type, detail }) => {
+            switch (type) {
+                case EventType.DISMISSED:
+                    console.log('User dismissed notification', detail.notification);
+                    break;
+                case EventType.PRESS:
+                    console.log('User pressed notification', detail);
+                    if (detail?.notification?.data?.onClick) {
+
+                        navigation.navigate(detail?.notification?.data?.onClick,
                             { "user_id": `34` })
 
                         // if (detail?.notification?.data?.onClick !== 'default') {
@@ -125,10 +152,17 @@ const BottomTabsParent = ({ navigation }) => {
             if (remoteMessage?.data?.type == "cancel") {
                 navigation.navigate('CancelledBookings_Parent', { cancelled_bookings: {} })
             }
-
+            if (remoteMessage?.data?.type == "chat") {
+                var formdata = new FormData()
+                formdata.append('user_id', remoteMessage?.data?.chat_userid)
+                const result = await handlePostRequest('get_message', formdata)
+                if (result?.status == '200') {
+                    dispatch(setMessages(result?.data))
+                }
+            }
 
             onDisplayNotification(remoteMessage?.notification?.title,
-                remoteMessage?.notification?.body, remoteMessage?.data?.onClick)
+                remoteMessage?.notification?.body, remoteMessage?.data)
         });
 
         return unsubscribe;

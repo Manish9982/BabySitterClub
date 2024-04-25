@@ -2,21 +2,21 @@ import React, { useEffect, useState } from 'react'
 import Router from './src/helper/Router'
 import { configureFonts, PaperProvider, MD2LightTheme, Text } from 'react-native-paper';
 import Fonts from './src/helper/Fonts';
-import { Provider } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import Store from './src/redux/Store';
 import { LOCAL_STORE } from './src/helper/Utils';
-import { getLocalValue } from './src/helper/LocalStore';
+import { getLocalValue, storeLocalValue } from './src/helper/LocalStore';
 import { Platform, SafeAreaView, StatusBar, AppState } from 'react-native';
 import Colors from './src/helper/Colors';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
+import { setBookingsFlag } from './src/redux/GlobalSlice';
 
 const App = () => {
 
   const [loading, setLoading] = useState(true);
-  const [initialRoute, setInitialRoute] = useState('BottomTabsSitter');
-  const [appState, setAppState] = useState(AppState.currentState);
-
+  const [initialRoute, setInitialRoute] = useState(null);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     getToken()
@@ -48,7 +48,12 @@ const App = () => {
         //setInitialRoute("CallingScreen"); // e.g. "Settings"
         console.log("remoteMessage=====>", remoteMessage);
         if (remoteMessage?._data?.onClick !== 'default') {
+          if (remoteMessage?._data?.onClick == 'Bookings') {
+            storeLocalValue(LOCAL_STORE.BOOKING_FLAG, '1')
+          }
           setInitialRoute(remoteMessage?._data?.onClick);
+          setData(JSON.stringify(remoteMessage?._data))
+          console.log("initial route set ====>>>>>", remoteMessage?._data?.onClick)
         }
         setLoading(false);
       });
@@ -96,7 +101,10 @@ const App = () => {
       style={{ flex: 1, backgroundColor: Colors.PRIMARY }}>
       <Provider store={Store}>
         <PaperProvider theme={theme}>
-          <Router initialRouteName={initialRoute} />
+          <Router
+            initialRouteName={initialRoute}
+            data={data}
+          />
         </PaperProvider>
       </Provider>
     </SafeAreaView>
