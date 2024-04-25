@@ -9,6 +9,7 @@ export const LOCAL_STORE = {
     USER_TYPE: 'userType',
     SELECTED_SERVICE: 'selected_service',
     FCM_TOKEN: 'fcm_token',
+    BOOKING_FLAG: 'booking_flag',
 }
 
 export const Constants = {

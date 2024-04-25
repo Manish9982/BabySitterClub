@@ -48,7 +48,7 @@ const DATA = {
         },
         {
             "first_person": false,
-            "message": "I see. Let me look into it for you. Could you provide more details or specific examples of the issues?",
+            "message": "I see. Let me cook into it for you. Could you provide more details or specific examples of the issues?",
             "name": "Support",
             "profile_pic": "https://images.pexels.com/photos/7282818/pexels-photo-7282818.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
             "read": false,
@@ -264,7 +264,6 @@ export default function SupportChat_ParentAndAdmin({ navigation, route }) {
                 data={messages}
                 renderItem={renderMessages}
                 keyExtractor={(item, index) => `${index}`}
-                inverted
             />
             <View
                 style={[styles.keyboardAvoidingContainer, { bottom: keyboardHeight }]}
@@ -288,15 +287,13 @@ export default function SupportChat_ParentAndAdmin({ navigation, route }) {
 const styles = StyleSheet.create({
     contentContainerStyle: {
         flexGrow: 1,
-       
     },
     keyboardAvoidingContainer: {
         position: 'absolute',
         width: '95%',
         bottom: 0,
         flex: 1,
-        margin:10
-       
+        margin:10   
     },
     textInput: {
         // Your text input styles here

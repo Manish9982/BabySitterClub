@@ -10,9 +10,9 @@ import { LOCAL_STORE, handleGetRequest, handlePostRequest } from './Utils';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CompleteYourProfile from '../screens/CompleteYourProfile';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsProfileCompleted } from '../redux/GlobalSlice';
+import { setIsProfileCompleted, setMessages } from '../redux/GlobalSlice';
 import MyProfile_Sitter from '../screens/MyProfile_Sitter';
-import { onNotificationReceiver, requestUserPermission } from './Notifications';
+import { onDisplayNotification, onNotificationReceiver, requestUserPermission } from './Notifications';
 import { getLocalValue, storeLocalValue } from './LocalStore';
 import AddAvailability_Sitter from '../screens/AddAvailability_Sitter';
 import AddAddress from '../screens/AddAddress';
@@ -21,7 +21,6 @@ import messaging from '@react-native-firebase/messaging';
 import RapidSearch_Sitter from '../screens/RapidSearch_Sitter';
 import Colors from './Colors';
 import PushNotification from "react-native-push-notification";
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import notifee, { EventType } from '@notifee/react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -40,28 +39,86 @@ const BottomTabsSitter = () => {
         onNotificationReceiver()
         //}
         updateFcmToken()
+        notificationConfig()
     }, [])
 
     useEffect(() => {
-        return notifee.onForegroundEvent(({ type, detail }) => {
+        return notifee.onForegroundEvent(({ detail, type }) => {
+
             switch (type) {
                 case EventType.DISMISSED:
                     console.log('User dismissed notification', detail.notification);
                     break;
                 case EventType.PRESS:
-                    console.log('User pressed notification', detail);
                     if (detail?.notification?.data?.onClick) {
 
-                        navigation.navigate(detail?.notification?.data?.onClick, 
-                            { "user_id": `14` })
+                        navigation.navigate(detail?.notification?.data?.onClick, { "user_id": detail?.notification?.data?.chat_userid })
+                        //     { "user_id": `14` })
+                        // navigation.navigate("Bookings", 
+                        //     { "user_id": `14` })
 
                     }
                     break;
             }
         });
     }, []);
+    useEffect(() => {
+        return notifee.onBackgroundEvent(({ detail, type }) => {
+
+            switch (type) {
+                case EventType.DISMISSED:
+                    console.log('User dismissed notification', detail.notification);
+                    break;
+                case EventType.PRESS:
+                    if (detail?.notification?.data?.onClick) {
+
+                        navigation.navigate(detail?.notification?.data?.onClick, { "user_id": detail?.notification?.data?.chat_userid })
+                        //     { "user_id": `14` })
+                        // navigation.navigate("Bookings", 
+                        //     { "user_id": `14` })
+
+                    }
+                    break;
+            }
+        });
+    }, []);
+    useEffect(() => {
+        getStatusOfBookingFlag()
+    }, [])
+
+    const getStatusOfBookingFlag = async () => {
+        const status = await getLocalValue(LOCAL_STORE.BOOKING_FLAG)
+        if (status == '1') {
+            navigation.navigate("Bookings")
+            storeLocalValue(LOCAL_STORE.BOOKING_FLAG, '0')
+        }
+    }
 
     // const [isProfileCompleted, setIsProfileCompleted] = useState(true)
+
+    const notificationConfig = async () => {
+        const unsubscribe = messaging().onMessage(async remoteMessage => {
+            console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+            //
+            // if (remoteMessage?.data?.type == "cancel") {
+            //     navigation.navigate('CancelledBookings_Parent', { cancelled_bookings: {} })
+            // }
+            if (remoteMessage?.data?.type == "chat") {
+                var formdata = new FormData()
+                formdata.append('user_id', remoteMessage?.data?.chat_userid)
+                const result = await handlePostRequest('get_message', formdata)
+                if (result?.status == '200') {
+                    dispatch(setMessages(result?.data))
+                    console.log('sitter messages fetched successfully')
+                }
+            }
+
+            onDisplayNotification(remoteMessage?.notification?.title,
+                remoteMessage?.notification?.body, remoteMessage?.data)
+        });
+
+        return unsubscribe;
+    }
 
     const checkProfileStatus = async () => {
         const result = await handleGetRequest('profile')
@@ -156,11 +213,10 @@ const BottomTabsSitter = () => {
                     headerShown: Platform.OS == "android" ? true : true
                 }}
             >
-                <Stack.Screen name='Complete Your Profile' component={MyProfile_Sitter} options={{ headerShown: true }} />
+                <Stack.Screen name="Complete Your Profile" component={MyProfile_Sitter} options={{ headerShown: true }} />
                 <Stack.Screen name="AddAvailability_Sitter" component={AddAvailability_Sitter} options={{ headerShown: true, headerTitle: 'Add Availabiltity' }} />
                 <Stack.Screen name="AddAddress" component={AddAddress} options={{ headerShown: true, headerTitle: 'Add Address' }} />
             </Stack.Navigator>
-
     )
 }
 export default BottomTabsSitter

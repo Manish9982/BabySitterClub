@@ -72,10 +72,12 @@ import WelcomeScreen from '../screens/WelcomeScreen';
 import TipPaymentWebview from '../screens/TipPaymentWebview';
 import ChatScreen_Sitter from '../screens/ChatScreen_Sitter';
 import SupportChat_ParentAndAdmin from '../screens/SupportChat_ParentAndAdmin';
+import CustomHeaderForChat from '../components/CustomHeaderForChat';
 
-const Router = ({ initialRouteName }) => {
+const Router = ({ initialRouteName, data }) => {
 
     const [isAppUpdate, setIsAppUpdate] = useState(true)
+    const [goHome, setGoHome] = useState(false)
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn)
     const usertype = useSelector(state => state.global.usertype)
     const Stack = createNativeStackNavigator();
@@ -83,6 +85,7 @@ const Router = ({ initialRouteName }) => {
     const defaultAddress = useSelector((state) => state.global.defaultAddress)
     const H = useWindowDimensions().height
     const W = useWindowDimensions().width
+    const dataParse = data !== undefined ? JSON.parse(data) : {}
     const styles = makeStyles(H, W)
 
     useEffect(() => {
@@ -112,13 +115,15 @@ const Router = ({ initialRouteName }) => {
                 if (usertype == "3") {//Parent
                     console.log('------------Parent is Logged In--------------')
                     return (
-                        <Stack.Navigator screenOptions={{
-                            statusBarColor: Colors.PRIMARY,
-                            headerBackTitleVisible: false,
-                            headerStyle: {
-                                backgroundColor: Colors.PRIMARY,
-                            },
-                        }}>
+                        <Stack.Navigator
+                            initialRouteName={goHome ? "BottomTabsParent" : initialRouteName}
+                            screenOptions={{
+                                statusBarColor: Colors.PRIMARY,
+                                headerBackTitleVisible: false,
+                                headerStyle: {
+                                    backgroundColor: Colors.PRIMARY,
+                                },
+                            }}>
                             <Stack.Screen name="BottomTabsParent" component={BottomTabsParent} options={{ headerShown: false }} />
                             <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerTitle: 'Chat' }} />
                             <Stack.Screen name="ProfileOfSitterDuringBooking_Parent" component={ProfileOfSitterDuringBooking_Parent} options={{ headerShown: true, headerTitle: 'Profile Details' }} />
@@ -147,8 +152,8 @@ const Router = ({ initialRouteName }) => {
                             <Stack.Screen name="SittersNearYouList_Parent" component={SittersNearYouList_Parent} options={{ headerShown: true, headerTitle: 'Sitters Near You' }} />
                             <Stack.Screen name="FriendRequests_Parent" component={FriendRequests_Parent} options={{ headerShown: true, headerTitle: 'Connection Requests' }} />
                             <Stack.Screen name="MyMessages_Parent" component={MyMessages_Parent} options={{ headerShown: true, headerTitle: 'Messages' }} />
-                            <Stack.Screen name="ChatScreen_Parent" component={ChatScreen_Parent} options={{ headerShown: true, headerTitle: 'Chat' }} initialParams={{
-                                user_id2:"Ajbba"
+                            <Stack.Screen name="ChatScreen_Parent" component={ChatScreen_Parent} options={{ headerShown: true, header: () => <CustomHeaderForChat onPressLeft={"BottomTabsParent"} title={'Chat'} /> }} initialParams={{
+                                user_id: dataParse?.chat_userid
                             }} />
                             <Stack.Screen name="SearchScreen_Parent" component={SearchScreen_Parent} options={{ headerShown: true, headerTitle: 'Search' }} />
                             <Stack.Screen name="Favourite_Parent" component={Favourite_Parent} options={{ headerShown: true, headerTitle: 'Favourite Sitters' }} />
@@ -164,11 +169,11 @@ const Router = ({ initialRouteName }) => {
                                 }}
                             />
                             <Stack.Screen name="TipPaymentWebview" component={TipPaymentWebview}
-options={{
-headerShown: true,
-headerTitle:"Payment",
-}}
-/>
+                                options={{
+                                    headerShown: true,
+                                    headerTitle: "Payment",
+                                }}
+                            />
 
                         </Stack.Navigator>
                     )
@@ -177,7 +182,7 @@ headerTitle:"Payment",
                     console.log("---------Sitter is Logged in------------")
                     return (
                         <Stack.Navigator
-                            initialRouteName={initialRouteName}
+                            initialRouteName={goHome ? "BottomTabsSitter" : initialRouteName}
                             screenOptions={{
                                 statusBarColor: Colors.PRIMARY,
                                 headerBackTitleVisible: false,
@@ -205,7 +210,9 @@ headerTitle:"Payment",
                             <Stack.Screen name="JobPostings_Sitter" component={JobPostings_Sitter} options={{ headerShown: true, headerTitle: 'New Jobs For You' }} />
                             <Stack.Screen name="SupportChat_ParentAndAdmin" component={SupportChat_ParentAndAdmin} options={{ headerShown: true, headerTitle: 'Support' }} />
 
-                            <Stack.Screen name="ChatScreen_Sitter" component={ChatScreen_Sitter} options={{ headerShown: true, headerTitle: 'Chat' }} />
+                            <Stack.Screen name="ChatScreen_Sitter" component={ChatScreen_Sitter} options={{ headerShown: true, header: () => <CustomHeaderForChat onPressLeft={"BottomTabsSitter"} title={'Chat'} /> }} initialParams={{
+                                user_id: dataParse?.chat_userid
+                            }} />
                             <Stack.Screen name="BlitzCareListingSuccess_Sitter" component={BlitzCareListingSuccess_Sitter} options={{
                                 headerShown: false,
                                 headerTitle: 'BlitzCare',
@@ -230,7 +237,7 @@ headerTitle:"Payment",
                         <Stack.Screen name="ChooseUserType" component={ChooseUserType} options={{ headerTitle: '' }} />
                         <Stack.Screen name="CountryList" component={CountryList} options={{ headerTitle: 'Choose Country' }} />
                         <Stack.Screen name="ForgotPassword" component={Forgotpassword} options={{}} />
-                        <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false,  }} />
+                        <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false, }} />
                     </Stack.Navigator>
                 )
             }
